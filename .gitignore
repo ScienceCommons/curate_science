@@ -111,6 +111,7 @@ tramp
 .\#*
 
 # Org-mode
+.org
 .org-id-locations
 *_archive
 
