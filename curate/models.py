@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     platform_invites = models.PositiveIntegerField(default=0)
 
 class Author(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    user = models.ForeignKey(UserProfile, on_delete=models.PROTECT, null=True)
     orcid = models.CharField(max_length=255, null=True)
     first_name = models.CharField(max_length=255)
     middle_name = models.CharField(max_length=255, null=True)
@@ -41,7 +41,7 @@ class Article(models.Model):
 
     doi = models.CharField(max_length=255, null=True)
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True)
-    publication_year = models.PositiveIntegerField(null=True)
+    year = models.PositiveIntegerField(null=True)
     title = models.CharField(max_length=255)
     abstract = models.TextField(null=True)
     keywords = JSONField(null=True)
@@ -54,17 +54,29 @@ class Article(models.Model):
         (COMMENTARY, 'commentary'),
     ))
     reporting_standards_type = models.CharField(max_length=255, null=True)
-    commentary_of = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
-    reproducibility_of = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
-    is_reproducibilty = models.BooleanField(default=False)
-    is_robustness = models.BooleanField(default=False)
+    related_articles = models.ManyToManyField(
+        'self',
+        through='RelatedArticle',
+        related_name='original_article',
+        symmetrical=False,
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    authors = models.ManyToManyField('Author', through='ArticleAuthor', related_name='articles')
 
 class RelatedArticle(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.PROTECT)
-    related_article = models.ForeignKey(Article, on_delete=models.PROTECT)
+    original_article = models.ForeignKey(
+        Article,
+        on_delete=models.PROTECT,
+        related_name='from_article'
+    )
+    related_article = models.ForeignKey(
+        Article,
+        on_delete=models.PROTECT,
+        related_name='to_article'
+    )
+    is_commentary = models.BooleanField(default=False)
+    is_reproducibilty = models.BooleanField(default=False)
+    is_robustness = models.BooleanField(default=False)
     order = models.PositiveIntegerField()
 
     class Meta:
@@ -78,82 +90,69 @@ class ArticleAuthor(models.Model):
     class Meta:
         ordering = ('order',)
 
-# A study is reported by an Article, or can be unpublished.
 class Study(models.Model):
+    """A set of controlled trials that may be reported by an Article, or may be unpublished"""
     EXACT = 'EXACT'
     VERY_SIMILAR = 'VERY_SIMILAR'
     SIMILAR = 'SIMILAR'
-
     article = models.ForeignKey(Article, on_delete=models.PROTECT, null=True)
-    effects = models.ManyToManyField('Effect')
-    study_type = models.CharField(max_length=255)
+    effects = models.ManyToManyField('Effect', related_name='studies')
+    study_type = models.CharField(max_length=255, null=True)
     study_number = models.PositiveIntegerField()
     evidence_type = models.CharField(max_length=255, null=True)
     reporting_standards_type = models.CharField(max_length=255, null=True)
-    collections = models.ManyToManyField('Collection')
-    #these fields are only for a replication study
+    #below fields are only for a replication study
     is_replication = models.BooleanField(default=False)
     replication_of = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
-    method_similarity_type = models.CharField(max_length=255,null=True,choices=(
-        (EXACT,'exact'),
-        (VERY_SIMILAR,'very similar'),
-        (SIMILAR,'similar'),p
-    ))
+    method_similarity_type = models.CharField(
+        max_length=255,
+        null=True,
+        choices=(
+            (EXACT,'exact'),
+            (VERY_SIMILAR,'very similar'),
+            (SIMILAR,'similar'),
+        )
+    )
     method_differences = JSONField(null=True)
     auxiliary_hypo_evidence = JSONField(null=True)
     rep_outcome_category = models.CharField(max_length=255,null=True)
 
-class Collection(models.Model):
-    studies = models.ManyToManyField(Study)
-    name = models.CharField(max_length=255)
-    verbal_summary = models.TextField()
-    creator = models.ForeignKey(UserProfile, on_delete=models.PROTECT)
-    last_modifier = models.ForeignKey(UserProfile, on_delete=models.PROTECT)
-
-# A Study reports one or more Effects
-# A ReplicationStudy attempts to replicate one or more of the effects reported by the original study
 class Effect(models.Model):
     name = models.CharField(max_length=255)
-    studies = models.ManyToManyField(Study)
-    replication_studies = models.ManyToManyField(ReplicationStudy)
+
+class Collection(models.Model):
+    """A collection of distinct but conceptually related Effects"""
+    name = models.CharField(max_length=255)
+    verbal_summary = models.TextField()
+    creator = models.ForeignKey(
+        UserProfile,
+        on_delete=models.PROTECT,
+        related_name='collections_created',
+        null=True,
+    )
+    effects = models.ManyToManyField(Effect, related_name='collections')
+    last_modifier = models.ForeignKey(
+        UserProfile,
+        on_delete=models.PROTECT,
+        related_name='collections_last_modified',
+        null=True,
+    )
 
 class Construct(models.Model):
+    """A name for a social science concept that can can be theorized about"""
     name = models.CharField(max_length=255)
 
 class Hypothesis(models.Model):
+    """
+    A name for a proposed relationship between constructs that describes an effect
+    """
     name = models.CharField(max_length=255)
-    effect = models.ForeignKey(Effect, on_delete=models.PROTECT, null=True)
-    is_positive_relationship = models.BooleanField()
-
-class StatisticalResult(models.Model):
-    estimate_value = models.FloatField()
-    estimate_precision = models.FloatField()
-    result_graph = models.ForeignKey(KeyFigure, on_delete=models.PROTECT, null=True)
-    is_reproducible = models.BooleanField()
-    is_robust = models.BooleanField()
-
-class Method(models.Model):
-    construct = models.ForeignKey(Construct, on_delete=models.PROTECT)
-    name = models.CharField(max_length=255)
-    method_version = models.CharField(max_length=255, null=True)
-    scoring_procedure = models.CharField(max_length=255, null=True)
-
-class Experiment(models.Model):
-    hypothesis = models.ForeignKey(Hypothesis, on_delete=models.PROTECT)
-
-class Variable(models.Model):
-    DEPENDENT='DEPENDENT'
-    INDEPENDENT='INDEPENDENT'
-    CONTROL='CONTROL'
-    VARIABLE_TYPES=(
-        (DEPENDENT,'DEPENDENT'),
-        (INDEPENDENT,'INDEPENDENT'),
-        (CONTROL,'CONTROL'),
+    effect = models.ForeignKey(Effect, on_delete=models.PROTECT)
+    studies = models.ManyToManyField(
+        Study,
+        through='StatisticalResult',
+        related_name='hypotheses',
     )
-    hypothesis = models.ForeignKey(Hypothesis, on_delete=models.PROTECT)
-    construct = models.ForeignKey(Construct, on_delete=models.PROTECT)
-    method = models.ForeignKey(Method, on_delete=models.PROTECT)
-    variable_type = models.CharField(max_length=255, choices=VARIABLE_TYPES)
 
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article, on_delete=models.PROTECT)
@@ -162,6 +161,46 @@ class KeyFigure(models.Model):
     file_name = models.CharField(max_length=255,null=True)
     is_figure = models.BooleanField()
     is_table = models.BooleanField()
+
+class StatisticalResult(models.Model):
+    """
+    A statistical result obtained by conducting a controlled trial
+    as part of a study, to test a specific hypothesis.
+    """
+    study = models.ForeignKey(Study, on_delete=models.PROTECT)
+    hypothesis = models.ForeignKey(Hypothesis, on_delete=models.PROTECT)
+    effect_size = models.FloatField()
+    alpha = models.FloatField(default=0.05)
+    lower_conf_lim = models.FloatField()
+    upper_conf_lim = models.FloatField()
+    result_graph = models.ForeignKey(KeyFigure, on_delete=models.PROTECT, null=True)
+    is_reproducible = models.BooleanField(default=False)
+    is_robust = models.BooleanField(default=False)
+
+class Method(models.Model):
+    """An empirical method of measuring a theoretical construct."""
+    construct = models.ForeignKey(Construct, on_delete=models.PROTECT)
+    name = models.CharField(max_length=255)
+    method_version = models.CharField(max_length=255, null=True)
+    scoring_procedure = models.CharField(max_length=255, null=True)
+
+class VariableRelationship(models.Model):
+    """
+    A proposed hypothetical relationship between two or more variables
+    as measured via specific methods.
+    """
+    POSITIVE='POSITIVE'
+    NEGATIVE='NEGATIVE'
+    NONLINEAR='NONLINEAR'
+    REL_TYPES=(
+        (POSITIVE, 'POSITIVE'),
+        (NEGATIVE, 'NEGATIVE'),
+        (NONLINEAR, 'NONLINEAR'),
+    )
+    relationship_type = models.CharField(max_length=255, choices=REL_TYPES)
+    hypothesis = models.ForeignKey(Hypothesis, on_delete=models.PROTECT)
+    ind_var = models.ForeignKey(Method, on_delete=models.PROTECT, related_name='independent_rels')
+    dep_var = models.ForeignKey(Method, on_delete=models.PROTECT, related_name='dependent_rels')
 
 class Transparency(models.Model):
     PREREG = 'PREREG'
