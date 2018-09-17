@@ -27,7 +27,7 @@ SECRET_KEY = 'af-36f5(kmc_fv(x4z#sz#$6i2qxp0qcozr(i67c6(i7-41usb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost',]
 
 
 # Application definition
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'curate_science.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'dev': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'curate',
         'USER': os.getenv('DB_USER'),
@@ -85,7 +85,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5433',
     },
-    'prod':{
+    'default':{
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'curate',
         'USER': os.getenv('DB_USER'),
@@ -133,3 +133,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT= '../static'

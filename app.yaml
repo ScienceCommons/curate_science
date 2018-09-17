@@ -1,7 +1,7 @@
 # [START django_app]
-runtime: python
+runtime: python37
 api_version: 1
-threadsafe: yes
+#threadsafe: yes
 
 handlers:
 - url: /static
@@ -17,15 +17,3 @@ handlers:
 #- name: MySQLdb
 #  version: 1.2.5
 # [END django_app]
-
-# Google App Engine limits application deployments to 10,000 uploaded files per
-# version. The skip_files section allows us to skip virtual environment files
-# to meet this requirement. The first 5 are the default regular expressions to
-# skip, while the last one is for all env/ files.
-skip_files:
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*\.py[co]$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-- ^env/.*$
