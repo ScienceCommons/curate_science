@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'af-36f5(kmc_fv(x4z#sz#$6i2qxp0qcozr(i67c6(i7-41usb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -84,6 +84,14 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASS'),
         'HOST': 'localhost',
         'PORT': '5433',
+    },
+    'prod':{
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'curate',
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASS'),
+        'HOST': '/cloudsql/curate-science-216207:europe-west1:curatedb',
+        'PORT': '5432',
     }
 }
 

@@ -149,3 +149,5 @@ flycheck_*.el
 
 
 time_log.org
+
+*credentials.json
