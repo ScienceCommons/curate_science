@@ -27,9 +27,15 @@ class Author(models.Model):
     updated = models.DateTimeField(auto_now=True)
     articles = models.ManyToManyField('Article', through='ArticleAuthor', related_name='authors')
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 class Journal(models.Model):
     name = models.CharField(max_length=255)
     issn = models.CharField(max_length=255, null=True)
+
+    def __str__(self):
+        return self.name
 
 class Article(models.Model):
     ORIGINAL = 'ORIGINAL'
@@ -62,6 +68,9 @@ class Article(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
 
 class RelatedArticle(models.Model):
     original_article = models.ForeignKey(

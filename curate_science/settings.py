@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True #False
 
 ALLOWED_HOSTS = ['*']
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'curate.apps.CurateConfig',
+#    'curate',
 ]
 
 MIDDLEWARE = [
@@ -77,14 +78,6 @@ WSGI_APPLICATION = 'curate_science.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'dev': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'curate',
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASS'),
-        'HOST': 'localhost',
-        'PORT': '5433',
-    },
     'default':{
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'curate',
@@ -92,9 +85,16 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASS'),
         'HOST': '/cloudsql/curate-science-216207:europe-west1:curatedb',
         'PORT': '5432',
+    },
+    'dev': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'curate',
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASS'),
+        'HOST': 'localhost',
+        'PORT': '5433',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -133,4 +133,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT= '../static'
+STATIC_ROOT= 'static'

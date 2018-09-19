@@ -1,17 +1,16 @@
 # [START django_app]
 runtime: python37
-api_version: 1
-#threadsafe: yes
+entrypoint: gunicorn --bind :8080 curate_science.wsgi:application
 
 handlers:
 - url: /static
   static_dir: static/
-- url: .*
-  script: mysite.wsgi.application
+- url: /.*
+  script: auto
 
 # Only pure Python libraries can be vendored
 # Python libraries that use C extensions can
-# only be included if they are part of the App Engine SDK 
+# only be included if they are part of the App Engine SDK
 # Using Third Party Libraries: https://cloud.google.com/appengine/docs/python/tools/using-libraries-python-27
 #libraries:
 #- name: MySQLdb
