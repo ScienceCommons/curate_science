@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import JSONField
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     curation_contributions = JSONField(null=True)
     browsing_history = JSONField(null=True)
     tracked_content = JSONField(null=True)
@@ -31,7 +31,7 @@ class Author(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 class Journal(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     issn = models.CharField(max_length=255, null=True)
 
     def __str__(self):
@@ -71,6 +71,9 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        unique_together=('title', 'year')
 
 class RelatedArticle(models.Model):
     original_article = models.ForeignKey(
@@ -126,12 +129,15 @@ class Study(models.Model):
     auxiliary_hypo_evidence = JSONField(null=True)
     rep_outcome_category = models.CharField(max_length=255,null=True)
 
+    class Meta:
+        unique_together=('article', 'study_number',)
+
 class Effect(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
 class Collection(models.Model):
     """A collection of distinct but conceptually related Effects"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     verbal_summary = models.TextField()
     creator = models.ForeignKey(
         UserProfile,
@@ -149,13 +155,13 @@ class Collection(models.Model):
 
 class Construct(models.Model):
     """A name for a social science concept that can can be theorized about"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
 class Hypothesis(models.Model):
     """
     A name for a proposed relationship between constructs that describes an effect
     """
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     effect = models.ForeignKey(Effect, on_delete=models.PROTECT)
     studies = models.ManyToManyField(
         Study,
@@ -166,10 +172,14 @@ class Hypothesis(models.Model):
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article, on_delete=models.PROTECT)
     study = models.ForeignKey(Study, on_delete=models.PROTECT, null=True)
+    figure_number = models.PositiveIntegerField()
     image_url = models.URLField(null=True)
     file_name = models.CharField(max_length=255,null=True)
     is_figure = models.BooleanField()
     is_table = models.BooleanField()
+
+    class Meta:
+        unique_together=('article', 'figure_number',)
 
 class StatisticalResult(models.Model):
     """
@@ -186,10 +196,13 @@ class StatisticalResult(models.Model):
     is_reproducible = models.BooleanField(default=False)
     is_robust = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together=('study', 'hypothesis')
+
 class Method(models.Model):
     """An empirical method of measuring a theoretical construct."""
     construct = models.ForeignKey(Construct, on_delete=models.PROTECT)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     method_version = models.CharField(max_length=255, null=True)
     scoring_procedure = models.CharField(max_length=255, null=True)
 
@@ -210,6 +223,9 @@ class VariableRelationship(models.Model):
     hypothesis = models.ForeignKey(Hypothesis, on_delete=models.PROTECT)
     ind_var = models.ForeignKey(Method, on_delete=models.PROTECT, related_name='independent_rels')
     dep_var = models.ForeignKey(Method, on_delete=models.PROTECT, related_name='dependent_rels')
+
+    class Meta:
+        unique_together=('hypothesis', 'ind_var', 'dep_var',)
 
 class Transparency(models.Model):
     PREREG = 'PREREG'
