@@ -152,3 +152,5 @@ time_log.org
 
 *credentials.json
 cloud_sql_proxy
+
+secrets.tar
