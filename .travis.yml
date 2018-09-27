@@ -1,18 +1,21 @@
 language: python
 python:
-  - "3.6"
+- '3.6'
 services:
-  - postgresql
+- postgresql
 before_install:
 - openssl aes-256-cbc -K $encrypted_cd07f8c30fea_key -iv $encrypted_cd07f8c30fea_iv
   -in google_cloud_credentials.json.enc -out google_cloud_credentials.json -d
 install:
-  - pip install -r requirements.txt
+- pip install -r requirements.txt
 before_script:
-  - psql -c 'create database test_curate;' -U postgres
+- psql -c 'create database test_curate;' -U postgres
 script:
-  - python manage.py test
+- python manage.py test
 deploy:
   provider: gae
   keyfile: google_cloud_credentials.json
   project: curate-science-216207
+env:
+  global:
+    secure: aVh8OYPa7IvlYBcoKbkJHkKyR3saCmUnhcWdLhz44394d2Ry9wMV24ua2jp/otyemimQlKCImonP4bSf/1WSh8ZsLiwsyjfWb68Hdqr0KZwtvOJtq7QrAAKpHxUOtqsP8D8QtmgLqHuoWYKbU/+8bQPZcBDagV++AACyAUbkjf32EB9B5VM25xmYFIWeaTfMoohXymszPCqCa3l6+Uybi89acHME881N5d+nXAWtmmuf5dUcHJ2Ikb2gVceWy7XLaBZezJ7xIN93xi8cUZq1/0AQh+sPqD2iaoBenf/MviaNsDmp5tpCUosCLa7Zj60SdqJpbs6yNJvaBwnF9t/3+snAvXtO57R3AvDjy1x4srpZSWuW+1ORoRir+x5j45fFZ2tTnGHyc3Dw07d9UIquTOVwdphNqVJt22mctBX6OFRZ1wofyLgZ6cjCcDs35bHv5+DcelDFwcmW7aRaDY2SR6w2B0GI3uVWpkMS/d+rDo0ybFgoAmqCiCDvXDGWcV/jhqBZKOn55t6n8/BFM/u7Vgu0y7ZgL5/Jm1/BuB65L1Jg/G8WtUsVIyGbaGzr8ZFLIuHFxYOFjlBVjZ4IUQ5rSRNlCKPd0PbRbtM/B5vIVP1qBkpWQyRFhXiR1qYqSID329oStVLW/Ii7UCrFyMMwlks6D6ezGUirRObE4FE6+lE=
