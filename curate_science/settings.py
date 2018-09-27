@@ -14,6 +14,13 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+# Google App Engine sets environment variable GOOGLE_CLOUD_PROJECT
+# If this env var exists, then the app is running on GAE. Else it's local dev environment.
+if os.getenv('GOOGLE_CLOUD_PROJECT'):
+    DB_HOST='/cloudsql/curate-science-216207:europe-west1:curatedb'
+else:
+    DB_HOST='localhost'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -78,21 +85,13 @@ WSGI_APPLICATION = 'curate_science.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default':{
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'curate',
-    #     'USER': os.getenv('DB_USER'),
-    #     'PASSWORD': os.getenv('DB_PASS'),
-    #     'HOST': '/cloudsql/curate-science-216207:europe-west1:curatedb',
-    #     'PORT': '5432',
-    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'curate',
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASS'),
-        'HOST': 'localhost',
-        'PORT': '5433',
+        'HOST': DB_HOST,
+        'PORT': '5432',
     }
 }
 

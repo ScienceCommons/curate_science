@@ -1,0 +1,18 @@
+language: python
+python:
+  - "3.6"
+services:
+  - postgresql
+before_install:
+- openssl aes-256-cbc -K $encrypted_cd07f8c30fea_key -iv $encrypted_cd07f8c30fea_iv
+  -in google_cloud_credentials.json.enc -out google_cloud_credentials.json -d
+install:
+  - pip install -r requirements.txt
+before_script:
+  - psql -c 'create database test_curate;' -U postgres
+script:
+  - python manage.py test
+deploy:
+  provider: gae
+  keyfile: google_cloud_credentials.json
+  project: curate-science-216207
