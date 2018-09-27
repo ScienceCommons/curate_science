@@ -21,4 +21,4 @@ env:
 before_install:
 - openssl aes-256-cbc -K $encrypted_cd07f8c30fea_key -iv $encrypted_cd07f8c30fea_iv
   -in secrets.tar.enc -out curate_science/secrets.tar -d
-- tar xvf curate_science/secrets.tar
+- tar xvf curate_science/secrets.tar -C curate_science
