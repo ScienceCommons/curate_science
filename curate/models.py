@@ -194,6 +194,9 @@ class Hypothesis(models.Model):
         related_name='hypotheses',
     )
 
+    def __str__(self):
+        return self.name
+
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article, on_delete=models.PROTECT)
     study = models.ForeignKey(Study, on_delete=models.PROTECT, null=True)
@@ -230,6 +233,9 @@ class Method(models.Model):
     name = models.CharField(max_length=255, unique=True)
     method_version = models.CharField(max_length=255, null=True)
     scoring_procedure = models.CharField(max_length=255, null=True)
+
+    def __str__(self):
+        return self.name
 
 class VariableRelationship(models.Model):
     """
