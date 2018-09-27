@@ -8,8 +8,6 @@ before_install:
   -in google_cloud_credentials.json.enc -out google_cloud_credentials.json -d
 install:
 - pip install -r requirements.txt
-before_script:
-- psql -c 'create database test_curate;' -U postgres
 script:
 - python manage.py test
 deploy:
