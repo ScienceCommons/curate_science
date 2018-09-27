@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.contrib.postgres.fields import JSONField
+import datetime
 
 # Create your models here.
 
@@ -47,7 +48,7 @@ class Article(models.Model):
 
     doi = models.CharField(max_length=255, null=True)
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True)
-    year = models.PositiveIntegerField(null=True)
+    year = models.PositiveIntegerField(default=datetime.datetime.now().year)
     title = models.CharField(max_length=255)
     abstract = models.TextField(null=True)
     keywords = JSONField(null=True)
@@ -55,8 +56,8 @@ class Article(models.Model):
         (ORIGINAL, 'original'),
         (REPLICATION, 'replication'),
         (REPRODUCIBILITY, 'reanalysis - reproducibility'),
-        (META_ANALYSIS, 'renalysis - meta-analysis'),
-        (META_RESEARCH, 'renanalysis - meta-research'),
+        (META_ANALYSIS, 'reanalysis - meta-analysis'),
+        (META_RESEARCH, 'reanalysis - meta-research'),
         (COMMENTARY, 'commentary'),
     ))
     reporting_standards_type = models.CharField(max_length=255, null=True)
@@ -69,8 +70,21 @@ class Article(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    @property
+    def et_al(self):
+        first_author = self.authors.first().last_name
+        has_two_authors = self.authors.count() == 2
+        has_many_authors = self.authors.count() > 2
+        if has_two_authors:
+            second_author = self.articleauthor_set.get(order=2).author.last_name
+            et_al = f"{first_author} & {second_author}"
+        elif has_many_authors:
+            et_al = f"{first_author} et al."
+        else:
+            et_al = first_author
+        return et_al
     def __str__(self):
-        return self.title
+        return f"{self.et_al} ({self.year}) {self.title}"
 
     class Meta:
         unique_together=('title', 'year')
@@ -114,7 +128,6 @@ class Study(models.Model):
     evidence_type = models.CharField(max_length=255, null=True)
     reporting_standards_type = models.CharField(max_length=255, null=True)
     #below fields are only for a replication study
-    is_replication = models.BooleanField(default=False)
     replication_of = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
     method_similarity_type = models.CharField(
         max_length=255,
@@ -129,11 +142,23 @@ class Study(models.Model):
     auxiliary_hypo_evidence = JSONField(null=True)
     rep_outcome_category = models.CharField(max_length=255,null=True)
 
+    @property
+    def is_replication(self):
+        self.replication_of is not None
+
+    def __str__(self):
+        if has_many_studies:
+            study_num = f" Study {self.study_number}"
+        else:
+            study_num = ""
+        return(f"{self.article.et_al} ({self.article.year}){study_num}")
+
     class Meta:
         unique_together=('article', 'study_number',)
 
 class Effect(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    constraints_on_generality = JSONField(null=True)
 
 class Collection(models.Model):
     """A collection of distinct but conceptually related Effects"""
@@ -240,6 +265,6 @@ class Transparency(models.Model):
         (DATA,'data'),
         (CODE,'code'),
     ))
-    url = models.URLField(null=True)
+    url = models.URLField(default="https://www.google.com/")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

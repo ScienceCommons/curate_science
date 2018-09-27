@@ -39,7 +39,23 @@ def seed_data(apps, schema_editor):
     )
     earp = Author.objects.create(
         first_name='Brian',
+        middle_name='D.',
         last_name='Earp'
+    )
+    everett = Author.objects.create(
+        first_name='Jim',
+        middle_name='A. C.',
+        last_name='Everett'
+    )
+    madva = Author.objects.create(
+        first_name='Elizabeth',
+        middle_name='N.',
+        last_name='Madva'
+    )
+    hamlin = Author.objects.create(
+        first_name='J.',
+        middle_name='Kiley',
+        last_name='Hamlin'
     )
     siev = Author.objects.create(
         first_name='Jedediah',
@@ -49,13 +65,46 @@ def seed_data(apps, schema_editor):
         first_name='Elena',
         last_name='Gámez',
     )
+    diaz = Author.objects.create(
+        first_name='José',
+        middle_name='M.',
+        last_name='Diaz'
+    )
+    marrero = Author.objects.create(
+        first_name='Hipólito',
+        last_name='Marrero'
+    )
     fayard = Author.objects.create(
         first_name='Jennifer',
+        middle_name='V.',
         last_name='Fayard',
+    )
+    bassi = Author.objects.create(
+        first_name='Amandeep',
+        middle_name='K.',
+        last_name='Bassi'
+    )
+    bernstein = Author.objects.create(
+        first_name='Daniel',
+        middle_name='M.',
+        last_name='Bernstein'
+    )
+    roberts = Author.objects.create(
+        first_name='Brent',
+        middle_name='W.',
+        last_name='Roberts'
     )
     reuven = Author.objects.create(
         first_name='Oma',
         last_name='Reuven',
+    )
+    liberman = Author.objects.create(
+        first_name='Nira',
+        last_name='Liberman'
+    )
+    dar = Author.objects.create(
+        first_name='Reuven',
+        last_name='Dar'
     )
     science = Journal.objects.create(
         name='Science',
@@ -211,34 +260,47 @@ def seed_data(apps, schema_editor):
     )
     earp_et_al = Article.objects.create(
         doi='10.1080/01973533.2013.856792',
+        article_type='REPLICATION',
         journal=basic,
         year=2014,
         title='Out, Damned Spot: Can the “Macbeth Effect” Be Replicated?',
         abstract="""
         Zhong and Liljenquist (2006) reported evidence of a “Macbeth Effect” in social psychology: a threat to people's moral purity leads them to seek, literally, to cleanse themselves. In an attempt to build upon these findings, we conducted a series of direct replications of Study 2 from Z&L's seminal report. We used Z&L's original materials and methods, investigated samples that were more representative of the general population, investigated samples from different countries and cultures, and substantially increased the power of our statistical tests. Despite multiple good-faith efforts, however, we were unable to detect a “Macbeth Effect” in any of our experiments. We discuss these findings in the context of recent concerns about replicability in the field of experimental social psychology.
         """,
-        article_type='REPLICATION',
     )
     ArticleAuthor.objects.create(
         article=earp_et_al,
         author=earp,
         order=1,
     )
+    ArticleAuthor.objects.create(
+        article=earp_et_al,
+        author=everett,
+        order=2,
+    )
+    ArticleAuthor.objects.create(
+        article=earp_et_al,
+        author=madva,
+        order=3,
+    )
     earp_study_3 = Study.objects.create(
         article=earp_et_al,
         study_number=3,
+        replication_of=znl_study_2
     )
     earp_study_3.effects.add(effect_1)
     earp_study_2 = Study.objects.create(
         article=earp_et_al,
         study_number=2,
+        replication_of=znl_study_2
     )
     earp_study_2.effects.add(effect_1)
     earp_study_1 = Study.objects.create(
         article=earp_et_al,
         study_number=1,
+        replication_of=znl_study_2
     )
-    earp_study_3.effects.add(effect_1)
+    earp_study_1.effects.add(effect_1)
     earp_result_3 = StatisticalResult.objects.create(
         study=earp_study_3,
         hypothesis=hypo_1,
@@ -261,6 +323,7 @@ def seed_data(apps, schema_editor):
         upper_conf_lim=0.16,
     )
     siev_2012 = Article.objects.create(
+        article_type='REPLICATION',
         doi='10.5209/rev_SJOP.2011.v14.n1.13',
         title='Unpublished experimental results attempting to replicate Zhong & Liljenquist',
         abstract='Unpublished experimental results attempting to replicate Zhong & Liljenquist',
@@ -274,6 +337,7 @@ def seed_data(apps, schema_editor):
     siev_study_2 = Study.objects.create(
         study_number=2,
         article=siev_2012,
+        replication_of=znl_study_2
     )
     siev_study_2.effects.add(effect_1)
     siev_result = StatisticalResult.objects.create(
@@ -289,6 +353,7 @@ def seed_data(apps, schema_editor):
     )
     gamez_2011 = Article.objects.create(
         doi='',
+        article_type='REPLICATION',
         journal=span_psych,
         year=2011,
         title='The Uncertain Universality of the Macbeth Effect with a Spanish Sample',
@@ -314,19 +379,32 @@ def seed_data(apps, schema_editor):
         author=gamez,
         order=1,
     )
+    ArticleAuthor.objects.create(
+        article=gamez_2011,
+        author=diaz,
+        order=2,
+    )
+    ArticleAuthor.objects.create(
+        article=gamez_2011,
+        author=marrero,
+        order=3,
+    )
     gamez_study_2 = Study.objects.create(
         study_number=2,
         article=gamez_2011,
+        replication_of=znl_study_2
     )
     gamez_study_2.effects.add(effect_1)
     gamez_study_3 = Study.objects.create(
         study_number=3,
         article=gamez_2011,
+        replication_of=znl_study_3
     )
     gamez_study_3.effects.add(effect_1)
     gamez_study_4 = Study.objects.create(
         study_number=4,
         article=gamez_2011,
+        replication_of=znl_study_4
     )
     gamez_study_4.effects.add(effect_2)
     gamez_result_2 = StatisticalResult.objects.create(
@@ -365,20 +443,38 @@ def seed_data(apps, schema_editor):
         journal=jasnh,
         year=2009,
         doi='10.1.1.214.2427',
+        article_type='REPLICATION',
     )
     ArticleAuthor.objects.create(
         article=fayard_2009,
         author=fayard,
         order=1
     )
+    ArticleAuthor.objects.create(
+        article=fayard_2009,
+        author=bassi,
+        order=2
+    )
+    ArticleAuthor.objects.create(
+        article=fayard_2009,
+        author=bernstein,
+        order=3
+    )
+    ArticleAuthor.objects.create(
+        article=fayard_2009,
+        author=roberts,
+        order=4
+    )
     fayard_study_1 = Study.objects.create(
         article=fayard_2009,
         study_number=1,
+        replication_of=znl_study_3
     )
     fayard_study_1.effects.add(effect_1)
     fayard_study_2 = Study.objects.create(
         article=fayard_2009,
         study_number=2,
+        replication_of=znl_study_4
     )
     fayard_study_2.effects.add(effect_2)
     clin_psych = Journal.objects.create(
@@ -395,15 +491,27 @@ def seed_data(apps, schema_editor):
         """,
         journal=clin_psych,
         doi='10.1177/2167702613485565',
+        article_type='REPLICATION',
     )
     ArticleAuthor.objects.create(
         article=reuven_2013,
         author=reuven,
         order=1,
     )
+    ArticleAuthor.objects.create(
+        article=reuven_2013,
+        author=liberman,
+        order=2,
+    )
+    ArticleAuthor.objects.create(
+        article=reuven_2013,
+        author=dar,
+        order=3,
+    )
     reuven_study_1 = Study.objects.create(
         study_number=1,
         article=reuven_2013,
+        replication_of=znl_study_4
     )
     reuven_study_1.effects.add(effect_2)
     reuven_result = StatisticalResult.objects.create(
@@ -440,6 +548,9 @@ def delete_data(apps, schema_editor):
     Construct.objects.all().delete()
     Collection.objects.all().delete()
     Effect.objects.all().delete()
+    for s in Study.objects.all():
+        s.replication_of = None
+        s.save()
     Study.objects.all().delete()
     ArticleAuthor.objects.all().delete()
     RelatedArticle.objects.all().delete()
