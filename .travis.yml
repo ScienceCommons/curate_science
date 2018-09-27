@@ -13,7 +13,7 @@ script:
 - python manage.py test
 deploy:
   provider: gae
-  keyfile: curate_science/google_application_credentials.json
+  keyfile: google_application_credentials.json
   project: curate-science-216207
 env:
   global:
