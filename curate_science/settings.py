@@ -18,8 +18,10 @@ load_dotenv()
 # If this env var exists, then the app is running on GAE. Else it's local dev environment.
 if os.getenv('GOOGLE_CLOUD_PROJECT'):
     DB_HOST='/cloudsql/curate-science-216207:europe-west1:curatedb'
+    DEBUG = False
 else:
     DB_HOST='localhost'
+    DEBUG = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,9 +32,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 

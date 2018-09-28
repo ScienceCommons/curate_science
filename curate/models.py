@@ -98,6 +98,10 @@ class Article(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     @property
+    def has_many_studies(self):
+        return len(self.study_set.all()) > 1
+
+    @property
     def et_al(self):
         first_author = self.authors.first().last_name
         has_two_authors = self.authors.count() == 2
@@ -174,7 +178,7 @@ class Study(models.Model):
         self.replication_of is not None
 
     def __str__(self):
-        if has_many_studies:
+        if self.article.has_many_studies:
             study_num = f" Study {self.study_number}"
         else:
             study_num = ""
