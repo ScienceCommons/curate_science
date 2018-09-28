@@ -46,6 +46,18 @@ class Article(models.Model):
     META_RESEARCH = 'META_RESEARCH'
     COMMENTARY = 'COMMENTARY'
 
+    BASIC_4_AT_SUBMISSION = 'BASIC_4_AT_SUBMISSION'
+    BASIC_4_RETROACTIVE = 'BASIC_4_RETROACTIVE'
+    CONSORT_SPI = 'CONSORT_SPI'
+    CONSORT = 'CONSORT'
+    JARS = 'JARS'
+    STROBE = 'STROBE'
+    ARRIVE = 'ARRIVE'
+    NATURE_NEUROSCIENCE = 'NATURE_NEUROSCIENCE'
+    MARS = 'MARS'
+    PRISMA = 'PRISMA'
+    PRISMA_P = 'PRISMA_P'
+
     doi = models.CharField(max_length=255, null=True)
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True)
     year = models.PositiveIntegerField(default=datetime.datetime.now().year)
@@ -60,13 +72,28 @@ class Article(models.Model):
         (META_RESEARCH, 'reanalysis - meta-research'),
         (COMMENTARY, 'commentary'),
     ))
-    reporting_standards_type = models.CharField(max_length=255, null=True)
+    reporting_standards_type = models.CharField(max_length=255, null=True, choices=(
+        (BASIC_4_AT_SUBMISSION, "Basic-4 (at submission; PSCI, 2014)"),
+        (BASIC_4_RETROACTIVE, "Basic-4 (retroactive; 2012)"),
+        (CONSORT_SPI, "CONSORT-SPI (2018)"),
+        (CONSORT, "CONSORT (2010)"),
+        (JARS, "JARS (2018)"),
+        (STROBE, "STROBE (2007)"),
+        (ARRIVE, "ARRIVE (2010)"),
+        (NATURE_NEUROSCIENCE, "Nature Neuroscience (2015)"),
+        (MARS, "MARS (2018)"),
+        (PRISMA, "PRISMA (2009)"),
+        (PRISMA_P, "PRISMA-P (2015)")
+    ))
     related_articles = models.ManyToManyField(
         'self',
         through='RelatedArticle',
         related_name='original_article',
         symmetrical=False,
     )
+    pdf_url = models.URLField(null=True)
+    html_url = models.URLField(null=True)
+    preprint_url = models.URLField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
