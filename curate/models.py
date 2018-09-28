@@ -58,6 +58,9 @@ class Article(models.Model):
     PRISMA = 'PRISMA'
     PRISMA_P = 'PRISMA_P'
 
+    SOCIAL_SCIENCE = 'SOCIAL_SCIENCE'
+    MEDICAL_LIFE_SCIENCE = 'MEDICAL_LIFE_SCIENCE'
+
     doi = models.CharField(max_length=255, null=True)
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True)
     year = models.PositiveIntegerField(default=datetime.datetime.now().year)
@@ -94,6 +97,13 @@ class Article(models.Model):
     pdf_url = models.URLField(null=True)
     html_url = models.URLField(null=True)
     preprint_url = models.URLField(null=True)
+    research_area = models.CharField(max_length=255,
+                                     choices=(
+                                         (SOCIAL_SCIENCE, 'Social Science'),
+                                         (MEDICAL_LIFE_SCIENCE, 'Medical/Life Science'),
+                                     ),
+                                     default=SOCIAL_SCIENCE
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -156,6 +166,7 @@ class Study(models.Model):
     effects = models.ManyToManyField('Effect', related_name='studies')
     study_type = models.CharField(max_length=255, null=True)
     study_number = models.PositiveIntegerField()
+    study_sub_number = models.CharField(max_length=2, null=True)
     evidence_type = models.CharField(max_length=255, null=True)
     reporting_standards_type = models.CharField(max_length=255, null=True)
     #below fields are only for a replication study
@@ -179,7 +190,10 @@ class Study(models.Model):
 
     def __str__(self):
         if self.article.has_many_studies:
-            study_num = f" Study {self.study_number}"
+            if self.study_sub_number:
+                study_num = f" Study {self.study_number}{self.study_sub_number}"
+            else:
+                study_num = f" Study {self.study_number}"
         else:
             study_num = ""
         return(f"{self.article.et_al} ({self.article.year}){study_num}")
