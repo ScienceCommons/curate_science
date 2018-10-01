@@ -109,7 +109,7 @@ class Article(models.Model):
 
     @property
     def has_many_studies(self):
-        return len(self.study_set.all()) > 1
+        return len(self.studies.all()) > 1
 
     @property
     def et_al(self):

@@ -561,5 +561,5 @@ class TestModelRelationships(TestCase):
 
     def test_study_number_only_study(self):
         reuven_2013 = Article.objects.get(doi='10.1177/2167702613485565')
-        reuven_study_1 = reuven_2013.study_set.first()
+        reuven_study_1 = reuven_2013.studies.first()
         assert str(reuven_study_1) == "Reuven et al. (2013)"
