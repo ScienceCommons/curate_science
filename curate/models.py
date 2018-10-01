@@ -62,7 +62,7 @@ class Article(models.Model):
     MEDICAL_LIFE_SCIENCE = 'MEDICAL_LIFE_SCIENCE'
 
     doi = models.CharField(max_length=255, null=True)
-    journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True)
+    journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True, related_name='articles')
     year = models.PositiveIntegerField(default=datetime.datetime.now().year)
     title = models.CharField(max_length=255)
     abstract = models.TextField(null=True)
@@ -162,7 +162,7 @@ class Study(models.Model):
     EXACT = 'EXACT'
     VERY_SIMILAR = 'VERY_SIMILAR'
     SIMILAR = 'SIMILAR'
-    article = models.ForeignKey(Article, on_delete=models.PROTECT, null=True)
+    article = models.ForeignKey(Article, on_delete=models.PROTECT, null=True, related_name='studies')
     effects = models.ManyToManyField('Effect', related_name='studies')
     study_type = models.CharField(max_length=255, null=True)
     study_number = models.PositiveIntegerField()

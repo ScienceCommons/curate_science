@@ -24,16 +24,39 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('api/authors/', api.list_authors, name='list-authors'),
-    path('api/articles/', api.list_articles, name='list-articles'),
-    path('api/collections/', api.list_collections, name='list-collections'),
-    path('api/constructs/', api.list_constructs, name='list-constructs'),
-    path('api/effects/', api.list_effects, name='list-effects'),
-    path('api/hypotheses/', api.list_hypotheses, name='list-hypotheses'),
-    path('api/journals/', api.list_journals, name='list-journals'),
-    path('api/key_figures/', api.list_key_figures, name='list-key-figures'),
-    path('api/methods/', api.list_methods, name='list-methods'),
-    path('api/statistical_results/', api.list_statistical_results, name='list-statistical-results'),
-    path('api/studies/', api.list_studies, name='list-studies'),
-    path('api/transparencies/', api.list_transparencies, name='list-transparencies'),
+    path('api/', api.index, name='api-index'),
+    # Author paths
+    path('api/authors/', api.list_authors, name='api-list-authors'),
+    path('api/authors/create/', api.create_author, name='api-create-author'),
+    path('api/authors/<pk>/', api.view_author, name='api-view-author'),
+    path('api/authors/<pk>/update', api.update_author, name='api-update-author'),
+    # Article paths
+    path('api/articles/', api.list_articles, name='api-list-articles'),
+    path('api/articles/<pk>/', api.view_article, name='api-view-article'),
+    # Collection paths
+    path('api/collections/', api.list_collections, name='api-list-collections'),
+    path('api/collections/<pk>/', api.view_collection, name='api-view-collection'),
+    # Construct paths
+    path('api/constructs/', api.list_constructs, name='api-list-constructs'),
+    path('api/constructs/<pk>/', api.view_construct, name='api-view-construct'),
+    # Effect paths
+    path('api/effects/', api.list_effects, name='api-list-effects'),
+    path('api/effects/<pk>/', api.view_effect, name='api-view-effect'),
+    # Hypothesis paths
+    path('api/hypotheses/', api.list_hypotheses, name='api-list-hypotheses'),
+    path('api/hypotheses/<pk>/', api.view_hypothesis, name='api-view-hypothesis'),
+    # Journal paths
+    path('api/journals/', api.list_journals, name='api-list-journals'),
+    path('api/journals/<pk>/', api.view_journal, name='api-view-journal'),
+    # Key figure paths
+    path('api/key_figures/', api.list_key_figures, name='api-list-key-figures'),
+    # Method paths
+    path('api/methods/', api.list_methods, name='api-list-methods'),
+    # Statistical Result paths
+    path('api/statistical_results/', api.list_statistical_results, name='api-list-statistical-results'),
+    # Study paths
+    path('api/studies/', api.list_studies, name='api-list-studies'),
+    path('api/studies/<pk>/', api.view_study, name='api-view-study'),
+    # Transparency paths
+    path('api/transparencies/', api.list_transparencies, name='api-list-transparencies'),
 ]

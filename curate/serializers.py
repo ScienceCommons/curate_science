@@ -22,6 +22,8 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class ArticleSerializer(serializers.ModelSerializer):
+    studies = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model=Article
         fields='__all__'
@@ -47,6 +49,8 @@ class HypothesisSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class JournalSerializer(serializers.ModelSerializer):
+    articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model=Journal
         fields='__all__'
