@@ -43,7 +43,16 @@ class EffectSerializer(serializers.ModelSerializer):
         model=Effect
         fields='__all__'
 
+class VariableRelationshipSerializer(serializers.ModelSerializer):
+    independent_variable_method=serializers.PrimaryKeyRelatedField(source='ind_var', read_only=True)
+    dependent_variable_method=serializers.PrimaryKeyRelatedField(source='dep_var', read_only=True)
+    class Meta:
+        model=VariableRelationship
+        #fields='__all__'
+        exclude=('ind_var','dep_var',)
+
 class HypothesisSerializer(serializers.ModelSerializer):
+    variables = VariableRelationshipSerializer(many=True, read_only=False)
     class Meta:
         model=Hypothesis
         fields='__all__'

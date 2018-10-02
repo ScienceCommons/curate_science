@@ -32,6 +32,7 @@ class Author(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 class Journal(models.Model):
+    """A periodical that publishes many Articles"""
     name = models.CharField(max_length=255, unique=True)
     issn = models.CharField(max_length=255, null=True)
 
@@ -39,6 +40,7 @@ class Journal(models.Model):
         return self.name
 
 class Article(models.Model):
+    """A written work with one or more Authors, reporting the results of a scientific Study."""
     ORIGINAL = 'ORIGINAL'
     REPLICATION = 'REPLICATION'
     REPRODUCIBILITY = 'REPRODUCIBILITY'
@@ -150,6 +152,7 @@ class RelatedArticle(models.Model):
         ordering = ('order',)
 
 class ArticleAuthor(models.Model):
+    """Represents a many-to-many relationship between Authors and the Articles that they write"""
     article = models.ForeignKey(Article, on_delete=models.PROTECT)
     author = models.ForeignKey(Author, on_delete=models.PROTECT)
     order = models.PositiveIntegerField()
@@ -296,7 +299,7 @@ class VariableRelationship(models.Model):
         (NONLINEAR, 'NONLINEAR'),
     )
     relationship_type = models.CharField(max_length=255, choices=REL_TYPES)
-    hypothesis = models.ForeignKey(Hypothesis, on_delete=models.PROTECT)
+    hypothesis = models.ForeignKey(Hypothesis, on_delete=models.PROTECT, related_name='variables')
     ind_var = models.ForeignKey(Method, on_delete=models.PROTECT, related_name='independent_rels')
     dep_var = models.ForeignKey(Method, on_delete=models.PROTECT, related_name='dependent_rels')
 

@@ -1,0 +1,11 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+  <p>Welcome to Curate Science, {{ user.username }}!</p>
+  <a href="{% url 'logout' %}">Log Out</a>
+{% else %}
+  <p>Welcome to Curate Science.</p>
+  <a href="{% url 'login' %}">Log In</a>
+{% endif %}
+{% endblock %}

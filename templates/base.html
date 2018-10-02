@@ -1,0 +1,15 @@
+<!-- templates/base.html -->
+{% load staticfiles %}
+
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>Curate Science</title>
+    {% block app_imports %}{% endblock %}
+  </head>
+  <body>
+    <main>
+    {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
