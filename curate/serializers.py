@@ -53,6 +53,8 @@ class VariableRelationshipSerializer(serializers.ModelSerializer):
 
 class HypothesisSerializer(serializers.ModelSerializer):
     variables = VariableRelationshipSerializer(many=True, read_only=False)
+    # TODO: write create() and update() methods
+    # http://www.django-rest-framework.org/api-guide/serializers/#writable-nested-representations
     class Meta:
         model=Hypothesis
         fields='__all__'

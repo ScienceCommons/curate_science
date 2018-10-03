@@ -17,14 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from curate.views import index
+from django.template import RequestContext
+from curate.views import index, create_article, view_article
 import curate.views_api as api
 
 urlpatterns = [
     path('', index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('articles/create/', create_article, name='create-article'),
+    path('articles/<pk>', view_article, name='view-article'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
     path('api/', api.index, name='api-index'),
