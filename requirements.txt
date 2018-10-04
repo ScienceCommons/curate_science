@@ -1,4 +1,5 @@
 Django==2.1.1
+django-autocomplete-light==3.3.2
 django-extensions==2.1.2
 djangorestframework==3.8.2
 gunicorn==19.9.0
