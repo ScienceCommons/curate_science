@@ -1,4 +1,7 @@
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from dal import autocomplete
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -608,3 +611,21 @@ def delete_transparency(request, pk):
     transparency=get_object_or_404(Transparency, pk)
     transparency.delete()
     return Response(status=status.HTTP_200_OK)
+
+# Autocomplete views
+
+class AuthorAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        queryset = Author.objects.all().order_by('last_name')
+        if self.q:
+            queryset = queryset.filter(Q(last_name__istartswith=self.q)
+                                       | Q(first_name__istartswith=self.q)).order_by('last_name')
+        return queryset
+
+class ArticleAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        queryset = Article.objects.all()
+        if self.q:
+            queryset = queryset.filter(Q(authors__last_name__startswith=self.q)
+                                       | Q(title__startswith=self.q))
+        return queryset

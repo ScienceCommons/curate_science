@@ -5,61 +5,15 @@
 <html>
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <meta http-equiv="Cache-control" content="public">
-  <title itemprop='name'>Curate Science - Crowdsourcing the Transparency of Empirical Research.</title>
-  <meta name="description" content="Curate Science is a platform to crowdsource the credibility of scientific research by curating its transparency, analytic reproducibility, analytic robustness, and replicability." />
-  <meta name="keywords" content="replication, replications, direct replication, conceptual replication, replicability, generalizability, analytic reproducibility, analytic robustness, research credibility, credibility of findings, sufficient transparency, open science, sufficient falsifiability, falsification, cumulative knowledge" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-
-<link rel="stylesheet" href="{% static 'curate/css/sprite-CSS.css' %}">
+  <title>Curate Science - Crowdsourcing the Transparency of Empirical Research.</title>
   {% block app_imports %}{% endblock %}
   </head>
 <body>
   <header >
-
-  <nav class="navbar navbar-default navbar-fixed-top">
-          <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top:2px;margin-bottom:2px;padding-top:2px;padding-bottom:2px;">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="/">
-                        <span style="padding-top:10px;margin-bottom:3px;font-weight:700;">Curate Science<img src=" logos/sprite-icons/CS-icon-light-blue.png" style="margin-left:1px;width:22px;margin-top:-2px;font-style:normal;"></span>
-                  </a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                  <ul class="nav navbar-nav">
-                        <li style="font-weight:bold"><a href="/#about">About</a></li>
-                        <li style="font-weight:bold"><a href="/#people">People</a></li>
-                        <li style="font-weight:bold"><a href="/#FAQ">FAQ</a></li>
-                        <li style="font-weight:bold"><a href="/#newsletter">Newsletter</a></li>
-                  </ul>
-                </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
-
-</header>
-
+  </header>
     <main>
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% endblock %}
     </main>
 </body>
-<!--<script type="text/javascript">
-                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
-          ga('create', 'UA-48865749-1', 'auto');
-          ga('send', 'pageview');
-  </script> -->
 </html>

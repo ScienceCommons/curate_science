@@ -1,595 +1,73 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="main-container">
-	<div class="container-fluid" style="font-size:12px;">
-		
-		
-		<div class="article-page-top-section">
-			<table cellspacing="0" border=0>
-				<tbody>
-					<tr>
-						<td style="vertical-align:top;">
-                            <img src=' {% static "curate/img/logos/sprite-icons/article.png" %}' class='shrunk-14 transparent' style="margin-top:2px;margin-right:10px;">
-						</td>
-						<td colspan="2" style="font-weight:bold;font-size:16px;">Add/Edit Article</td>
-						</td>
-					</tr>
-					<tr>
-						<td >
-						</td>
-						<td  colspan="2">
-							
-							<table style="margin-top:0px;border:1px solid lightgrey;" border=0>
-								<tr>
-									<td style="padding:5px;">
-										<div style="font-style:italic;font-size:10px;color:grey;">Article-level</div>
-										<input type="text" name="DOI" placeholder="DOI (or leave blank for Unpublished/Under peer review articles)" style="color:grey;opacity:.40;margin-top:5px;" size="54">
-										<input type="submit" value="Populate article metadata" style="font-size:9px;">
-									</td>
-									<td>
-									</td>
-								</tr>
-								<tr >  
-								  <td style="padding:5px;">
-										<input type="text" name="articletitle" placeholder="Article title" style="font-size:20px;line-height:26px;margin-top:0px;" size="65"><b>*</b>
-										<br>
-										<input type="text" name="authors" placeholder="Authors" style="color:#009933;margin-top:10px;" size="75"><b>*</b>
-										<input type="text" name="pub.year" placeholder="Year (or 'in press')" style="color:#009933;margin-top:10px;margin-left:20px;" size="15"><b>*</b>
-										<br>
-										<input type="text" name="authors" placeholder="Journal name (or 'Under peer review' or 'Unpublished')" style="color:#999999;font-style:italic;margin-top:10px;" size="50"><b>*</b>
-										<br>
-										<textarea name="abstract" placeholder="Abstract (optional)" style="font-size:12px;color:grey;margin-top:10px;height:30px;width:707px;max-height:250px;min-height:30px;overflow:auto;resize:vertical;"></textarea>
-									</td>
-									<td style="vertical-align:top;text-align:right;padding:5px;"> 
-											<span class='label label-info-purple' style="font-size:80%!important;">Preprint</a></span>
-											<input type="text" name="preprint.URL" placeholder="Article preprint URL" style="font-size:10px;" size="25">
-										<br>
-											<span class='label label-default' style="font-size:80%!important;;">HTML</span>
-											<input type="text" name="HTML.URL" placeholder="Article HTML URL" style="font-size:10px;" size="25">
-										<br>
-											<img src='{% static "curate/img/logos/sprite-icons/pdf.png" %}' class='shrunk-16 transparent'>
-											<input type="text" name="PDF.URL" placeholder="Article PDF URL" style="font-size:10px;" size="25">
-									</td >
-								</tr>
-								<tr>
-									<td colspan="2" style="padding:5px;">
-										<div style="margin-left:15px;margin-bottom:5px;vertical-align:top;display:inline-block;">
-											Article type<b>*</b>:
-										</div>
-										<div style="margin-bottom:5px;vertical-align:top;display:inline-block;">
-											<input type="radio" name="articleType" value="orig" style="margin-top:5px;vertical-align:bottom;margin-left:15px;" autocomplete="off" > Original research
-											
-										</div>
-										<div style="margin-bottom:5px;vertical-align:top;display:inline-block;">
-											<input type="radio" name="articleType" value="rep" style="margin-top:1px;vertical-align:bottom;margin-left:30px;" autocomplete="off" checked="checked"> <span class='label label-info-brown' title='Article reports replications (enter # of replications reported).'>Replications: <span class='badge badge-repnum'></span></span>
-											<input type="text" name="rep.num" placeholder="1" style="margin-left:2px;font-size:9px;line-height:10px;" size="2" maxlength="4"><b>*</b>	
-										</div>
-										<div style="margin-bottom:5px;vertical-align:top;display:inline-block;">
-											<input type="radio" name="articleType" value="reanal" style="margin-top:1px;vertical-align:bottom;margin-left:30px;" autocomplete="off" id="reanalRadio">  <span class="label label-info-pecan" title="Article reports a reanalysis of a previously published data.">Reanalysis</span>
-											<div style="margin-left:20px;margin-top:5px;font-size:10px;opacity:.6;">
-												<input type="radio" name="reanalysisType" value="reanal" style="margin-top:1px;vertical-align:bottom;margin-left:30px;" autocomplete="off" checked="checked"> <span title="Article reports a reproducibility or robustness reanalysis of a previously published result.">Reproducibility/robustness</span>
-												<br>
-												<input type="radio" name="reanalysisType" value="meta" style="margin-top:5px;vertical-align:bottom;margin-left:30px;" autocomplete="off"> Meta-analysis (traditional)
-												<br>
-												<input type="radio" name="reanalysisType" value="meta" style="margin-top:5px;vertical-align:bottom;margin-left:30px;" autocomplete="off"> Meta-research (other)
-											</div>
-										</div>
-										<div style="margin-bottom:5px;vertical-align:top;display:inline-block;">
-											<input type="radio" name="articleType" value="meta" style="margin-top:5px;vertical-align:bottom;margin-left:30px;" autocomplete="off"> <span class='label label-info-commentary'>Commentary</span>
-										</div>
-										<div style="margin-bottom:5px;vertical-align:top;display:inline-block;margin-left:75px;">
-											Research area<b>*</b>:
-											<br>
-											<input type="radio" name="research_area" value="social_science" style="margin-top:1px;vertical-align:bottom;margin-left:15px;" autocomplete="off" checked="checked"> Social Science
-											<br>
-											<input type="radio" name="research_area" value="life_science" style="margin-top:5px;vertical-align:bottom;margin-left:15px;" autocomplete="off"> Medical/Life Science
-										</div>										
-										
-											<table style="margin-top:5px;margin-left:15px;table-layout:fixed;" border=0>
-												<tr>
-													<td width="255px" >
-														<div style="font-weight:600;">Transparency (Article-Level)<sup>†</sup></div>
-														<ul class="nav nav-tabs">
-															<li class="active" ><a data-toggle="tab" href="#prereg3" style="padding:5px 7px;margin-top:1px;" title='Curate preregistered study protocol'><img src=' logos/sprite-icons/preregistered-plus-available.png' class='shrunk-18 transparent'></a></li>
-															<li ><a data-toggle="tab" href="#om3" style="padding:5px 7px;"  title='Curate study materials'><img src=' logos/sprite-icons/materials-available.png' class='shrunk-18 transparent'></a></li>
-															<li ><a data-toggle="tab" href="#od3" style="padding:5px 7px;"  title='Curate open data'><img src=' logos/sprite-icons/data-available.png' class='shrunk-18 transparent'></a></li>
-															<li ><a data-toggle="tab" href="#oc3" style="padding:5px 7px;"  title='Curate open code/Code Ocean capsule'><img src=' logos/sprite-icons/code.png' class='shrunk-18 code-icon'></a></li>
-															<li ><a data-toggle="tab" href="#rs3" style="padding:5px 7px;"  title='Curate reporting standards compliance information'><img src=' logos/sprite-icons/disclosure-available.png' class='shrunk-18 transparent'></a></li>
-														</ul>
-														<div class="tab-content" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;border-radius: 0px 0px 5px 5px;padding: 10px;">
-															<div id="prereg3" class="tab-pane fade in active" >
-																<span style="font-weight:600;">Preregistration type:</span>
-																<br>
-																<input type="radio" name="preRegType" value="rr" style="margin-top:1px;" autocomplete="off"> <span class="label label-info-red" title="Study design and analysis plans were peer-reviewed and preregistered prior to data collection.">Registered Report</span> format
-																<br>
-																<input type="radio" name="preRegType" value="preregplus" style="margin-top:1px;" autocomplete="off"> Preregistered design + analysis
-																<br>
-																<input type="radio" name="preRegType" value="prereg" style="margin-top:1px;" autocomplete="off"> Preregistered design 
-																<br>
-																<input type="text" name="preRegURL" placeholder="Preregistered protocol URL" style="color:#999999;margin-top:5px;" size="25">
-																
-															</div>
-															<div id="om3" class="tab-pane fade" >
-																<span style="font-weight:600;">Open study materials:</span>
-																<br>
-																<input type="text" name="omURL" placeholder="Study materials URL" style="color:#999999;margin-top:5px;" size="25">
-																<br>
-																<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-																
-															</div>
-															<div id="od3" class="tab-pane fade" >
-																<span style="font-weight:600;">Open data:</span>
-																<br>
-																<input type="text" name="odURL" placeholder="Data URL" style="color:#999999;margin-top:5px;" size="25">
-																<br>
-																<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-															</div>
-															<div id="oc3" class="tab-pane fade" >
-																<span style="font-weight:600;">Open code:</span>
-																<br>
-																<input type="text" name="ocURL" placeholder="Code URL" style="color:#999999;margin-top:5px;" size="25">
-																<br>
-																<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-															</div>
-															<div id="rs3" class="tab-pane fade" >
-																<span style="font-weight:600;">Compliance to relevant reporting standard:</span>
-																<div style="font-style:italic;font-size:8px;color:grey;margin-bottom:5px;">(All studies)</div>
-																<select name="rs.name" onchange="getRSdivText3(this)">
-																	<option value="1">Basic-4 (at submission; PSCI, 2014)</option>
-																	<option value="2">Basic-4 (retroactive; 2012)</option>
-																	<option value="3">CONSORT-SPI (2018)</option>
-																	<option value="4">CONSORT (2010)</option>
-																	<option value="5">JARS (2018)</option>
-																	<option value="6">STROBE (2007)</option>
-																	<option value="7">ARRIVE (2010)</option>
-																	<option value="8">Nature Neuroscience (2015)</option>
-																	<option value="9">MARS (2018)</option>
-																	<option value="10">PRISMA (2009)</option>
-																	<option value="11">PRISMA-P (2015)</option>	
-																</select>
-																<div id="rsDiv3" style="color:grey;font-size:9px;">
-																	<ol style='margin-top:5px;margin-bottom:5px;padding-left:10px;'>
-																	   <li><strong>Excluded data (subjects/observations):</strong> Full details reported in article.</li>
-																	   <li><strong>Experimental conditions:</strong> Full details reported in article.</li>
-																	   <li><strong>Outcome measures:</strong> Full details reported in article.</li>
-																	   <li><strong>Sample size determination:</strong> Full details reported in article.</li>
-																	</ol>
-																	<br><a href='https://www.psychologicalscience.org/publications/psychological_science/ps-submissions#DISC' target='_blank'>Details of Psychological Science's 'Basic-4 at submission reporting standard (2014)'</a>
-																</div>
-															</div>
-														</div> <!--tab panes-- div-->
-												
-													</td>
-													<td style="vertical-align:top;padding-left:5px;padding-top:4px;">
-														<div style="font-weight:600;margin-bottom:5px;">Key Figures/Tables (Article-Level)</div>
-														<input type="submit" value="Upload image" style="font-size:10px;margin-top:2px;"> or 
-														<br>
-														<input type="text" name="keyFigureURL" placeholder="Image URL" style="color:#999999;margin-top:4px;" size="20">
-														<br>
-														<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another image URL</a>
-													</td>
-													<td style="vertical-align:top;" >
-														<div id="reanalysisDetailsDiv" style="margin-top:10px;display:inline-block;margin-left:60px;vertical-align:top;opacity:.5;">
-															<span style="font-weight:600;color:grey;">Reanalysis Details</span>
-															<br>
-															<input type="checkbox" name="articleType" value="rep" style="margin-top:1px;vertical-align:bottom;" autocomplete="off">Reproducibility
-															<input type="checkbox" name="articleType" value="rep" style="margin-top:1px;vertical-align:bottom;margin-left:20px;" autocomplete="off">Robustness
-															<br>
-															Of article: 
-															<input type="text" name="rep.study.authors" placeholder="Article authors & pub.year*" style="color:#999999;font-size:10px;margin-top:5px;" size="25">
-															<br>
-															<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add article</a>
-																
-														</div>
-													</td>
-													<td style="vertical-align:top;">
-														<div id="commentaryDetailsDiv" style="margin-top:10px;display:inline-block;margin-left:60px;vertical-align:top;opacity:.5;">
-															<span style="font-weight:600;color:grey;">Commentary Details</span>
-															<br>
-															Of article: 
-															<input type="text" name="rep.study.authors" placeholder="Article authors & pub.year*" style="color:#999999;font-size:10px;margin-top:5px;" size="25">
-															<br>
-															<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add article</a>
-														</div>
-													</td>
-												</tr>
-											</table>
-											
-										
-										
-										
-										<div style="margin-top:10px;">
-										</div>
-									
-									</td>
-								</tr>
-							</table>
-						
-							
-						
-						</td>
-					</tr>
-					
-					<tr>
-						<td >
-						</td>
-						<td width="20px"><img src="logos\_trans-square.png">
-						</td>
-						<td  style="border:lightgrey solid 1px;">
-							<div style="font-style:italic;font-size:10px;color:grey;padding:2px;">Study-level</div>
-							<table style="table-layout:fixed;margin-top:0px;margin-left:5px;" border=0>
-								<tr>
-									<td></td>
-									<td><div style="font-weight:600;">Transparency<sup>†</sup></div>
-										<div style="font-style:italic;font-size:8px;color:grey;margin-top:-2px;">Deep curation (recommended) <i class="fas fa-info-circle" style="font-size:1.25em;" title="Please curate transparency information at the study-level (‘Deep curation (recommended)’) *or* at the article-level above (‘Quick curation’), but not at both levels."></i></div>
-										</td>
-									<td><div style="font-weight:600;margin-bottom:5px;">Key Figures/Tables </div></td>
-									<td><div style="font-weight:600;margin-bottom:5px;">Replication Details </div></td>
-								</tr>
-								<tr>
-									<td width="55px" class="padded">
-										Study
-										<input type="text" name="rep.study.number" placeholder="Study #" style="color:#999999;display:inline;font-size:10px;" size="5" maxlength="2">
-										<div style="font-style:italic;font-size:8px;color:grey;margin-top:5px;">Leave blank for sole study article</div>
-									</td>
-									<td style="min-width:200px;">
-										
-										<ul class="nav nav-tabs">
-											<li class="active" ><a data-toggle="tab" href="#prereg1" style="padding:5px 7px;margin-top:1px;" title='Curate preregistered study protocol'><img src=' logos/sprite-icons/preregistered-plus-available.png' class='shrunk-18 transparent'></a></li>
-											<li ><a data-toggle="tab" href="#om1" style="padding:5px 7px;"  title='Curate study materials'><img src=' logos/sprite-icons/materials-available.png' class='shrunk-18 transparent'></a></li>
-											<li ><a data-toggle="tab" href="#od1" style="padding:5px 7px;"  title='Curate open data'><img src=' logos/sprite-icons/data-available.png' class='shrunk-18 transparent'></a></li>
-											<li ><a data-toggle="tab" href="#oc1" style="padding:5px 7px;"  title='Curate open code/Code Ocean capsule'><img src=' logos/sprite-icons/code.png' class='shrunk-18 code-icon'></a></li>
-											<li ><a data-toggle="tab" href="#rs1" style="padding:5px 7px;"  title='Curate reporting standards compliance information'><img src=' logos/sprite-icons/disclosure-available.png' class='shrunk-18 transparent'></a></li>
-										</ul>
-										<div class="tab-content" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;border-radius: 0px 0px 5px 5px;padding: 10px;">
-											<div id="prereg1" class="tab-pane fade in active" >
-												<span style="font-weight:600;">Preregistration type:</span>
-												<br>
-												<input type="radio" name="preRegType" value="rr" style="margin-top:1px;" autocomplete="off"> <span class="label label-info-red" title="Study design and analysis plans were peer-reviewed and preregistered prior to data collection.">Registered Report</span> format
-												<br>
-												<input type="radio" name="preRegType" value="preregplus" style="margin-top:1px;" autocomplete="off"> Preregistered design + analysis
-												<br>
-												<input type="radio" name="preRegType" value="prereg" style="margin-top:1px;" autocomplete="off"> Preregistered design 
-												<br>
-												<input type="text" name="preRegURL" placeholder="Preregistered protocol URL" style="color:#999999;margin-top:5px;" size="25">
-												
-											</div>
-											<div id="om1" class="tab-pane fade" >
-												<span style="font-weight:600;">Open study materials:</span>
-												<br>
-												<input type="text" name="omURL" placeholder="Study materials URL" style="color:#999999;margin-top:5px;" size="25">
-												<br>
-												<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-											</div>
-											<div id="od1" class="tab-pane fade" >
-												<span style="font-weight:600;">Open data:</span>
-												<br>
-												<input type="text" name="odURL" placeholder="Data URL" style="color:#999999;margin-top:5px;" size="25">
-												<br>
-												<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-											</div>
-											<div id="oc1" class="tab-pane fade" >
-												<span style="font-weight:600;">Open code:</span>
-												<br>
-												<input type="text" name="ocURL" placeholder="Code URL" style="color:#999999;margin-top:5px;" size="25">
-												<br>
-												<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-											</div>
-											<div id="rs1" class="tab-pane fade" >
-												<span style="font-weight:600;">Compliance to relevant reporting standard:</span>
-												<br>
-												<select name="rs.name" onchange="getRSdivText1(this)">
-													<option value="1">Basic-4 (at submission; PSCI, 2014)</option>
-													<option value="2">Basic-4 (retroactive; 2012)</option>
-													<option value="3">CONSORT-SPI (2018)</option>
-													<option value="4">CONSORT (2010)</option>
-													<option value="5">JARS (2018)</option>
-													<option value="6">STROBE (2007)</option>
-													<option value="7">ARRIVE (2010)</option>
-													<option value="8">Nature Neuroscience (2015)</option>
-													<option value="9">MARS (2018)</option>
-													<option value="10">PRISMA (2009)</option>
-													<option value="11">PRISMA-P (2015)</option>	
-												</select>
-												<div id="rsDiv1" style="color:grey;font-size:9px;">
-													<ol style='margin-top:5px;margin-bottom:5px;padding-left:10px;'>
-													   <li><strong>Excluded data (subjects/observations):</strong> Full details reported in article.</li>
-													   <li><strong>Experimental conditions:</strong> Full details reported in article.</li>
-													   <li><strong>Outcome measures:</strong> Full details reported in article.</li>
-													   <li><strong>Sample size determination:</strong> Full details reported in article.</li>
-													</ol>
-													<br><a href='https://www.psychologicalscience.org/publications/psychological_science/ps-submissions#DISC' target='_blank'>Details of Psychological Science's 'Basic-4 at submission reporting standard (2014)'</a>
-												</div>
-											</div>
-										</div> <!--tab panes-- div-->
-								
-									</td>
-									<td style="vertical-align:top;padding-left:4px;padding-top:4px;" width="150px;">
-										
-										<input type="submit" value="Upload image" style="font-size:10px;margin-top:2px;"> or <input type="text" name="keyFigureURL" placeholder="Image URL" style="color:#999999;margin-top:4px;" size="20">
-										<br>
-										<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another image URL</a>
-									</td>
-									<td style="vertical-align:top;padding-left:2px;">
-									
-									  <table class="stripe" style="opacity:.5;" border=0>
-											<thead>
-												<tr style="border-bottom:solid 1px lightgrey;">
-													<th style="text-align:center;color:grey;" class="padded">Original.Study</th>
-													<th style="text-align:center;color:grey;" class="padded">Target.Effects</th>
-													<th style="text-align:center;color:grey;" class="padded">Rep.Method.Similarity</th>
-													<th style="text-align:center;color:grey;" class="padded">Rep.Differences</th>
-													<th style="text-align:center;color:grey;" class="padded">Auxiliary.Hypotheses</th>
-													<th style="text-align:center;color:grey;" class="padded">IVs</th>
-													<th style="text-align:center;color:grey;" class="padded">DVs</th>
-													<th style="text-align:center;color:grey;" class="padded">IV.Methods</th>
-													<th style="text-align:center;color:grey;" class="padded">DV.Methods</th>
-												</tr>
-											</thead>
-											<tbody>
-											<tr>
-												<td class="padded">
-													<input type="text" name="rep.study.authors" placeholder="Orig. study authors & pub.year*" style="color:#999999;font-size:10px;" size="25">
-													<br>
-													<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add article</a>
-													<br>
-													<input type="text" name="rep.study.number" placeholder="Study #" style="color:#999999;font-size:10px;margin-top:5px;" size="10">	
-													<div style="font-style:italic;font-size:8px;color:grey;margin-top:2px;">N/A for sole study articles</div>
-												</td>
-												<td class="center padded">
-													<input type="text" name="target.effect" placeholder="e.g., 'playboy effect'" style="color:#999999;" size="15"><b>*</b>
-												</td>
-												<td class="center padded" >
-													<div style="display:inline-block;vertical-align:top;">
-														<select class="body_text" name="methodSim1" onchange="getText1(this)"> 
-															<option value="close"> Close </option>
-															<option value="veryClose"> Very Close </option>
-															<option value="exact"> Exact </option>
-														</select><b>*</b>
-													</div>
-													<div style="display:inline-block;text-align:left;">
-														<div style="display:inline-block;text-align:left;vertical-align:top;">
-															<span style="font-weight:bold;font-size:9px;">Same:</span>
-														</div>
-														<div style="display:inline-block;text-align:left;">
-															<div id="methodSimDiv1" style="color:grey;font-size:9px;"><ul style="padding-left:15px;"><li>Effect/constructs</li><li>IV/DV methods</li><li>population</li></ul> </div>
-														</div>
-													</div>
-												</td>
-												<td class="center padded">
-													<input type="text" name="method.diffs" placeholder="e.g., 'diff. DV stimuli'" style="color:#999999;" size="15" title="e.g., 'different DV stimuli'">
-												</td>
-												<td class="center padded">
-													<input type="text" name="aux.hypotheses" placeholder="e.g., 'success. manip. check'" style="color:#999999;" size="15" title="e.g., 'successful manipulation check'">
-												</td>
-												
-												<td class="center padded">
-													<input type="text" name="IVs" placeholder="e.g., 'erotica exposure vs. control'" style="color:#999999;" size="15" title="e.g., 'erotica exposure vs. control'">
-												</td>
-												<td class="center padded">
-													<input type="text" name="DVs" placeholder="e.g., 'partner love'" style="color:#999999;" size="15">
-												</td>
-												<td class="center padded">
-													<input type="text" name="IV.methods" placeholder="e.g., 'Playboy centerfolds vs. abstract art images'" style="color:#999999;" size="15" title="e.g., 'Playboy centerfolds vs. abstract art images'">
-												</td>
-												<td class="center padded">
-													<input type="text" name="DV.methods" placeholder="e.g., 'Rubin Love Scale (13-item)'" style="color:#999999;" size="15" title="e.g., 'Rubin Love Scale (13-item)'">
-												</td>
-											</tr>
-											</tbody>
-										</table>
-									</td>
-								</tr>
-							</table>
-							
-							<div id="newStudyDIV" style="display:none;">
-								<table style="table-layout:fixed;margin-top:15px;margin-left:5px;" border=0>
-									<tr>
-										<td width="55px" class="padded">
-											Study
-											<input type="text" name="rep.study.number" placeholder="Study #" style="color:#999999;display:inline;font-size:10px;" size="5" maxlength="2">
-											
-										</td>
-										<td style="min-width:200px;">
-											
-											<ul class="nav nav-tabs">
-												<li class="active" ><a data-toggle="tab" href="#prereg2" style="padding:5px 7px;margin-top:1px;" title='Curate preregistered study protocol'><img src=' logos/sprite-icons/preregistered-plus-available.png' class='shrunk-18 transparent'></a></li>
-												<li ><a data-toggle="tab" href="#om2" style="padding:5px 7px;"  title='Curate study materials'><img src=' logos/sprite-icons/materials-available.png' class='shrunk-18 transparent'></a></li>
-												<li ><a data-toggle="tab" href="#od2" style="padding:5px 7px;"  title='Curate open data'><img src=' logos/sprite-icons/data-available.png' class='shrunk-18 transparent'></a></li>
-												<li ><a data-toggle="tab" href="#oc2" style="padding:5px 7px;"  title='Curate open code/Code Ocean capsule'><img src=' logos/sprite-icons/code.png' class='shrunk-18 code-icon'></a></li>
-												<li ><a data-toggle="tab" href="#rs2" style="padding:5px 7px;"  title='Curate reporting standards compliance information'><img src=' logos/sprite-icons/disclosure-available.png' class='shrunk-18 transparent'></a></li>
-											</ul>
-											<div class="tab-content" style="border-left: 1px solid #ddd;border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;border-radius: 0px 0px 5px 5px;padding: 10px;">
-												<div id="prereg2" class="tab-pane fade in active" >
-													<span style="font-weight:600;">Preregistration type:</span>
-													<br>
-													<input type="radio" name="preRegType" value="rr" style="margin-top:1px;" autocomplete="off"> <span class="label label-info-red" title="Study design and analysis plans were peer-reviewed and preregistered prior to data collection.">Registered Report</span> format
-													<br>
-													<input type="radio" name="preRegType" value="preregplus" style="margin-top:1px;" autocomplete="off"> Preregistered design + analysis
-													<br>
-													<input type="radio" name="preRegType" value="prereg" style="margin-top:1px;" autocomplete="off"> Preregistered design 
-													<br>
-													<input type="text" name="preRegURL" placeholder="Preregistered protocol URL" style="color:#999999;margin-top:5px;" size="25">
-													
-												</div>
-												<div id="om2" class="tab-pane fade" >
-													<span style="font-weight:600;">Open study materials:</span>
-													<br>
-													<input type="text" name="omURL" placeholder="Study materials URL" style="color:#999999;margin-top:5px;" size="25">
-													<br>
-													<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-												</div>
-												<div id="od2" class="tab-pane fade" >
-													<span style="font-weight:600;">Open data:</span>
-													<br>
-													<input type="text" name="odURL" placeholder="Data URL" style="color:#999999;margin-top:5px;" size="25">
-													<br>
-													<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-												</div>
-												<div id="oc2" class="tab-pane fade" >
-													<span style="font-weight:600;">Open code:</span>
-													<br>
-													<input type="text" name="ocURL" placeholder="Code URL" style="color:#999999;margin-top:5px;" size="25">
-													<br>
-													<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another URL</a>
-												</div>
-												<div id="rs2" class="tab-pane fade" >
-													<span style="font-weight:600;">Compliance to relevant reporting standard:</span>
-													<br>
-													<select name="rs.name" onchange="getRSdivText2(this)">
-														<option value="1">Basic-4 (at submission; PSCI, 2014)</option>
-														<option value="2">Basic-4 (retroactive; 2012)</option>
-														<option value="3">CONSORT-SPI (2018)</option>
-														<option value="4">CONSORT (2010)</option>
-														<option value="5">JARS (2018)</option>
-														<option value="6">STROBE (2007)</option>
-														<option value="7">ARRIVE (2010)</option>
-														<option value="8">Nature Neuroscience (2015)</option>
-														<option value="9">MARS (2018)</option>
-														<option value="10">PRISMA (2009)</option>
-														<option value="11">PRISMA-P (2015)</option>	
-													</select>
-													<div id="rsDiv2" style="color:grey;font-size:9px;">
-														<ol style='margin-top:5px;margin-bottom:5px;padding-left:10px;'>
-														   <li><strong>Excluded data (subjects/observations):</strong> Full details reported in article.</li>
-														   <li><strong>Experimental conditions:</strong> Full details reported in article.</li>
-														   <li><strong>Outcome measures:</strong> Full details reported in article.</li>
-														   <li><strong>Sample size determination:</strong> Full details reported in article.</li>
-														</ol>
-														<br><a href='https://www.psychologicalscience.org/publications/psychological_science/ps-submissions#DISC' target='_blank'>Details of Psychological Science's 'Basic-4 at submission reporting standard (2014)'</a>
-													</div>
-												</div>
-											</div> <!--tab panes-- div-->
-									
-										</td>
-										<td style="vertical-align:top;padding-left:4px;padding-top:4px;" width="150px;">
-											
-											<input type="submit" value="Upload image" style="font-size:10px;margin-top:2px;"> or <input type="text" name="keyFigureURL" placeholder="Image URL" style="color:#999999;margin-top:4px;" size="20">
-											<br>
-											<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add another image URL</a>
-										</td>
-										<td style="vertical-align:top;padding-left:2px;">
-										
-										  <table class="stripe" style="opacity:.5;">
-												<thead>
-													<tr style="border-bottom:solid 1px lightgrey;">
-														<th style="text-align:center;color:grey;" class="padded">Original.Study</th>
-														<th style="text-align:center;color:grey;" class="padded">Target.Effects</th>
-														<th style="text-align:center;color:grey;" class="padded">Rep.Method.Similarity</th>
-														<th style="text-align:center;color:grey;" class="padded">Rep.Differences</th>
-														<th style="text-align:center;color:grey;" class="padded">Auxiliary.Hypotheses</th>
-														<th style="text-align:center;color:grey;" class="padded">IVs</th>
-														<th style="text-align:center;color:grey;" class="padded">DVs</th>
-														<th style="text-align:center;color:grey;" class="padded">IV.Methods</th>
-														<th style="text-align:center;color:grey;" class="padded">DV.Methods</th>
-													</tr>
-												</thead>
-												<tbody>
-												<tr>
-													<td class="padded">
-														<input type="text" name="rep.study.authors" placeholder="Orig. study authors & pub.year*" style="color:#999999;font-size:10px;" size="25">
-														<br>
-														<a href="" style="font-size:10px;"><i class="fas fa-plus" style="font-size:1em;"></i> Add article</a>
-														<br>
-														<input type="text" name="rep.study.number" placeholder="Study #" style="color:#999999;font-size:10px;margin-top:5px;" size="10">	
-														<div style="font-style:italic;font-size:8px;color:grey;margin-top:2px;">N/A for sole study articles</div>	
-													</td>
-													<td class="center padded">
-														<input type="text" name="target.effect" placeholder="e.g., 'playboy effect'" style="color:#999999;" size="15"><b>*</b>
-													</td>
-													<td class="center padded" >
-														<div style="display:inline-block;vertical-align:top;">
-															<select class="body_text" name="methodSim2" onchange="getText2(this)"> 
-																<option value="close"> Close </option>
-																<option value="veryClose"> Very Close </option>
-																<option value="exact"> Exact </option>
-															</select><b>*</b>
-														</div>
-														<div style="display:inline-block;text-align:left;">
-															<div style="display:inline-block;text-align:left;vertical-align:top;">
-																<span style="font-weight:bold;font-size:9px;">Same:</span>
-															</div>
-															<div style="display:inline-block;text-align:left;">
-																<div id="methodSimDiv2" style="color:grey;font-size:9px;"><ul style="padding-left:15px;"><li>Effect/constructs</li><li>IV/DV methods</li><li>population</li></ul> </div>
-															</div>
-														</div>
-													</td>
-													<td class="center padded">
-														<input type="text" name="method.diffs" placeholder="e.g., 'diff. DV stimuli'" style="color:#999999;" size="15" title="e.g., 'different DV stimuli'">
-													</td>
-													<td class="center padded">
-														<input type="text" name="aux.hypotheses" placeholder="e.g., 'success. manip. check'" style="color:#999999;" size="15" title="e.g., 'successful manipulation check'">
-													</td>
-													
-													<td class="center padded">
-														<input type="text" name="IVs" placeholder="e.g., 'erotica exposure vs. control'" style="color:#999999;" size="15" title="e.g., 'erotica exposure vs. control'">
-													</td>
-													<td class="center padded">
-														<input type="text" name="DVs" placeholder="e.g., 'partner love'" style="color:#999999;" size="15">
-													</td>
-													<td class="center padded">
-														<input type="text" name="IV.methods" placeholder="e.g., 'Playboy centerfolds vs. abstract art images'" style="color:#999999;" size="15" title="e.g., 'Playboy centerfolds vs. abstract art images'">
-													</td>
-													<td class="center padded">
-														<input type="text" name="DV.methods" placeholder="e.g., 'Rubin Love Scale (13-item)'" style="color:#999999;" size="15" title="e.g., 'Rubin Love Scale (13-item)'">
-													</td>
-												</tr>
-												</tbody>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</div>
-							
-							<div style="padding:5px;margin-top:10px;margin-left:20px;"><a style="font-size:10px;cursor:pointer;" onclick="toggleDisplayBlock('newStudyDIV')"><i class="fas fa-plus" style="font-size:1em;"></i> Add another study</a></div>
-						</td>
-					</tr>		
-					<tr>		
-						<td>
-						</td>
-						<td colspan="2">			
-								
-								
-								<br>
-								<br>
-							<form action="http://curatescience.org/articles/bdc(2016,jesp).html">
-								<input type="submit" value="Submit/Save changes" /> 
-							</form>
-							<br>
-							<b>*</b> indicates required field
-							<br>
-							<sup>†</sup> indicates at least one transparency badge must be fulfilled (at either article- or study-level)
-						</td>
-						
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		
-		
-		
-		
-		<div style="margin-top:400px;">
-		</div>
-	
-	
-	</div> <!--secondary container div-->
-	
-	
-		<div class="footer-bottom" style="background-color:whitesmoke;padding-top:10px;">
-			
-		
-			
-			<div class="container" style="margin-top:15px;">
-				<div class="row">
-						<center>
-							<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License"/></a>
-							<br>
-							<i>*Thanks to <a href="http://www.nicebread.de/">Felix Schonbrodt</a> for hosting CurateScience.org</i>
-						</center>
-				</div>
-			</div>
-		</div> <!--footer-bottom div-->
-</div> <!--main-container push div -->
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {{ form.source.errors }}
+  {{ form.source }}
+  <table>
+    <tr>
+      <th>{{form.doi.label_tag}}</th>
+      <td>
+        {{form.doi.errors}}
+        {{form.doi}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.title.label_tag}}</th>
+      <td>
+        {{form.title.errors}}
+        {{form.title}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.authors.label_tag}}</th>
+      <td>
+        {{form.authors.errors}}
+        {{form.authors}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.abstract.label_tag}}</th>
+      <td>
+        {{form.abstract.errors}}
+        {{form.abstract}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.article_type.label_tag}}</th>
+        <td>
+          {{form.article_type.errors}}
+          {{form.article_type}}
+        </td>
+    </tr>
+    <tr>
+      <th>{{form.research_area.label_tag}}</th>
+      <td>
+        {{form.research_area.errors}}
+        {{form.research_area}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.reporting_standards_type.label_tag}}</th>
+      <td>
+        {{form.reporting_standards_type.errors}}
+        {{form.reporting_standards_type}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.commentary_of.label_tag}}</th>
+      <td>
+        {{form.commentary_of.errors}}
+        {{form.commentary_of}}
+      </td>
+    </tr>
+  </table>
+  <button type="submit">Submit</button>
+</form>
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{{form.media}}
 {% endblock %}
+
