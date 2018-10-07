@@ -62,9 +62,23 @@ class Article(models.Model):
 
     SOCIAL_SCIENCE = 'SOCIAL_SCIENCE'
     MEDICAL_LIFE_SCIENCE = 'MEDICAL_LIFE_SCIENCE'
+    standards_choices = (
+            (BASIC_4_AT_SUBMISSION, "Basic-4 (at submission; PSCI, 2014)"),
+            (BASIC_4_RETROACTIVE, "Basic-4 (retroactive; 2012)"),
+            (CONSORT_SPI, "CONSORT-SPI (2018)"),
+            (CONSORT, "CONSORT (2010)"),
+            (JARS, "JARS (2018)"),
+            (STROBE, "STROBE (2007)"),
+            (ARRIVE, "ARRIVE (2010)"),
+            (NATURE_NEUROSCIENCE, "Nature Neuroscience (2015)"),
+            (MARS, "MARS (2018)"),
+            (PRISMA, "PRISMA (2009)"),
+            (PRISMA_P, "PRISMA-P (2015)")
+            )
 
     doi = models.CharField(max_length=255, null=True, blank=True)
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True, blank=True, related_name='articles')
+    # TODO: YEAR can be null if the article is "in press"
     year = models.PositiveIntegerField(default=datetime.datetime.now().year)
     title = models.CharField(max_length=255)
     abstract = models.TextField(null=True, blank=True)
@@ -77,26 +91,13 @@ class Article(models.Model):
         (META_RESEARCH, 'reanalysis - meta-research'),
         (COMMENTARY, 'commentary'),
     ))
+    # TODO: Add to Study model as well
     reporting_standards_type = models.CharField(
-        max_length=255, null=True, blank=True, choices=(
-        (BASIC_4_AT_SUBMISSION, "Basic-4 (at submission; PSCI, 2014)"),
-        (BASIC_4_RETROACTIVE, "Basic-4 (retroactive; 2012)"),
-        (CONSORT_SPI, "CONSORT-SPI (2018)"),
-        (CONSORT, "CONSORT (2010)"),
-        (JARS, "JARS (2018)"),
-        (STROBE, "STROBE (2007)"),
-        (ARRIVE, "ARRIVE (2010)"),
-        (NATURE_NEUROSCIENCE, "Nature Neuroscience (2015)"),
-        (MARS, "MARS (2018)"),
-        (PRISMA, "PRISMA (2009)"),
-        (PRISMA_P, "PRISMA-P (2015)")
-    ))
-    # commentary_of = models.ManyToManyField(
-    #     'self',
-    #     through='RelatedArticle',
-    #     symmetrical=False,
-    #     blank=True
-    # )
+        max_length=255,
+        null=True,
+        blank=True,
+        choices=standards_choices
+    )
     # commentary_of = models.ManyToManyField(
     #     'self',
     #     through='RelatedArticle',
@@ -186,11 +187,15 @@ class Study(models.Model):
     SIMILAR = 'SIMILAR'
     article = models.ForeignKey(Article, on_delete=models.PROTECT, null=True, related_name='studies')
     effects = models.ManyToManyField('Effect', related_name='studies')
-    study_type = models.CharField(max_length=255, null=True)
-    study_number = models.PositiveIntegerField()
-    study_sub_number = models.CharField(max_length=2, null=True)
-    evidence_type = models.CharField(max_length=255, null=True)
-    reporting_standards_type = models.CharField(max_length=255, null=True)
+    study_type = models.CharField(max_length=255, null=True, blank=True)
+    study_number = models.CharField(max_length=2, null=True, blank=True)
+    evidence_type = models.CharField(max_length=255, null=True, blank=True)
+    reporting_standards_type = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        choices=Article.standards_choices
+    )
     #below fields are only for a replication study
     replication_of = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
     method_similarity_type = models.CharField(
@@ -212,16 +217,13 @@ class Study(models.Model):
 
     def __str__(self):
         if self.article.has_many_studies:
-            if self.study_sub_number:
-                study_num = f" Study {self.study_number}{self.study_sub_number}"
-            else:
-                study_num = f" Study {self.study_number}"
+            study_num = f" Study {self.study_number}"
         else:
             study_num = ""
         return(f"{self.article.et_al} ({self.article.year}){study_num}")
 
     class Meta:
-        unique_together=('article', 'study_number',)
+        unique_together=('article','study_number')
 
 class Effect(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -338,6 +340,6 @@ class Transparency(models.Model):
         (DATA,'data'),
         (CODE,'code'),
     ))
-    url = models.URLField(default="https://www.google.com/")
+    url = models.URLField(default="")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
