@@ -9,7 +9,8 @@ from curate.models import(
 )
 
 def index(request):
-    return render(request, 'index.html')
+    articles = Article.objects.order_by('updated')[:10]
+    return render(request, 'index.html', {'articles': articles})
 
 @require_http_methods(["GET",])
 def view_article(request, pk):

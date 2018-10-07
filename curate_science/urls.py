@@ -42,6 +42,7 @@ urlpatterns += [
     path('api/articles/', api.list_articles, name='api-list-articles'),
     path('api/articles/autocomplete/', api.ArticleAutocomplete.as_view(), name='article-autocomplete'),
     path('api/articles/create/', api.create_article, name='api-create-article'),
+    path('api/articles/search/', api.search_articles, name='api-search-articles'),
     path('api/articles/<pk>/', api.view_article, name='api-view-article'),
     path('api/articles/<pk>/update/', api.update_article, name='api-update-article'),
     path('api/articles/<pk>/delete/', api.delete_article, name='api-delete-article'),

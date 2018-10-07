@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.contrib.postgres.search import SearchVector, SearchRank
 from dal import autocomplete
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
@@ -611,6 +613,23 @@ def delete_transparency(request, pk):
     transparency=get_object_or_404(Transparency, pk)
     transparency.delete()
     return Response(status=status.HTTP_200_OK)
+
+# Search Articles view
+@api_view(('GET', ))
+def search_articles(request):
+    q = request.GET.get('q')
+    page_size = int(request.GET.get('page_size'))
+    if q:
+        search_vector = SearchVector('title', 'abstract', 'authors__last_name')
+        search_rank = SearchRank(search_vector, q)
+        queryset=Article.objects.annotate(rank=search_rank).order_by('-rank').distinct()
+    else:
+        queryset=Article.objects.order_by('updated')[:10]
+    paginator = PageNumberPagination()
+    paginator.page_size = page_size
+    result_page = paginator.paginate_queryset(queryset, request)
+    serializer=ArticleSerializer(instance=result_page, many=True)
+    return Response(serializer.data)
 
 # Autocomplete views
 

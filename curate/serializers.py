@@ -23,7 +23,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     studies = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
+    authors = AuthorSerializer(many=True, read_only=True)
     class Meta:
         model=Article
         fields='__all__'

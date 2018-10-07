@@ -8,4 +8,17 @@
   <p>Welcome to Curate Science.</p>
   <a href="{% url 'login' %}">Log In</a>
 {% endif %}
+
+<div>
+   <label>Search:</label>
+   <input type="search">
+</div>
+
+<table>
+  {% for a in articles %}
+  <tr>
+    <td>{{ a.title }}<td>
+  </tr>
+{% endfor %}
+</table>
 {% endblock %}
