@@ -11,6 +11,8 @@ before_script:
 - export DB_USER=postgres DB_PASS=''
 script:
 - python manage.py test
+after_script:
+- python manage.py migrate
 deploy:
   provider: gae
   keyfile: curate_science/google_application_credentials.json
