@@ -63,12 +63,12 @@ class Article(models.Model):
     SOCIAL_SCIENCE = 'SOCIAL_SCIENCE'
     MEDICAL_LIFE_SCIENCE = 'MEDICAL_LIFE_SCIENCE'
 
-    doi = models.CharField(max_length=255, null=True)
-    journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True, related_name='articles')
+    doi = models.CharField(max_length=255, null=True, blank=True)
+    journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True, blank=True, related_name='articles')
     year = models.PositiveIntegerField(default=datetime.datetime.now().year)
     title = models.CharField(max_length=255)
-    abstract = models.TextField(null=True)
-    keywords = JSONField(null=True)
+    abstract = models.TextField(null=True, blank=True)
+    keywords = JSONField(null=True, blank=True)
     article_type = models.CharField(max_length=255, choices=(
         (ORIGINAL, 'original'),
         (REPLICATION, 'replication'),
@@ -77,7 +77,8 @@ class Article(models.Model):
         (META_RESEARCH, 'reanalysis - meta-research'),
         (COMMENTARY, 'commentary'),
     ))
-    reporting_standards_type = models.CharField(max_length=255, null=True, choices=(
+    reporting_standards_type = models.CharField(
+        max_length=255, null=True, blank=True, choices=(
         (BASIC_4_AT_SUBMISSION, "Basic-4 (at submission; PSCI, 2014)"),
         (BASIC_4_RETROACTIVE, "Basic-4 (retroactive; 2012)"),
         (CONSORT_SPI, "CONSORT-SPI (2018)"),
@@ -90,15 +91,33 @@ class Article(models.Model):
         (PRISMA, "PRISMA (2009)"),
         (PRISMA_P, "PRISMA-P (2015)")
     ))
-    related_articles = models.ManyToManyField(
-        'self',
-        through='RelatedArticle',
-        related_name='original_article',
-        symmetrical=False,
-    )
-    pdf_url = models.URLField(null=True)
-    html_url = models.URLField(null=True)
-    preprint_url = models.URLField(null=True)
+    # commentary_of = models.ManyToManyField(
+    #     'self',
+    #     through='RelatedArticle',
+    #     symmetrical=False,
+    #     blank=True
+    # )
+    # commentary_of = models.ManyToManyField(
+    #     'self',
+    #     through='RelatedArticle',
+    #     related_name='commentaries',
+    #     blank=True,
+    # )
+    # reproducibility_of = models.ManyToManyField(
+    #     'self',
+    #     through='RelatedArticle',
+    #     related_name='reproducibilities',
+    #     blank=True,
+    # )
+    # robustness_of = models.ManyToManyField(
+    #     'self',
+    #     through='RelatedArticle',
+    #     related_name='robustnesses',
+    #     blank=True,
+    # )
+    pdf_url = models.URLField(null=True, blank=True)
+    html_url = models.URLField(null=True, blank=True)
+    preprint_url = models.URLField(null=True, blank=True)
     research_area = models.CharField(max_length=255,
                                      choices=(
                                          (SOCIAL_SCIENCE, 'Social Science'),
@@ -136,12 +155,12 @@ class RelatedArticle(models.Model):
     original_article = models.ForeignKey(
         Article,
         on_delete=models.PROTECT,
-        related_name='from_article'
+        related_name='from_article',
     )
     related_article = models.ForeignKey(
         Article,
         on_delete=models.PROTECT,
-        related_name='to_article'
+        related_name='to_article',
     )
     is_commentary = models.BooleanField(default=False)
     is_reproducibilty = models.BooleanField(default=False)
@@ -153,7 +172,7 @@ class RelatedArticle(models.Model):
 
 class ArticleAuthor(models.Model):
     """Represents a many-to-many relationship between Authors and the Articles that they write"""
-    article = models.ForeignKey(Article, on_delete=models.PROTECT)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
     author = models.ForeignKey(Author, on_delete=models.PROTECT)
     order = models.PositiveIntegerField()
 

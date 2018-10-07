@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<table>
+  <tr>
+    <th>DOI</th>
+      <td>
+        {{article.doi}}
+      </td>
+    </tr>
+    <tr>
+      <th>Title</th>
+      <td>
+        {{article.title}}
+      </td>
+    </tr>
+    <tr>
+      <th>Authors</th>
+      {% for a in article.authors.all %}
+      <td>
+        {{a}}
+      </td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <th>Year</th>
+      <td>
+        {{article.year}}
+      </td>
+    </tr>
+    <tr>
+      <th>Abstract</th>
+      <td>
+        {{article.abstract}}
+      </td>
+    </tr>
+    <tr>
+      <th>Article Type</th>
+        <td>
+          {{article.article_type}}
+        </td>
+    </tr>
+    <tr>
+      <th>Research Area</th>
+      <td>
+        {{article.research_area}}
+      </td>
+    </tr>
+    <tr>
+      <th>Reporting Standards Type</th>
+      <td>
+        {{article.reporting_standards_type}}
+      </td>
+    </tr>
+    <tr>
+      <th>Commentary Of</th>
+      <td>
+        {{article.commentary_of}}
+      </td>
+    </tr>
+  </table>
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{% endblock %}

@@ -30,6 +30,13 @@
       </td>
     </tr>
     <tr>
+      <th>{{form.year.label_tag}}</th>
+      <td>
+        {{form.year.errors}}
+        {{form.year}}
+      </td>
+    </tr>
+    <tr>
       <th>{{form.abstract.label_tag}}</th>
       <td>
         {{form.abstract.errors}}
@@ -55,13 +62,6 @@
       <td>
         {{form.reporting_standards_type.errors}}
         {{form.reporting_standards_type}}
-      </td>
-    </tr>
-    <tr>
-      <th>{{form.commentary_of.label_tag}}</th>
-      <td>
-        {{form.commentary_of.errors}}
-        {{form.commentary_of}}
       </td>
     </tr>
   </table>

@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('articles/create/', create_article, name='create-article'),
-    path('articles/<pk>', view_article, name='view-article'),
+    path('articles/<pk>/', view_article, name='view-article'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
