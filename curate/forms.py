@@ -24,7 +24,26 @@ class ArticleForm(forms.ModelForm):
                 'data-placeholder': '...',
             }
         ),
-        to_field_name='to_article',
+        required=False
+    )
+    reproducibility_of = forms.ModelMultipleChoiceField(
+        queryset=Article.objects.all(),
+        widget=autocomplete.ModelSelect2Multiple(
+            url='article-autocomplete',
+            attrs={
+                'data-placeholder': '...',
+            }
+        ),
+        required=False
+    )
+    robustness_of = forms.ModelMultipleChoiceField(
+        queryset=Article.objects.all(),
+        widget=autocomplete.ModelSelect2Multiple(
+            url='article-autocomplete',
+            attrs={
+                'data-placeholder': '...',
+            }
+        ),
         required=False
     )
     class Meta:

@@ -18,19 +18,23 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.template import RequestContext
-from curate.views import index, create_article, view_article
+from rest_framework.documentation import include_docs_urls
+from curate import views
 import curate.views_api as api
 
 urlpatterns = [
-    path('', index),
+    path('', views.index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('articles/create/', create_article, name='create-article'),
-    path('articles/<pk>/', view_article, name='view-article'),
+    path('articles/create/', views.create_article, name='create-article'),
+    path('articles/<pk>/', views.view_article, name='view-article'),
+    path('articles/<pk>/update/', views.update_article, name='update-article'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
     path('api/', api.index, name='api-index'),
+    path('api/docs/', include_docs_urls(title="Curate Science API")),
+    path('api/schema/', api.schema, name='api-schema'),
     # Author paths
     path('api/authors/', api.list_authors, name='api-list-authors'),
     path('api/authors/autocomplete/', api.AuthorAutocomplete.as_view(), name='author-autocomplete'),

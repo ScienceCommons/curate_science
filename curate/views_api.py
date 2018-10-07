@@ -8,8 +8,8 @@ from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework import status, schemas, renderers
 from curate.models import (
     Author,
     Article,
@@ -42,8 +42,16 @@ from curate.serializers import (
 )
 
 @api_view(('GET',))
+@renderer_classes([renderers.CoreJSONRenderer])
+def schema(request):
+    generator = schemas.SchemaGenerator(title='Curate Science API')
+    return Response(generator.get_schema())
+
+@api_view(('GET',))
 def index(request, format=None):
     return Response({
+        'docs': reverse('api-docs:docs-index', request=request, format=format),
+        'schema': reverse('api-schema', request=request, format=format),
         'authors': reverse('api-list-authors', request=request, format=format),
         'articles': reverse('api-list-articles', request=request, format=format),
         'collections': reverse('api-list-collections', request=request, format=format),
@@ -71,15 +79,19 @@ def view_author(request, pk):
     serializer=AuthorSerializer(instance=queryset)
     return Response(serializer.data)
 
-@api_view(('POST', ))
+@api_view(('GET', 'POST', ))
 @permission_classes((IsAuthenticated,))
-def create_author(request, pk):
-    serializer=AuthorSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+def create_author(request):
+    if request.method == 'POST':
+        serializer=AuthorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer=AuthorSerializer()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
@@ -100,6 +112,9 @@ def update_author(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_author(request, pk):
+    '''
+    Delete one specific author.
+    '''
     author=get_object_or_404(Author, pk)
     author.delete()
     return Response(status=status.HTTP_200_OK)
@@ -107,25 +122,35 @@ def delete_author(request, pk):
 # Article views
 @api_view(('GET', ))
 def list_articles(request):
+    '''
+    Return a list of all existing articles.
+    '''
     queryset=Article.objects.all()
     serializer=ArticleSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
 @api_view(('GET', ))
 def view_article(request, pk):
+    '''
+    View one specific article.
+    '''
     queryset=get_object_or_404(Article, id=pk)
     serializer=ArticleSerializer(instance=queryset)
     return Response(serializer.data)
 
-@api_view(('POST', ))
+@api_view(('GET', 'POST', ))
 @permission_classes((IsAuthenticated,))
-def create_article(request, pk):
-    serializer=ArticleSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+def create_article(request):
+    if request.method=='POST':
+        serializer=ArticleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ArticleSerializer()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
@@ -618,7 +643,7 @@ def delete_transparency(request, pk):
 @api_view(('GET', ))
 def search_articles(request):
     q = request.GET.get('q')
-    page_size = int(request.GET.get('page_size'))
+    page_size = int(request.GET.get('page_size')) or 25
     if q:
         search_vector = SearchVector('title', 'abstract', 'authors__last_name')
         search_rank = SearchRank(search_vector, q)

@@ -17,11 +17,11 @@
     </tr>
     <tr>
       <th>Authors</th>
-      {% for a in article.authors.all %}
       <td>
-        {{a}}
-      </td>
+      {% for a in article.authors.all %}
+        <p>{{a}}</p>
       {% endfor %}
+      </td>
     </tr>
     <tr>
       <th>Year</th>
@@ -56,7 +56,9 @@
     <tr>
       <th>Commentary Of</th>
       <td>
-        {{article.commentary_of}}
+        {% for c in article.commentary_of %}
+        <p><a href="{{ c.get_absolute_url }}">{{c.et_al}}</a></p>
+        {% endfor %}
       </td>
     </tr>
   </table>

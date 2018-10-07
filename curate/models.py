@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
 from django.contrib.postgres.fields import JSONField
 import datetime
@@ -99,11 +100,11 @@ class Article(models.Model):
         choices=standards_choices
     )
     # commentary_of = models.ManyToManyField(
-    #     'self',
-    #     through='RelatedArticle',
-    #     related_name='commentaries',
-    #     blank=True,
-    # )
+    #      'self',
+    #      through='RelatedArticle',
+    #      related_name='commentaries',
+    #      blank=True,
+    #  )
     # reproducibility_of = models.ManyToManyField(
     #     'self',
     #     through='RelatedArticle',
@@ -146,8 +147,27 @@ class Article(models.Model):
         else:
             et_al = first_author
         return et_al
+
+    @property
+    def commentary_of(self):
+        queryset = Article.objects.filter(related_to_articles__is_commentary=True, related_to_articles__original_article=self)
+        return queryset
+
+    @property
+    def reproducibility_of(self):
+        queryset = Article.objects.filter(related_to_articles__is_reproducibilty=True, related_to_articles__original_article=self)
+        return queryset
+
+    @property
+    def robustness_of(self):
+        queryset = Article.objects.filter(related_to_articles__is_robustness=True, related_to_articles__original_article=self)
+        return queryset
+
     def __str__(self):
         return f"{self.et_al} ({self.year}) {self.title}"
+
+    def get_absolute_url(self):
+        return reverse('view-article', args=[str(self.id)])
 
     class Meta:
         unique_together=('title', 'year')
@@ -156,12 +176,12 @@ class RelatedArticle(models.Model):
     original_article = models.ForeignKey(
         Article,
         on_delete=models.PROTECT,
-        related_name='from_article',
+        related_name='related_articles',
     )
     related_article = models.ForeignKey(
         Article,
         on_delete=models.PROTECT,
-        related_name='to_article',
+        related_name='related_to_articles',
     )
     is_commentary = models.BooleanField(default=False)
     is_reproducibilty = models.BooleanField(default=False)
