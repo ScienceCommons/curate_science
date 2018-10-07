@@ -61,6 +61,22 @@
         {% endfor %}
       </td>
     </tr>
+    <tr>
+      <th>Reproducibility Of</th>
+      <td>
+        {% for c in article.reproducibility_of %}
+        <p><a href="{{ c.get_absolute_url }}">{{c.et_al}}</a></p>
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <th>Robustness Of</th>
+      <td>
+        {% for c in article.robustness_of %}
+        <p><a href="{{ c.get_absolute_url }}">{{c.et_al}}</a></p>
+        {% endfor %}
+      </td>
+    </tr>
   </table>
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 {% endblock %}

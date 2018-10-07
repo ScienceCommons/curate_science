@@ -63,20 +63,16 @@ def create_article(request):
 def update_article(request, pk):
     queryset = get_object_or_404(Article.objects.prefetch_related('authors'), id=pk)
     if request.method=="POST":
-        form = ArticleForm(request.POST, request.FILES)
+        form = ArticleForm(request.POST, request.FILES, instance=queryset)
         if form.is_valid():
             article = form.save()
-            aa_set = []
-            commentary_set = []
-            reproducibility_set = []
-            robustness_set = []
+
             for index, author in enumerate(form.cleaned_data['authors']):
                 aa, _ = ArticleAuthor.objects.update_or_create(
                     article=article,
                     author=author,
                     defaults={'order': index}
                 )
-                aa_set.append(aa)
             for index, commentary_of in enumerate(form.cleaned_data['commentary_of']):
                 co, _ = RelatedArticle.objects.update_or_create(
                     original_article=article,
@@ -84,7 +80,6 @@ def update_article(request, pk):
                     is_commentary=True,
                     defaults={'order': index}
                 )
-                commentary_set.append(co)
             for index, reproducibility_of in enumerate(form.cleaned_data['reproducibility_of']):
                 re, _ = RelatedArticle.objects.update_or_create(
                     original_article=article,
@@ -92,7 +87,6 @@ def update_article(request, pk):
                     is_reproducibility=True,
                     defaults={'order': index}
                 )
-                reproducibility_set.append(re)
             for index, robustness_of in enumerate(form.cleaned_data['robustness_of']):
                 ro, _ = RelatedArticle.objects.update_or_create(
                     original_article=article,
@@ -100,16 +94,15 @@ def update_article(request, pk):
                     is_robustness=True,
                     defaults={'order': index}
                 )
-                robustness_set.append(ro)
             for co in article.commentary_of:
-                if co not in commentary_set:
-                    article.related_articles.remove(co)
-            for re in article.reproducibility_of:
-                if re not in reproducibiliity_set:
-                    article.related_articles.remove(re)
-            for ro in article.robustness_of:
-                if ro not in robustness_set:
-                    article.related_articles.remove(ro)
+                 if co not in form.cleaned_data['commentary_of']:
+                     article.related_articles.filter(related_article=co).delete()
+            for co in article.reproducibility_of:
+                 if co not in form.cleaned_data['reproducibility_of']:
+                     article.related_articles.filter(related_article=co).delete()
+            for co in article.robustness_of:
+                 if co not in form.cleaned_data['robustness_of']:
+                     article.related_articles.filter(related_article=co).delete()
             article.save()
             return redirect(reverse('view-article', kwargs={'pk': article.id}))
     else:
@@ -117,5 +110,5 @@ def update_article(request, pk):
         form.fields['authors'].initial=queryset.authors.all()
         form.fields['commentary_of'].initial=queryset.commentary_of
         form.fields['reproducibility_of'].initial=queryset.reproducibility_of
-        form.fields['robustness_of'].initial=queryset.reproducibility_of
+        form.fields['robustness_of'].initial=queryset.robustness_of
     return render(request, "curate/new-edit-article-page.html", {'form': form})

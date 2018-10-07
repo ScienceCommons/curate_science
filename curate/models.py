@@ -155,7 +155,7 @@ class Article(models.Model):
 
     @property
     def reproducibility_of(self):
-        queryset = Article.objects.filter(related_to_articles__is_reproducibilty=True, related_to_articles__original_article=self)
+        queryset = Article.objects.filter(related_to_articles__is_reproducibility=True, related_to_articles__original_article=self)
         return queryset
 
     @property
@@ -184,7 +184,7 @@ class RelatedArticle(models.Model):
         related_name='related_to_articles',
     )
     is_commentary = models.BooleanField(default=False)
-    is_reproducibilty = models.BooleanField(default=False)
+    is_reproducibility = models.BooleanField(default=False)
     is_robustness = models.BooleanField(default=False)
     order = models.PositiveIntegerField()
 
