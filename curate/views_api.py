@@ -152,26 +152,30 @@ def create_article(request):
         serializer = ArticleSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(('PUT', 'PATCH', ))
+@api_view(('GET', 'PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_article(request, pk):
-    article=get_object_or_404(Article, pk)
-    if request.method=="PATCH":
-        is_partial=True
+    queryset=get_object_or_404(Article, id=pk)
+    if request.method in ('PUT', 'PATCH'):
+        if request.method=="PATCH":
+            is_partial=True
+        else:
+            is_partial=False
+        serializer = ArticleSerializer(queryset, data=request.data, partial=is_partial)
+        if serializer.is_valid():
+            serializer.save()
+            result_status=status.HTTP_200_OK
+        else:
+            result_status=status.HTTP_400_BAD_REQUEST
+        return Response(serializer.errors, status=result_status)
     else:
-        is_partial=False
-    serializer = ArticleSerializer(article, data=request.data, partial=is_partial)
-    if serializer.is_valid():
-        serializer.save()
-        result_status=status.HTTP_200_OK
-    else:
-        result_status=status.HTTP_400_BAD_REQUEST
-    return Response(serializer.errors, status=result_status)
+        serializer = ArticleSerializer(instance=queryset)
+        return Response(serializer.data)
 
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_article(request, pk):
-    article=get_object_or_404(Article, pk)
+    article=get_object_or_404(Article, id=pk)
     article.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -201,7 +205,7 @@ def create_collection(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_collection(request, pk):
-    collection=get_object_or_404(Collection, pk)
+    collection=get_object_or_404(Collection, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -217,7 +221,7 @@ def update_collection(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_collection(request, pk):
-    collection=get_object_or_404(Collection, pk)
+    collection=get_object_or_404(Collection, id=pk)
     collection.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -247,7 +251,7 @@ def create_construct(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_construct(request, pk):
-    construct=get_object_or_404(Construct, pk)
+    construct=get_object_or_404(Construct, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -263,7 +267,7 @@ def update_construct(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_construct(request, pk):
-    construct=get_object_or_404(Construct, pk)
+    construct=get_object_or_404(Construct, id=pk)
     construct.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -293,7 +297,7 @@ def create_effect(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_effect(request, pk):
-    effect=get_object_or_404(Effect, pk)
+    effect=get_object_or_404(Effect, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -309,7 +313,7 @@ def update_effect(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_effect(request, pk):
-    effect=get_object_or_404(Effect, pk)
+    effect=get_object_or_404(Effect, id=pk)
     effect.delete()
     return Response(status=status.HTTP_200_OK)
 

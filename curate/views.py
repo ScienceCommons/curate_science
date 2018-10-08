@@ -71,38 +71,50 @@ def update_article(request, pk):
                 aa, _ = ArticleAuthor.objects.update_or_create(
                     article=article,
                     author=author,
-                    defaults={'order': index}
+                    defaults={'order': index + 1}
                 )
             for index, commentary_of in enumerate(form.cleaned_data['commentary_of']):
                 co, _ = RelatedArticle.objects.update_or_create(
                     original_article=article,
                     related_article=commentary_of,
                     is_commentary=True,
-                    defaults={'order': index}
+                    defaults={'order': index + 1}
                 )
             for index, reproducibility_of in enumerate(form.cleaned_data['reproducibility_of']):
                 re, _ = RelatedArticle.objects.update_or_create(
                     original_article=article,
                     related_article=reproducibility_of,
                     is_reproducibility=True,
-                    defaults={'order': index}
+                    defaults={'order': index + 1}
                 )
             for index, robustness_of in enumerate(form.cleaned_data['robustness_of']):
                 ro, _ = RelatedArticle.objects.update_or_create(
                     original_article=article,
                     related_article=robustness_of,
                     is_robustness=True,
-                    defaults={'order': index}
+                    defaults={'order': index + 1}
                 )
+            for a in article.authors:
+                if a not in form.cleaned_data['authors']:
+                    article.articleauthor_set.filter(author=a).delete()
             for co in article.commentary_of:
                  if co not in form.cleaned_data['commentary_of']:
-                     article.related_articles.filter(related_article=co).delete()
+                     article.related_articles.filter(
+                         related_article=co,
+                         is_commentary=True
+                     ).delete()
             for co in article.reproducibility_of:
                  if co not in form.cleaned_data['reproducibility_of']:
-                     article.related_articles.filter(related_article=co).delete()
+                     article.related_articles.filter(
+                         related_article=co,
+                         is_reproducibility=True
+                     ).delete()
             for co in article.robustness_of:
                  if co not in form.cleaned_data['robustness_of']:
-                     article.related_articles.filter(related_article=co).delete()
+                     article.related_articles.filter(
+                         related_article=co,
+                         is_robustness=True
+                     ).delete()
             article.save()
             return redirect(reverse('view-article', kwargs={'pk': article.id}))
     else:
