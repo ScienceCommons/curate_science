@@ -99,24 +99,6 @@ class Article(models.Model):
         blank=True,
         choices=standards_choices
     )
-    # commentary_of = models.ManyToManyField(
-    #      'self',
-    #      through='RelatedArticle',
-    #      related_name='commentaries',
-    #      blank=True,
-    #  )
-    # reproducibility_of = models.ManyToManyField(
-    #     'self',
-    #     through='RelatedArticle',
-    #     related_name='reproducibilities',
-    #     blank=True,
-    # )
-    # robustness_of = models.ManyToManyField(
-    #     'self',
-    #     through='RelatedArticle',
-    #     related_name='robustnesses',
-    #     blank=True,
-    # )
     pdf_url = models.URLField(null=True, blank=True)
     html_url = models.URLField(null=True, blank=True)
     preprint_url = models.URLField(null=True, blank=True)

@@ -96,7 +96,7 @@ def create_author(request):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_author(request, pk):
-    author=get_object_or_404(Author, pk)
+    author=get_object_or_404(Author, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -115,7 +115,7 @@ def delete_author(request, pk):
     '''
     Delete one specific author.
     '''
-    author=get_object_or_404(Author, pk)
+    author=get_object_or_404(Author, id=pk)
     author.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -343,7 +343,7 @@ def create_hypothesis(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_hypothesis(request, pk):
-    hypothesis=get_object_or_404(Hypothesis, pk)
+    hypothesis=get_object_or_404(Hypothesis, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -361,7 +361,7 @@ def update_hypothesis(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_hypothesis(request, pk):
-    hypothesis=get_object_or_404(Hypothesis, pk)
+    hypothesis=get_object_or_404(Hypothesis, id=pk)
     hypothesis.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -391,7 +391,7 @@ def create_journal(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_journal(request, pk):
-    journal=get_object_or_404(Journal, pk)
+    journal=get_object_or_404(Journal, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -409,7 +409,7 @@ def update_journal(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_journal(request, pk):
-    journal=get_object_or_404(Journal, pk)
+    journal=get_object_or_404(Journal, id=pk)
     journal.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -439,7 +439,7 @@ def create_key_figure(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_key_figure(request, pk):
-    key_figure=get_object_or_404(Key_Figure, pk)
+    key_figure=get_object_or_404(Key_Figure, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -455,7 +455,7 @@ def update_key_figure(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_key_figure(request, pk):
-    key_figure=get_object_or_404(KeyFigure, pk)
+    key_figure=get_object_or_404(KeyFigure, id=pk)
     key_figure.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -485,7 +485,7 @@ def create_method(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_method(request, pk):
-    method=get_object_or_404(Method, pk)
+    method=get_object_or_404(Method, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -501,7 +501,7 @@ def update_method(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_method(request, pk):
-    method=get_object_or_404(Method, pk)
+    method=get_object_or_404(Method, id=pk)
     method.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -531,7 +531,7 @@ def create_statistical_result(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_statistical_result(request, pk):
-    statistical_result=get_object_or_404(Statistical_Result, pk)
+    statistical_result=get_object_or_404(Statistical_Result, id=pk)
     if request.statistical_result=="PATCH":
         is_partial=True
     else:
@@ -547,7 +547,7 @@ def update_statistical_result(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_statistical_result(request, pk):
-    statistical_result=get_object_or_404(StatisticalResult, pk)
+    statistical_result=get_object_or_404(StatisticalResult, id=pk)
     statistical_result.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -577,7 +577,7 @@ def create_study(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_study(request, pk):
-    study=get_object_or_404(Study, pk)
+    study=get_object_or_404(Study, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -593,7 +593,7 @@ def update_study(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_study(request, pk):
-    study=get_object_or_404(Study, pk)
+    study=get_object_or_404(Study, id=pk)
     study.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -623,7 +623,7 @@ def create_transparency(request, pk):
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_transparency(request, pk):
-    transparency=get_object_or_404(Transparency, pk)
+    transparency=get_object_or_404(Transparency, id=pk)
     if request.method=="PATCH":
         is_partial=True
     else:
@@ -639,7 +639,7 @@ def update_transparency(request, pk):
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_transparency(request, pk):
-    transparency=get_object_or_404(Transparency, pk)
+    transparency=get_object_or_404(Transparency, id=pk)
     transparency.delete()
     return Response(status=status.HTTP_200_OK)
 

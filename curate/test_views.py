@@ -22,7 +22,7 @@ from curate.models import (
 )
 from curate.test_setup import create_model_instances
 
-class TestListViews(TestCase):
+class TestViews(TestCase):
     def setUp(self):
         create_model_instances()
         self.client = Client()
@@ -46,6 +46,5 @@ class TestListViews(TestCase):
             "research_area": "SOCIAL_SCIENCE",
             "authors": [1,]
         })
-        print(r.status_code)
         a = Article.objects.get(doi="abc")
         assert a.title == "test article"
