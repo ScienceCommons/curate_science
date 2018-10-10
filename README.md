@@ -4,7 +4,7 @@ Curate Science
 
 *Nutritional Labels for Science*
 
-This repository contains the code of **[Curate Science](http://CurateScience.org)**, a community  platform to _curate_ and _track_ the transparency and replications of published scientific findings (for full details of our approach, see [our white paper](https://osf.io/preprints/psyarxiv/uwmr8)
+This repository contains the code of **[Curate Science](http://CurateScience.org)**, a web  platform for the research community to _label_, _link_, and _organize_ the transparency and replications of published scientific findings (for full details of our approach, see [our white paper](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf)).
 
 
 ## Contributing
