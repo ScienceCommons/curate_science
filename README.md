@@ -2,6 +2,39 @@ Curate Science
 ==============
 [![Build Status](https://travis-ci.org/ScienceCommons/curate_science.svg?branch=master)](https://travis-ci.org/ScienceCommons/curate_science)
 
-<i>Nutritional Labels for Science</i>
+*Nutritional Labels for Science*
 
-<p>This repository contains the code of <strong><a href="http://CurateScience.org">Curate Science</a></strong>, a community  platform to <i><u>curate</u></i> and <i><u>track</u></i> the transparency and replications of published scientific findings (for full details of our approach, see <a href="https://osf.io/preprints/psyarxiv/uwmr8" target="_blank">our white paper</a>).</p>
+This repository contains the code of **[Curate Science](http://CurateScience.org)**, a community  platform to _curate_ and _track_ the transparency and replications of published scientific findings (for full details of our approach, see [our white paper](https://osf.io/preprints/psyarxiv/uwmr8)
+
+Curate Science is a web application written in Python 3 using the Django framework 2.1. with PostgreSQL 9.6, running on Google App Engine.  REST API
+
+Entity models are in `curate/models.py`
+REST API view controllers use [Django REST Framework](http://django-rest-framework.org/) and are in `views_api.py`
+REST API model serializers are in `curate/serializers.py`
+HTML view controllers are in `curate/views.py`
+HTML templates use the Django template engine and are in `templates/`
+URL routes are in `curate_science/urls.py`
+JS, CSS, and image files go in `static/curate/`
+Application configurations are in `curate_science/settings.py`
+
+To set up the app locally:
+
+1. Clone this repository
+2. Install PostgreSQL >= 9.4
+3. Create a .env file and set the environment variables `DB_USER` and `DB_PASS`
+
+```sql
+
+CREATE DATABASE curate;
+CREATE USER [DB_USER] WITH PASSWORD [DB_PASS];
+GRANT ALL PRIVILEGES ON DATABASE curate TO [DB_USER];
+
+```
+
+```bash
+
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver_plus
+
+```
