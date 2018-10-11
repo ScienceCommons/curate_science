@@ -215,7 +215,7 @@ class Study(models.Model):
 
     @property
     def is_replication(self):
-        self.replication_of is not None
+        return self.replication_of is not None
 
     def __str__(self):
         if self.article.has_many_studies:

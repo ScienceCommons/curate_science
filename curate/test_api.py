@@ -23,6 +23,32 @@ class TestAPIViews(TestCase):
         destroy_model_instances()
 
     # Article tests
+    # List Articles
+    def test_anon_can_list_articles_api(self):
+        self.client=Client()
+        article_count = len(models.Article.objects.all())
+        url = reverse('api-list-articles')
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert(len(d) == article_count)
+        assert r.status_code == 200
+
+    # View Articles
+    def test_anonymous_user_can_view_article_api(self):
+        self.client=Client()
+        article = models.Article.objects.first()
+        url = reverse('api-view-article', kwargs={'pk': article.id})
+        r = self.client.get(url)
+        assert r.status_code == 200
+        assert "title" in r.content.decode('utf-8')
+
+    def test_invalid_article_id_404(self):
+        self.client = Client()
+        url = reverse('api-view-article', kwargs={'pk': 99999})
+        r = self.client.get(url)
+        assert r.status_code == 404
+
+    # Create Articles
     def test_authenticated_user_can_create_article_with_api(self):
         self.client.login(username='admin', password='password')
         url = reverse('api-create-article')
@@ -38,17 +64,25 @@ class TestAPIViews(TestCase):
         a = models.Article.objects.get(doi="001")
         assert a.title == "api test article"
 
-    def test_authenticated_user_can_edit_article_with_api(self):
-        self.client.login(username='new_user', password='password1')
-        article=models.Article.objects.first()
-        url = reverse('api-update-article', kwargs={'pk': article.id})
-        r = self.client.patch(
-            url, {
-                "id": article.id,
-                "html_url": "http://www.curatescience.org/"
-            },
-            content_type="application/json")
-        assert r.status_code == 200
+    def test_authenticated_user_can_create_article_with_replications(self):
+        self.client.login(username='admin', password='password')
+        url = reverse('api-create-article')
+        article_1 = models.Article.objects.first()
+        article_2 = models.Article.objects.all()[1]
+        r = self.client.post(url, {
+            "doi": "002",
+            "year": 2017,
+            "journal": models.Journal.objects.first().id,
+            "title": "api test article 2",
+            "article_type": "ORIGINAL",
+            "research_area": "SOCIAL_SCIENCE",
+            "authors": [models.Author.objects.first().id,],
+            "commentary_of": [article_1.id, article_2.id]
+        })
+        a = models.Article.objects.get(doi="002")
+        assert a.title == "api test article 2"
+        assert article_1 in a.commentary_of
+        assert article_2 in a.commentary_of
 
     def test_anonymous_user_cannot_create_article_with_api(self):
         self.client=Client()
@@ -69,13 +103,18 @@ class TestAPIViews(TestCase):
 
         assert r.status_code == 403
 
-    def test_anonymous_user_can_view_article_api(self):
-        self.client=Client()
-        article = models.Article.objects.first()
-        url = reverse('api-view-article', kwargs={'pk': article.id})
-        r = self.client.get(url)
+    # Update Articles
+    def test_authenticated_user_can_edit_article_with_api(self):
+        self.client.login(username='new_user', password='password1')
+        article=models.Article.objects.first()
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        r = self.client.patch(
+            url, {
+                "id": article.id,
+                "html_url": "http://www.curatescience.org/"
+            },
+            content_type="application/json")
         assert r.status_code == 200
-        assert "title" in r.content.decode('utf-8')
 
     def test_anonymous_user_cannot_edit_article_api(self):
         self.client=Client()
@@ -87,16 +126,15 @@ class TestAPIViews(TestCase):
         })
         assert r.status_code == 403
 
-    def test_anon_can_list_articles_api(self):
+    def test_update_invalid_article_id_404(self):
         self.client=Client()
-        article_count = len(models.Article.objects.all())
-        url = reverse('api-list-articles')
-        r = self.client.get(url)
-        d = json.loads(r.content.decode('utf-8'))
-        assert(len(d) == article_count)
-        assert r.status_code == 200
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-update-article', kwargs={'pk': 99999})
+        r = self.client.put(url, {"title": "_"})
+        assert r.status_code == 404
 
-    #Author tests
+    # Author tests
+    # List Authors
     def test_anon_can_list_authors_api(self):
         self.client=Client()
         author_count = len(models.Author.objects.all())
@@ -106,6 +144,7 @@ class TestAPIViews(TestCase):
         assert(len(d) == author_count)
         assert r.status_code == 200
 
+    # View Authors
     def test_anon_can_view_author_api(self):
         self.client=Client()
         author = models.Author.objects.filter(last_name='Liljenquist').first()
@@ -114,6 +153,13 @@ class TestAPIViews(TestCase):
         assert r.status_code == 200
         assert "Liljenquist" in r.content.decode('utf-8')
 
+    def test_invalid_author_id_404(self):
+        self.client = Client()
+        url = reverse('api-view-author', kwargs={'pk': 99999})
+        r = self.client.get(url)
+        assert r.status_code == 404
+
+    # Create Authors
     def test_anon_cannot_create_author_api(self):
         self.client=Client()
         url = reverse('api-create-author')
@@ -128,6 +174,17 @@ class TestAPIViews(TestCase):
 
         assert r.status_code == 403
 
+    def test_authorized_user_can_create_author_api(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-create-author')
+        r = self.client.post(url, {
+            "first_name": "John",
+            "last_name": "Tester"
+        })
+        a = models.Author.objects.get(last_name="Tester")
+        assert a.first_name == "John"
+
+    # Update Authors
     def test_anon_cannot_edit_author_api(self):
         self.client=Client()
         author=models.Author.objects.first()
@@ -138,6 +195,7 @@ class TestAPIViews(TestCase):
         })
         assert r.status_code == 403
 
+    # Delete Authors
     def test_anon_cannot_delete_author_api(self):
         self.client=Client()
         author=models.Author.objects.first()
@@ -167,12 +225,8 @@ class TestAPIViews(TestCase):
         assert r.status_code == 200
         assert len(models.Author.objects.filter(id=author.id)) == 0
 
-    def test_authorized_user_can_create_author_api(self):
-        self.client.login(username='new_user', password='password1')
-        url = reverse('api-create-author')
-        r = self.client.post(url, {
-            "first_name": "John",
-            "last_name": "Tester"
-        })
-        a = models.Author.objects.get(last_name="Tester")
-        assert a.first_name == "John"
+    # List Studies
+    # View Study
+    # Create Study
+    # Update Study
+    # Delete Study

@@ -2,6 +2,7 @@ certifi==2018.8.24
 chardet==3.0.4
 coreapi==2.3.3
 coreschema==0.0.4
+coverage==4.5.1
 Django==2.1.1
 django-autocomplete-light==3.3.2
 django-extensions==2.1.2
