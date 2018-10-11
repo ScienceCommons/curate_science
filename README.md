@@ -29,7 +29,7 @@ To set up the app locally:
 1. Clone this repository
 2. Install Python >= 3.6
 3. Install PostgreSQL >= 9.4
-4. Create a .env file and set the environment variables `DB_USER`, `DB_PASS`, and `SECRET_KEY`.
+4. Create a .env file and set the environment variables `DB_USER`, `DB_PASS`, and `SECRET_KEY`
 
 ```sql
 
