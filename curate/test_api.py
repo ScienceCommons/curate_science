@@ -64,6 +64,18 @@ class TestAPIViews(TestCase):
         a = models.Article.objects.get(doi="001")
         assert a.title == "api test article"
 
+    def test_create_invalid_article_400(self):
+        self.client.login(username='admin', password='password')
+        url = reverse('api-create-article')
+        r = self.client.post(url, {
+            "journal": models.Journal.objects.first().id,
+            "title": "api test article",
+            "article_type": "ORIGINAL",
+            "research_area": "SOCIAL_SCIENCE",
+            "authors": [models.Author.objects.first().id,]
+        })
+        assert r.status_code == 400
+
     def test_article_year_can_be_in_press(self):
         self.client.login(username='admin', password='password')
         url = reverse('api-create-article')
@@ -118,6 +130,12 @@ class TestAPIViews(TestCase):
 
         assert r.status_code == 403
 
+    def test_authorized_user_can_get_article_create_form(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-create-article')
+        r = self.client.get(url)
+        assert r.status_code == 200
+
     # Update Articles
     def test_authenticated_user_can_edit_article_with_api(self):
         self.client.login(username='new_user', password='password1')
@@ -146,6 +164,45 @@ class TestAPIViews(TestCase):
         self.client.login(username='new_user', password='password1')
         url = reverse('api-update-article', kwargs={'pk': 99999})
         r = self.client.put(url, {"title": "_"})
+        assert r.status_code == 404
+
+    # Delete Articles
+    def test_anon_cannot_delete_article_api(self):
+        self.client=Client()
+        article=models.Article.objects.first()
+        url = reverse('api-delete-article', kwargs={'pk': article.id})
+        r = self.client.delete(url)
+        assert r.status_code == 403
+
+    def test_user_cannot_delete_article_api(self):
+        self.client.login(username='new_user', password='password1')
+        article=models.Article.objects.first()
+        url = reverse('api-delete-article', kwargs={'pk': article.id})
+        r = self.client.delete(url)
+        assert r.status_code == 403
+
+    def test_admin_can_delete_article_api(self):
+        self.client.login(username='admin', password='password')
+        url = reverse('api-create-article')
+        r = self.client.post(url, {
+            "doi": "003",
+            "year": 2017,
+            "journal": models.Journal.objects.first().id,
+            "title": "api test article 3",
+            "article_type": "ORIGINAL",
+            "research_area": "SOCIAL_SCIENCE",
+            "authors": [models.Author.objects.first().id,]
+        })
+        article = models.Article.objects.get(doi="003")
+        url = reverse('api-delete-article', kwargs={'pk': article.id})
+        r = self.client.delete(url)
+        assert r.status_code == 200
+        assert len(models.Article.objects.filter(id=article.id)) == 0
+
+    def test_delete_invalid_article_404(self):
+        self.client.login(username='admin', password='password')
+        url = reverse('api-delete-article', kwargs={'pk': 9999})
+        r = self.client.delete(url)
         assert r.status_code == 404
 
     # Author tests
@@ -301,7 +358,99 @@ class TestAPIViews(TestCase):
         assert d['study_number'] == '2'
 
     # Create Study
+    def test_anon_cannot_create_study_api(self):
+        self.client=Client()
+        url = reverse('api-create-study')
+        r = self.client.post(
+            url,
+            {
+                "article": models.Article.objects.first().id,
+                "study_number": "5"
+            },
+            content_type="application/json"
+        )
+
+        assert r.status_code == 403
+
+    def test_authorized_user_can_create_study_api(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-create-study')
+        r = self.client.post(url, {
+            "article": models.Article.objects.first().id,
+            "study_number": "5"
+        })
+        a = models.Study.objects.get(
+            article_id=models.Article.objects.first().id,
+            study_number="5"
+        )
+        assert r.status_code==201
+        assert a.study_number=="5"
+
+    def test_study_create_invalid_400(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-create-study')
+        r = self.client.post(url, {
+            "first_name": "John"
+        })
+        assert r.status_code == 400
+
     # Update Study
+    def test_authenticated_user_can_patch_study(self):
+        self.client.login(username='new_user', password='password1')
+        study=models.Study.objects.first()
+        url = reverse('api-update-study', kwargs={'pk': study.id})
+        r = self.client.patch(
+            url, {
+                "id": study.id,
+                "study_number": "2a"
+            },
+            content_type="application/json")
+        assert r.status_code == 200
+
+    def test_authenticated_user_can_put_study(self):
+        self.client.login(username='new_user', password='password1')
+        study=models.Study.objects.first()
+        url = reverse('api-update-study', kwargs={'pk': study.id})
+        r = self.client.put(
+            url, {
+                "id": study.id,
+                "article": study.article_id,
+                "study_number": "2a"
+            },
+            content_type="application/json")
+
+        assert r.status_code == 200
+
+    def test_authenticated_user_can_put_study(self):
+        self.client.login(username='new_user', password='password1')
+        study=models.Study.objects.first()
+        url = reverse('api-update-study', kwargs={'pk': study.id})
+        r = self.client.put(
+            url, {
+                "id": study.id,
+                "study_number": "2a"
+            },
+            content_type="application/json")
+
+        assert r.status_code == 400
+
+    def test_anonymous_user_cannot_edit_study_api(self):
+        self.client=Client()
+        study=models.Study.objects.first()
+        url = reverse('api-update-study', kwargs={'pk': study.id})
+        r = self.client.patch(url, {
+            "id": study.id,
+            "study_number": "2"
+        })
+        assert r.status_code == 403
+
+    def test_update_invalid_study_id_404(self):
+        self.client=Client()
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-update-study', kwargs={'pk': 99999})
+        r = self.client.put(url, {"study_number": ""})
+        assert r.status_code == 404
+
     # Delete Study
     def test_anon_cannot_delete_study_api(self):
         self.client=Client()
