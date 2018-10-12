@@ -233,7 +233,7 @@ def list_constructs(request):
     return Response(serializer.data)
 
 @api_view(('GET', ))
-def view_construct(request):
+def view_construct(request, pk):
     queryset=get_object_or_404(Construct, id=pk)
     serializer=ConstructSerializer(instance=queryset)
     return Response(serializer.data)
@@ -326,7 +326,7 @@ def list_hypotheses(request):
 
 @api_view(('GET', ))
 def view_hypothesis(request, pk):
-    queryset=get_object_or_404(Hypothesis.objects.select_related('variables'), id=pk)
+    queryset=get_object_or_404(Hypothesis, id=pk)
     serializer=HypothesisSerializer(instance=queryset, context={'request': request})
     return Response(serializer.data)
 

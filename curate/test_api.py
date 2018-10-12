@@ -486,3 +486,217 @@ class TestAPIViews(TestCase):
         url = reverse('api-delete-study', kwargs={'pk': 9999})
         r = self.client.delete(url)
         assert r.status_code == 404
+
+    # Effect Tests
+    # List Effects
+    def test_anon_can_list_effects(self):
+        self.client = Client()
+        url = reverse('api-list-effects')
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert len(d) == 2
+        assert d[0].get('name') == "Macbeth Effect #1"
+
+    # View Effect
+    def test_anon_can_view_effect(self):
+        self.client=Client()
+        effect = models.Effect.objects.first()
+        url = reverse('api-view-effect', kwargs={'pk': effect.id})
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d.get('name') == "Macbeth Effect #1"
+
+    def test_invalid_effect_id_404(self):
+        self.client = Client()
+        url = reverse('api-view-effect', kwargs={'pk': 99999})
+        r = self.client.get(url)
+        assert r.status_code == 404
+
+    # Create Effect
+    # Update Effect
+    # Delete Effect
+
+    # Collection Tests
+    # List Collections
+    def test_anon_can_list_collections(self):
+        self.client = Client()
+        url = reverse('api-list-collections')
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert len(d) == 1
+        assert d[0].get('name') == "Macbeth Effect"
+
+    # View Collection
+    def test_anon_can_view_collection(self):
+        self.client=Client()
+        collection = models.Collection.objects.first()
+        url = reverse('api-view-collection', kwargs={'pk': collection.id})
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d.get('name') == "Macbeth Effect"
+
+    def test_invalid_collection_id_404(self):
+        self.client = Client()
+        url = reverse('api-view-collection', kwargs={'pk': 99999})
+        r = self.client.get(url)
+        assert r.status_code == 404
+
+    # Create Collection
+    # Update Collection
+    # Delete Collection
+
+    # Construct Tests
+    # List Constructs
+    def test_anon_can_list_constructs(self):
+        self.client = Client()
+        url = reverse('api-list-constructs')
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert len(d) == 4
+        assert d[0].get('name') == "moral purity threat"
+
+    # View Construct
+    def test_anon_can_view_construct(self):
+        self.client=Client()
+        construct = models.Construct.objects.get(name="moral purity threat")
+        url = reverse('api-view-collection', kwargs={'pk': construct.id})
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d.get('name') == "moral purity threat"
+
+    def test_invalid_construct_id_404(self):
+        self.client = Client()
+        url = reverse('api-view-construct', kwargs={'pk': 99999})
+        r = self.client.get(url)
+        assert r.status_code == 404
+
+    # Create Construct
+    def test_anon_cannot_create_construct_api(self):
+        self.client=Client()
+        url = reverse('api-create-construct')
+        r = self.client.post(
+            url,
+            {
+                "name": "need to test"
+            },
+            content_type="application/json"
+        )
+
+        assert r.status_code == 403
+
+    def test_authorized_user_can_create_construct_api(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-create-construct')
+        r = self.client.post(url,{"name": "need to test"})
+        a = models.Construct.objects.get(
+            name="need to test"
+        )
+        assert r.status_code==201
+        assert a.name == "need to test"
+
+    def test_construct_create_invalid_400(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-create-construct')
+        r = self.client.post(url, {
+            "invalid_field": "need to test"
+        })
+        assert r.status_code == 400
+
+    # Update Construct
+    # Delete Construct
+
+    # Method Tests
+    # List Methods
+    def test_anon_can_list_constructs(self):
+        self.client = Client()
+        url = reverse('api-list-constructs')
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert len(d) == 4
+        assert d[0].get('name') == "moral purity threat"
+    # View Method
+    def test_anon_can_view_construct(self):
+        self.client=Client()
+        construct = models.Construct.objects.get(name="moral purity threat")
+        url = reverse('api-view-collection', kwargs={'pk': construct.id})
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d.get('name') == "moral purity threat"
+    # Create Method
+    # Update Method
+    # Delete Method
+
+    # Hypothesis Tests
+    # List Hypotheses
+    def test_anon_can_list_hypotheses(self):
+        self.client = Client()
+        url = reverse('api-list-hypotheses')
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d[0].get('name') == '''
+    Moral purity threat (transcribe text) boosts need to
+    cleanse oneself (cleaning products desirability)
+    '''
+    # View Hypothesis
+    def test_anon_can_view_hypothesis(self):
+        self.client=Client()
+        hypothesis = models.Hypothesis.objects.first()
+        url = reverse('api-view-hypothesis', kwargs={'pk': hypothesis.id})
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d.get('name') == '''
+    Moral purity threat (transcribe text) boosts need to
+    cleanse oneself (cleaning products desirability)
+    '''
+
+    # Create Hypothesis
+    # Update Hypothesis
+    # Delete Hypothesis
+
+    # Journal Tests
+    # List Journals
+    def test_anon_can_list_journals(self):
+        self.client = Client()
+        url = reverse('api-list-journals')
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d[0].get('name') == "Science"
+
+    # View Journal
+    def test_anon_can_view_construct(self):
+        self.client=Client()
+        construct = models.Journal.objects.get(name="Science")
+        url = reverse('api-view-journal', kwargs={'pk': construct.id})
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d.get('name') == "Science"
+
+    # Create Journal
+    # Update Journal
+    # Delete Journal
+
+    # TODO: KeyFigure Tests
+
+    # TODO: StatisticalResult Tests
+
+    # TODO: Transparency Tests
+
+    # TODO: VariableRelationship Tests
+
+    # TODO: Search Articles tests
+
+    # TODO: Article Autocomplete tests
+
+    # TODO: Author Autocomplete tests
