@@ -1,10 +1,10 @@
 from django import forms
 from dal import autocomplete
+from datetime import datetime
 from curate.models import (
     Article,
     Author,
 )
-#from dal import autocomplete
 
 class ArticleForm(forms.ModelForm):
     authors = forms.ModelMultipleChoiceField(

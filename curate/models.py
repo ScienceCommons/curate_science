@@ -79,8 +79,7 @@ class Article(models.Model):
 
     doi = models.CharField(max_length=255, null=True, blank=True)
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True, blank=True, related_name='articles')
-    # TODO: YEAR can be null if the article is "in press"
-    year = models.PositiveIntegerField(default=datetime.datetime.now().year)
+    year = models.PositiveIntegerField(null=True, blank=True)
     title = models.CharField(max_length=255)
     abstract = models.TextField(null=True, blank=True)
     keywords = JSONField(null=True, blank=True)
@@ -111,6 +110,13 @@ class Article(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    @property
+    def publication_year(self):
+        if self.year:
+            return str(self.year)
+        else:
+            return "In Press"
 
     @property
     def has_many_studies(self):

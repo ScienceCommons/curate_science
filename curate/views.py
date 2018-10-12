@@ -22,7 +22,10 @@ def view_article(request, pk):
 @require_http_methods(["GET", "POST"])
 def create_article(request):
     if request.method=="POST":
-        form = ArticleForm(request.POST, request.FILES)
+        post_data = request.POST.copy()
+        if post_data.get('year') == "In Press":
+            post_data.update({'year': 0})
+        form = ArticleForm(post_data, request.FILES)
         if form.is_valid():
             article = form.save()
             for index, author in enumerate(form.cleaned_data['authors']):
@@ -94,7 +97,7 @@ def update_article(request, pk):
                     is_robustness=True,
                     defaults={'order': index + 1}
                 )
-            for a in article.authors:
+            for a in article.authors.all():
                 if a not in form.cleaned_data['authors']:
                     article.articleauthor_set.filter(author=a).delete()
             for co in article.commentary_of:

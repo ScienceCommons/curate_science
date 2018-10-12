@@ -64,6 +64,21 @@ class TestAPIViews(TestCase):
         a = models.Article.objects.get(doi="001")
         assert a.title == "api test article"
 
+    def test_article_year_can_be_in_press(self):
+        self.client.login(username='admin', password='password')
+        url = reverse('api-create-article')
+        r = self.client.post(url, {
+            "doi": "000",
+            "year": "",
+            "journal": models.Journal.objects.first().id,
+            "title": "api test article",
+            "article_type": "ORIGINAL",
+            "research_area": "SOCIAL_SCIENCE",
+            "authors": [models.Author.objects.first().id,]
+        })
+        a = models.Article.objects.get(doi="000")
+        assert a.publication_year == "In Press"
+
     def test_authenticated_user_can_create_article_with_replications(self):
         self.client.login(username='admin', password='password')
         url = reverse('api-create-article')

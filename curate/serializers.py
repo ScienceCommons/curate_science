@@ -25,6 +25,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class ArticleSerializer(serializers.ModelSerializer):
+    year = serializers.IntegerField(required=False, allow_null=True)
     studies = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
