@@ -194,7 +194,7 @@ def view_collection(request, pk):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_collection(request, pk):
+def create_collection(request):
     serializer=CollectionSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -240,7 +240,7 @@ def view_construct(request):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_construct(request, pk):
+def create_construct(request):
     serializer=ConstructSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -286,7 +286,7 @@ def view_effect(request, pk):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_effect(request, pk):
+def create_effect(request):
     serializer=EffectSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -332,7 +332,7 @@ def view_hypothesis(request, pk):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_hypothesis(request, pk):
+def create_hypothesis(request):
     serializer=HypothesisSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -380,7 +380,7 @@ def view_journal(request, pk):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_journal(request, pk):
+def create_journal(request):
     serializer=JournalSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -428,7 +428,7 @@ def view_key_figure(request, pk):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_key_figure(request, pk):
+def create_key_figure(request):
     serializer=KeyFigureSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -474,7 +474,7 @@ def view_method(request, pk):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_method(request, pk):
+def create_method(request):
     serializer=MethodSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -520,7 +520,7 @@ def view_statistical_result(request):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_statistical_result(request, pk):
+def create_statistical_result(request):
     serializer=StatisticalResultSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -566,7 +566,7 @@ def view_study(request, pk):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_study(request, pk):
+def create_study(request):
     serializer=StudySerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -612,7 +612,7 @@ def view_transparency(request, pk):
 
 @api_view(('POST', ))
 @permission_classes((IsAuthenticated,))
-def create_transparency(request, pk):
+def create_transparency(request):
     serializer=TransparencySerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

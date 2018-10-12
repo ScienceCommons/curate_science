@@ -243,6 +243,10 @@ class StatisticalResultSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class StudySerializer(serializers.ModelSerializer):
+    effects = serializers.PrimaryKeyRelatedField(
+        many=True, allow_null=True, required=False,
+        queryset=Effect.objects.all()
+    )
     class Meta:
         model=Study
         fields='__all__'
