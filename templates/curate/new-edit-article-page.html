@@ -37,6 +37,13 @@
       </td>
     </tr>
     <tr>
+      <th>{{form.journal.label_tag}}</th>
+      <td>
+        {{form.journal.errors}}
+        {{form.journal}}
+      </td>
+    </tr>
+    <tr>
       <th>{{form.abstract.label_tag}}</th>
       <td>
         {{form.abstract.errors}}
@@ -62,6 +69,27 @@
       <td>
         {{form.reporting_standards_type.errors}}
         {{form.reporting_standards_type}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.preprint_url.label_tag}}</th>
+      <td>
+        {{form.preprint_url.errors}}
+        {{form.preprint_url}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.html_url.label_tag}}</th>
+      <td>
+        {{form.html_url.errors}}
+        {{form.html_url}}
+      </td>
+    </tr>
+    <tr>
+      <th>{{form.pdf_url.label_tag}}</th>
+      <td>
+        {{form.pdf_url.errors}}
+        {{form.pdf_url}}
       </td>
     </tr>
     <tr>

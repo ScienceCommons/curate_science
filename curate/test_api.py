@@ -136,6 +136,64 @@ class TestAPIViews(TestCase):
         r = self.client.get(url)
         assert r.status_code == 200
 
+    def test_create_article_nested_studies(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-create-article')
+        r = self.client.post(
+            url,
+            {
+                'year': 2007,
+                'studies': [
+                    {
+                        'study_type': None,
+                        'study_number': '3',
+                        'evidence_type': None,
+                        'reporting_standards_type': None,
+                        'method_similarity_type': None,
+                        'method_differences': None,
+                        'auxiliary_hypo_evidence': None,
+                        'rep_outcome_category': None,
+                        'replication_of': None
+                    },
+                    {
+                        'study_type': None,
+                        'study_number': '4',
+                        'evidence_type': None,
+                        'reporting_standards_type': None,
+                        'method_similarity_type': None,
+                        'method_differences': None,
+                        'auxiliary_hypo_evidence': None,
+                        'rep_outcome_category': None,
+                        'replication_of': None
+                    },
+                    {
+                        'study_type': None,
+                        'study_number': '2',
+                        'evidence_type': None,
+                        'reporting_standards_type': None,
+                        'method_similarity_type': None,
+                        'method_differences': None,
+                        'auxiliary_hypo_evidence': None,
+                        'rep_outcome_category': None,
+                        'replication_of': None
+                    }
+                ],
+                'authors': [models.Author.objects.first().id,],
+                'commentary_of': [],
+                'reproducibility_of': [],
+                'robustness_of': [],
+                'doi': '0003',
+                'title': 'TEST Washing away your sins: threatened morality and physical cleansing.',
+                'abstract': 'abstract',
+                'article_type': 'ORIGINAL',
+                'research_area': 'SOCIAL_SCIENCE',
+                'created': '2018-09-28T03:39:41.488019Z',
+                'updated': '2018-09-28T03:39:41.488042Z',
+                'journal': models.Journal.objects.first().id}
+        )
+        a = models.Article.objects.get(doi="0003")
+        assert a.title == "TEST Washing away your sins: threatened morality and physical cleansing."
+
     # Update Articles
     def test_authenticated_user_can_edit_article_with_api(self):
         self.client.login(username='new_user', password='password1')
@@ -671,7 +729,7 @@ class TestAPIViews(TestCase):
         r = self.client.get(url)
         d = json.loads(r.content.decode('utf-8'))
         assert r.status_code == 200
-        assert d[0].get('name') == "Science"
+        assert d[0].get('name') == "Basic and Applied Social Psychology"
 
     # View Journal
     def test_anon_can_view_construct(self):
@@ -682,6 +740,7 @@ class TestAPIViews(TestCase):
         d = json.loads(r.content.decode('utf-8'))
         assert r.status_code == 200
         assert d.get('name') == "Science"
+
 
     # Create Journal
     # Update Journal

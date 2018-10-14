@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.utils import model_meta
+from django.shortcuts import get_object_or_404
 from curate.models import (
     Author,
     Article,
@@ -24,16 +25,34 @@ class AuthorSerializer(serializers.ModelSerializer):
         model=Author
         fields='__all__'
 
+class NestedStudySerializer(serializers.ModelSerializer):
+    id = serializers.ModelField(model_field=Study()._meta.get_field('id'))
+    effects = serializers.PrimaryKeyRelatedField(
+        many=True, allow_null=True, required=False,
+        queryset=Effect.objects.all()
+    )
+    class Meta:
+        model=Study
+        exclude=('article',)
+
+class StudySerializer(serializers.ModelSerializer):
+    effects = serializers.PrimaryKeyRelatedField(
+        many=True, allow_null=True, required=False,
+        queryset=Effect.objects.all()
+    )
+    class Meta:
+        model=Study
+        fields='__all__'
+
 class ArticleSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
-    studies = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    studies = NestedStudySerializer(many=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     robustness_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
 
     def create(self, validated_data):
-
         if 'authors' in validated_data:
             authors = validated_data.pop('authors')
         else:
@@ -53,6 +72,11 @@ class ArticleSerializer(serializers.ModelSerializer):
             robustness_of = validated_data.pop('robustness_of')
         else:
             robustness_of = None
+
+        if 'studies' in validated_data:
+            studies = validated_data.pop('studies')
+        else:
+            studies = None
 
         instance = Article.objects.create(**validated_data)
 
@@ -91,6 +115,19 @@ class ArticleSerializer(serializers.ModelSerializer):
                     order=index+1
                 )
 
+        if studies is not None:
+            for s in studies:
+                effects = None
+                if 'effects' in s:
+                    effects = s.pop('effects')
+                study = Study.objects.create(
+                    article=instance,
+                    **s
+                )
+                if effects is not None:
+                    for effect in effects:
+                        study.effects.add(effect)
+
         instance.save()
         return instance
 
@@ -114,6 +151,11 @@ class ArticleSerializer(serializers.ModelSerializer):
         else:
             robustness_of = None
 
+        if 'studies' in validated_data:
+            studies = validated_data.pop('studies')
+        else:
+            studies = None
+
         for attr, value in validated_data.items():
             if attr in info.relations and info.relations[attr].to_many:
                 field = getattr(instance, attr)
@@ -134,6 +176,29 @@ class ArticleSerializer(serializers.ModelSerializer):
             for a in instance.authors.all():
                 if a not in authors:
                     instance.articleauthor_set.filter(author=a).delete()
+
+        if studies is not None:
+            for s in studies:
+                effects = None
+                if 'effects' in s:
+                    effects = s.pop('effects')
+                if 'id' in s:
+                    study = Study.objects.filter(id=s['id'])
+                    study.update(**s)
+                    study = study.first()
+                else:
+                    raise Exception("id not in s")
+                    study = Study.objects.create(
+                        article=instance,
+                        **s
+                    )
+
+                if effects is not None:
+                    for effect in effects:
+                        study.effects.add(effect)
+                    for e in study.effects.all():
+                        if e not in effects:
+                            study.effects.remove(e)
 
         if commentary_of is not None:
             for index, article in enumerate(commentary_of):
@@ -240,15 +305,6 @@ class MethodSerializer(serializers.ModelSerializer):
 class StatisticalResultSerializer(serializers.ModelSerializer):
     class Meta:
         model=StatisticalResult
-        fields='__all__'
-
-class StudySerializer(serializers.ModelSerializer):
-    effects = serializers.PrimaryKeyRelatedField(
-        many=True, allow_null=True, required=False,
-        queryset=Effect.objects.all()
-    )
-    class Meta:
-        model=Study
         fields='__all__'
 
 class TransparencySerializer(serializers.ModelSerializer):

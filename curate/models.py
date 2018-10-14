@@ -40,6 +40,9 @@ class Journal(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('name',)
+
 class Article(models.Model):
     """A written work with one or more Authors, reporting the results of a scientific Study."""
     ORIGINAL = 'ORIGINAL'
@@ -91,7 +94,6 @@ class Article(models.Model):
         (META_RESEARCH, 'reanalysis - meta-research'),
         (COMMENTARY, 'commentary'),
     ))
-    # TODO: Add to Study model as well
     reporting_standards_type = models.CharField(
         max_length=255,
         null=True,
