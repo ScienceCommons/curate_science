@@ -217,9 +217,9 @@ class Study(models.Model):
             (SIMILAR,'similar'),
         )
     )
-    method_differences = JSONField(null=True)
-    auxiliary_hypo_evidence = JSONField(null=True)
-    rep_outcome_category = models.CharField(max_length=255,null=True)
+    method_differences = JSONField(null=True, blank=True)
+    auxiliary_hypo_evidence = JSONField(null=True, blank=True)
+    rep_outcome_category = models.CharField(max_length=255,null=True, blank=True)
 
     @property
     def is_replication(self):
@@ -238,6 +238,12 @@ class Study(models.Model):
 class Effect(models.Model):
     name = models.CharField(max_length=255, unique=True)
     constraints_on_generality = JSONField(null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ('name',)
 
 class Collection(models.Model):
     """A collection of distinct but conceptually related Effects"""
@@ -277,7 +283,7 @@ class Hypothesis(models.Model):
         return self.name
 
 class KeyFigure(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.PROTECT)
+    article = models.ForeignKey(Article, on_delete=models.PROTECT, related_name='key_figures')
     study = models.ForeignKey(Study, on_delete=models.PROTECT, null=True)
     figure_number = models.PositiveIntegerField()
     image_url = models.URLField(null=True)
@@ -342,8 +348,8 @@ class Transparency(models.Model):
     MATERIALS = 'MATERIALS'
     DATA = 'DATA'
     CODE = 'CODE'
-    article = models.ForeignKey(Article, on_delete=models.PROTECT)
-    study = models.ForeignKey(Study, on_delete=models.PROTECT, null=True)
+    article = models.ForeignKey(Article, on_delete=models.PROTECT, related_name='transparencies')
+    study = models.ForeignKey(Study, on_delete=models.PROTECT, null=True, blank=True, related_name='transparencies')
     transparency_type = models.CharField(max_length=255, choices=(
         (PREREG,'prereg'),
         (MATERIALS,'materials'),

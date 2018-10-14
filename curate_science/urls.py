@@ -64,6 +64,7 @@ urlpatterns += [
     path('api/constructs/<pk>/delete/', api.delete_construct, name='api-delete-construct'),
     # Effect paths
     path('api/effects/', api.list_effects, name='api-list-effects'),
+    path('api/effects/autocomplete/', api.EffectAutocomplete.as_view(), name='effect-autocomplete'),
     path('api/effects/create/', api.create_effect, name='api-create-effect'),
     path('api/effects/<pk>/', api.view_effect, name='api-view-effect'),
     path('api/effects/<pk>/update/', api.update_effect, name='api-update-effect'),
@@ -107,7 +108,7 @@ urlpatterns += [
     # Transparency paths
     path('api/transparencies/', api.list_transparencies, name='api-list-transparencies'),
     path('api/transparencies/create/', api.create_transparency, name='api-create-transparency'),
-    path('api/transparencies/<pk>/', api.view_author, name='api-view-author'),
+    path('api/transparencies/<pk>/', api.view_transparency, name='api-view-transparency'),
     path('api/transparencies/<pk>/update/', api.update_author, name='api-update-author'),
     path('api/transparencies/<pk>/delete/', api.delete_author, name='api-delete-author'),
 ]

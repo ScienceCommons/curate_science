@@ -2,11 +2,24 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.contrib.auth.decorators import login_required
-from curate.forms import ArticleForm
+from curate.forms import (
+    ArticleForm,
+    KeyFigureForm,
+    KeyFigureFormSet,
+    StudyForm,
+    StudyFormSet,
+    TransparencyForm,
+    TransparencyFormSet,
+    #VariableRelationshipForm,
+    #VariableRelationshipFormSet,
+)
 from curate.models import(
     Article,
     ArticleAuthor,
+    KeyFigure,
     RelatedArticle,
+    Study,
+    Transparency,
 )
 
 def index(request):
@@ -26,7 +39,10 @@ def create_article(request):
         if post_data.get('year') == "In Press":
             post_data.update({'year': 0})
         form = ArticleForm(post_data, request.FILES)
-        if form.is_valid():
+        transparency_formset = TransparencyFormSet(post_data, request.FILES, prefix='transparency')
+        study_formset = StudyFormSet(post_data, request.FILES, prefix='study')
+        key_figure_formset = KeyFigureFormSet(post_data, request.FILES, prefix='keyfigure')
+        if form.is_valid() and transparency_formset.is_valid() and study_formset.is_valid() and key_figure_formset.is_valid():
             article = form.save()
             for index, author in enumerate(form.cleaned_data['authors']):
                 ArticleAuthor.objects.create(
@@ -55,11 +71,58 @@ def create_article(request):
                     is_robustness=True,
                     order=index
                 )
+            for transparency_form in transparency_formset:
+                if transparency_form.cleaned_data != {}:
+                    if 'DELETE' in transparency_form.cleaned_data:
+                        transparency_form.cleaned_data.pop('DELETE')
+                    if 'article' in transparency_form.cleaned_data:
+                        transparency_form.cleaned_data.pop('article')
+                    Transparency.objects.create(
+                        article=article,
+                        **(transparency_form.cleaned_data)
+                    )
+            for study_form in study_formset:
+                if study_form.cleaned_data != {}:
+                    if 'DELETE' in study_form.cleaned_data:
+                        study_form.cleaned_data.pop('DELETE')
+                    if 'article' in study_form.cleaned_data:
+                        study_form.cleaned_data.pop('article')
+                    if 'effects' in study_form.cleaned_data:
+                        effects = study_form.cleaned_data.pop('effects')
+                    study = Study.objects.create(
+                        article=article,
+                        **(study_form.cleaned_data)
+                    )
+                    for effect in effects:
+                        study.effects.add(effect)
+            for key_figure_form in key_figure_formset:
+                if key_figure_form.cleaned_data != {}:
+                    if 'DELETE' in key_figure_form.cleaned_data:
+                        key_figure_form.cleaned_data.pop('DELETE')
+                    if 'article' in key_figure_form.cleaned_data:
+                        key_figure_form.cleaned_data.pop('article')
+                    KeyFigure.objects.create(
+                        article=article,
+                        **(key_figure_form.cleaned_data)
+                    )
+
             article.save()
             return redirect(reverse('view-article', kwargs={'pk': article.id}))
+        else:
+            raise Exception("form invalid")
     else:
         form = ArticleForm()
-    return render(request, "curate/new-edit-article-page.html", {'form': form})
+        transparency_formset = TransparencyFormSet(prefix='transparency')
+        study_formset = StudyFormSet(prefix='study')
+        key_figure_formset = KeyFigureFormSet(prefix='keyfigure')
+        #variable_relationship_formset = VariableRelationshipFormSet(prefix='variable')
+    return render(request, "curate/new-edit-article-page.html",
+                  {'form': form,
+                   'transparency_formset': transparency_formset,
+                   'study_formset': study_formset,
+                   'key_figure_formset': key_figure_formset,
+                   #'variable_relationship_formset': variable_relationship_formset,
+                  })
 
 @login_required
 @require_http_methods(["GET", "POST"])
@@ -67,7 +130,10 @@ def update_article(request, pk):
     queryset = get_object_or_404(Article.objects.prefetch_related('authors'), id=pk)
     if request.method=="POST":
         form = ArticleForm(request.POST, request.FILES, instance=queryset)
-        if form.is_valid():
+        transparency_formset = TransparencyFormSet(request.POST, request.FILES, prefix='transparency')
+        study_formset = StudyFormSet(request.POST, request.FILES, prefix='study')
+        key_figure_formset = KeyFigureFormSet(request.POST, request.FILES, prefix='keyfigure')
+        if form.is_valid() and transparency_formset.is_valid() and study_formset.is_valid() and key_figure_formset.is_valid():
             article = form.save()
 
             for index, author in enumerate(form.cleaned_data['authors']):
@@ -118,12 +184,79 @@ def update_article(request, pk):
                          related_article=co,
                          is_robustness=True
                      ).delete()
+
+            for transparency_form in transparency_formset:
+                if transparency_form.cleaned_data != {}:
+                    id = transparency_form.cleaned_data.get('id')
+                    if id is not None and transparency_form.cleaned_data.get('DELETE') == True:
+                        Transparency.objects.delete(id=id)
+                    else:
+                        if 'article' in transparency_form.cleaned_data:
+                            transparency_form.cleaned_data.pop('article')
+                        if id is not None:
+                            Transparency.objects.filter(id=id).update(
+                                **(transparency_form.cleaned_data)
+                            )
+                        else:
+                            Transparency.objects.create(
+                                article=article,
+                                **(transparency_form.cleaned_data)
+                            )
+            for study_form in study_formset:
+                if study_form.cleaned_data != {}:
+                    id = transparency_form.cleaned_data.get('id')
+                    if id is not None and transparency_form.cleaned_data.get('DELETE') == True:
+                        Study.objects.delete(id=id)
+                    else:
+                        if 'article' in study_form.cleaned_data:
+                            study_form.cleaned_data.pop('article')
+                        if 'effects' in study_form.cleaned_data:
+                            effects = study_form.cleaned_data.pop('effects')
+                        if id is not None:
+                            Study.objects.filter(id=id).update(
+                                **(study_form.cleaned_data)
+                            )
+                            for effect in effects:
+                                if effect not in study.effects:
+                                    study.effects.add(effect)
+                        else:
+                            study = Study.objects.create(
+                                article=article,
+                                **(study_form.cleaned_data)
+                            )
+                            for effect in effects:
+                                study.effects.add(effect)
+            for key_figure_form in key_figure_formset:
+                if key_figure_form.cleaned_data != {}:
+                    id = key_figure_form.cleaned_data.get('id')
+                    if id is not None and key_figure_form.cleaned_data.get('DELETE') == True:
+                        KeyFigure.objects.delete(id=id)
+                    else:
+                        if 'article' in key_figure_form.cleaned_data:
+                            key_figure_form.cleaned_data.pop('article')
+                        if id is not None:
+                            KeyFigure.objects.filter(id=id).update(
+                                **(key_figure_form.cleaned_data)
+                            )
+                        else:
+                            KeyFigure.objects.create(
+                                article=article,
+                                **(key_figure_form.cleaned_data)
+                            )
             article.save()
             return redirect(reverse('view-article', kwargs={'pk': article.id}))
     else:
         form = ArticleForm(instance=queryset)
+        transparency_formset = TransparencyFormSet(instance=queryset, prefix='transparency')
+        study_formset = StudyFormSet(instance=queryset, prefix='study')
+        key_figure_formset = KeyFigureFormSet(instance=queryset, prefix='keyfigure')
         form.fields['authors'].initial=queryset.authors.all()
         form.fields['commentary_of'].initial=queryset.commentary_of
         form.fields['reproducibility_of'].initial=queryset.reproducibility_of
         form.fields['robustness_of'].initial=queryset.robustness_of
-    return render(request, "curate/new-edit-article-page.html", {'form': form})
+    return render(request, "curate/new-edit-article-page.html",
+                  {'form': form,
+                   'transparency_formset': transparency_formset,
+                   'study_formset': study_formset,
+                   'key_figure_formset': key_figure_formset,
+                  })

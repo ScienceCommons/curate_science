@@ -78,5 +78,79 @@
     </td>
   </tr>
 </table>
+<table>
+  {% for trans in article.transparencies.all %}
+  {% if forloop.first %}
+    <thead>
+    <tr>
+      <th>Transparencies:</th>
+      <th>Transparency Type</th>
+      <th>URL</th>
+    </tr>
+    </thead>
+    {% endif %}
+  <tr>
+    <td />
+    <td>{{ trans.transparency_type }}</td>
+    <td>{{ trans.url }}</td>
+  <tr>
+  {% endfor %}
+</table>
+<table>
+  {% for kf in article.key_figures.all %}
+  {% if forloop.first %}
+    <thead>
+    <tr>
+      <th>Key Figures:</th>
+      <th>Figure #</th>
+      <th>Image URL</th>
+      <th>File Name</th>
+      <th>Is Figure?</th>
+      <th>Is Image?</th>
+    </tr>
+    </thead>
+    {% endif %}
+  <tr>
+    <td />
+    <td>{{ kf.figure_number }}</td>
+    <td>{{ kf.image_url }}</td>
+    <td>{{ kf.file_name }}</td>
+    <td>{{ kf.is_figure }}</td>
+    <td>{{ kf.is_table }}</td>
+  <tr>
+  {% endfor %}
+</table>
+<table>
+  {% for s in article.studies.all %}
+  {% if forloop.first %}
+    <thead>
+    <tr>
+      <th>Studies:</th>
+      <th>Study #</th>
+      <th>Replication Of</th>
+      <th>Effects</th>
+      <th>Method Similarity Type</th>
+      <th>Method Differences</th>
+    </tr>
+    </thead>
+    {% endif %}
+  <tr>
+    <td />
+    <td>{{ s.study_number }}</td>
+    <td>
+      {% if s.replication_of %}
+      <a href="{{ s.replication_of.get_absolute_url }}">{{ s.replication_of }}</a></td>
+      {% endif %}
+    <td>
+      {% for e in s.effects.all %}
+      <p><a href="{{ e.get_absolute_url }}">{{e.name}}</a></p>
+      {% endfor %}
+    </td>
+    <td>{{ s.method_similarity_type }}</td>
+    <td>{{ s.method_differences }}</td>
+   <tr>
+  {% endfor %}
+</table>
+<a href="{% url "update-article" article.id %}">Edit Article</a>
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 {% endblock %}

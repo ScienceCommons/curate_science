@@ -47,6 +47,8 @@ class StudySerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
     studies = NestedStudySerializer(many=True)
+    key_figures = serializers.PrimaryKeyRelatedField(many=True, queryset=KeyFigure.objects.all())
+    transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all())
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())

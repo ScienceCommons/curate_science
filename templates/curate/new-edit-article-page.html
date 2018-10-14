@@ -7,6 +7,7 @@
   {{ form.non_field_errors }}
   {{ form.source.errors }}
   {{ form.source }}
+  <h3>Article-level</h3>
   <table>
     <tr>
       <th>{{form.doi.label_tag}}</th>
@@ -92,7 +93,74 @@
         {{form.pdf_url}}
       </td>
     </tr>
-    <tr>
+  </table>
+  <table>
+    {{ transparency_formset.management_form }}
+    {% for transparency_form in transparency_formset %}
+      {% if forloop.first %}
+        <thead>
+          <tr>
+            <th>Transparencies:</th>
+            <th>{{ transparency_form.transparency_type.label_tag }}</th>
+            <th>{{ transparency_form.url.label_tag }}</th>
+          </tr>
+        </thead>
+        {% endif %}
+        <tr class="transparency-formset-row">
+        <td>Transparency:</td>
+          <td>
+            {{ transparency_form.transparency_type.errors.as_ul }}
+            {{ transparency_form.transparency_type }}
+          </td>
+          <td>
+            {{ transparency_form.url.errors.as_ul }}
+            {{ transparency_form.url }}
+          </td>
+        </tr>
+    {% endfor %}
+  </table>
+  <table>
+    {{ key_figure_formset.management_form }}
+    {% for key_figure_form in key_figure_formset %}
+      {% if forloop.first %}
+        <thead>
+          <tr>
+            <th>Key Figures:</th>
+            <th>{{ key_figure_form.figure_number.label_tag }}</th>
+            <th>{{ key_figure_form.image_url.label_tag }}</th>
+            <th>{{ key_figure_form.file_name.label_tag }}</th>
+            <th>{{ key_figure_form.is_figure.label_tag }}</th>
+            <th>{{ key_figure_form.is_table.label_tag }}</th>
+          </tr>
+        </thead>
+        {% endif %}
+        <tr class="keyfigure-formset-row">
+        <td>Key_Figure:</td>
+          <td>
+            {{ key_figure_form.figure_number.errors.as_ul }}
+            {{ key_figure_form.figure_number }}
+          </td>
+          <td>
+            {{ key_figure_form.image_url.errors.as_ul }}
+            {{ key_figure_form.image_url }}
+          </td>
+          <td>
+            {{ key_figure_form.file_name.errors.as_ul }}
+            {{ key_figure_form.file_name }}
+          </td>
+          <td>
+            {{ key_figure_form.is_figure.errors.as_ul }}
+            {{ key_figure_form.is_figure }}
+          </td>
+          <td>
+            {{ key_figure_form.is_table.errors.as_ul }}
+            {{ key_figure_form.is_table }}
+          </td>
+        </tr>
+    {% endfor %}
+  </table>
+  <table>
+   <tr>
       <th>{{form.commentary_of.label_tag}}</th>
       <td>
         {{form.commentary_of.errors}}
@@ -114,9 +182,77 @@
       </td>
     </tr>
   </table>
-  <button type="submit">Submit</button>
+  <br />
+  <h3>Study-level</h3>
+  <table>
+    {{ study_formset.management_form }}
+    {% for study_form in study_formset %}
+      {% if forloop.first %}
+        <thead>
+          <tr>
+            <th>Studies:</th>
+            <th>{{ study_form.study_number.label_tag }}</th>
+            <th>{{ study_form.replication_of.label_tag }}</th>
+            <th>{{ study_form.effects.label_tag }}</th>
+            <th>{{ study_form.method_similarity_type.label_tag }}</th>
+            <th>{{ study_form.method_differences.label_tag }}</th>
+          </tr>
+        </thead>
+        {% endif %}
+        <tr class="study-formset-row">
+        <td>Study:</td>
+          <td>
+            {{ study_form.study_number.errors.as_ul }}
+            {{ study_form.study_number }}
+          </td>
+          <td>
+            {{ study_form.replication_of.errors.as_ul }}
+            {{ study_form.replication_of }}
+          </td>
+          <td>
+            {{ study_form.effects.errors.as_ul }}
+            {{ study_form.effects }}
+          </td>
+          <td>
+            {{ study_form.method_similarity_type.errors.as_ul }}
+            {{ study_form.method_similarity_type}}
+          </td>
+          <td>
+            {{ study_form.method_differences.errors.as_url }}
+            {{ study_form.method_differences }}
+          </td>
+        <td>
+          </td>
+          {% if form.instance.id %}
+            <td>
+            {{ form.DELETE }}
+            </td>
+          {% endif %}
+        </tr>
+    {% endfor %}
+  </table>
+  <button type="submit" class="button">Submit</button>
 </form>
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+<!-- Include formset plugin - including jQuery dependency -->
+<script src="{% static 'curate/js/jquery.formset.js' %}"></script>
+<script>
+    $('.transparency-formset-row').formset({
+      addText: 'Add Transparency',
+    deleteText: 'Remove',
+    prefix: 'transparency'
+    });
+    $('.keyfigure-formset-row').formset({
+      addText: 'Add Key Figure',
+    deleteText: 'Remove',
+    prefix: 'keyfigure'
+    });
+    $('.study-formset-row').formset({
+      addText: 'Add Study',
+    deleteText: 'Remove',
+    prefix: 'study'
+    });
+</script>
 {{form.media}}
 {% endblock %}
 
