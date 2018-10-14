@@ -47,8 +47,8 @@ class StudySerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
     studies = NestedStudySerializer(many=True)
-    key_figures = serializers.PrimaryKeyRelatedField(many=True, queryset=KeyFigure.objects.all())
-    transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all())
+    key_figures = serializers.PrimaryKeyRelatedField(many=True, queryset=KeyFigure.objects.all(), required=False, allow_null=True)
+    transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all(), required=False, allow_null=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
@@ -79,6 +79,12 @@ class ArticleSerializer(serializers.ModelSerializer):
             studies = validated_data.pop('studies')
         else:
             studies = None
+
+        if 'key_figures' in validated_data:
+            key_figures = validated_data.pop('key_figures')
+
+        if 'transparencies' in validated_data:
+            transparencies = validated_data.pop('transparencies')
 
         instance = Article.objects.create(**validated_data)
 
@@ -129,6 +135,20 @@ class ArticleSerializer(serializers.ModelSerializer):
                 if effects is not None:
                     for effect in effects:
                         study.effects.add(effect)
+
+        if transparencies is not None:
+            for t in transparencies:
+                tr = Transparency.objects.create(
+                    article=instance,
+                    **t
+                )
+
+        if key_figures is not None:
+            for k in key_figures:
+                kf = KeyFigure.objects.create(
+                    article=instance,
+                    **k
+                )
 
         instance.save()
         return instance
