@@ -80,7 +80,7 @@ class Article(models.Model):
             (PRISMA_P, "PRISMA-P (2015)")
             )
 
-    doi = models.CharField(max_length=255, null=True, blank=True)
+    doi = models.CharField(max_length=255, null=True, blank=True, unique=True)
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True, blank=True, related_name='articles')
     year = models.PositiveIntegerField(null=True, blank=True)
     title = models.CharField(max_length=255)
