@@ -90,7 +90,7 @@ TransparencyFormSet = inlineformset_factory(
     Article,
     Transparency,
     form=TransparencyForm,
-    extra=0,
+    extra=1,
     can_delete=True
 )
 
@@ -98,7 +98,7 @@ StudyFormSet = inlineformset_factory(
     Article,
     Study,
     form=StudyForm,
-    extra=0,
+    extra=1,
     can_delete=True
 )
 
@@ -106,7 +106,7 @@ KeyFigureFormSet = inlineformset_factory(
     Article,
     KeyFigure,
     form=KeyFigureForm,
-    extra=0,
+    extra=1,
     can_delete=True
 )
 
