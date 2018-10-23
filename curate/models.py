@@ -207,10 +207,11 @@ class Study(models.Model):
         choices=Article.standards_choices
     )
     #below fields are only for a replication study
-    replication_of = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
+    replication_of = models.ForeignKey('self', on_delete=models.PROTECT, null=True, blank=True)
     method_similarity_type = models.CharField(
         max_length=255,
         null=True,
+        blank=True,
         choices=(
             (EXACT,'exact'),
             (VERY_SIMILAR,'very similar'),
@@ -220,6 +221,11 @@ class Study(models.Model):
     method_differences = JSONField(null=True, blank=True)
     auxiliary_hypo_evidence = JSONField(null=True, blank=True)
     rep_outcome_category = models.CharField(max_length=255,null=True, blank=True)
+    ind_vars = models.ManyToManyField('Construct', related_name='studies_as_iv')
+    dep_vars = models.ManyToManyField('Construct', related_name='studies_as_dv')
+    ind_var_methods = models.ManyToManyField('Method', related_name='studies_as_iv_method')
+    dep_var_methods = models.ManyToManyField('Method', related_name='studies_as_dv_method')
+
 
     @property
     def is_replication(self):
@@ -266,6 +272,9 @@ class Collection(models.Model):
 class Construct(models.Model):
     """A name for a social science concept that can can be theorized about"""
     name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
 
 class Hypothesis(models.Model):
     """
@@ -314,7 +323,7 @@ class StatisticalResult(models.Model):
 
 class Method(models.Model):
     """An empirical method of measuring a theoretical construct."""
-    construct = models.ForeignKey(Construct, on_delete=models.PROTECT)
+    construct = models.ForeignKey(Construct, on_delete=models.PROTECT, null=True)
     name = models.CharField(max_length=255, unique=True)
     method_version = models.CharField(max_length=255, null=True)
     scoring_procedure = models.CharField(max_length=255, null=True)

@@ -5,8 +5,10 @@ from django.forms import inlineformset_factory
 from curate.models import (
     Article,
     Author,
+    Construct,
     Effect,
     KeyFigure,
+    Method,
     Study,
     Transparency,
     VariableRelationship,
@@ -72,6 +74,47 @@ class StudyForm(forms.ModelForm):
         ),
         required=False
     )
+    ind_vars = forms.ModelMultipleChoiceField(
+        queryset=Construct.objects.all(),
+        widget=autocomplete.ModelSelect2Multiple(
+            url='construct-autocomplete',
+            attrs={
+                'data-placeholder': '...',
+            }
+        ),
+        required=False
+    )
+    dep_vars = forms.ModelMultipleChoiceField(
+        queryset=Construct.objects.all(),
+        widget=autocomplete.ModelSelect2Multiple(
+            url='construct-autocomplete',
+            attrs={
+                'data-placeholder': '...',
+            }
+        ),
+        required=False
+    )
+    ind_var_methods = forms.ModelMultipleChoiceField(
+        queryset=Method.objects.all(),
+        widget=autocomplete.ModelSelect2Multiple(
+            url='method-autocomplete',
+            attrs={
+                'data-placeholder': '...',
+            }
+        ),
+        required=False
+    )
+    dep_var_methods = forms.ModelMultipleChoiceField(
+        queryset=Method.objects.all(),
+        widget=autocomplete.ModelSelect2Multiple(
+            url='method-autocomplete',
+            attrs={
+                'data-placeholder': '...',
+            }
+        ),
+        required=False
+    )
+
     class Meta:
         model = Study
         fields = '__all__'
@@ -109,11 +152,3 @@ KeyFigureFormSet = inlineformset_factory(
     extra=1,
     can_delete=True
 )
-
-# VariableRelationshipFormSet = inlineformset_factory(
-#     Study,
-#     VariableRelationship,
-#     form=VariableRelationshipForm,
-#     extra=1,
-#     can_delete=True
-# )

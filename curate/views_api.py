@@ -674,13 +674,34 @@ class ArticleAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
     def get_queryset(self):
         queryset = Article.objects.all()
         if self.q:
-            queryset = queryset.filter(Q(authors__last_name__startswith=self.q)
-                                       | Q(title__startswith=self.q))
+            queryset = queryset.filter(Q(authors__last_name__istartswith=self.q)
+                                       | Q(title__istartswith=self.q))
         return queryset
 
 class EffectAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
     def get_queryset(self):
         queryset = Effect.objects.all()
         if self.q:
-            queryset = queryset.filter(name__startswith=self.q)
+            queryset = queryset.filter(name__istartswith=self.q)
+        return queryset
+
+class ConstructAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        queryset = Construct.objects.all()
+        if self.q:
+            queryset = queryset.filter(name__istartswith=self.q)
+        return queryset
+
+class MethodAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        queryset = Method.objects.all()
+        if self.q:
+            queryset = queryset.filter(name__istartswith=self.q)
+        return queryset
+
+class JournalAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        queryset = Journal.objects.all()
+        if self.q:
+            queryset = queryset.filter(name__istartswith=self.q)
         return queryset

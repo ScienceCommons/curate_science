@@ -58,6 +58,7 @@ urlpatterns += [
     path('api/collections/<pk>/delete/', api.delete_collection, name='api-delete-collection'),
     # Construct paths
     path('api/constructs/', api.list_constructs, name='api-list-constructs'),
+    path('api/constructs/autocomplete/', api.ConstructAutocomplete.as_view(), name='construct-autocomplete'),
     path('api/constructs/create/', api.create_construct, name='api-create-construct'),
     path('api/constructs/<pk>/', api.view_construct, name='api-view-construct'),
     path('api/constructs/<pk>/update/', api.update_construct, name='api-update-construct'),
@@ -77,6 +78,7 @@ urlpatterns += [
     path('api/hypotheses/<pk>/delete/', api.delete_hypothesis, name='api-delete-hypothesis'),
     # Journal paths
     path('api/journals/', api.list_journals, name='api-list-journals'),
+    path('api/journals/autocomplete/', api.JournalAutocomplete.as_view(), name='journal-autocomplete'),
     path('api/journals/create/', api.create_journal, name='api-create-journal'),
     path('api/journals/<pk>/', api.view_journal, name='api-view-journal'),
     path('api/journals/<pk>/update/', api.update_journal, name='api-update-journal'),
@@ -89,6 +91,7 @@ urlpatterns += [
     path('api/key_figures/<pk>/delete/', api.delete_key_figure, name='api-delete-key-figure'),
     # Method paths
     path('api/methods/', api.list_methods, name='api-list-methods'),
+    path('api/methods/autocomplete/', api.MethodAutocomplete.as_view(), name='method-autocomplete'),
     path('api/methods/create/', api.create_method, name='api-create-method'),
     path('api/methods/<pk>/', api.view_method, name='api-view-method'),
     path('api/methods/<pk>/update/', api.update_method, name='api-update-method'),

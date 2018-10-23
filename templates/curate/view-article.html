@@ -131,6 +131,11 @@
       <th>Effects</th>
       <th>Method Similarity Type</th>
       <th>Method Differences</th>
+      <th>Auxiliary.Hypotheses</th>
+      <th>IVs</th>
+      <th>DVs</th>
+      <th>IV.Methods</th>
+      <th>DV.Methods</th>
     </tr>
     </thead>
     {% endif %}
@@ -148,6 +153,27 @@
     </td>
     <td>{{ s.method_similarity_type }}</td>
     <td>{{ s.method_differences }}</td>
+    <td>{{ s.auxiliary_hypo_evidence }}</td>
+    <td>
+      {% for i in s.ind_vars.all %}
+      <p><a href="{{ i.get_absolute_url }}">{{i.name}}</a></p>
+      {% endfor %}
+    </td>
+    <td>
+      {% for i in s.dep_vars.all %}
+      <p><a href="{{ i.get_absolute_url }}">{{i.name}}</a></p>
+      {% endfor %}
+    </td>
+    <td>
+      {% for i in s.ind_var_methods.all %}
+      <p><a href="{{ i.get_absolute_url }}">{{i.name}}</a></p>
+      {% endfor %}
+    </td>
+    <td>
+      {% for i in s.dep_var_methods.all %}
+      <p><a href="{{ i.get_absolute_url }}">{{i.name}}</a></p>
+      {% endfor %}
+    </td>
    <tr>
   {% endfor %}
 </table>

@@ -60,3 +60,5 @@ class TestViews(TestCase):
         assert auth.get_user(self.client).is_authenticated
         assert r.status_code == 302
         assert a.title == "test article 1"
+
+    #TODO: test study delete from article

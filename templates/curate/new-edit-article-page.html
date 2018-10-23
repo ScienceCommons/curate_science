@@ -107,7 +107,10 @@
         </thead>
         {% endif %}
         <tr class="transparency-formset-row">
-        <td>Transparency:</td>
+          <td>
+            Transparency:
+            <div>{{ transparency_form.id }}</div>
+          </td>
           <td>
             {{ transparency_form.transparency_type.errors.as_ul }}
             {{ transparency_form.transparency_type }}
@@ -115,6 +118,11 @@
           <td>
             {{ transparency_form.url.errors.as_ul }}
             {{ transparency_form.url }}
+          </td>
+          <td>
+            {% if transparency_form.instance.id %}
+            {{ transparency_form.DELETE }}
+            {% endif %}
           </td>
         </tr>
     {% endfor %}
@@ -135,7 +143,10 @@
         </thead>
         {% endif %}
         <tr class="keyfigure-formset-row">
-        <td>Key_Figure:</td>
+          <td>
+            Key_Figure:
+            <div>{{ key_figure_form.id }}</div>
+          </td>
           <td>
             {{ key_figure_form.figure_number.errors.as_ul }}
             {{ key_figure_form.figure_number }}
@@ -155,6 +166,11 @@
           <td>
             {{ key_figure_form.is_table.errors.as_ul }}
             {{ key_figure_form.is_table }}
+          </td>
+          <td>
+            {% if key_figure_form.instance.id %}
+            {{ key_figure_form.DELETE }}
+            {% endif %}
           </td>
         </tr>
     {% endfor %}
@@ -196,11 +212,19 @@
             <th>{{ study_form.effects.label_tag }}</th>
             <th>{{ study_form.method_similarity_type.label_tag }}</th>
             <th>{{ study_form.method_differences.label_tag }}</th>
+            <th>{{ study_form.auxiliary_hypo_evidence.label_tag }}</th>
+            <th>{{ study_form.ind_vars.label_tag }}</th>
+            <th>{{ study_form.dep_vars.label_tag }}</th>
+            <th>{{ study_form.ind_var_methods.label_tag }}</th>
+            <th>{{ study_form.dep_var_methods.label_tag }}</th>
           </tr>
         </thead>
         {% endif %}
         <tr class="study-formset-row">
-        <td>Study:</td>
+          <td>
+            Study:
+            <div>{{ study_form.id }}</div>
+          </td>
           <td>
             {{ study_form.study_number.errors.as_ul }}
             {{ study_form.study_number }}
@@ -218,8 +242,28 @@
             {{ study_form.method_similarity_type}}
           </td>
           <td>
-            {{ study_form.method_differences.errors.as_url }}
+            {{ study_form.method_differences.errors.as_ul }}
             {{ study_form.method_differences }}
+          </td>
+          <td>
+            {{ study_form.auxiliary_hypo_evidence.errors.as_ul }}
+            {{ study_form.auxiliary_hypo_evidence }}
+          </td>
+          <td>
+            {{ study_form.ind_vars.errors.as_ul }}
+            {{ study_form.ind_vars }}
+          </td>
+          <td>
+            {{ study_form.dep_vars.errors.as_ul }}
+            {{ study_form.dep_vars }}
+          </td>
+          <td>
+            {{ study_form.ind_var_methods.errors.as_ul }}
+            {{ study_form.ind_var_methods }}
+          </td>
+          <td>
+            {{ study_form.dep_var_methods.errors.as_ul }}
+            {{ study_form.dep_var_methods }}
           </td>
         <td>
           </td>
@@ -234,6 +278,7 @@
   <button type="submit" class="button">Submit</button>
 </form>
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
 <!-- Include formset plugin - including jQuery dependency -->
 <script src="{% static 'curate/js/jquery.formset.js' %}"></script>
 <script>
