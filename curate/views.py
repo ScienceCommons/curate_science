@@ -21,6 +21,7 @@ from curate.models import(
     Study,
     Transparency,
 )
+from curate.view_utils import sync_child_m2m_instances
 
 def index(request):
     articles = Article.objects.order_by('updated')[:10]
@@ -83,18 +84,27 @@ def create_article(request):
                     )
             for study_form in study_formset:
                 if study_form.cleaned_data != {}:
-                    if 'DELETE' in study_form.cleaned_data:
-                        study_form.cleaned_data.pop('DELETE')
-                    if 'article' in study_form.cleaned_data:
-                        study_form.cleaned_data.pop('article')
-                    if 'effects' in study_form.cleaned_data:
-                        effects = study_form.cleaned_data.pop('effects')
+                    study_form.cleaned_data.pop('DELETE', False)
+                    study_form.cleaned_data.pop('article', False)
+                    effects = study_form.cleaned_data.pop('effects', [])
+                    ind_vars = study_form.cleaned_data.pop('ind_vars', [])
+                    dep_vars = study_form.cleaned_data.pop('dep_vars', [])
+                    ind_var_methods = study_form.cleaned_data.pop('ind_var_methods', [])
+                    dep_var_methods = study_form.cleaned_data.pop('dep_var_methods', [])
                     study = Study.objects.create(
                         article=article,
                         **(study_form.cleaned_data)
                     )
                     for effect in effects:
                         study.effects.add(effect)
+                    for ind_var in ind_vars:
+                        study.ind_vars.add(ind_var)
+                    for dep_var in dep_vars:
+                        study.dep_vars.add(dep_var)
+                    for ind_var_method in ind_var_methods:
+                        study.ind_var_methods.add(ind_var_method)
+                    for dep_var_method in dep_var_methods:
+                        study.dep_var_methods.add(dep_var_method)
             for key_figure_form in key_figure_formset:
                 if key_figure_form.cleaned_data != {}:
                     if 'DELETE' in key_figure_form.cleaned_data:
@@ -108,8 +118,8 @@ def create_article(request):
 
             article.save()
             return redirect(reverse('view-article', kwargs={'pk': article.id}))
-        else:
-            raise Exception("form invalid")
+        #else:
+        #    raise Exception("form invalid")
     else:
         form = ArticleForm()
         transparency_formset = TransparencyFormSet(prefix='transparency')
@@ -130,7 +140,9 @@ def update_article(request, pk):
     queryset = get_object_or_404(Article.objects.prefetch_related('authors'), id=pk)
     if request.method=="POST":
         form = ArticleForm(request.POST, request.FILES, instance=queryset)
-        transparency_formset = TransparencyFormSet(request.POST, request.FILES, prefix='transparency')
+        transparency_formset = TransparencyFormSet(
+            request.POST, request.FILES, prefix='transparency'
+        )
         study_formset = StudyFormSet(request.POST, request.FILES, prefix='study')
         key_figure_formset = KeyFigureFormSet(request.POST, request.FILES, prefix='keyfigure')
         if form.is_valid() and transparency_formset.is_valid() \
@@ -188,13 +200,12 @@ def update_article(request, pk):
 
             for transparency_form in transparency_formset:
                 if transparency_form.cleaned_data != {}:
-                    instance = transparency_form.cleaned_data.pop('id')
-                    delete = transparency_form.cleaned_data.pop('DELETE')
-                    if instance is not None and delete:
+                    instance = transparency_form.cleaned_data.pop('id', False)
+                    delete = transparency_form.cleaned_data.pop('DELETE', False)
+                    if instance and delete:
                         instance.delete()
                     else:
-                        if 'article' in transparency_form.cleaned_data:
-                            transparency_form.cleaned_data.pop('article')
+                        transparency_form.cleaned_data.pop('article')
                         if instance is not None:
                             Transparency.objects.filter(id=instance.id).update(
                                 **(transparency_form.cleaned_data)
@@ -204,55 +215,17 @@ def update_article(request, pk):
                                 article=article,
                                 **(transparency_form.cleaned_data)
                             )
-            for study_form in study_formset:
-                if study_form.cleaned_data != {}:
-                    study_instance = study_form.cleaned_data.pop('id')
-                    delete = study_form.cleaned_data.pop('DELETE')
-                    if study_instance is not None and delete:
-                        study_instance.delete()
-                    else:
-                        if 'article' in study_form.cleaned_data:
-                            study_form.cleaned_data.pop('article')
-                        if 'effects' in study_form.cleaned_data:
-                            effects = study_form.cleaned_data.pop('effects')
-                        if 'ind_vars' in study_form.cleaned_data:
-                            ind_vars = study_form.cleaned_data.pop('ind_vars')
-                        if 'dep_vars' in study_form.cleaned_data:
-                            dep_vars = study_form.cleaned_data.pop('dep_vars')
-                        if 'ind_var_methods' in study_form.cleaned_data:
-                            ind_var_methods = study_form.cleaned_data.pop('ind_var_methods')
-                        if 'dep_var_methods' in study_form.cleaned_data:
-                            dep_var_methods = study_form.cleaned_data.pop('dep_var_methods')
 
-                        if study_instance is not None:
-                            study, _ = Study.objects.update_or_create(
-                                id=study_instance.id,
-                                defaults=study_form.cleaned_data
-                            )
-                            existing_effects = study.effects.all()
-                            for effect in effects:
-                                if effect not in existing_effects:
-                                    study.effects.add(effect)
-                            for ex in existing_effects:
-                                if ex not in effects:
-                                    study.effects.remove(ex)
-                        else:
-                            study = Study.objects.create(
-                                article=article,
-                                **(study_form.cleaned_data)
-                            )
-                            for effect in effects:
-                                study.effects.add(effect)
             for key_figure_form in key_figure_formset:
                 if key_figure_form.cleaned_data != {}:
-                    id = key_figure_form.cleaned_data.get('id')
-                    if id is not None and key_figure_form.cleaned_data.get('DELETE') == True:
-                        KeyFigure.objects.delete(id=id)
+                    instance = key_figure_form.cleaned_data.pop('id', False)
+                    delete = key_figure_form.cleaned_data.pop('DELETE', False)
+                    if instance and delete:
+                        instance.delete()
                     else:
-                        if 'article' in key_figure_form.cleaned_data:
-                            key_figure_form.cleaned_data.pop('article')
-                        if id is not None:
-                            KeyFigure.objects.filter(id=id).update(
+                        key_figure_form.cleaned_data.pop('article')
+                        if instance is not None:
+                            KeyFigure.objects.filter(id=instance.id).update(
                                 **(key_figure_form.cleaned_data)
                             )
                         else:
@@ -260,10 +233,59 @@ def update_article(request, pk):
                                 article=article,
                                 **(key_figure_form.cleaned_data)
                             )
+
+            for study_form in study_formset:
+                if study_form.cleaned_data != {}:
+                    study_form.cleaned_data.pop('article')
+                    study_instance = study_form.cleaned_data.pop('id', False)
+                    delete = study_form.cleaned_data.pop('DELETE', False)
+                    effects = study_form.cleaned_data.pop('effects', False)
+                    ind_vars = study_form.cleaned_data.pop('ind_vars', False)
+                    dep_vars = study_form.cleaned_data.pop('dep_vars', False)
+                    ind_var_methods = study_form.cleaned_data.pop('ind_var_methods', False)
+                    dep_var_methods = study_form.cleaned_data.pop('dep_var_methods', False)
+
+                    if study_instance:
+                        if delete:
+                            study_instance.delete()
+                        else:
+                            study, _ = Study.objects.update_or_create(
+                                id=study_instance.id,
+                                defaults=study_form.cleaned_data
+                            )
+                            sync_child_m2m_instances(study, 'effects', effects)
+                            sync_child_m2m_instances(
+                                study,
+                                'ind_vars',
+                                ind_vars
+                            )
+                            sync_child_m2m_instances(
+                                study,
+                                'dep_vars',
+                                dep_vars
+                            )
+                            sync_child_m2m_instances(
+                                study,
+                                'ind_var_methods',
+                                ind_var_methods
+                            )
+                            sync_child_m2m_instances(
+                                study,
+                                'dep_var_methods',
+                                dep_var_methods
+                            )
+                    else:
+                        study = Study.objects.create(
+                            article=article,
+                            **(study_form.cleaned_data)
+                        )
+                        for effect in effects:
+                            study.effects.add(effect)
+
             article.save()
             return redirect(reverse('view-article', kwargs={'pk': article.id}))
-        else:
-            raise Exception("form invalid")
+        #else:
+        #    raise Exception('form invalid')
     else:
         form = ArticleForm(instance=queryset)
         transparency_formset = TransparencyFormSet(instance=queryset, prefix='transparency')

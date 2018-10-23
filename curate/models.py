@@ -9,25 +9,25 @@ import datetime
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     email = models.EmailField(unique=True)
-    curation_contributions = JSONField(null=True)
-    browsing_history = JSONField(null=True)
-    tracked_content = JSONField(null=True)
-    recommended_contet = JSONField(null=True)
-    account_settings = JSONField(null=True)
-    research_interests = JSONField(null=True)
+    curation_contributions = JSONField(null=True, blank=True)
+    browsing_history = JSONField(null=True, blank=True)
+    tracked_content = JSONField(null=True, blank=True)
+    recommended_content = JSONField(null=True, blank=True)
+    account_settings = JSONField(null=True, blank=True)
+    research_interests = JSONField(null=True, blank=True)
     platform_invites = models.PositiveIntegerField(default=0)
 
 class Author(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.PROTECT, null=True)
-    orcid = models.CharField(max_length=255, null=True)
+    user = models.ForeignKey(UserProfile, on_delete=models.PROTECT, null=True, blank=True)
+    orcid = models.CharField(max_length=255, null=True, blank=True)
     first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, null=True)
+    middle_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255)
-    affiliations = JSONField(null=True)
-    profile_urls = JSONField(null=True)
+    affiliations = JSONField(null=True, blank=True)
+    profile_urls = JSONField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    articles = models.ManyToManyField('Article', through='ArticleAuthor', related_name='authors')
+    articles = models.ManyToManyField('Article', through='ArticleAuthor', related_name='authors', blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -35,7 +35,7 @@ class Author(models.Model):
 class Journal(models.Model):
     """A periodical that publishes many Articles"""
     name = models.CharField(max_length=255, unique=True)
-    issn = models.CharField(max_length=255, null=True)
+    issn = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -221,10 +221,10 @@ class Study(models.Model):
     method_differences = JSONField(null=True, blank=True)
     auxiliary_hypo_evidence = JSONField(null=True, blank=True)
     rep_outcome_category = models.CharField(max_length=255,null=True, blank=True)
-    ind_vars = models.ManyToManyField('Construct', related_name='studies_as_iv')
-    dep_vars = models.ManyToManyField('Construct', related_name='studies_as_dv')
-    ind_var_methods = models.ManyToManyField('Method', related_name='studies_as_iv_method')
-    dep_var_methods = models.ManyToManyField('Method', related_name='studies_as_dv_method')
+    ind_vars = models.ManyToManyField('Construct', related_name='studies_as_iv', blank=True)
+    dep_vars = models.ManyToManyField('Construct', related_name='studies_as_dv', blank=True)
+    ind_var_methods = models.ManyToManyField('Method', related_name='studies_as_iv_method', blank=True)
+    dep_var_methods = models.ManyToManyField('Method', related_name='studies_as_dv_method', blank=True)
 
 
     @property
@@ -243,7 +243,7 @@ class Study(models.Model):
 
 class Effect(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    constraints_on_generality = JSONField(null=True)
+    constraints_on_generality = JSONField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -293,7 +293,7 @@ class Hypothesis(models.Model):
 
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='key_figures')
-    study = models.ForeignKey(Study, on_delete=models.CASCADE, null=True)
+    study = models.ForeignKey(Study, on_delete=models.CASCADE, null=True, blank=True)
     figure_number = models.PositiveIntegerField()
     image_url = models.URLField(null=True)
     file_name = models.CharField(max_length=255,null=True)

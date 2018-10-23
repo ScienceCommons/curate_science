@@ -40,7 +40,6 @@ class TestViews(TestCase):
     def tearDown(self):
         destroy_model_instances()
 
-    @skip("needs to be rewritten for inline formsets")
     def test_authenticated_user_can_create_article(self):
         self.client.login(username='admin', password='password')
         url = reverse('create-article')
@@ -52,8 +51,13 @@ class TestViews(TestCase):
             "article_type": "ORIGINAL",
             "research_area": "SOCIAL_SCIENCE",
             "authors": [Author.objects.first().id,],
-            'form-TOTAL_FORMS': 1,
-            'form-INITIAL_FORMS': 0,
+            'transparency-TOTAL_FORMS': 0,
+            'transparency-INITIAL_FORMS': 0,
+            'transparency-TOTAL_FORMS': 0,
+            'study-INITIAL_FORMS': 0,
+            'study-TOTAL_FORMS': 0,
+            'keyfigure-INITIAL_FORMS': 0,
+            'keyfigure-TOTAL_FORMS': 0,
         })
 
         a = Article.objects.filter(doi="abc123").first()
@@ -61,4 +65,30 @@ class TestViews(TestCase):
         assert r.status_code == 302
         assert a.title == "test article 1"
 
-    #TODO: test study delete from article
+    def test_can_create_article_with_study(self):
+        self.client.login(username='admin', password='password')
+        url = reverse('create-article')
+        r = self.client.post(url,{
+            "doi": "abc1234",
+            "year": 2018,
+            "journal": Journal.objects.first().id,
+            "title": "test article 2",
+            "article_type": "ORIGINAL",
+            "research_area": "SOCIAL_SCIENCE",
+            "authors": [Author.objects.first().id,],
+            'transparency-TOTAL_FORMS': 0,
+            'transparency-INITIAL_FORMS': 0,
+            'keyfigure-INITIAL_FORMS': 0,
+            'keyfigure-TOTAL_FORMS': 0,
+            'study-INITIAL_FORMS': 0,
+            'study-TOTAL_FORMS': 1,
+            'study-0-study_number': '1a',
+            'study-0-effects': [Effect.objects.first().id],
+
+        })
+        a = Article.objects.filter(doi="abc1234").first()
+        assert auth.get_user(self.client).is_authenticated
+        assert r.status_code == 302
+        assert a.title == "test article 2"
+        assert len(a.studies.all()) == 1
+        assert len(a.studies.first().effects.all()) == 1

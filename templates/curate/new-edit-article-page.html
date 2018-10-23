@@ -266,12 +266,12 @@
             {{ study_form.dep_var_methods }}
           </td>
         <td>
-          </td>
-          {% if form.instance.id %}
-            <td>
-            {{ form.DELETE }}
-            </td>
+        </td>
+        <td>
+          {% if study_form.instance.id %}
+            {{ study_form.DELETE }}
           {% endif %}
+        </td>
         </tr>
     {% endfor %}
   </table>
