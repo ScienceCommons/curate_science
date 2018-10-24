@@ -295,8 +295,8 @@ class KeyFigure(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='key_figures')
     study = models.ForeignKey(Study, on_delete=models.CASCADE, null=True, blank=True)
     figure_number = models.PositiveIntegerField()
-    image_url = models.URLField(null=True)
-    file_name = models.CharField(max_length=255,null=True)
+    image_url = models.URLField(null=True, blank=True)
+    file_name = models.CharField(max_length=255,null=True, blank=True)
     is_figure = models.BooleanField()
     is_table = models.BooleanField()
 

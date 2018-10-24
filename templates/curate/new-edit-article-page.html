@@ -144,7 +144,7 @@
         {% endif %}
         <tr class="keyfigure-formset-row">
           <td>
-            Key_Figure:
+            Key Figure:
             <div>{{ key_figure_form.id }}</div>
           </td>
           <td>
@@ -208,6 +208,7 @@
           <tr>
             <th>Studies:</th>
             <th>{{ study_form.study_number.label_tag }}</th>
+            <th>{{ study_form.reporting_standards_type.label_tag }}</th>
             <th>{{ study_form.replication_of.label_tag }}</th>
             <th>{{ study_form.effects.label_tag }}</th>
             <th>{{ study_form.method_similarity_type.label_tag }}</th>
@@ -222,12 +223,15 @@
         {% endif %}
         <tr class="study-formset-row">
           <td>
-            Study:
-            <div>{{ study_form.id }}</div>
+            Study:<div>{{ study_form.id }}</div>
           </td>
           <td>
             {{ study_form.study_number.errors.as_ul }}
             {{ study_form.study_number }}
+          </td>
+          <td>
+            {{ study_form.reporting_standards_type.errors.as_ul }}
+            {{ study_form.reporting_standards_type }}
           </td>
           <td>
             {{ study_form.replication_of.errors.as_ul }}

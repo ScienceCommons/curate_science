@@ -137,7 +137,7 @@ def create_article(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def update_article(request, pk):
-    queryset = get_object_or_404(Article.objects.prefetch_related('authors'), id=pk)
+    queryset = get_object_or_404(Article.objects.prefetch_related('authors', 'studies'), id=pk)
     if request.method=="POST":
         form = ArticleForm(request.POST, request.FILES, instance=queryset)
         transparency_formset = TransparencyFormSet(
@@ -289,8 +289,9 @@ def update_article(request, pk):
     else:
         form = ArticleForm(instance=queryset)
         transparency_formset = TransparencyFormSet(instance=queryset, prefix='transparency')
-        study_formset = StudyFormSet(instance=queryset, prefix='study')
         key_figure_formset = KeyFigureFormSet(instance=queryset, prefix='keyfigure')
+        study_formset = StudyFormSet(instance=queryset, prefix='study')
+
         form.fields['authors'].initial=queryset.authors.all()
         form.fields['commentary_of'].initial=queryset.commentary_of
         form.fields['reproducibility_of'].initial=queryset.reproducibility_of
