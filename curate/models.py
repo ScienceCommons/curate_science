@@ -84,7 +84,7 @@ class Article(models.Model):
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT, null=True, blank=True, related_name='articles')
     year = models.PositiveIntegerField(null=True, blank=True)
     title = models.CharField(max_length=255)
-    abstract = models.TextField(null=True, blank=True)
+    abstract = models.TextField(null=True, blank=True, max_length=4000)
     keywords = JSONField(null=True, blank=True)
     article_type = models.CharField(max_length=255, choices=(
         (ORIGINAL, 'original'),
@@ -100,9 +100,9 @@ class Article(models.Model):
         blank=True,
         choices=standards_choices
     )
-    pdf_url = models.URLField(null=True, blank=True)
-    html_url = models.URLField(null=True, blank=True)
-    preprint_url = models.URLField(null=True, blank=True)
+    pdf_url = models.URLField(null=True, blank=True, max_length=1000)
+    html_url = models.URLField(null=True, blank=True, max_length=1000)
+    preprint_url = models.URLField(null=True, blank=True, max_length=1000)
     research_area = models.CharField(max_length=255,
                                      choices=(
                                          (SOCIAL_SCIENCE, 'Social Science'),
@@ -207,7 +207,7 @@ class Study(models.Model):
         choices=Article.standards_choices
     )
     #below fields are only for a replication study
-    replication_of = models.ForeignKey('self', on_delete=models.PROTECT, null=True, blank=True)
+    replication_of = models.ForeignKey('self', on_delete=models.DO_NOTHING, null=True, blank=True)
     method_similarity_type = models.CharField(
         max_length=255,
         null=True,
