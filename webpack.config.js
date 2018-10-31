@@ -14,6 +14,7 @@ module.exports = {
     filename: 'js/index_bundle.js',
     publicPath: '/dist'
   },
+  watch: true,
   module: {
     rules: [
       { test: /\.css$/,
