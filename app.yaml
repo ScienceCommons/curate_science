@@ -5,6 +5,8 @@ entrypoint: gunicorn --bind :8080 curate_science.wsgi:application
 handlers:
 - url: /static
   static_dir: static/
+- url: /dist
+  static_dir: dist/
 - url: /.*
   script: auto
 

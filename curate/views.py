@@ -27,6 +27,11 @@ def index(request):
     articles = Article.objects.order_by('updated')[:10]
     return render(request, 'index.html', {'articles': articles})
 
+# Endpoint for redesigned pages
+def new_index(request):
+    articles = Article.objects.order_by('updated')[:10]
+    return render(request, 'new_index.html', {'articles': articles})
+
 @require_http_methods(["GET",])
 def view_article(request, pk):
     article = get_object_or_404(Article, id=pk)

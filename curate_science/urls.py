@@ -24,12 +24,13 @@ import curate.views_api as api
 
 urlpatterns = [
     path('', views.index),
+    path('2/', views.new_index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('articles/create/', views.create_article, name='create-article'),
     path('articles/<pk>/', views.view_article, name='view-article'),
     path('articles/<pk>/update/', views.update_article, name='update-article'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static("/dist/js/", document_root="dist/js")
 
 urlpatterns += [
     path('api/', api.index, name='api-index'),

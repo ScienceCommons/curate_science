@@ -56,3 +56,13 @@ python manage.py runserver_plus
 python manage.py test
 
 ```
+
+### Starting Local Server for Development
+
+```bash
+
+python manage.py runserver_plus
+# In a new terminal (to compile JS bundle(s) and HTML)
+yarn start
+```
+
