@@ -1,0 +1,26 @@
+
+<svg width="86px" height="98px" viewBox="0 0 86 98" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <polygon id="path-1" points="138 0 177.837169 23 177.837169 69 138 92 98.1628314 69 98.1628314 23"></polygon>
+        <filter x="0.7%" y="-3.8%" width="98.6%" height="112.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.221524004 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Enabled" transform="translate(-95.000000, 1.000000)">
+            <g id="Polygon">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#F5A623" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <g id="Materials-Icon" transform="translate(111.000000, 30.000000)" fill="#FFFFFF">
+                <g id="Rectangle">
+                    <polygon points="9.5630421 12.4807349 26.0857637 20.3204899 43.0336894 12.4807349 43.0336894 28.160245 26.0411982 36 9.5630421 28.160245"></polygon>
+                    <polygon points="15.1414833 0.721102358 26.0857637 4.64097987 10.1027947 11.6967594 0 7.77688189"></polygon>
+                    <polygon points="38.0395663 0.721102358 53.1810496 7.77688189 43.0782549 11.6967594 27.0952859 4.64097987"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

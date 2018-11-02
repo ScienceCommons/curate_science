@@ -1,0 +1,25 @@
+
+<svg width="86px" height="98px" viewBox="0 0 86 98" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <polygon id="path-1" points="318 0 357.837169 23 357.837169 69 318 92 278.162831 69 278.162831 23"></polygon>
+        <filter x="0.7%" y="-3.8%" width="98.6%" height="112.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.221524004 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Disabled" transform="translate(-275.000000, 1.000000)">
+            <g id="Polygon">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#ADADAD" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <g id="Code-Icon" transform="translate(289.000000, 30.000000)" fill="#FFFFFF">
+                <g id="Triangle">
+                    <polygon transform="translate(10.500000, 17.000000) rotate(-90.000000) translate(-10.500000, -17.000000) " points="10.5 6.5 27.5 23.5 23.3804401 27.5 10.481828 14.5 -2.34455145 27.5 -6.5 23.5"></polygon>
+                    <polygon transform="translate(46.500000, 17.000000) scale(-1, 1) rotate(-90.000000) translate(-46.500000, -17.000000) " points="46.5 6.5 63.5 23.5 59.3804401 27.5 46.481828 14.5 33.6554486 27.5 29.5 23.5"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
