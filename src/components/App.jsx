@@ -4,7 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import {AppBar, Toolbar, Typography, IconButton, Button, Grid, Menu, MenuItem} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
-import constants from 'constants';
+import C from '../constants/constants';
+
+import ArticleLI from './ArticleLI.jsx';
 
 import css from '../App.css';
 // import url('https://fonts.googleapis.com/css?family=Roboto');
@@ -36,6 +38,13 @@ class App extends React.Component {
     const { classes } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
+    let a = {
+    	title: "From motive dispositions to states to outcomes: An intensive experience sampling study on communal motivational dynamics in couples",
+    	authors: "Zygar, Hagemeyer, Pusch, & Schönbrodt (2018)",
+    	journals: "European Journal of Personality 10.1002/per.2145",
+    	editor: "chiefeditor",
+    	edit_date: "August 01 2018"
+    }
     return (
     	<div>
     	<AppBar position="static">
@@ -44,7 +53,7 @@ class App extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              {constants.SITENAME}
+              {C.SITENAME}
             </Typography>
             {auth && (
               <div>
@@ -78,8 +87,9 @@ class App extends React.Component {
           </Toolbar>
         </AppBar>
 
-		<Grid container style={{flexGrow: 1}} spacing={16}>
+		<Grid container style={{flexGrow: 1, padding: '10px'}} spacing={16}>
 	        <Grid item xs={12}>
+	        	<ArticleLI article={a} />
 	        </Grid>
 	    </Grid>
 

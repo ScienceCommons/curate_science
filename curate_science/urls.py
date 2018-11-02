@@ -19,18 +19,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.template import RequestContext
 from rest_framework.documentation import include_docs_urls
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from curate import views
 import curate.views_api as api
 
 urlpatterns = [
-    path('', views.index),
+    # path('', views.index),
     path('2/', views.new_index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('articles/create/', views.create_article, name='create-article'),
     path('articles/<pk>/', views.view_article, name='view-article'),
     path('articles/<pk>/update/', views.update_article, name='update-article'),
-] + static("/dist/js/", document_root="dist/js")
+] + static("/dist/js/", document_root="dist/js") + static("/sitestatic/", document_root="sitestatic")
 
 urlpatterns += [
     path('api/', api.index, name='api-index'),

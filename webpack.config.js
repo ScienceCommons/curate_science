@@ -11,7 +11,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve('dist'),
-    filename: 'js/index_bundle.js',
+    filename: 'js/index_bundle.[chunkhash].js',
+    chunkFilename: "js/index_bundle.[chunkhash].js",
     publicPath: '/dist'
   },
   watch: true,
