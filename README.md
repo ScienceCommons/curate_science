@@ -30,6 +30,7 @@ To set up the app locally:
 2. Install Python >= 3.6
 3. Install PostgreSQL >= 9.4 (command may be sql or psql depending on install method)
 4. Create a .env file and set the environment variables `DB_USER`, `DB_PASS`, and `SECRET_KEY`
+5. Create a superuser to access Django admin: `python manage.py createsuperuser` and follow prompts
 
 ```sql
 
@@ -65,4 +66,8 @@ python manage.py runserver_plus
 # In a new terminal (to compile JS bundle(s) and HTML)
 yarn start
 ```
+
+App should be running at `localhost:8000`.
+Django admin should be available at `localhost:8000/admin`.
+
 
