@@ -2,8 +2,8 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: './src/new_index.html',
-  filename: 'new_index.html',
+  template: './src/router_index.html',
+  filename: 'router_index.html',
   inject: 'body'
 })
 
@@ -11,8 +11,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve('dist'),
-    filename: 'js/index_bundle.[chunkhash].js',
-    chunkFilename: "js/index_bundle.[chunkhash].js",
+    filename: 'js/bundle.[chunkhash].js',
+    chunkFilename: "js/bundle.[chunkhash].js",
     publicPath: '/dist'
   },
   watch: true,

@@ -1,7 +1,7 @@
 
 <svg width="86px" height="98px" viewBox="0 0 86 98" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
-        <polygon id="path-1" points="136 0 175.837169 23 175.837169 69 136 92 96.1628314 69 96.1628314 23"></polygon>
+        <polygon id="path-1" points="46 0 85.8371686 23 85.8371686 69 46 92 6.16283143 69 6.16283143 23"></polygon>
         <filter x="0.7%" y="-3.8%" width="98.6%" height="112.0%" filterUnits="objectBoundingBox" id="filter-2">
             <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
             <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
@@ -9,13 +9,20 @@
         </filter>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Disabled" transform="translate(-93.000000, 1.000000)">
+        <g id="Enabled" transform="translate(-3.000000, 1.000000)">
             <g id="Polygon">
                 <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-                <use fill="#ADADAD" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <use fill="#C60018" fill-rule="evenodd" xlink:href="#path-1"></use>
             </g>
-            <g id="Prereg-Icon" transform="translate(112.000000, 29.000000)" fill="#FFFFFF">
-                <polygon id="Path" points="0 20.4566182 18 34.2788976 45.5526853 6.11216438 37.7082607 0 18 21.4566182 5.91997455 12.3836238"></polygon>
+            <g id="Prereg-Plus-Icon" transform="translate(22.000000, 29.000000)" fill="#FFFFFF">
+                <g id="Prereg-Icon">
+                    <g>
+                        <polygon id="Path" points="0 20.4566182 18 34.2788976 45.5526853 6.11216438 37.7082607 0 18 21.4566182 5.91997455 12.3836238"></polygon>
+                        <text id="+" font-family="Helvetica-Bold, Helvetica" font-size="26" font-weight="bold">
+                            <tspan x="30" y="40">+</tspan>
+                        </text>
+                    </g>
+                </g>
             </g>
         </g>
     </g>

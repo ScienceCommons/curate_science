@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.template import RequestContext
@@ -25,7 +25,7 @@ import curate.views_api as api
 
 urlpatterns = [
     # path('', views.index),
-    path('2/', views.new_index),
+    re_path(r'^2/(.*)$', views.router_index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('articles/create/', views.create_article, name='create-article'),
