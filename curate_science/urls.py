@@ -25,7 +25,7 @@ import curate.views_api as api
 
 urlpatterns = [
     # path('', views.index),
-    re_path(r'^2/(.*)$', views.router_index),
+    re_path(r'^new/(.*)$', views.router_index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('articles/create/', views.create_article, name='create-article'),

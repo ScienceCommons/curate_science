@@ -13,7 +13,7 @@ class Home extends React.Component {
 		return (
 			<div>
 				<h1>Home</h1>
-				<Link onClick={this.forceUpdate} to="/2/about">About</Link>
+				<Link onClick={this.forceUpdate} to="/new/about">About</Link>
 			</div>
 		)
 	}

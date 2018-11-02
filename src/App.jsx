@@ -89,9 +89,9 @@ class App extends React.Component {
             </Toolbar>
           </AppBar>
           <Switch>
-            <Route exact path="/2" component={Home} />
-            <Route path="/2/about" component={About} />
-            <Route path="/2/article" component={ArticleDetail} />
+            <Route exact path="/new" component={Home} />
+            <Route path="/new/about" component={About} />
+            <Route path="/new/article/:id" component={ArticleDetail} />
           </Switch>
         </div>
       </Router>
