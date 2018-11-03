@@ -1,26 +1,28 @@
 
-<svg width="86px" height="98px" viewBox="0 0 86 98" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="86px" height="92px" viewBox="0 0 86 92" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
-        <polygon id="path-1" points="46 0 85.8371686 23 85.8371686 69 46 92 6.16283143 69 6.16283143 23"></polygon>
-        <filter x="0.7%" y="-3.8%" width="98.6%" height="112.0%" filterUnits="objectBoundingBox" id="filter-2">
+        <path d="M49,5.19615242 L70.8371686,17.8038476 C76.406388,21.0192379 79.8371686,26.9615242 79.8371686,33.3923048 L79.8371686,58.6076952 C79.8371686,65.0384758 76.406388,70.9807621 70.8371686,74.1961524 L49,86.8038476 C43.4307806,90.0192379 36.5692194,90.0192379 31,86.8038476 L9.16283143,74.1961524 C3.59361204,70.9807621 0.162831426,65.0384758 0.162831426,58.6076952 L0.162831426,33.3923048 C0.162831426,26.9615242 3.59361204,21.0192379 9.16283143,17.8038476 L31,5.19615242 C36.5692194,1.98076211 43.4307806,1.98076211 49,5.19615242 Z" id="path-1"></path>
+        <filter x="-6.9%" y="-0.8%" width="113.8%" height="105.9%" filterUnits="objectBoundingBox" id="filter-2">
             <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
             <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
             <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.221524004 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
         </filter>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Enabled" transform="translate(-3.000000, 1.000000)">
-            <g id="Polygon">
-                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-                <use fill="#C60018" fill-rule="evenodd" xlink:href="#path-1"></use>
-            </g>
-            <g id="Prereg-Plus-Icon" transform="translate(22.000000, 29.000000)" fill="#FFFFFF">
-                <g id="Prereg-Icon">
-                    <g>
-                        <polygon id="Path" points="0 20.4566182 18 34.2788976 45.5526853 6.11216438 37.7082607 0 18 21.4566182 5.91997455 12.3836238"></polygon>
-                        <text id="+" font-family="Helvetica-Bold, Helvetica" font-size="26" font-weight="bold">
-                            <tspan x="30" y="40">+</tspan>
-                        </text>
+        <g id="Enabled" transform="translate(3.000000, -2.000000)">
+            <g id="prp">
+                <g id="Polygon">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#C60018" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g id="Prereg-Plus-Icon" transform="translate(16.000000, 29.000000)" fill="#FFFFFF">
+                    <g id="Prereg-Icon">
+                        <g>
+                            <polygon id="Path" points="0 20.4566182 18 34.2788976 45.5526853 6.11216438 37.7082607 0 18 21.4566182 5.91997455 12.3836238"></polygon>
+                            <text id="+" font-family="Helvetica-Bold, Helvetica" font-size="26" font-weight="bold">
+                                <tspan x="30" y="40">+</tspan>
+                            </text>
+                        </g>
                     </g>
                 </g>
             </g>
