@@ -11,7 +11,7 @@ This repository contains the code of **[Curate Science](http://CurateScience.org
 
 ### Application Structure
 
-Curate Science is a web application written in Python 3 using the [Django](https://www.djangoproject.com/) framework 2.1. with PostgreSQL 9.6, running on Google App Engine. The master branch is continuously deployed to production with Travis CI. The application features a REST API for interacting with the curated data programmatically.
+Curate Science is a web application written in Python 3 using the [Django](https://www.djangoproject.com/) framework 2.1. with PostgreSQL 9.6, running on Google App Engine Standard Environment. The master branch is continuously deployed to production with Travis CI. The application features a REST API for interacting with the curated data programmatically.
 
 * Entity models are in `curate/models.py`
 * REST API view controllers use [Django REST Framework](http://django-rest-framework.org/) and are in `views_api.py`
@@ -21,6 +21,17 @@ Curate Science is a web application written in Python 3 using the [Django](https
 * URL routes are in `curate_science/urls.py`
 * JS, CSS, and image files go in `static/curate/`
 * Application configurations are in `curate_science/settings.py`
+
+### Useful Documentation
+
+### Back-end
+
+* GCP [documentation](https://cloud.google.com/appengine/docs/python/)
+* Django [documentation](https://docs.djangoproject.com/en/2.1/)
+
+### Front-end
+
+* React-Router [documentation](https://reacttraining.com/react-router/web/guides/quick-start)
 
 ### Setup
 

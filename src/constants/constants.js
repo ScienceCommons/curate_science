@@ -2,14 +2,14 @@ var C = {
 	SITENAME: "Curate Science",
 	BADGE_FEATURES: [
 		{
-			id: "pr",
+			id: "prereg",
 			label: "Preregistration",
-			icon: "pr"
+			icon: "prereg"
 		},
 		{
-			id: "mat",
+			id: "materials",
 			label: "Public Materials",
-			icon: "mat"
+			icon: "materials"
 		},
 		{
 			id: "data",
@@ -22,9 +22,9 @@ var C = {
 			icon: "code"
 		},
 		{
-			id: "rs",
+			id: "repstd",
 			label: "Reporting Standards",
-			icon: "rs"
+			icon: "repstd"
 		}
 	]
 }

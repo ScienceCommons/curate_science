@@ -21,7 +21,10 @@ import css from './App.css';
 
 // style.use();
 const styles = {
-
+  sitename: {
+    color: 'white',
+    textDecoration: 'none'
+  }
 };
 
 class App extends React.Component {
@@ -48,15 +51,17 @@ class App extends React.Component {
     const open = Boolean(anchorEl);
     return (
     	<Router>
-        <div>
+        <div className="App">
       	  <AppBar position="static">
         		<Toolbar>
       			<IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6" color="inherit" className={classes.grow}>
-                {C.SITENAME}
-              </Typography>
+              <a href="/new">
+                <Typography variant="h6" color="inherit" className={classes.sitename}>
+                  {C.SITENAME}
+                </Typography>
+              </a>
               {auth && (
                 <div>
                   <IconButton
@@ -88,11 +93,13 @@ class App extends React.Component {
               )}
             </Toolbar>
           </AppBar>
-          <Switch>
-            <Route exact path="/new" component={Home} />
-            <Route path="/new/about" component={About} />
-            <Route path="/new/article/:id" component={ArticleDetail} />
-          </Switch>
+          <div className="AppContent">
+            <Switch>
+              <Route exact path="/new" component={Home} />
+              <Route path="/new/about" component={About} />
+              <Route path="/new/article/:id" component={ArticleDetail} />
+            </Switch>
+          </div>
         </div>
       </Router>
     );

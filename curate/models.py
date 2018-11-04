@@ -357,6 +357,8 @@ class Transparency(models.Model):
     MATERIALS = 'MATERIALS'
     DATA = 'DATA'
     CODE = 'CODE'
+    REPSTD = 'REPSTD'
+
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='transparencies')
     study = models.ForeignKey(Study, on_delete=models.CASCADE, null=True, blank=True, related_name='transparencies')
     transparency_type = models.CharField(max_length=255, choices=(
@@ -364,6 +366,7 @@ class Transparency(models.Model):
         (MATERIALS,'materials'),
         (DATA,'data'),
         (CODE,'code'),
+        (REPSTD,'repstd'),
     ))
     url = models.URLField(default="")
     created = models.DateTimeField(auto_now_add=True)

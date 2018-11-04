@@ -12,24 +12,34 @@ class TransparencyBadge extends React.Component {
     }
 
 	render_feature(f) {
-		let {active, icon_size} = this.props
-		let enabled = active.indexOf(f.id) > -1
+		let {transparencies, icon_size} = this.props
+		let tdata = transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
+		let enabled = tdata.length > 0
+		let url, label = ''
 		let icon = f.icon
-		if (!enabled) icon += "_dis"
-		return <object key={f.icon}
-					   data={`/sitestatic/icons/${icon}.svg`}
+		if (enabled) {
+			url = tdata[0].url
+		} else {
+			label = `${f.label} not available`
+			icon += "_dis"
+		}
+		return <a href={url} title={label} target="_blank">
+					<img key={icon}
+					   src={`/sitestatic/icons/${icon}.svg`}
 					   width={icon_size}
 					   height={icon_size}
 					   type="image/svg+xml" />
+			   </a>
 	}
 
 	render() {
-		return C.BADGE_FEATURES.map(this.render_feature)
+		let relevant_transparencies = C.BADGE_FEATURES.filter(bf => true) // TODO
+		return relevant_transparencies.map(this.render_feature)
 	}
 }
 
 TransparencyBadge.defaultProps = {
-	active: [], // List of ids
+	transparencies: [], // List of objects (see Transparency serializer)
 	icon_size: 30
 };
 

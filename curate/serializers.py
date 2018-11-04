@@ -21,9 +21,14 @@ from curate.models import (
 )
 
 class AuthorSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+
     class Meta:
         model=Author
-        fields='__all__'
+        fields=('id', 'first_name', 'last_name')
+
 
 class NestedStudySerializer(serializers.ModelSerializer):
     id = serializers.ModelField(model_field=Study()._meta.get_field('id'))
@@ -44,12 +49,23 @@ class StudySerializer(serializers.ModelSerializer):
         model=Study
         fields='__all__'
 
+class TransparencySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    transparency_type = serializers.CharField(read_only=True)
+    url = serializers.CharField(read_only=True)
+
+    class Meta:
+        model=Transparency
+        fields= ('id', 'transparency_type', 'url')
+
 class ArticleSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
     studies = NestedStudySerializer(many=True)
     key_figures = serializers.PrimaryKeyRelatedField(many=True, queryset=KeyFigure.objects.all(), required=False, allow_null=True)
-    transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all(), required=False, allow_null=True)
-    authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+    # transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all(), required=False, allow_null=True)
+    transparencies = TransparencySerializer(many=True)
+    # authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+    authors = AuthorSerializer(many=True)
     commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     robustness_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
@@ -308,6 +324,10 @@ class HypothesisSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class JournalSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
+    name = serializers.CharField()
+    issn = serializers.CharField()
+
     articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
@@ -329,10 +349,6 @@ class StatisticalResultSerializer(serializers.ModelSerializer):
         model=StatisticalResult
         fields='__all__'
 
-class TransparencySerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Transparency
-        fields='__all__'
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
