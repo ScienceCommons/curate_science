@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
@@ -31,34 +33,28 @@ class ArticleLI extends React.Component {
     }
 
 	render() {
- 	    const { classes } = this.props;
-		let a = this.props.article
+ 	    let { classes, id, title, authors, journal, doi, transparencies } = this.props;
+ 	    let author_text = authors.map(author => `${author.last_name}, ${author.first_name}`)
+ 	    let url = `/new/article/${id}`
 		return (
-			<div className="ArticleLI">
-				<Card className={classes.card}>
-	      			<CardContent>
-		      			<Typography className={classes.title} variant="h2" component="h2" gutterBottom>
-		      			{ a.title }
-		      			</Typography>
-		      			<Typography className={classes.authors} gutterBottom>
-		      			{ a.authors }
-		      			</Typography>
-		      			<Typography className={classes.journal} color="textSecondary" gutterBottom>
-		      			{ a.journal }
-		      			</Typography>
-						<TransparencyBadge active={['rs']} />
-						<Typography className={classes.editor} color="textSecondary" gutterBottom>
-							{ a.editor + " " + a.edit_date }
-						</Typography>
-  				    </CardContent>
-				</Card>
-			</div>
+			<ListItem button component="a" href={url} className="ArticleLI">
+				<ListItemText primary={title} secondary={author_text} />
+	  			<Typography className={classes.journal} color="textSecondary" gutterBottom>
+	  				<span>{ journal }</span> <span>{ doi }</span>
+	  			</Typography>
+				<TransparencyBadge transparencies={transparencies} />
+			</ListItem>
 		)
 	}
 }
 
 ArticleLI.defaultProps = {
-	article: {}
+	id: "",
+	title: "",
+	authors: [],
+	journal: "",
+	doi: "",
+	transparencies: []
 };
 
 ArticleLI.propTypes = {
