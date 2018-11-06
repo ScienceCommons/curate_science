@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 import { Link } from "react-router-dom";
 
@@ -25,6 +26,29 @@ class Home extends React.Component {
 
     componentDidMount() {
     	this.fetch_recent_articles()
+        this.handleLocationChange(this.props.history.location);
+        this.unlisten = this.props.history.listen(this.handleLocationChange);
+        console.log("Home listening")
+    }
+
+    componentWillUnmount() {
+        this.unlisten();
+    }
+
+    handleLocationChange(location) {
+        this.search()
+    }
+
+    query() {
+        return this.props.location.search.substring(3)
+    }
+
+    search() {
+        let q = this.query()
+        fetch(`/api/articles/search/?q=${q}&page_size=25`).then(res => res.json()).then((res) => {
+            console.log(res)
+            this.setState({articles: res})
+        })
     }
 
 	render() {
@@ -42,4 +66,4 @@ class Home extends React.Component {
 	}
 }
 
-export default Home;
+export default withRouter(Home);

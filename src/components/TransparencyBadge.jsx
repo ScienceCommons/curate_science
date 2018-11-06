@@ -23,8 +23,8 @@ class TransparencyBadge extends React.Component {
 			label = `${f.label} not available`
 			icon += "_dis"
 		}
-		return <a href={url} title={label} target="_blank">
-					<img key={icon}
+		return <a href={url} title={label} key={icon} target="_blank">
+					<img
 					   src={`/sitestatic/icons/${icon}.svg`}
 					   width={icon_size}
 					   height={icon_size}
