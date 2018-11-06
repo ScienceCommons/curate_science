@@ -3,6 +3,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.contrib.postgres.search import SearchVector, SearchRank
+import logging
 from dal import autocomplete
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
@@ -40,6 +41,8 @@ from curate.serializers import (
     TransparencySerializer,
     UserProfileSerializer,
 )
+
+logger = logging.getLogger()
 
 @api_view(('GET',))
 @renderer_classes([renderers.CoreJSONRenderer])
@@ -649,6 +652,7 @@ def search_articles(request):
     q = request.GET.get('q')
     page_size = int(request.GET.get('page_size')) or 25
     if q:
+        logger.warning("Query: %s" % q)
         search_vector = SearchVector('title', 'abstract', 'authors__last_name')
         search_rank = SearchRank(search_vector, q)
         queryset=Article.objects.annotate(rank=search_rank).order_by('-rank').distinct()
