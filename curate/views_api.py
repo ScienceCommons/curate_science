@@ -646,8 +646,8 @@ def delete_transparency(request, pk):
 # Search Articles view
 @api_view(('GET', ))
 def search_articles(request):
-    q = request.GET.get('q')
-    page_size = int(request.GET.get('page_size')) or 25
+    q = request.GET.get('q','')
+    page_size = int(request.GET.get('page_size', 25))
     if q:
         search_vector = SearchVector('title', 'abstract', 'authors__last_name')
         search_rank = SearchRank(search_vector, q)

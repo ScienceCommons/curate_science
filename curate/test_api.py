@@ -756,6 +756,22 @@ class TestAPIViews(TestCase):
 
     # TODO: Search Articles tests
 
+    def test_article_search(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-search-articles') + "?q=Morality"
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert d[0].get('title') == "Washing away your sins: threatened morality and physical cleansing."
+
+    def test_article_search_pagination(self):
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-search-articles') + "?q=Morality&page_size=2"
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert r.status_code == 200
+        assert len(d) == 2
+
     # TODO: Article Autocomplete tests
 
     # TODO: Author Autocomplete tests
