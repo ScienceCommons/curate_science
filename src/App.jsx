@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 // Routing & routes
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
-import Home from './pages/Home.jsx';
+import ArticleSearch from './pages/ArticleSearch.jsx';
+import Recent from './pages/Recent.jsx';
 import FAQ from './pages/FAQ.jsx';
 import About from './pages/About.jsx';
 import ArticleDetail from './pages/ArticleDetail.jsx';
@@ -44,8 +45,9 @@ class App extends React.Component {
                     <TopBar auth={auth} />
                     <div className="AppContent">
                         <Switch>
-                            <Route exact path="/" component={Home} />
-                            <Route path="/articles" component={Home} />
+                            <Route exact path="/" component={Recent} />
+                            <Route exact path="/recent" component={Recent} />
+                            <Route path="/articles/search" component={ArticleSearch} />
                             <Route path="/about" component={About} />
                             <Route path="/faq" component={FAQ} />
                             <Route path="/article/:id" component={ArticleDetail} />

@@ -74,7 +74,7 @@ var C = {
 				{
 					id: 'repstd',
 					icon: '',
-					label: "Replications"
+					label: "Reporting Standards"
 				}
 			]
 		}

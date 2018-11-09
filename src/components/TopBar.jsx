@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import qs from 'query-string';
+
 // Routing & routes
 import { Link } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
@@ -65,9 +67,12 @@ const styles = theme => ({
 class TopBar extends React.Component {
     constructor(props) {
         super(props);
+
+        let q = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).q || ''
+
         this.state = {
             anchorEl: null,
-            search_term: ''
+            search_term: q || ''
         };
 
         this.handleSearchBoxChange = this.handleSearchBoxChange.bind(this)
@@ -80,7 +85,7 @@ class TopBar extends React.Component {
 
     handleSearchKeyPress(e) {
         if (e.key == 'Enter') {
-            this.goto_search()
+            this.refreshSearch()
         }
     }
 
@@ -96,10 +101,12 @@ class TopBar extends React.Component {
         this.setState({ anchorEl: null });
     };
 
-    goto_search() {
+    refreshSearch() {
         let {search_term} = this.state
+        let parsed = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
+        let f = parsed.f || ''
         let query = encodeURIComponent(search_term)
-        this.props.history.replace(`/articles?q=${query}`);
+        this.props.history.replace(`/articles/search?q=${query}&f=${f}`);
     }
 
     render() {

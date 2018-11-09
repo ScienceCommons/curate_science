@@ -45,7 +45,7 @@ class NestedStudySerializer(serializers.ModelSerializer):
         many=True, allow_null=True, required=False,
         queryset=Effect.objects.all()
     )
-    transparencies = TransparencySerializer(many=True)
+    transparencies = TransparencySerializer(many=True, read_only=True)
 
     class Meta:
         model=Study
@@ -56,7 +56,7 @@ class StudySerializer(serializers.ModelSerializer):
         many=True, allow_null=True, required=False,
         queryset=Effect.objects.all()
     )
-    transparencies = TransparencySerializer(many=True)
+    transparencies = TransparencySerializer(many=True, read_only=True)
 
     class Meta:
         model=Study
