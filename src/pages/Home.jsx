@@ -1,6 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
+import qs from 'query-string';
+
 import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
@@ -42,13 +44,15 @@ class Home extends React.Component {
     }
 
     query() {
-        // TODO: Fix, need to get real query string
-        return this.props.location.search.substring(3)
+        let q = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).q
+        return q
     }
 
     search() {
         let q = this.query()
-        fetch(`/api/articles/search/?q=${q}&page_size=25`).then(res => res.json()).then((res) => {
+        let url = `/api/articles/search/?q=${q}&page_size=25`
+        console.log(url)
+        fetch(url).then(res => res.json()).then((res) => {
             console.log(res)
             this.setState({articles: res})
         })
