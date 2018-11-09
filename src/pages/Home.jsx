@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
+import Grid from '@material-ui/core/Grid';
 
+import ArticleSearchFilter from '../components/ArticleSearchFilter.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
 
 class Home extends React.Component {
@@ -40,6 +42,7 @@ class Home extends React.Component {
     }
 
     query() {
+        // TODO: Fix, need to get real query string
         return this.props.location.search.substring(3)
     }
 
@@ -54,14 +57,15 @@ class Home extends React.Component {
 	render() {
 		let {articles} = this.state
 		return (
-			<div>
-				<Typography variant="h2">Recently Curated</Typography>
-
-				<List style={{backgroundColor: 'white'}}>
-					{ articles.map(a => <ArticleLI key={a.id} {...a} />) }
-				</List>
-
-			</div>
+			<Grid container>
+                <Grid item xs={4}>
+                    <ArticleSearchFilter query={this.query()} />
+                </Grid>
+                <Grid item xs={8}>
+    				<Typography variant="h2">Recently Curated</Typography>
+    				{ articles.map(a => <ArticleLI key={a.id} {...a} />) }
+                </Grid>
+			</Grid>
 		)
 	}
 }

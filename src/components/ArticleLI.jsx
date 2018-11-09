@@ -11,13 +11,16 @@ import Typography from '@material-ui/core/Typography';
 
 import C from '../constants/constants';
 import TransparencyBadge from './TransparencyBadge.jsx';
+import JournalDOIBadge from './JournalDOIBadge.jsx';
+import AuthorList from './AuthorList.jsx';
 
 const styles = {
   card: {
     minWidth: 275,
+    marginBottom: '5px'
   },
   title: {
-    fontSize: 14,
+    fontSize: 24,
   },
   authors: {
   	color: "#0CC343",
@@ -34,16 +37,20 @@ class ArticleLI extends React.Component {
 
 	render() {
  	    let { classes, id, title, authors, journal, doi, transparencies } = this.props;
- 	    let author_text = authors.map(author => `${author.last_name}, ${author.first_name}`)
  	    let url = `/new/article/${id}`
 		return (
-			<ListItem button component="a" href={url} className="ArticleLI">
-				<ListItemText primary={title} secondary={author_text} />
-	  			<Typography className={classes.journal} color="textSecondary" gutterBottom>
-	  				<span>{ journal }</span> <span>{ doi }</span>
-	  			</Typography>
-				<TransparencyBadge transparencies={transparencies} />
-			</ListItem>
+			<Card>
+				<CardContent>
+					<a href={url}><Typography className={classes.title} variant="h2" color="textPrimary">{title}</Typography></a>
+					<Typography className={classes.authors} color="textSecondary" gutterBottom>
+						<AuthorList authors={authors} />
+					</Typography>
+					<TransparencyBadge transparencies={transparencies} />
+		  			<Typography className={classes.journal} color="textSecondary" gutterBottom>
+		  				<JournalDOIBadge journal={journal} doi={doi} />
+		  			</Typography>
+	  			</CardContent>
+			</Card>
 		)
 	}
 }

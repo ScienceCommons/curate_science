@@ -1,0 +1,115 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import { withRouter } from 'react-router-dom';
+
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import Checkbox from '@material-ui/core/Checkbox';
+
+import C from '../constants/constants';
+
+const styles = {
+
+};
+
+class ArticleSearchFilter extends React.Component {
+	constructor(props) {
+        super(props);
+        this.state = {
+        	selected_filters: [],
+        	filter_changes: false
+        };
+
+        this.render_category = this.render_category.bind(this)
+        this.render_item = this.render_item.bind(this)
+        this.item_selected = this.item_selected.bind(this)
+        this.refreshSearch = this.refreshSearch.bind(this)
+    }
+
+    refreshSearch() {
+    	let {selected_filters} = this.state
+    	let {query} = this.props
+    	let filters = selected_filters.map((item) => item.id).join(',')
+    	// TODO: Construct query
+    	// Redirect to home (articles) page
+        query = encodeURIComponent(query || '')
+        this.props.history.replace(`/articles?q=${query}&f=${filters}`)
+    }
+
+    item_selected(item) {
+    	let { selected_filters } = this.state;
+    	return selected_filters.indexOf(item) > -1
+    }
+
+	handleFilterItemCheck = item => event => {
+		let { selected_filters } = this.state;
+		if (this.item_selected(item)) {
+			// Remove from list
+			let idx = selected_filters.indexOf(item)
+			delete selected_filters[idx]
+		} else {
+			selected_filters.push(item)
+		}
+		this.setState({selected_filters: selected_filters, filter_changes: true})
+	}
+
+    render_category(cat) {
+    	return (
+			<FormControl component="fieldset" key={cat.category}>
+    		    <FormLabel component="legend">{ cat.label }</FormLabel>
+                <FormGroup>
+				{ cat.items.map(this.render_item) }
+				</FormGroup>
+			</FormControl>
+		)
+    }
+
+    render_item(item) {
+    	return (
+    		<FormControlLabel
+   			key={item.id}
+	          control={
+	            <Checkbox
+	              checked={this.item_selected(item)}
+	              onChange={this.handleFilterItemCheck(item)}
+	              value={item.id}
+	              color="primary"
+	            />
+	          }
+	          label={item.label}
+	        />
+		)
+	}
+
+	render() {
+ 	    let { filter_changes } = this.state;
+		return (
+			<div className="ArticleSearchFilter">
+				<Typography variant="h3">Filter Articles</Typography>
+
+				<div>
+				{ C.FILTERS.map(this.render_category) }
+				</div>
+
+				<Button disabled={!filter_changes} onClick={this.refreshSearch} variant="outlined">Refresh Results</Button>
+			</div>
+		)
+	}
+}
+
+ArticleSearchFilter.defaultProps = {
+	query: ''
+};
+
+ArticleSearchFilter.propTypes = {
+  classes: PropTypes.object.isRequired,
+  query: PropTypes.string
+};
+
+export default withRouter(withStyles(styles)(ArticleSearchFilter));

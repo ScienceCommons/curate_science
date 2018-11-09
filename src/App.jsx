@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import Home from './pages/Home.jsx';
+import FAQ from './pages/FAQ.jsx';
 import About from './pages/About.jsx';
 import ArticleDetail from './pages/ArticleDetail.jsx';
 import TopBar from './components/TopBar.jsx';
@@ -46,6 +47,7 @@ class App extends React.Component {
                             <Route exact path="/" component={Home} />
                             <Route path="/articles" component={Home} />
                             <Route path="/about" component={About} />
+                            <Route path="/faq" component={FAQ} />
                             <Route path="/article/:id" component={ArticleDetail} />
                         </Switch>
                     </div>

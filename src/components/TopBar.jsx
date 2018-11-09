@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // Routing & routes
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
 
 // UI components
@@ -123,7 +123,7 @@ class TopBar extends React.Component {
                             <SearchIcon />
                         </div>
                         <InputBase
-                            placeholder="Search articles…"
+                            placeholder="Search for articles… (try 'bias' or 'love')"
                             onChange={this.handleSearchBoxChange}
                             onKeyPress={this.handleSearchKeyPress}
                             value={search_term || ''}
@@ -132,6 +132,18 @@ class TopBar extends React.Component {
                               input: classes.inputInput,
                             }}
                         />
+                    </div>
+                    <div>
+                        Browse: <Link to="/home">Articles</Link> &middot; <Link to="/home">Replications</Link>
+                    </div>
+
+                    <div>
+                        <Button>Curate Article Transparency</Button>
+                        <Button>Add a replication</Button>
+                    </div>
+
+                    <div>
+                        <Link to="/about">About</Link> &middot; <Link to="/faq">FAQ</Link>
                     </div>
 
                     {auth && (
@@ -158,8 +170,7 @@ class TopBar extends React.Component {
                         open={open}
                         onClose={this.handleClose}
                       >
-                        <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                        <MenuItem onClick={this.handleClose}>Logout</MenuItem>
                       </Menu>
                     </div>
                   )}

@@ -32,6 +32,7 @@ Curate Science is a web application written in Python 3 using the [Django](https
 ### Front-end
 
 * React-Router [documentation](https://reacttraining.com/react-router/web/guides/quick-start)
+* Material UI (React component library) [documentation](https://material-ui.com/)
 
 ### Setup
 

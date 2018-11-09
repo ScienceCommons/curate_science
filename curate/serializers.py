@@ -29,26 +29,6 @@ class AuthorSerializer(serializers.ModelSerializer):
         model=Author
         fields=('id', 'first_name', 'last_name')
 
-
-class NestedStudySerializer(serializers.ModelSerializer):
-    id = serializers.ModelField(model_field=Study()._meta.get_field('id'))
-    effects = serializers.PrimaryKeyRelatedField(
-        many=True, allow_null=True, required=False,
-        queryset=Effect.objects.all()
-    )
-    class Meta:
-        model=Study
-        exclude=('article',)
-
-class StudySerializer(serializers.ModelSerializer):
-    effects = serializers.PrimaryKeyRelatedField(
-        many=True, allow_null=True, required=False,
-        queryset=Effect.objects.all()
-    )
-    class Meta:
-        model=Study
-        fields='__all__'
-
 class TransparencySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     transparency_type = serializers.CharField(read_only=True)
@@ -58,6 +38,42 @@ class TransparencySerializer(serializers.ModelSerializer):
         model=Transparency
         fields= ('id', 'transparency_type', 'url')
 
+
+class NestedStudySerializer(serializers.ModelSerializer):
+    id = serializers.ModelField(model_field=Study()._meta.get_field('id'))
+    effects = serializers.PrimaryKeyRelatedField(
+        many=True, allow_null=True, required=False,
+        queryset=Effect.objects.all()
+    )
+    transparencies = TransparencySerializer(many=True)
+
+    class Meta:
+        model=Study
+        exclude=('article',)
+
+class StudySerializer(serializers.ModelSerializer):
+    effects = serializers.PrimaryKeyRelatedField(
+        many=True, allow_null=True, required=False,
+        queryset=Effect.objects.all()
+    )
+    transparencies = TransparencySerializer(many=True)
+
+    class Meta:
+        model=Study
+        fields='__all__'
+
+class JournalSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
+    name = serializers.CharField()
+    issn = serializers.CharField()
+
+    articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    class Meta:
+        model=Journal
+        fields='__all__'
+
+
 class ArticleSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
     studies = NestedStudySerializer(many=True)
@@ -66,6 +82,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     transparencies = TransparencySerializer(many=True)
     # authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     authors = AuthorSerializer(many=True)
+    journal = JournalSerializer()
     commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     robustness_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
@@ -321,17 +338,6 @@ class HypothesisSerializer(serializers.ModelSerializer):
     # http://www.django-rest-framework.org/api-guide/serializers/#writable-nested-representations
     class Meta:
         model=Hypothesis
-        fields='__all__'
-
-class JournalSerializer(serializers.ModelSerializer):
-    id = serializers.CharField()
-    name = serializers.CharField()
-    issn = serializers.CharField()
-
-    articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
-    class Meta:
-        model=Journal
         fields='__all__'
 
 class KeyFigureSerializer(serializers.ModelSerializer):
