@@ -62,10 +62,10 @@ class Home extends React.Component {
 		let {articles, searched} = this.state
 		return (
 			<Grid container>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <ArticleSearchFilter />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={9}>
     				<Typography variant="h2">{ searched ? "Search Results" : "Recently Curated" }</Typography>
                     <Typography variant="subtitle1">Showing <b>{ articles.length }</b> articles</Typography>
     				{ articles.map(a => <ArticleLI key={a.id} {...a} />) }

@@ -10,7 +10,8 @@ import { withRouter } from 'react-router-dom';
 // UI components
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Typography, IconButton, Button, Grid, Menu, MenuItem} from '@material-ui/core';
+import {AppBar, Toolbar, Typography, IconButton, Button, Grid, Menu, MenuItem,
+    Drawer, List, ListItem, ListItemText, Divider} from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
@@ -20,8 +21,19 @@ import C from '../constants/constants';
 
 const styles = theme => ({
     sitename: {
+        color: 'white'
+    },
+    grow: {
+        flexGrow: 1,
+    },
+    subSearchLinks: {
         color: 'white',
-        textDecoration: 'none'
+        fontSize: 12,
+        marginTop: 5,
+        marginLeft: 25
+    },
+    searchSection: {
+        margin: 7,
     },
     search: {
         position: 'relative',
@@ -29,14 +41,14 @@ const styles = theme => ({
         backgroundColor: fade(theme.palette.common.white, 0.15),
         '&:hover': {
           backgroundColor: fade(theme.palette.common.white, 0.25),
-      },
-      marginRight: theme.spacing.unit * 2,
-      marginLeft: 0,
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
+        },
+        marginRight: theme.spacing.unit * 2,
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
           marginLeft: theme.spacing.unit * 3,
           width: 'auto',
-      },
+        },
     },
     searchIcon: {
         width: theme.spacing.unit * 9,
@@ -72,7 +84,8 @@ class TopBar extends React.Component {
 
         this.state = {
             anchorEl: null,
-            search_term: q || ''
+            search_term: q || '',
+            drawerOpen: false
         };
 
         this.handleSearchBoxChange = this.handleSearchBoxChange.bind(this)
@@ -109,80 +122,116 @@ class TopBar extends React.Component {
         this.props.history.replace(`/articles/search?q=${query}&f=${f}`);
     }
 
+    toggleDrawer = (open) => () => {
+        this.setState({drawerOpen: !this.state.drawerOpen})
+    }
+
     render() {
         const { classes } = this.props;
         let {auth} = this.props
-        const { anchorEl, search_term } = this.state;
+        const { anchorEl, search_term, drawerOpen } = this.state;
         const open = Boolean(anchorEl);
+        const menu = (
+            <div>
+                <List>
+                    <Link to="/about">
+                        <ListItem button key="about">
+                            <ListItemText primary="About" />
+                        </ListItem>
+                    </Link>
+                    <Link to="/faq">
+                        <ListItem button key="faq">
+                            <ListItemText primary={"FAQ"} />
+                        </ListItem>
+                    </Link>
+                </List>
+                <Divider />
+            </div>
+        )
         return (
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                        <MenuIcon />
-                    </IconButton>
-                    <a href="/new">
-                        <Typography variant="h6" color="inherit" className={classes.sitename}>
-                          {C.SITENAME}
-                        </Typography>
-                    </a>
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
+            <div>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
+                            <MenuIcon />
+                        </IconButton>
+                        <a href="/new" className={classes.sitename}>
+                            <Typography variant="h6" color="inherit">
+                              {C.SITENAME}
+                            </Typography>
+                        </a>
+                        <div className={classes.searchSection}>
+                            <div className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                    <SearchIcon />
+                                </div>
+                                <InputBase
+                                    placeholder="Search for articles… (try 'bias' or 'love')"
+                                    onChange={this.handleSearchBoxChange}
+                                    onKeyPress={this.handleSearchKeyPress}
+                                    value={search_term || ''}
+                                    fullWidth={true}
+                                    classes={{
+                                      root: classes.inputRoot,
+                                      input: classes.inputInput,
+                                    }}
+                                />
+                            </div>
+                            <Typography className={classes.subSearchLinks}>
+                                Browse: <Link to="/recent">Articles</Link> &middot; <Link to="/recent">Replications</Link>
+                            </Typography>
                         </div>
-                        <InputBase
-                            placeholder="Search for articles… (try 'bias' or 'love')"
-                            onChange={this.handleSearchBoxChange}
-                            onKeyPress={this.handleSearchKeyPress}
-                            value={search_term || ''}
-                            classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
+
+                        <div className={classes.grow}>
+                            <Link to="/articles/curate"><Button variant="raised" size="small">Curate Article Transparency</Button></Link>
+                            <Link to="/articles/curate"><Button variant="raised" size="small" href="/articles/curate">Add a replication</Button></Link>
+                        </div>
+
+                        <Typography>
+                            <Link to="/about">About</Link>
+                        </Typography>
+
+                        {auth && (
+                        <div>
+                          <IconButton
+                            aria-owns={open ? 'menu-appbar' : undefined}
+                            aria-haspopup="true"
+                            onClick={this.handleMenu}
+                            color="inherit"
+                          >
+                            <AccountCircle />
+                          </IconButton>
+                          <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
                             }}
-                        />
-                    </div>
-                    <div>
-                        Browse: <Link to="/home">Articles</Link> &middot; <Link to="/home">Replications</Link>
-                    </div>
-
-                    <div>
-                        <Button>Curate Article Transparency</Button>
-                        <Button>Add a replication</Button>
-                    </div>
-
-                    <div>
-                        <Link to="/about">About</Link> &middot; <Link to="/faq">FAQ</Link>
-                    </div>
-
-                    {auth && (
-                    <div>
-                      <IconButton
-                        aria-owns={open ? 'menu-appbar' : undefined}
-                        aria-haspopup="true"
-                        onClick={this.handleMenu}
-                        color="inherit"
-                      >
-                        <AccountCircle />
-                      </IconButton>
-                      <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        open={open}
-                        onClose={this.handleClose}
-                      >
-                        <MenuItem onClick={this.handleClose}>Logout</MenuItem>
-                      </Menu>
-                    </div>
-                  )}
-                </Toolbar>
-            </AppBar>
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={this.handleClose}
+                          >
+                            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                          </Menu>
+                        </div>
+                      )}
+                    </Toolbar>
+                </AppBar>
+                <Drawer open={drawerOpen} onClose={this.toggleDrawer(false)}>
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    onClick={this.toggleDrawer(false)}
+                    onKeyDown={this.toggleDrawer(false)}
+                  >
+                    {menu}
+                  </div>
+                </Drawer>
+            </div>
         );
     }
 }

@@ -22,6 +22,8 @@ const styles = {
   title: {
     fontSize: 24,
   },
+  title_a: {
+  },
   authors: {
   	color: "#0CC343",
     marginBottom: 12,
@@ -39,9 +41,9 @@ class ArticleLI extends React.Component {
  	    let { classes, id, title, authors, journal, doi, transparencies } = this.props;
  	    let url = `/new/article/${id}`
 		return (
-			<Card>
+			<Card className={classes.card}>
 				<CardContent>
-					<a href={url}><Typography className={classes.title} variant="h2" color="textPrimary">{title}</Typography></a>
+					<a href={url} className={classes.title_a}><Typography className={classes.title} variant="h2" color="textPrimary">{title}</Typography></a>
 					<Typography className={classes.authors} color="textSecondary" gutterBottom>
 						<AuthorList authors={authors} />
 					</Typography>

@@ -4,10 +4,13 @@ html, body {
     background: #EFEFEF;
 }
 
+a:link, a:visited, a:hover, a:active {
+	text-decoration: none;
+}
+
 .App {
 
 }
 
 .AppContent {
-	padding: 12px;
 }
