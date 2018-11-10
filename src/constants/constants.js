@@ -1,5 +1,41 @@
 var C = {
 	SITENAME: "Curate Science",
+	ARTICLE_TYPES: [
+        {
+			id: "ORIGINAL",
+			label: "Original research"
+		},
+	    {
+			id: "REPLICATION",
+			label: "Replication(s)?"
+		},
+        {
+			id: "REPRODUCIBILITY",
+			label: "Reanalysis - Reproducibility/Robustness"
+		},
+        {
+			id: "META_ANALYSIS",
+			label: "Renalysis - Meta-analysis"
+		},
+        {
+			id: "META_RESEARCH",
+			label: "Renalysis - Meta-research"
+		},
+        {
+			id: "COMMENTARY",
+			label: "Commentary"
+		}
+	],
+	RESEARCH_AREAS: [
+		{
+			id: "social_science",
+			label: "Social Sciences"
+		},
+		{
+			id: "medical_life",
+			label: "Medical/Life Sciences"
+		}
+	],
 	FILTERS: [
 		{
 			category: 'area',
@@ -46,7 +82,7 @@ var C = {
 				}
 			]
 		},
-		// Sync with BADGE_FEATURES & transparency data model
+		// Sync with TRANSPARENCY_BADGES & transparency data model
 		{
 			category: 'transparency',
 			label: "Transparency",
@@ -79,7 +115,7 @@ var C = {
 			]
 		}
 	],
-	BADGE_FEATURES: [
+	TRANSPARENCY_BADGES: [
 		{
 			id: "prereg",
 			label: "Preregistration",

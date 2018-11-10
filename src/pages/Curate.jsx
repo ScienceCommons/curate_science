@@ -53,8 +53,8 @@ class Curate extends React.Component {
 		const { classes } = this.props;
 		let {formdata} = this.state
 		return (
-			<Grid container className={classes.root}>
-				<form noValidate autoComplete="off">
+			<form noValidate autoComplete="off">
+				<Grid container className={classes.root} spacing={24}>
 					<Grid xs={12} item>
 						<Typography variant="h2">Add/Edit Article</Typography>
 
@@ -92,7 +92,6 @@ class Curate extends React.Component {
 				          fullWidth
 				          variant="outlined"
 				        />
-
 				        <TextField
 				          id="journal"
 				          label="Journal name"
@@ -105,20 +104,31 @@ class Curate extends React.Component {
 				        />
 				    </Grid>
 				    <Grid item xs={6}>
+						<FormControl variant="outlined" className={classes.formControl}>
+					        <InputLabel
+					            ref={ref => {
+					              this.InputLabelRef = ref;
+					            }}
+					            htmlFor="research_area"
+					          >
+					            Research Area
+					        </InputLabel>
+					        <Select
+					            value={formdata.type || "social_science"}
+					            onChange={this.handleChange('research_area')}
+					            input={
+					              <OutlinedInput
+					                name="research_area"
+					                id="research_area"
+					              />
+					            }
+					          >
+					            { C.RESEARCH_AREAS.map((ra) => {
+					            	return <MenuItem value={ra.id}>{ra.label}</MenuItem>
+					            })}
+					        </Select>
+					    </FormControl>
 
-						<TextField
-				          id="abstract"
-				          label="Abstract"
-				          className={classes.textField}
-				          value={formdata.abstract}
-				          onChange={this.handleChange('abstract')}
-				          margin="normal"
-				          fullWidth
-				          multiLine
-				          variant="outlined"
-				        />
-				    </Grid>
-				    <Grid item xs={6}>
 						<FormControl variant="outlined" className={classes.formControl}>
 					        <InputLabel
 					            ref={ref => {
@@ -138,28 +148,36 @@ class Curate extends React.Component {
 					              />
 					            }
 					          >
-					            <MenuItem value="ORIGINAL">Original research</MenuItem>
-					            <MenuItem value="REPLICATION">Replication(s)?</MenuItem>
-					            <MenuItem value="REPRODUCIBILITY">Reanalysis - Reproducibility/Robustness</MenuItem>
-					            <MenuItem value="META_ANALYSIS">Renalysis - Meta-analysis</MenuItem>
-					            <MenuItem value="META_RESEARCH">Renalysis - Meta-research</MenuItem>
-					            <MenuItem value="COMMENTARY">Commentary</MenuItem>
+					          { C.ARTICLE_TYPES.map((at) => {
+					            	return <MenuItem value={at.id}>{at.label}</MenuItem>
+					            })}
 					        </Select>
 					    </FormControl>
-					</Grid>
+
+						<TextField
+				          id="abstract"
+				          label="Abstract"
+				          className={classes.textField}
+				          value={formdata.abstract}
+				          onChange={this.handleChange('abstract')}
+				          margin="normal"
+				          fullWidth
+				          multiLine
+				          variant="outlined"
+				        />
+				    </Grid>
 					<Grid item xs={6}>
 						<TransparencyEditor />
 					</Grid>
 					<Grid item xs={6}>
 					</Grid>
-				</form>
+				</Grid>
 
 				<div>
 					<Button variant="raised" size="large">Save</Button>
 					<Button size="large">Cancel</Button>
 				</div>
-
-			</Grid>
+			</form>
 		)
 	}
 }
