@@ -183,8 +183,8 @@ class TopBar extends React.Component {
                         </div>
 
                         <div className={classes.grow}>
-                            <Link to="/articles/curate"><Button variant="raised" size="small">Curate Article Transparency</Button></Link>
-                            <Link to="/articles/curate"><Button variant="raised" size="small" href="/articles/curate">Add a replication</Button></Link>
+                            <Link to="/articles/curate"><Button variant="outlined" size="small">Curate Article Transparency</Button></Link>
+                            <Link to="/articles/curate"><Button variant="outlined" size="small" href="/articles/curate">Add a replication</Button></Link>
                         </div>
 
                         <Typography>

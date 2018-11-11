@@ -16,6 +16,11 @@ const styles = {
     },
     formControl: {
 
+    },
+    tab: {
+    	label: {
+    		fontSize: 8
+    	}
     }
 }
 
@@ -33,7 +38,7 @@ class MultiURLInput extends React.Component {
 		let {label, urls} = this.props
 		let inputs = urls.map((url) => {
 			return (
-				<FormControl>
+				<FormControl key={url}>
 			        <InputLabel htmlFor="materials">{ label }</InputLabel>
 			        <Input
 			          id="materials"
@@ -108,11 +113,12 @@ class TransparencyEditor extends React.Component {
 	render_transparency_tab(f) {
 		let {transparencies, icon_size, classes} = this.props
 		let icon = <img
+					   key={f.icon}
 					   src={`/sitestatic/icons/${f.icon}.svg`}
 					   width={icon_size}
 					   height={icon_size}
 					   type="image/svg+xml" />
-        return <Tab icon={icon} label={f.label} />
+        return <Tab className={classes.tab} icon={icon} label={f.label} size="small" />
 	}
 
 	render_tab_content() {
@@ -191,7 +197,7 @@ class TransparencyEditor extends React.Component {
 
 TransparencyEditor.defaultProps = {
 	transparencies: [], // List of objects (see Transparency serializer)
-	icon_size: 30
+	icon_size: 20
 };
 
 export default withStyles(styles)(TransparencyEditor);

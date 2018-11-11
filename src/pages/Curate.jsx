@@ -6,8 +6,11 @@ import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
 	FormControl, Select, OutlinedInput} from '@material-ui/core';
 
 import C from '../constants/constants';
-import TransparencyEditor from '../components/TransparencyEditor.jsx';
 
+import TransparencyEditor from '../components/TransparencyEditor.jsx';
+import DOILookup from '../components/curateform/DOILookup.jsx';
+
+import {get} from 'lodash'
 import {printDate} from '../util/util.jsx'
 
 const styles = {
@@ -28,18 +31,20 @@ class Curate extends React.Component {
         this.state = {
         	formdata: {}
         };
+
+        this.handleDOILookupResults = this.handleDOILookupResults.bind(this)
     }
 
     componentDidMount() {
 
     }
 
-    fetch_metadata() {
-    	let {match} = this.props
-    	// fetch(`/api/articles/${match.params.id}`).then(res => res.json()).then((res) => {
-    	// 	console.log(res)
-    	// 	this.setState({article: res})
-    	// })
+    handleDOILookupResults(res) {
+    	let {formdata} = this.state
+    	formdata.title = res.title[0]
+    	formdata.authors = res.author.map((author) => author.family).join(', ')
+    	formdata.year = get(res, ['journal-issue', 'published-print', 'date-parts', 0, 0])
+		this.setState({formdata})
     }
 
     handleChange = prop => event => {
@@ -47,7 +52,6 @@ class Curate extends React.Component {
     	formdata[prop] = event.target.value
 	    this.setState({formdata});
   	}
-
 
 	render() {
 		const { classes } = this.props;
@@ -58,26 +62,17 @@ class Curate extends React.Component {
 					<Grid xs={12} item>
 						<Typography variant="h2">Add/Edit Article</Typography>
 
-				        <TextField
-				          id="doi"
-				          label="DOI"
-				          className={classes.textField}
-				          value={formdata.doi}
-				          onChange={this.handleChange('doi')}
-				          margin="normal"
-				          fullWidth
-				          variant="outlined"
-				        />
-				        <Button>Populate via DOI</Button>
+						<DOILookup onLookup={this.handleDOILookupResults} />
 
 				        <TextField
 				          id="title"
 				          label="Article title"
 				          className={classes.textField}
-				          value={formdata.title}
+				          value={formdata.title || ''}
 				          onChange={this.handleChange('title')}
 				          margin="normal"
 				          fullWidth
+				          required
 				          variant="outlined"
 				        />
 				    </Grid>
@@ -86,10 +81,11 @@ class Curate extends React.Component {
 				          id="authors"
 				          label="Authors"
 				          className={classes.textField}
-				          value={formdata.authors}
+				          value={formdata.authors || ''}
 				          onChange={this.handleChange('authors')}
 				          margin="normal"
 				          fullWidth
+				          required
 				          variant="outlined"
 				        />
 				        <TextField
@@ -154,6 +150,16 @@ class Curate extends React.Component {
 					        </Select>
 					    </FormControl>
 
+					    <TextField
+				          id="year"
+				          label="Year (or 'in press')"
+				          className={classes.textField}
+				          value={formdata.year || ''}
+				          onChange={this.handleChange('year')}
+				          margin="normal"
+				          variant="outlined"
+				        />
+
 						<TextField
 				          id="abstract"
 				          label="Abstract"
@@ -162,14 +168,12 @@ class Curate extends React.Component {
 				          onChange={this.handleChange('abstract')}
 				          margin="normal"
 				          fullWidth
-				          multiLine
+				          multiline
 				          variant="outlined"
 				        />
 				    </Grid>
-					<Grid item xs={6}>
+					<Grid item xs={12}>
 						<TransparencyEditor />
-					</Grid>
-					<Grid item xs={6}>
 					</Grid>
 				</Grid>
 
