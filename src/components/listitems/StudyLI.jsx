@@ -38,32 +38,34 @@ class StudyLI extends React.Component {
     }
 
 	render() {
- 	    let { classes, study, ofMultiple, showEditIcon} = this.props;
+ 	    let { classes, study, ofMultiple, showEditIcon, showReplicationDetails} = this.props;
 		return (
 			<Card className={classes.card}>
 				<CardContent>
 					{ ofMultiple ? <Typography className={classes.studyNum} color="textSecondary" gutterBottom>{ "STUDY " + study.study_number }</Typography> : null }
 					<TransparencyBadge transparencies={study.transparencies} />
 
-					<Typography variant="h5">Replication Details</Typography>
+					<div hidden={!showReplicationDetails}>
+						<Typography variant="h5">Replication Details</Typography>
 
-					<Grid container>
-						<Grid item xs={2}>
-							<Typography variant="h6" className={classes.replicationHeader}>Original Study</Typography>
+						<Grid container>
+							<Grid item xs={2}>
+								<Typography variant="h6" className={classes.replicationHeader}>Original Study</Typography>
+							</Grid>
+							<Grid item xs={2}>
+								<Typography variant="h6" className={classes.replicationHeader}>Target Effect</Typography>
+							</Grid>
+							<Grid item xs={2}>
+								<Typography variant="h6" className={classes.replicationHeader}>Similarity Method</Typography>
+							</Grid>
+							<Grid item xs={2}>
+								<Typography variant="h6" className={classes.replicationHeader}>Differences</Typography>
+							</Grid>
+							<Grid item xs={2}>
+								<Typography variant="h6" className={classes.replicationHeader}>Aux. Hypotheses</Typography>
+							</Grid>
 						</Grid>
-						<Grid item xs={2}>
-							<Typography variant="h6" className={classes.replicationHeader}>Target Effect</Typography>
-						</Grid>
-						<Grid item xs={2}>
-							<Typography variant="h6" className={classes.replicationHeader}>Similarity Method</Typography>
-						</Grid>
-						<Grid item xs={2}>
-							<Typography variant="h6" className={classes.replicationHeader}>Differences</Typography>
-						</Grid>
-						<Grid item xs={2}>
-							<Typography variant="h6" className={classes.replicationHeader}>Aux. Hypotheses</Typography>
-						</Grid>
-					</Grid>
+					</div>
 
 					{ showEditIcon ? <Button>Edit</Button> : null }
 	  			</CardContent>
@@ -80,7 +82,8 @@ StudyLI.defaultProps = {
 
 StudyLI.propTypes = {
   classes: PropTypes.object.isRequired,
-  showEditIcon: PropTypes.bool
+  showEditIcon: PropTypes.bool,
+  showReplicationDetails: PropTypes.bool
 };
 
 export default withStyles(styles)(StudyLI);

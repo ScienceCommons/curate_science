@@ -4,9 +4,11 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 	FormControlLabel, Radio, Icon, InputLabel, Input, InputAdornment,
-	AppBar, Typography, Button} from '@material-ui/core';
+	AppBar, Typography, Button, TextField} from '@material-ui/core';
 
 import {set} from 'lodash'
+
+import MultiURLInput from '../components/curateform/MultiURLInput.jsx';
 
 import C from '../constants/constants';
 
@@ -22,50 +24,6 @@ const styles = {
     		fontSize: 8
     	}
     }
-}
-
-class MultiURLInput extends React.Component {
-
-	addURL() {
-		this.props.onAddURL()
-	}
-
-	deleteURL() {
-
-	}
-
-	render() {
-		let {label, urls} = this.props
-		let inputs = urls.map((url) => {
-			return (
-				<FormControl key={url}>
-			        <InputLabel htmlFor="materials">{ label }</InputLabel>
-			        <Input
-			          id="materials"
-			          startAdornment={
-			            <InputAdornment position="start">
-			              <Icon>link</Icon>
-			            </InputAdornment>
-			          }
-			        />
-			    </FormControl>
-			)
-		})
-		return (
-			<div>
-				{ inputs }
-				<Button variant="contained" size="small" onClick={this.addURL}>
-					<Icon>add</Icon>
-					Add another URL
-				</Button>
-			</div>
-	    )
-	}
-}
-
-MultiURLInput.defaultProps = {
-	label: "",
-	urls: []
 }
 
 class TransparencyEditor extends React.Component {
@@ -128,21 +86,34 @@ class TransparencyEditor extends React.Component {
 		let {tab, form} = this.state
 		let tb = C.TRANSPARENCY_BADGES[tab]
 		let tab_content
+		let protocol_url // TODO
 		if (tb.id == 'prereg') {
 			tab_content = (
-				<FormControl component="fieldset" className={classes.formControl}>
-		          <FormLabel component="legend">Preregistration Type</FormLabel>
-		          <RadioGroup
-		            aria-label="prereg_rg"
-		            name="prereg_rg"
-		            className={classes.group}
-		            value={form.prereg_type}
-		          >
-		            <FormControlLabel value="format" control={<Radio />} label="Registered Report format" />
-		            <FormControlLabel value="design_analysis" control={<Radio />} label="Preregistered design + analysis" />
-		            <FormControlLabel value="design" control={<Radio />} label="Preregistered design" />
-		          </RadioGroup>
-		        </FormControl>
+				<div>
+					<FormControl component="fieldset" className={classes.formControl}>
+			          <FormLabel component="legend">Preregistration Type</FormLabel>
+			          <RadioGroup
+			            aria-label="prereg_rg"
+			            name="prereg_rg"
+			            className={classes.group}
+			            value={form.prereg_type}
+			          >
+			            <FormControlLabel value="format" control={<Radio />} label="Registered Report format" />
+			            <FormControlLabel value="design_analysis" control={<Radio />} label="Preregistered design + analysis" />
+			            <FormControlLabel value="design" control={<Radio />} label="Preregistered design" />
+			          </RadioGroup>
+			        </FormControl>
+
+					<TextField
+					  id='protocol-url'
+					  label={`Preregistered protocol URL`}
+					  value={protocol_url || ''}
+					  onChange={this.handleChange}
+					  margin="normal"
+					  fullWidth
+					  variant="outlined"
+					/>
+		        </div>
 				)
 		} else if (tb.id == 'materials') {
 			tab_content = <MultiURLInput label="Study materials URL" urls={[""]} onAddURL={this.addTransparencyURL('materials')} />

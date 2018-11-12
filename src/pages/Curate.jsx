@@ -3,7 +3,8 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
-	FormControl, Select, OutlinedInput, Paper} from '@material-ui/core';
+	FormControl, FormControlLabel, RadioGroup, Radio,
+	Select, OutlinedInput, Paper} from '@material-ui/core';
 
 import C from '../constants/constants';
 
@@ -11,8 +12,10 @@ import TransparencyEditor from '../components/TransparencyEditor.jsx';
 import StudyLI from '../components/listitems/StudyLI.jsx';
 import DOILookup from '../components/curateform/DOILookup.jsx';
 import StudyEditor from '../components/curateform/StudyEditor.jsx';
+import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
+import FigureSelector from '../components/curateform/FigureSelector.jsx';
 
-import {get} from 'lodash'
+import {get, find} from 'lodash'
 import {printDate} from '../util/util.jsx'
 
 const styles = {
@@ -75,9 +78,21 @@ class Curate extends React.Component {
   		this.setState({studies})
   	}
 
+
 	render() {
+		//
 		const { classes } = this.props;
 		let {formdata, study_editor_open, studies, study_editor_study} = this.state
+		console.log(C.ARTICLE_TYPES)
+		let at = find(C.ARTICLE_TYPES, {id: formdata.type || 'ORIGINAL'})
+		let show_reanalysis, show_commentary, show_study_section, show_replication
+		if (at != null) {
+			console.log(at)
+			show_reanalysis = at.relevant_sections.indexOf('reanalysis') > -1
+			show_commentary = at.relevant_sections.indexOf('commentary') > -1
+			show_study_section = at.relevant_sections.indexOf('studies') > -1
+			show_replication = at.relevant_sections.indexOf('replication') > -1
+		}
 		return (
 			<form noValidate autoComplete="off" className={classes.root}>
 				<Grid container className={classes.root} spacing={24}>
@@ -132,7 +147,7 @@ class Curate extends React.Component {
 					            Research Area
 					        </InputLabel>
 					        <Select
-					            value={formdata.type || "social_science"}
+					            value={formdata.research_area || "social_science"}
 					            onChange={this.handleChange('research_area')}
 					            input={
 					              <OutlinedInput
@@ -195,12 +210,42 @@ class Curate extends React.Component {
 				        />
 				    </Grid>
 					<Grid item xs={12}>
+						<Typography variant="h4">Transparency (article-level)</Typography>
 						<TransparencyEditor />
 					</Grid>
 
 					<Grid item xs={12}>
+						<Typography variant="h4">Key figures/tables (article-level)</Typography>
+						<FigureSelector />
+					</Grid>
+
+					<Grid item xs={12} hidden={!show_reanalysis}>
+						<Typography variant="h4">Reanalysis Details</Typography>
+						<FormControl component="fieldset" className={classes.formControl}>
+				          <RadioGroup
+				            aria-label="reanalysis_details"
+				            name="reanalysis_details"
+				            className={classes.group}
+				            value={formdata.reanalysis_details}
+				          >
+				            <FormControlLabel value="reproducibility" control={<Radio />} label="Reproducibility" />
+				            <FormControlLabel value="robustness" control={<Radio />} label="Robustness" />
+				          </RadioGroup>
+				        </FormControl>
+						<ArticleSelector />
+					</Grid>
+
+					<Grid item xs={12} hidden={!show_commentary}>
+						<Typography variant="h4">Commentary Details</Typography>
+						<ArticleSelector />
+					</Grid>
+
+					<Grid item xs={12} hidden={!show_study_section}>
 						<Typography variant="h3" gutterBottom>Studies</Typography>
-						{ studies.map(study => <StudyLI key={study.id} study={study} showEditIcon={true} />) }
+						{ studies.map(study => <StudyLI key={study.id}
+														study={study}
+														showReplicationDetails={show_replication}
+														showEditIcon={true} />) }
 						<Button variant="contained" onClick={this.openStudyEditor}>Add Study</Button>
 					</Grid>
 

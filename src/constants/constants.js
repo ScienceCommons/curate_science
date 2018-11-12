@@ -3,27 +3,33 @@ var C = {
 	ARTICLE_TYPES: [
         {
 			id: "ORIGINAL",
-			label: "Original research"
+			label: "Original research",
+			relevant_sections: ['studies']
 		},
 	    {
 			id: "REPLICATION",
-			label: "Replication(s)?"
+			label: "Replication(s)?",
+			relevant_sections: ['replication', 'studies']
 		},
         {
 			id: "REPRODUCIBILITY",
-			label: "Reanalysis - Reproducibility/Robustness"
+			label: "Reanalysis - Reproducibility/Robustness",
+			relevant_sections: ['reanalysis']
 		},
         {
 			id: "META_ANALYSIS",
-			label: "Renalysis - Meta-analysis"
+			label: "Renalysis - Meta-analysis",
+			relevant_sections: ['reanalysis']
 		},
         {
 			id: "META_RESEARCH",
-			label: "Renalysis - Meta-research"
+			label: "Renalysis - Meta-research",
+			relevant_sections: ['reanalysis']
 		},
         {
 			id: "COMMENTARY",
-			label: "Commentary"
+			label: "Commentary",
+			relevant_sections: ['commentary']
 		}
 	],
 	RESEARCH_AREAS: [
