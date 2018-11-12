@@ -10,6 +10,8 @@ import TransparencyEditor from '../../components/TransparencyEditor.jsx';
 import ArticleSelector from '../../components/curateform/ArticleSelector.jsx';
 import FigureSelector from '../../components/curateform/FigureSelector.jsx';
 
+import {merge} from 'lodash'
+
 const styles = {
 
 }
@@ -136,7 +138,7 @@ class StudyEditor extends React.Component {
 				)
 		} else if (params.type == 'select') {
 			return (
-				<FormControl variant="outlined" fullWidth className={classes.formControl}>
+				<FormControl key={params.name} variant="outlined" fullWidth className={classes.formControl}>
 			        <InputLabel
 			            ref={ref => {
 			              this.InputLabelRef = ref;
@@ -156,7 +158,7 @@ class StudyEditor extends React.Component {
 			            }
 			          >
 			            { params.options.map((op) => {
-			            	return <MenuItem value={op.value}>{op.label}</MenuItem>
+			            	return <MenuItem key={op.value} value={op.value}>{op.label}</MenuItem>
 			            })}
 			        </Select>
 			    </FormControl>

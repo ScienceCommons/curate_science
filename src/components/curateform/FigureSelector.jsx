@@ -12,6 +12,7 @@ class FigureSelector extends React.Component {
         super(props);
         this.state = {
         };
+        this.addFigure = this.addFigure.bind(this)
     }
 
     addFigure() {
@@ -32,7 +33,7 @@ class FigureSelector extends React.Component {
     	let num = id + 1
     	return (
     		<TextField
-		          id={id}
+		          id={`url-${id}`}
 		          key={id}
 		          label={`Figure/Table ${num}`}
 		          value={url || ''}
@@ -49,6 +50,9 @@ class FigureSelector extends React.Component {
 		return (
 			<div className={classes.search}>
 				{ figure_urls.map((url, i) => this.render_url_input(i, url)) }
+
+				<Button onClick={this.addFigure}>Add Figure</Button>
+
             </div>
         )
 	}

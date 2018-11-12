@@ -22,6 +22,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 // Theme
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+// import 'typeface-roboto'
 
 import C from './constants/constants';
 
@@ -33,11 +34,11 @@ import css from './App.css';
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: "#CCC" },
-    secondary: { main: '#11cb5f' },
+    secondary: { main: '#007CC9' },
   },
   typography: {
-    useNextVariants: true
+    useNextVariants: true,
+    fontSize: 12
   }
 });
 

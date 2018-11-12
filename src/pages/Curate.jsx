@@ -69,8 +69,10 @@ class Curate extends React.Component {
   	}
 
   	saveStudy(study) {
-  		console.log(study)
-  		// TODO
+  		this.toggleStudyEditor(false)
+  		let {studies} = this.state
+  		studies.push(study)
+  		this.setState({studies})
   	}
 
 	render() {
@@ -80,7 +82,7 @@ class Curate extends React.Component {
 			<form noValidate autoComplete="off" className={classes.root}>
 				<Grid container className={classes.root} spacing={24}>
 					<Grid xs={12} item>
-						<Typography variant="h2">Add/Edit Article</Typography>
+						<Typography variant="h4">Add/Edit Article</Typography>
 
 						<DOILookup onLookup={this.handleDOILookupResults} />
 
@@ -195,23 +197,24 @@ class Curate extends React.Component {
 					<Grid item xs={12}>
 						<TransparencyEditor />
 					</Grid>
+
+					<Grid item xs={12}>
+						<Typography variant="h3" gutterBottom>Studies</Typography>
+						{ studies.map(study => <StudyLI key={study.id} study={study} showEditIcon={true} />) }
+						<Button variant="contained" onClick={this.openStudyEditor}>Add Study</Button>
+					</Grid>
+
+					<Grid item xs={6}>
+						<Button variant="contained" color="primary" size="large">Save</Button>
+						<Button size="large">Cancel</Button>
+					</Grid>
+
 				</Grid>
 
 				<StudyEditor open={study_editor_open}
 							 onClose={this.closeStudyEditor}
 							 onSave={this.saveStudy}
 							 editStudy={study_editor_study} />
-
-				<Paper>
-					<Typography variant="h3" bottomGutter>Studies</Typography>
-					{ studies.map(study => <StudyLI key={study.id} study={study} showEditIcon={true} />) }
-					<Button onClick={this.openStudyEditor}>Add Study</Button>
-				</Paper>
-
-				<Grid item xs={6}>
-					<Button variant="contained" size="large">Save</Button>
-					<Button size="large">Cancel</Button>
-				</Grid>
 
 			</form>
 		)

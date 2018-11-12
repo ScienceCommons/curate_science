@@ -21,13 +21,17 @@ import C from '../constants/constants';
 
 const styles = theme => ({
     sitename: {
-        color: 'white'
+        color: 'black'
+    },
+    topBar: {
+        background: 'linear-gradient(0deg, #EEE 30%, #CCC 90%)',
+        boxShadow: 'none'
     },
     grow: {
         flexGrow: 1,
     },
     subSearchLinks: {
-        color: 'white',
+        color: 'gray',
         fontSize: 12,
         marginTop: 5,
         marginLeft: 25
@@ -146,7 +150,7 @@ class TopBar extends React.Component {
         )
         return (
             <div>
-                <AppBar position="static">
+                <AppBar position="static" className={classes.topBar}>
                     <Toolbar>
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                             <MenuIcon />
