@@ -13,27 +13,30 @@ import ArticleContentLinks from '../components/ArticleContentLinks.jsx';
 import TransparencyBadge from '../components/TransparencyBadge.jsx';
 import JournalDOIBadge from '../components/JournalDOIBadge.jsx';
 import AuthorList from '../components/AuthorList.jsx';
-import StudyLI from '../components/StudyLI.jsx';
+import StudyLI from '../components/listitems/StudyLI.jsx';
 
 import {printDate} from '../util/util.jsx'
 
 const styles = {
-  card: {
-    minWidth: 275,
-  },
-  title: {
-    fontSize: 28,
-  },
-  type: {
-    fontSize: 14,
-  },
-  label: {
-    fontSize: 14,
-  },
-  authors: {
-  	color: "#0CC343",
-    marginBottom: 12,
-  },
+	root: {
+		padding: 10
+	},
+	card: {
+		minWidth: 275,
+	},
+	title: {
+		fontSize: 28,
+	},
+	type: {
+		fontSize: 14,
+	},
+	label: {
+		fontSize: 14,
+	},
+	authors: {
+		color: "#0CC343",
+		marginBottom: 12,
+	},
 };
 
 function Keywords(props) {
@@ -66,7 +69,7 @@ class ArticleDetail extends React.Component {
     render_study(s) {
     	let {article} = this.state
     	let multiple = article.studies != null && article.studies.length > 1
-    	return <StudyLI study={s} ofMultiple={multiple} />
+    	return <StudyLI key={s.id} study={s} ofMultiple={multiple} />
     }
 
 	render() {
@@ -75,8 +78,9 @@ class ArticleDetail extends React.Component {
 		let {article} = this.state
 		if (article == null) return <p>Loading...</p>
 		let update_date = new Date(article.updated)
+		let plural = article.studies.length > 1
 		return (
-			<div>
+			<div className={classes.root}>
 				<Card className={classes.card}>
 	      			<CardContent>
 	      				<Grid container justify="flex-end">
@@ -111,7 +115,7 @@ class ArticleDetail extends React.Component {
   				    </CardContent>
 				</Card>
 
-				<Typography variant="h4" color="textSecondary" gutterBottom>Studies</Typography>
+				<Typography variant="h4" color="textSecondary" gutterBottom>{ plural ? "Studies" : "Study" }</Typography>
 
 				{ article.studies.map(this.render_study) }
 

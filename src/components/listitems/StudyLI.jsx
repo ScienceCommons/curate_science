@@ -8,10 +8,10 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import C from '../constants/constants';
-import TransparencyBadge from './TransparencyBadge.jsx';
-import JournalDOIBadge from './JournalDOIBadge.jsx';
-import AuthorList from './AuthorList.jsx';
+import C from '../../constants/constants';
+import TransparencyBadge from '../TransparencyBadge.jsx';
+import JournalDOIBadge from '../JournalDOIBadge.jsx';
+import AuthorList from '../AuthorList.jsx';
 
 const styles = {
   card: {
@@ -38,9 +38,9 @@ class StudyLI extends React.Component {
     }
 
 	render() {
- 	    let { classes, study, ofMultiple } = this.props;
+ 	    let { classes, study, ofMultiple, showEditIcon} = this.props;
 		return (
-			<Card>
+			<Card className={classes.card}>
 				<CardContent>
 					{ ofMultiple ? <Typography className={classes.studyNum} color="textSecondary" gutterBottom>{ "STUDY " + study.study_number }</Typography> : null }
 					<TransparencyBadge transparencies={study.transparencies} />
@@ -64,6 +64,8 @@ class StudyLI extends React.Component {
 							<Typography variant="h6" className={classes.replicationHeader}>Aux. Hypotheses</Typography>
 						</Grid>
 					</Grid>
+
+					{ showEditIcon ? <Button>Edit</Button> : null }
 	  			</CardContent>
 			</Card>
 		)
@@ -72,11 +74,13 @@ class StudyLI extends React.Component {
 
 StudyLI.defaultProps = {
 	study: {},
-	ofMultiple: true
+	ofMultiple: true,
+	showEditIcon: false
 };
 
 StudyLI.propTypes = {
   classes: PropTypes.object.isRequired,
+  showEditIcon: PropTypes.bool
 };
 
 export default withStyles(styles)(StudyLI);

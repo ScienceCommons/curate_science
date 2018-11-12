@@ -33,7 +33,7 @@ class TransparencyBadge extends React.Component {
 	}
 
 	render() {
-		let relevant_transparencies = C.BADGE_FEATURES.filter(bf => true) // TODO
+		let relevant_transparencies = C.TRANSPARENCY_BADGES.filter(bf => true) // TODO
 		return relevant_transparencies.map(this.render_feature)
 	}
 }

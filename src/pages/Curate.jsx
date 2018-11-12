@@ -3,36 +3,47 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
-	FormControl, Select, OutlinedInput} from '@material-ui/core';
+	FormControl, Select, OutlinedInput, Paper} from '@material-ui/core';
 
 import C from '../constants/constants';
 
 import TransparencyEditor from '../components/TransparencyEditor.jsx';
+import StudyLI from '../components/listitems/StudyLI.jsx';
 import DOILookup from '../components/curateform/DOILookup.jsx';
+import StudyEditor from '../components/curateform/StudyEditor.jsx';
 
 import {get} from 'lodash'
 import {printDate} from '../util/util.jsx'
 
 const styles = {
-  textField: {
+	root: {
+		padding: 10
+	},
+	textField: {
 
-  },
-  root: {
-  	padding: 13
-  },
-  formControl: {
+	},
+	root: {
+		padding: 13
+	},
+	formControl: {
 
-  }
-};
+	}
+}
 
 class Curate extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-        	formdata: {}
+        	formdata: {},
+        	studies: [],
+        	study_editor_open: false,
+        	study_editor_study: null
         };
 
         this.handleDOILookupResults = this.handleDOILookupResults.bind(this)
+        this.openStudyEditor = this.toggleStudyEditor.bind(this, true)
+        this.closeStudyEditor = this.toggleStudyEditor.bind(this, false)
+        this.saveStudy = this.saveStudy.bind(this)
     }
 
     componentDidMount() {
@@ -53,11 +64,20 @@ class Curate extends React.Component {
 	    this.setState({formdata});
   	}
 
+  	toggleStudyEditor(open) {
+  		this.setState({study_editor_open: open})
+  	}
+
+  	saveStudy(study) {
+  		console.log(study)
+  		// TODO
+  	}
+
 	render() {
 		const { classes } = this.props;
-		let {formdata} = this.state
+		let {formdata, study_editor_open, studies, study_editor_study} = this.state
 		return (
-			<form noValidate autoComplete="off">
+			<form noValidate autoComplete="off" className={classes.root}>
 				<Grid container className={classes.root} spacing={24}>
 					<Grid xs={12} item>
 						<Typography variant="h2">Add/Edit Article</Typography>
@@ -120,7 +140,7 @@ class Curate extends React.Component {
 					            }
 					          >
 					            { C.RESEARCH_AREAS.map((ra) => {
-					            	return <MenuItem value={ra.id}>{ra.label}</MenuItem>
+					            	return <MenuItem key={ra.id} value={ra.id}>{ra.label}</MenuItem>
 					            })}
 					        </Select>
 					    </FormControl>
@@ -145,7 +165,7 @@ class Curate extends React.Component {
 					            }
 					          >
 					          { C.ARTICLE_TYPES.map((at) => {
-					            	return <MenuItem value={at.id}>{at.label}</MenuItem>
+					            	return <MenuItem key={at.id} value={at.id}>{at.label}</MenuItem>
 					            })}
 					        </Select>
 					    </FormControl>
@@ -177,10 +197,22 @@ class Curate extends React.Component {
 					</Grid>
 				</Grid>
 
-				<div>
-					<Button variant="raised" size="large">Save</Button>
+				<StudyEditor open={study_editor_open}
+							 onClose={this.closeStudyEditor}
+							 onSave={this.saveStudy}
+							 editStudy={study_editor_study} />
+
+				<Paper>
+					<Typography variant="h3" bottomGutter>Studies</Typography>
+					{ studies.map(study => <StudyLI key={study.id} study={study} showEditIcon={true} />) }
+					<Button onClick={this.openStudyEditor}>Add Study</Button>
+				</Paper>
+
+				<Grid item xs={6}>
+					<Button variant="contained" size="large">Save</Button>
 					<Button size="large">Cancel</Button>
-				</div>
+				</Grid>
+
 			</form>
 		)
 	}

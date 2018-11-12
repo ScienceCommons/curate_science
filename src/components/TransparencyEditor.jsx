@@ -113,12 +113,14 @@ class TransparencyEditor extends React.Component {
 	render_transparency_tab(f) {
 		let {transparencies, icon_size, classes} = this.props
 		let icon = <img
-					   key={f.icon}
 					   src={`/sitestatic/icons/${f.icon}.svg`}
 					   width={icon_size}
 					   height={icon_size}
 					   type="image/svg+xml" />
-        return <Tab className={classes.tab} icon={icon} label={f.label} size="small" />
+        return <Tab key={f.icon} className={classes.tab}
+        			icon={icon}
+        			label={f.label}
+        			size="small" />
 	}
 
 	render_tab_content() {
