@@ -37,7 +37,7 @@ class AuthorSelector extends React.Component {
                                  labelProp="text"
                                  listUrl="/api/authors/autocomplete/"
                                  createUrl="/api/authors/create/"
-                                 placeholder="Author name *"
+                                 placeholder="Authors *"
                                  multi
                                  onChange={this.handleChange} />
         )

@@ -65,8 +65,8 @@ class AddTransparencyMenuItem extends React.Component {
 		let icon = (
 			<img
 			   src={`/sitestatic/icons/${transparency_type.icon}.svg`}
-			   width={20}
-			   height={20}
+			   width={30}
+			   height={30}
 			   type="image/svg+xml" />
 	   )
 		return (
@@ -205,9 +205,15 @@ class TransparencyEditor extends React.Component {
 		return content
 	}
 
+	relevant_transparencies() {
+		let {article_type} = this.props
+		return C.TRANSPARENCY_BADGES.filter((tb) => {
+			return tb.article_types.includes(article_type)
+		})
+	}
+
 	render_create_menu() {
 		const { anchorEl } = this.state;
-		let relevant_transparencies = C.TRANSPARENCY_BADGES.filter(bf => true) // TODO
 		return (
 			<div>
 		        <Button
@@ -224,7 +230,7 @@ class TransparencyEditor extends React.Component {
 		          open={Boolean(anchorEl)}
 		          onClose={this.handleCreateMenuClose}
 		        >
-		        	{ relevant_transparencies.map((tt, i) => {
+		        	{ this.relevant_transparencies().map((tt, i) => {
 		        		return <AddTransparencyMenuItem
 		        					key={i}
 		        					onAddTransparency={this.addTransparency}
@@ -254,6 +260,7 @@ class TransparencyEditor extends React.Component {
 
 TransparencyEditor.defaultProps = {
 	transparencies: [], // List of objects (see Transparency serializer)
+	article_type: "ORIGINAL",
 	icon_size: 20
 };
 

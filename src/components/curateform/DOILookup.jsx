@@ -1,13 +1,37 @@
 import React from 'react';
 
 import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
-	FormControl, Select, OutlinedInput} from '@material-ui/core';
+	FormControl, Select, OutlinedInput, InputBase} from '@material-ui/core';
 
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = {
-
-}
+const styles = theme => ({
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.black, 0.15),
+        '&:hover': {
+          backgroundColor: fade(theme.palette.common.black, 0.25),
+        },
+        marginRight: theme.spacing.unit * 2,
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+          marginLeft: theme.spacing.unit * 3,
+          width: 'auto',
+        },
+    },
+    searchIcon: {
+        width: theme.spacing.unit * 9,
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+})
 
 class DOILookup extends React.Component {
 	constructor(props) {
@@ -19,6 +43,7 @@ class DOILookup extends React.Component {
         	populated: false
         };
         this.handleChange = this.handleChange.bind(this)
+        this.handleSearchKeyPress = this.handleSearchKeyPress.bind(this)
         this.lookup = this.lookup.bind(this)
 
         this.MIN_LEN = 4
@@ -32,6 +57,13 @@ class DOILookup extends React.Component {
 		    this.setState({doi: doi, error: false, populated: false, loading: false});
         }
   	}
+
+
+    handleSearchKeyPress(e) {
+        if (e.key == 'Enter') {
+            this.refreshSearch()
+        }
+    }
 
   	canLookup() {
   		let {doi} = this.state
@@ -55,31 +87,29 @@ class DOILookup extends React.Component {
   	}
 
 	render() {
+		let {classes} = this.props
 		let {error, doi, populated, loading} = this.state
 		let ht = error ? "Invalid DOI" : ""
-		let icon = populated ? <Icon>check</Icon> : <Icon>search</Icon>
+		let ph = loading ? "Looking up..." : "Lookup by DOI"
 		return (
-			<Grid container>
-				<Grid item xs={8}>
-			        <TextField
-			          id="doi"
-			          label="DOI"
-			          error={error}
-			          helperText={ht}
-			          value={doi}
-			          onChange={this.handleChange}
-			          margin="normal"
-			          fullWidth
-			          variant="outlined"
-			        />
-			    </Grid>
-			    <Grid item xs={4}>
-			        <Button variant="contained" onClick={this.lookup} disabled={!this.canLookup()}>
-			        	{ loading ? "Looking up..." : "DOI Lookup" }
-			        	{icon}
-		        	</Button>
-		        </Grid>
-	        </Grid>
+			<div className={classes.search}>
+                <div className={classes.searchIcon}>
+                    <Icon>search</Icon>
+                </div>
+                <InputBase
+                    placeholder={ph}
+                    onChange={this.handleChange}
+                    error={error}
+                    helperText={ht}
+                    onKeyPress={this.handleSearchKeyPress}
+                    value={doi || ''}
+                    fullWidth={true}
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                />
+            </div>
         )
 	}
 }

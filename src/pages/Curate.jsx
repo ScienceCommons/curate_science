@@ -3,7 +3,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
-	FormControl, FormControlLabel, RadioGroup, Radio,
+	FormControl, FormControlLabel, RadioGroup, Radio, Checkbox,
 	Select, OutlinedInput, Paper} from '@material-ui/core';
 
 import C from '../constants/constants';
@@ -69,6 +69,12 @@ class Curate extends React.Component {
 	    this.setState({formdata});
   	}
 
+  	handleCheckChange = prop => event => checked => {
+  		let {formdata} = this.state
+  		formdata[prop] = checked
+	    this.setState({formdata});
+  	}
+
     handleValueChange = prop => value => {
     	let {formdata} = this.state
     	formdata[prop] = value
@@ -131,8 +137,11 @@ class Curate extends React.Component {
 				        <JournalSelector onChange={this.handleValueChange('journal')} />
 
 				    </Grid>
-				    <Grid item xs={6}>
-						<FormControl variant="outlined" className={classes.formControl}>
+				    <Grid item xs={3}>
+						<FormControl
+							variant="outlined"
+							fullWidth
+							className={classes.formControl}>
 					        <InputLabel
 					            ref={ref => {
 					              this.InputLabelRef = ref;
@@ -157,8 +166,9 @@ class Curate extends React.Component {
 					            })}
 					        </Select>
 					    </FormControl>
-
-						<FormControl variant="outlined" className={classes.formControl}>
+					</Grid>
+					<Grid item xs={3}>
+						<FormControl variant="outlined" fullWidth className={classes.formControl}>
 					        <InputLabel
 					            ref={ref => {
 					              this.InputLabelRef = ref;
@@ -183,15 +193,32 @@ class Curate extends React.Component {
 					            })}
 					        </Select>
 					    </FormControl>
-
+					</Grid>
+					<Grid item xs={6}>
 					    <TextField
 				          id="year"
-				          label="Year (or 'in press')"
+				          label="Year (YYYY)"
 				          className={classes.textField}
 				          value={formdata.year || ''}
 				          onChange={this.handleChange('year')}
+				          inputProps={{pattern: "\d\d\d\d"}}
+				          type="number"
 				          margin="normal"
 				          variant="outlined"
+				          disabled={formdata.in_press}
+				        />
+
+			    		<FormControlLabel
+				            control={
+			    	            <Checkbox
+			    	              checked={formdata.in_press}
+			    	              onChange={this.handleCheckChange('in_press')}
+			    	              checked={formdata.in_press}
+			    	              value={'in_press'}
+			    	              color="primary"
+			    	            />
+			    	          }
+			                label="In press"
 				        />
 
 						<TextField
@@ -206,11 +233,6 @@ class Curate extends React.Component {
 				          variant="outlined"
 				        />
 				    </Grid>
-
-					<Grid item xs={12}>
-						<Typography variant="h4">Key figures/tables (article-level)</Typography>
-						<FigureSelector onChange={""} />
-					</Grid>
 
 					<Grid item xs={12} hidden={!show_reanalysis}>
 						<Typography variant="h4">Reanalysis Details</Typography>
@@ -233,6 +255,11 @@ class Curate extends React.Component {
 						<ArticleSelector />
 					</Grid>
 
+					<Grid item xs={12}>
+						<Typography variant="h4">Key figures/tables (article-level)</Typography>
+						<FigureSelector />
+					</Grid>
+
 					<Grid item xs={12} hidden={!show_study_section}>
 						<Typography variant="h3" gutterBottom>Studies</Typography>
 						{ studies.map(study => <StudyLI key={study.id}
@@ -244,7 +271,6 @@ class Curate extends React.Component {
 
 					<Grid item xs={6}>
 						<Button variant="contained" color="primary" size="large" type="submit">Save</Button>
-						<Button size="large">Cancel</Button>
 					</Grid>
 
 				</Grid>
@@ -252,6 +278,7 @@ class Curate extends React.Component {
 				<StudyEditor open={study_editor_open}
 							 onClose={this.closeStudyEditor}
 							 onSave={this.saveStudy}
+							 article_type={formdata.type}
 							 editStudy={study_editor_study} />
 
 			</form>

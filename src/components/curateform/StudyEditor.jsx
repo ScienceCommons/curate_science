@@ -1,6 +1,7 @@
 import React from 'react';
 
-import {Dialog, Slide, AppBar, TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
+import {Dialog, DialogTitle, DialogActions, DialogContent,
+	Slide, AppBar, TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 	FormControl, Select, OutlinedInput, Toolbar, IconButton, List, ListItem,
 	ListItemText, Divider, MenuItem} from '@material-ui/core';
 
@@ -173,56 +174,51 @@ class StudyEditor extends React.Component {
 	}
 
 	render() {
-		const { classes, open, editStudy } = this.props;
+		const { classes, open, editStudy, article_type } = this.props;
 		let {formdata, transparencies} = this.state
 		let creating_new = editStudy == null
+		let replication_details
+		if (article_type == "ORIGINAL") {
+			replication_details = (
+				<div>
+					<Typography variant="h5" gutterBottom>Replication Details</Typography>
+					{ this.replicationInputs.map(this.renderReplicationInput)}
+				</div>
+			)
+		}
 		return (
 			<div>
 				<Dialog
-					fullScreen
+				fullWidth
 					open={open}
 					onClose={this.handleClose}
 					TransitionComponent={Transition}
 				>
-					<AppBar className={classes.appBar}>
-						<Toolbar>
-							<IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
-								<Icon>close</Icon>
-							</IconButton>
-							<Typography variant="h6" color="inherit" className={classes.flex}>
-								{ creating_new ? "Add" : "Edit" } Study
-							</Typography>
-							<Button color="inherit" onClick={this.handleSave}>
-								save
-							</Button>
-						</Toolbar>
-					</AppBar>
+					<DialogTitle id="form-dialog-title">{ creating_new ? "Add" : "Edit" } Study</DialogTitle>
 
-					<Grid container style={{padding: 10, marginTop: 70}}>
+					<DialogContent>
+						<Typography variant="h5">Original Article/Study</Typography>
+						<ArticleSelector selectStudy={true} />
 
-						<Grid item xs={6}>
-							<TransparencyEditor
+						<TransparencyEditor
 								transparencies={transparencies}
+								article_type={article_type || "ORIGINAL"}
 								onAddTransparency={this.handleAddTransparency} />
-						</Grid>
 
-						<Grid item xs={6}>
-							<Typography variant="h5">Original Article/Study</Typography>
-						</Grid>
+						<Typography variant="h5" gutterBottom>Key Figures/Tables</Typography>
+						<FigureSelector figure_urls={formdata.figure_urls || [""]} onChange={this.handleFigureChange} />
 
-						<Grid item xs={6}>
-							<ArticleSelector selectStudy={true} />
-						</Grid>
+						{ replication_details }
+					</DialogContent>
 
-						<Grid item xs={6}>
-							<Typography variant="h5" gutterBottom>Key Figures/Tables</Typography>
-							<FigureSelector figure_urls={formdata.figure_urls || [""]} onChange={this.handleFigureChange} />
-						</Grid>
-
-						<Typography variant="h5" gutterBottom>Replication Details</Typography>
-
-						{ this.replicationInputs.map(this.renderReplicationInput)}
-					</Grid>
+					<DialogActions>
+						<Button color="inherit" variant="contained" color="primary" onClick={this.handleSave}>
+							save
+						</Button>
+			            <Button onClick={this.handleClose} color="primary">
+			              Cancel
+			            </Button>
+			          </DialogActions>
 				</Dialog>
 			</div>
 			);
@@ -231,6 +227,7 @@ class StudyEditor extends React.Component {
 
 StudyEditor.defaultProps = {
 	open: false,
+	article_type: "ORIGINAL",
 	editStudy: null
 };
 
