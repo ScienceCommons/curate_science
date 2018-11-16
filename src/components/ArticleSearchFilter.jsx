@@ -17,7 +17,9 @@ import C from '../constants/constants';
 import qs from 'query-string';
 
 const styles = {
-
+    root: {
+        padding: 10
+    }
 };
 
 class ArticleSearchFilter extends React.Component {
@@ -110,9 +112,10 @@ class ArticleSearchFilter extends React.Component {
 	}
 
 	render() {
+        let {classes} = this.props
  	    let { filter_changes } = this.state;
 		return (
-			<div className="ArticleSearchFilter">
+			<div className={classes.root}>
 				<Typography variant="h3">Filter Articles</Typography>
 
 				<div>

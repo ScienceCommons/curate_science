@@ -38,7 +38,7 @@ class ArticleLI extends React.Component {
     }
 
 	render() {
- 	    let { classes, id, title, authors, journal, doi, transparencies } = this.props;
+ 	    let { classes, id, title, authors, journal, doi, transparencies, article_type } = this.props;
  	    let url = `/new/article/${id}`
 		return (
 			<Card className={classes.card}>
@@ -47,7 +47,7 @@ class ArticleLI extends React.Component {
 					<Typography className={classes.authors} color="textSecondary" gutterBottom>
 						<AuthorList authors={authors} />
 					</Typography>
-					<TransparencyBadge transparencies={transparencies} />
+					<TransparencyBadge transparencies={transparencies} article_type={article_type} />
 		  			<Typography className={classes.journal} color="textSecondary" gutterBottom>
 		  				<JournalDOIBadge journal={journal} doi={doi} />
 		  			</Typography>
@@ -63,6 +63,7 @@ ArticleLI.defaultProps = {
 	authors: [],
 	journal: "",
 	doi: "",
+	article_type: "ORIGINAL",
 	transparencies: []
 };
 

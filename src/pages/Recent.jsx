@@ -39,7 +39,7 @@ class Home extends React.Component {
 	render() {
 		let {articles, searched} = this.state
 		return (
-			<Grid container>
+			<Grid container spacing={24}>
                 <Grid item xs={3}>
                     <ArticleSearchFilter />
                 </Grid>

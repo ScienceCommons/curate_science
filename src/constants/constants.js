@@ -8,7 +8,7 @@ var C = {
 		},
 	    {
 			id: "REPLICATION",
-			label: "Replication(s)?",
+			label: "Replication",
 			relevant_sections: ['replication', 'studies']
 		},
         {
@@ -125,27 +125,32 @@ var C = {
 		{
 			id: "prereg",
 			label: "Preregistration",
-			icon: "prereg"
+			icon: "prereg",
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY']
 		},
 		{
 			id: "materials",
 			label: "Public Materials",
-			icon: "materials"
+			icon: "materials",
+			article_types: ['ORIGINAL']
 		},
 		{
 			id: "data",
 			label: "Public Data",
-			icon: "data"
+			icon: "data",
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY']
 		},
 		{
 			id: "code",
 			label: "Public Code",
-			icon: "code"
+			icon: "code",
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY']
 		},
 		{
 			id: "repstd",
 			label: "Reporting Standards",
-			icon: "repstd"
+			icon: "repstd",
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH']
 		}
 	]
 }

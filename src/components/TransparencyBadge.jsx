@@ -1,4 +1,7 @@
 import React from 'react';
+
+import PropTypes from 'prop-types';
+
 import C from '../constants/constants';
 
 
@@ -32,14 +35,26 @@ class TransparencyBadge extends React.Component {
 			   </a>
 	}
 
-	render() {
-		let relevant_transparencies = C.TRANSPARENCY_BADGES.filter(bf => true) // TODO
-		return relevant_transparencies.map(this.render_feature)
+	relevant_badges() {
+		let {article_type} = this.props
+		return C.TRANSPARENCY_BADGES.filter((tb) => {
+			return tb.article_types.includes(article_type)
+		})
 	}
+
+	render() {
+		return this.relevant_badges().map(this.render_feature)
+	}
+}
+
+TransparencyBadge.propTypes = {
+	transparencies: PropTypes.array,
+	article_type: PropTypes.string.required
 }
 
 TransparencyBadge.defaultProps = {
 	transparencies: [], // List of objects (see Transparency serializer)
+	article_type: "ORIGINAL",
 	icon_size: 30
 };
 

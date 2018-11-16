@@ -24,7 +24,7 @@ const styles = theme => ({
         color: 'black'
     },
     topBar: {
-        background: 'linear-gradient(0deg, #EEE 30%, #CCC 90%)',
+        background: 'linear-gradient(0deg, #EEE 10%, #BBB 100%)',
         boxShadow: 'none'
     },
     grow: {

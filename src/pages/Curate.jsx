@@ -100,7 +100,11 @@ class Curate extends React.Component {
 			show_replication = at.relevant_sections.indexOf('replication') > -1
 		}
 		return (
-			<form noValidate autoComplete="off" className={classes.root}>
+			<form noValidate
+				autoComplete="off"
+				action="/api/articles/create/"
+				method="POST"
+				className={classes.root}>
 				<Grid container className={classes.root} spacing={24}>
 					<Grid xs={12} item>
 						<Typography variant="h4">Add/Edit Article</Typography>
@@ -114,6 +118,7 @@ class Curate extends React.Component {
 				          value={formdata.title || ''}
 				          onChange={this.handleChange('title')}
 				          margin="normal"
+				          name="title"
 				          fullWidth
 				          required
 				          variant="outlined"
@@ -238,7 +243,7 @@ class Curate extends React.Component {
 					</Grid>
 
 					<Grid item xs={6}>
-						<Button variant="contained" color="primary" size="large">Save</Button>
+						<Button variant="contained" color="primary" size="large" type="submit">Save</Button>
 						<Button size="large">Cancel</Button>
 					</Grid>
 
