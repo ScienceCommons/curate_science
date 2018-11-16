@@ -20,12 +20,12 @@ class JournalSelector extends React.Component {
 
 	render() {
 		let {classes, name} = this.props
-        let suggestions = [
-            {value: "Nature", label: "Nature"},
-            {value: "Science", label: "Science"}
-        ] // TOOD
 		return (
-			<AutocompleteReactSelect suggestions={suggestions}
+			<AutocompleteReactSelect
+                                     creatable
+                                     labelProp="text"
+                                     listUrl="/api/journals/autocomplete/"
+                                     createUrl="/api/journals/create/"
                                      placeholder="Journal name *"
                                      onChange={this.handleChange} />
         )

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Select from 'react-select';
+import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import NoSsr from '@material-ui/core/NoSsr';
@@ -11,11 +12,12 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import debounce from 'lodash.debounce';
+
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    height: 250,
+    marginBottom: 15
   },
   input: {
     display: 'flex',
@@ -45,8 +47,8 @@ const styles = theme => ({
   },
   placeholder: {
     position: 'absolute',
-    left: 2,
-    fontSize: 16,
+    left: 10,
+    fontSize: 14,
   },
   paper: {
     position: 'absolute',
@@ -169,21 +171,84 @@ const components = {
 };
 
 class AutocompleteReactSelect extends React.Component {
-  state = {
-    single: null,
-    multi: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null
+    };
 
-  handleChange = name => value => {
+    this.handleChange = this.handleChange.bind(this)
+    this.loadOptions = debounce(this.loadOptions.bind(this), 400)
+    this.validateNew = this.validateNew.bind(this)
+    this.createOption = this.createOption.bind(this)
+    this.filterOption = this.filterOption.bind(this)
+    this.renderOptionLabel = this.renderOptionLabel.bind(this)
+    this.renderOptionValue = this.renderOptionValue.bind(this)
+    this.newOptionData = this.newOptionData.bind(this)
+    this.formatCreateLabel = this.formatCreateLabel.bind(this)
+  }
+
+  handleChange = (value, action) => {
     this.setState({
-      [name]: value,
+      value: value,
     }, () => {
-      this.props.onChange(value)
-    });
-  };
+      this.props.onChange(value, action)
+    })
+  }
+
+  loadOptions(inputValue, cb) {
+    let {listUrl} = this.props
+    this.setState({loading: true}, () => {
+      return fetch(listUrl).then((res) => {
+        return res.json()
+      }).then((json) => {
+        return this.setState({loading: false}, () => {
+          cb(json.results)
+        })
+      })
+    })
+  }
+
+  validateNew(inputValue, selectValue, selectOptions) {
+    let valid = inputValue.length >= 3
+    return valid
+  }
+
+  createOption(d) {
+
+  }
+
+  filterOption(op, text) {
+    let {labelProp} = this.props
+    if (text.length == 0) return false
+    else return op.label != null && op.label.toLowerCase().indexOf(text.toLowerCase()) > -1
+  }
+
+  renderOptionLabel(option) {
+    let {labelProp} = this.props
+    return option[labelProp]
+  }
+
+  renderOptionValue(option) {
+    let {labelProp} = this.props
+    return option[labelProp]
+  }
+
+  formatCreateLabel(inputValue) {
+    return <span>{ `Create '${inputValue}'` }</span>
+  }
+
+  newOptionData(inputValue, optionLabel) {
+    let {labelProp} = this.props
+    let op = {id: '0'}
+    op[labelProp] = inputValue
+    op.label = inputValue
+    return op
+  }
 
   render() {
-    const { classes, theme, suggestions, placeholder } = this.props;
+    const { classes, theme, suggestions, placeholder, creatable, multi, labelProp } = this.props;
+    let {loading} = this.state
 
     const selectStyles = {
       input: base => ({
@@ -194,18 +259,42 @@ class AutocompleteReactSelect extends React.Component {
         },
       }),
     };
+    let sel
+    let params = {
+      classes: classes,
+      styles: selectStyles,
+      components: components,
+      value: this.state.value,
+      placeholder: placeholder
+    }
+    if (creatable) {
+      sel = (
+        <AsyncCreatableSelect
+          onChange={this.handleChange}
+          cacheOptions={false}
+          isLoading={loading}
+          allowCreateWhileLoading
+          isValidNewOption={this.validateNew}
+          filterOption={this.filterOption}
+          getOptionLabel={this.renderOptionLabel}
+          getOptionValue={this.renderOptionValue}
+          getNewOptionData={this.newOptionData}
+          formatCreateLabel={this.formatCreateLabel}
+          loadOptions={this.loadOptions}
+          isMulti={multi}
+          {...params} />
+        )
+    } else {
+      sel = (
+        <Select
+          onChange={this.handleChange}
+          {...params} />
+      )
+    }
     return (
       <div className={classes.root}>
         <NoSsr>
-          <Select
-            classes={classes}
-            styles={selectStyles}
-            options={suggestions}
-            components={components}
-            value={this.state.single}
-            onChange={this.handleChange('single')}
-            placeholder={placeholder}
-          />
+          { sel }
         </NoSsr>
       </div>
     );
@@ -213,14 +302,24 @@ class AutocompleteReactSelect extends React.Component {
 }
 
 AutocompleteReactSelect.defaultProps = {
-  placeholder: "Start typing..."
+  placeholder: "Start typing...",
+  creatable: false,
+  listUrl: null,
+  createUrl: null,
+  labelProp: 'name',
+  multi: false
 }
 
 AutocompleteReactSelect.propTypes = {
+  creatable: PropTypes.bool,
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  suggestions: PropTypes.array,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  creatable: PropTypes.bool,
+  listUrl: PropTypes.string,
+  createUrl: PropTypes.string,
+  labelProp: PropTypes.string,
+  multi: PropTypes.bool
 };
 
 export default withStyles(styles, { withTheme: true })(AutocompleteReactSelect);

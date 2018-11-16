@@ -12,6 +12,8 @@ import TransparencyEditor from '../components/TransparencyEditor.jsx';
 import StudyLI from '../components/listitems/StudyLI.jsx';
 import DOILookup from '../components/curateform/DOILookup.jsx';
 import StudyEditor from '../components/curateform/StudyEditor.jsx';
+import JournalSelector from '../components/curateform/JournalSelector.jsx';
+import AuthorSelector from '../components/curateform/AuthorSelector.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 import FigureSelector from '../components/curateform/FigureSelector.jsx';
 
@@ -67,6 +69,12 @@ class Curate extends React.Component {
 	    this.setState({formdata});
   	}
 
+    handleValueChange = prop => value => {
+    	let {formdata} = this.state
+    	formdata[prop] = value
+	    this.setState({formdata});
+  	}
+
   	toggleStudyEditor(open) {
   		this.setState({study_editor_open: open})
   	}
@@ -83,11 +91,9 @@ class Curate extends React.Component {
 		//
 		const { classes } = this.props;
 		let {formdata, study_editor_open, studies, study_editor_study} = this.state
-		console.log(C.ARTICLE_TYPES)
 		let at = find(C.ARTICLE_TYPES, {id: formdata.type || 'ORIGINAL'})
 		let show_reanalysis, show_commentary, show_study_section, show_replication
 		if (at != null) {
-			console.log(at)
 			show_reanalysis = at.relevant_sections.indexOf('reanalysis') > -1
 			show_commentary = at.relevant_sections.indexOf('commentary') > -1
 			show_study_section = at.relevant_sections.indexOf('studies') > -1
@@ -114,27 +120,11 @@ class Curate extends React.Component {
 				        />
 				    </Grid>
 				    <Grid item xs={6}>
-				        <TextField
-				          id="authors"
-				          label="Authors"
-				          className={classes.textField}
-				          value={formdata.authors || ''}
-				          onChange={this.handleChange('authors')}
-				          margin="normal"
-				          fullWidth
-				          required
-				          variant="outlined"
-				        />
-				        <TextField
-				          id="journal"
-				          label="Journal name"
-				          className={classes.textField}
-				          value={formdata.journal}
-				          onChange={this.handleChange('journal')}
-				          margin="normal"
-				          fullWidth
-				          variant="outlined"
-				        />
+
+				        <AuthorSelector />
+
+				        <JournalSelector onChange={this.handleValueChange('journal')} />
+
 				    </Grid>
 				    <Grid item xs={6}>
 						<FormControl variant="outlined" className={classes.formControl}>
@@ -216,7 +206,7 @@ class Curate extends React.Component {
 
 					<Grid item xs={12}>
 						<Typography variant="h4">Key figures/tables (article-level)</Typography>
-						<FigureSelector />
+						<FigureSelector onChange={""} />
 					</Grid>
 
 					<Grid item xs={12} hidden={!show_reanalysis}>

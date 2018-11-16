@@ -31,7 +31,9 @@ class TransparencyEditor extends React.Component {
         super(props);
         this.state = {
         	tab: 0,
-        	form: {}
+        	form: {
+        		rs: 1
+        	}
         };
 
         this.render_transparency_tab = this.render_transparency_tab.bind(this)

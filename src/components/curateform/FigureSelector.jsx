@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 	FormControl, Select, OutlinedInput, InputBase} from '@material-ui/core';
@@ -56,6 +57,10 @@ class FigureSelector extends React.Component {
             </div>
         )
 	}
+}
+
+FigureSelector.propTypes = {
+    onChange: PropTypes.func.required
 }
 
 FigureSelector.defaultProps = {
