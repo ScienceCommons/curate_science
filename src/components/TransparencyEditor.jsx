@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 	FormControlLabel, Radio, Icon, InputLabel, Input, InputAdornment,
-	AppBar, Typography, Button, TextField} from '@material-ui/core';
+	AppBar, Typography, Button, TextField, Menu, MenuItem} from '@material-ui/core';
 
-import {set} from 'lodash'
+import {set, find} from 'lodash'
 
 import MultiURLInput from '../components/curateform/MultiURLInput.jsx';
 
@@ -14,6 +14,7 @@ import C from '../constants/constants';
 
 const styles = {
     root: {
+    	padding: 10,
 	    flexGrow: 1,
     },
     formControl: {
@@ -26,6 +27,57 @@ const styles = {
     }
 }
 
+class URLInput extends React.Component {
+
+	render() {
+		let {label, urls} = this.props
+		return (
+			<FormControl>
+		        <InputLabel htmlFor="materials">{ label }</InputLabel>
+		        <Input
+		          id="materials"
+		          fullWidth
+		          startAdornment={
+		            <InputAdornment position="start">
+		              <Icon>link</Icon>
+		            </InputAdornment>
+		          }
+		        />
+		    </FormControl>
+			)
+	}
+}
+
+class AddTransparencyMenuItem extends React.Component {
+
+	constructor(props) {
+        super(props);
+        this.add = this.add.bind(this)
+    }
+
+	add() {
+		let {transparency_type} = this.props
+		this.props.onAddTransparency(transparency_type.id)
+	}
+
+	render() {
+		let {transparency_type} = this.props
+		let icon = (
+			<img
+			   src={`/sitestatic/icons/${transparency_type.icon}.svg`}
+			   width={20}
+			   height={20}
+			   type="image/svg+xml" />
+	   )
+		return (
+			<MenuItem onClick={this.add}>
+				{ icon }
+    			{ transparency_type.label }
+			</MenuItem>
+		)
+	}
+}
+
 class TransparencyEditor extends React.Component {
 	constructor(props) {
         super(props);
@@ -33,10 +85,10 @@ class TransparencyEditor extends React.Component {
         	tab: 0,
         	form: {
         		rs: 1
-        	}
+        	},
+        	anchorEl: null
         };
 
-        this.render_transparency_tab = this.render_transparency_tab.bind(this)
         this.RS_TEXT = [
         	"<ol style='margin-top:5px;margin-bottom:5px;padding-left:10px;'><li><strong>Excluded data (subjects/observations):</strong> Full details reported in article.</li>  <li><strong>Experimental conditions:</strong> Full details reported in article.</li><li><strong>Outcome measures:</strong> Full details reported in article.</li>	   <li><strong>Sample size determination:</strong> Full details reported in article.</li></ol><input type='text' name='disclosureDate' placeholder='Retroactive disclosure date (MM/DD/YYYY)' style='color:#999999;' size='35'><br><br><a href='https://psychdisclosure.org/' target='_blank'>Details of the 'Basic 4 (retroactive) reporting standard (2012)'</a>",
 			"<br/><a href='https://trialsjournal.biomedcentral.com/track/pdf/10.1186/s13063-018-2733-1' target='_blank'>Randomized trials of social and psychological interventions (CONSORT-SPI 2018; 26 items)</a> ",
@@ -49,6 +101,10 @@ class TransparencyEditor extends React.Component {
 			"<br/><a href='http://prisma-statement.org/documents/PRISMA%202009%20checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (PRISMA 2009; 27 items)</a>",
 			"<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
 		]
+
+		this.handleCreateMenuClick = this.handleCreateMenuClick.bind(this)
+		this.handleCreateMenuClose = this.handleCreateMenuClose.bind(this)
+		this.addTransparency = this.addTransparency.bind(this)
     }
 
     handleChange = (event, transp, key, value) => {
@@ -61,6 +117,14 @@ class TransparencyEditor extends React.Component {
 	    this.setState({tab: value })
 	}
 
+	handleCreateMenuClick = event => {
+	    this.setState({ anchorEl: event.currentTarget });
+	}
+
+	handleCreateMenuClose = () => {
+	    this.setState({ anchorEl: null });
+	}
+
 	renderRSText(idx) {
 		if (idx == null) idx = 0
 		return {__html: this.RS_TEXT[idx]}
@@ -70,28 +134,21 @@ class TransparencyEditor extends React.Component {
 
 	}
 
-	render_transparency_tab(f) {
-		let {transparencies, icon_size, classes} = this.props
-		let icon = <img
-					   src={`/sitestatic/icons/${f.icon}.svg`}
-					   width={icon_size}
-					   height={icon_size}
-					   type="image/svg+xml" />
-        return <Tab key={f.icon} className={classes.tab}
-        			icon={icon}
-        			label={f.label}
-        			size="small" />
+	addTransparency(type) {
+		this.props.onAddTransparency(type)
+		this.handleCreateMenuClose()
 	}
 
-	render_tab_content() {
+	render_transparency(transparency, i) {
 		let {classes} = this.props
-		let {tab, form} = this.state
-		let tb = C.TRANSPARENCY_BADGES[tab]
-		let tab_content
+		let {form} = this.state
+		console.log(transparency)
+		let tb = find(C.TRANSPARENCY_BADGES, {id: transparency.transparency_type})
+		let content
 		let protocol_url // TODO
 		if (tb.id == 'prereg') {
-			tab_content = (
-				<div>
+			content = (
+				<div key={i}>
 					<FormControl component="fieldset" className={classes.formControl}>
 			          <FormLabel component="legend">Preregistration Type</FormLabel>
 			          <RadioGroup
@@ -118,13 +175,13 @@ class TransparencyEditor extends React.Component {
 		        </div>
 				)
 		} else if (tb.id == 'materials') {
-			tab_content = <MultiURLInput label="Study materials URL" urls={[""]} onAddURL={this.addTransparencyURL('materials')} />
+			content = <URLInput label="Study materials URL" urls={[""]} />
 		} else if (tb.id == 'data') {
-			tab_content = <MultiURLInput label="Data URL" urls={[""]} onAddURL={this.addTransparencyURL('data')} />
+			content = <URLInput label="Data URL" urls={[""]} />
 		} else if (tb.id == 'code') {
-			tab_content = <MultiURLInput label="Code URL" urls={[""]} onAddURL={this.addTransparencyURL('code')} />
+			content = <URLInput label="Code URL" urls={[""]} />
 		} else if (tb.id == 'repstd') {
-			tab_content = (
+			content = (
 				<div id="rs1">
 					<span>Compliance to relevant reporting standard:</span>
 					<br/>
@@ -145,26 +202,51 @@ class TransparencyEditor extends React.Component {
 				</div>
 			)
 		}
-		return tab_content
+		return content
+	}
+
+	render_create_menu() {
+		const { anchorEl } = this.state;
+		let relevant_transparencies = C.TRANSPARENCY_BADGES.filter(bf => true) // TODO
+		return (
+			<div>
+		        <Button
+		          aria-owns={anchorEl ? 'simple-menu' : undefined}
+		          aria-haspopup="true"
+		          onClick={this.handleCreateMenuClick}
+		        >
+		        	<Icon>add</Icon>
+	  	          Add Transparency
+		        </Button>
+		        <Menu
+		          id="simple-menu"
+		          anchorEl={anchorEl}
+		          open={Boolean(anchorEl)}
+		          onClose={this.handleCreateMenuClose}
+		        >
+		        	{ relevant_transparencies.map((tt, i) => {
+		        		return <AddTransparencyMenuItem
+		        					key={i}
+		        					onAddTransparency={this.addTransparency}
+		        					transparency_type={tt} />
+		        	})}
+		        </Menu>
+		      </div>
+		)
 	}
 
 	render() {
-		let {classes} = this.props
-		let relevant_transparencies = C.TRANSPARENCY_BADGES.filter(bf => true) // TODO
+		let {classes, transparencies} = this.props
+
 		return (
 			<Paper className={classes.root}>
-			    <Tabs
-		          value={this.state.tab}
-		          onChange={this.handleTabChange}
-		          fullWidth
-		          indicatorColor="primary"
-		          textColor="secondary"
-		        >
-			    	{ relevant_transparencies.map(this.render_transparency_tab) }
-			    </Tabs>
-			    <Typography component="div" style={{ padding: 8 * 3 }}>
-			    { this.render_tab_content() }
-			    </Typography>
+			    <Typography component="h3">Transpariences</Typography>
+			    { transparencies.map((t, i) => {
+			    	return this.render_transparency(t, i)
+			    }) }
+			    <div>
+			    { this.render_create_menu() }
+			    </div>
 	        </Paper>
 		)
 	}

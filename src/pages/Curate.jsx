@@ -141,6 +141,7 @@ class Curate extends React.Component {
 					            onChange={this.handleChange('research_area')}
 					            input={
 					              <OutlinedInput
+					                labelWidth={100}
 					                name="research_area"
 					                id="research_area"
 					              />
@@ -166,6 +167,7 @@ class Curate extends React.Component {
 					            onChange={this.handleChange('type')}
 					            input={
 					              <OutlinedInput
+  	                                labelWidth={80}
 					                name="type"
 					                id="type"
 					              />
@@ -199,10 +201,6 @@ class Curate extends React.Component {
 				          variant="outlined"
 				        />
 				    </Grid>
-					<Grid item xs={12}>
-						<Typography variant="h4">Transparency (article-level)</Typography>
-						<TransparencyEditor />
-					</Grid>
 
 					<Grid item xs={12}>
 						<Typography variant="h4">Key figures/tables (article-level)</Typography>
@@ -235,7 +233,7 @@ class Curate extends React.Component {
 						{ studies.map(study => <StudyLI key={study.id}
 														study={study}
 														showReplicationDetails={show_replication}
-														showEditIcon={true} />) }
+														showActions={true} />) }
 						<Button variant="contained" onClick={this.openStudyEditor}>Add Study</Button>
 					</Grid>
 

@@ -24,12 +24,14 @@ class StudyEditor extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-			formdata: {}
+			formdata: {},
+			transparencies: []
 		};
 
 		this.handleChange = this.handleChange.bind(this)
 		this.handleFigureChange = this.handleFigureChange.bind(this)
 		this.renderReplicationInput = this.renderReplicationInput.bind(this)
+		this.handleAddTransparency = this.handleAddTransparency.bind(this)
 
 		this.replicationInputs = [
 			{
@@ -119,6 +121,10 @@ class StudyEditor extends React.Component {
 		this.setState({formdata})
 	}
 
+	handleAddTransparency(tt) {
+		this.setState({transparencies: this.state.transparencies.concat({transparency_type: tt})})
+	}
+
 	renderReplicationInput(params) {
 		let {classes} = this.props
 		let {formdata} = this.state
@@ -168,7 +174,7 @@ class StudyEditor extends React.Component {
 
 	render() {
 		const { classes, open, editStudy } = this.props;
-		let {formdata} = this.state
+		let {formdata, transparencies} = this.state
 		let creating_new = editStudy == null
 		return (
 			<div>
@@ -194,15 +200,24 @@ class StudyEditor extends React.Component {
 
 					<Grid container style={{padding: 10, marginTop: 70}}>
 
-						<TransparencyEditor />
+						<Grid item xs={6}>
+							<TransparencyEditor
+								transparencies={transparencies}
+								onAddTransparency={this.handleAddTransparency} />
+						</Grid>
 
-						<Typography variant="h5">Original Article/Study</Typography>
+						<Grid item xs={6}>
+							<Typography variant="h5">Original Article/Study</Typography>
+						</Grid>
 
-						<ArticleSelector selectStudy={true} />
+						<Grid item xs={6}>
+							<ArticleSelector selectStudy={true} />
+						</Grid>
 
-						<Typography variant="h5" gutterBottom>Key Figures/Tables</Typography>
-
-						<FigureSelector figure_urls={formdata.figure_urls || [""]} onChange={this.handleFigureChange} />
+						<Grid item xs={6}>
+							<Typography variant="h5" gutterBottom>Key Figures/Tables</Typography>
+							<FigureSelector figure_urls={formdata.figure_urls || [""]} onChange={this.handleFigureChange} />
+						</Grid>
 
 						<Typography variant="h5" gutterBottom>Replication Details</Typography>
 

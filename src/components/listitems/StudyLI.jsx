@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+import {Card, CardActions, CardContent, Icon} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -38,7 +36,16 @@ class StudyLI extends React.Component {
     }
 
 	render() {
- 	    let { classes, study, ofMultiple, showEditIcon, showReplicationDetails} = this.props;
+ 	    let { classes, study, ofMultiple, showActions, showReplicationDetails} = this.props;
+ 	    let actions = (
+ 	    	<CardActions>
+ 	    		<Button>Edit</Button>
+ 	    		<Button>
+ 	    			<Icon>delete</Icon>
+ 	    			Delete
+ 	    		</Button>
+    		</CardActions>
+		)
 		return (
 			<Card className={classes.card}>
 				<CardContent>
@@ -66,9 +73,8 @@ class StudyLI extends React.Component {
 							</Grid>
 						</Grid>
 					</div>
-
-					{ showEditIcon ? <Button>Edit</Button> : null }
 	  			</CardContent>
+				{ showActions ? actions : null }
 			</Card>
 		)
 	}
@@ -77,12 +83,12 @@ class StudyLI extends React.Component {
 StudyLI.defaultProps = {
 	study: {},
 	ofMultiple: true,
-	showEditIcon: false
+	showActions: false
 };
 
 StudyLI.propTypes = {
   classes: PropTypes.object.isRequired,
-  showEditIcon: PropTypes.bool,
+  showActions: PropTypes.bool,
   showReplicationDetails: PropTypes.bool
 };
 

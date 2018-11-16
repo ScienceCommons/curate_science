@@ -135,12 +135,12 @@ class TopBar extends React.Component {
             <div>
                 <List>
                     <Link to="/about">
-                        <ListItem button key="about">
+                        <ListItem key="about">
                             <ListItemText primary="About" />
                         </ListItem>
                     </Link>
                     <Link to="/faq">
-                        <ListItem button key="faq">
+                        <ListItem key="faq">
                             <ListItemText primary={"FAQ"} />
                         </ListItem>
                     </Link>

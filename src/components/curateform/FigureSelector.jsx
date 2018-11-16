@@ -19,7 +19,7 @@ class FigureSelector extends React.Component {
     addFigure() {
     	let {figure_urls} = this.props
     	figure_urls.push("")
-    	this.props.onChange(figure_urls)
+    	if (this.props.onChange != null) this.props.onChange(figure_urls)
     }
 
     deleteFigure(idx) {
