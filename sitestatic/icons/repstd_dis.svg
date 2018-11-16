@@ -15,15 +15,22 @@
                     <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
                     <use fill="#ADADAD" fill-rule="evenodd" xlink:href="#path-1"></use>
                 </g>
-                <g id="Reporting-Icon" transform="translate(27.000000, 23.000000)">
-                    <g id="Rectangle">
-                        <rect fill="#FFFFFF" opacity="0.587262835" x="0" y="0" width="35" height="44" rx="2"></rect>
-                        <rect fill="#FFFFFF" x="4" y="3" width="35" height="44" rx="2"></rect>
-                        <rect fill="#D8D8D8" x="18" y="16" width="17" height="3"></rect>
-                        <rect fill="#D8D8D8" x="8" y="20" width="27" height="3"></rect>
-                        <rect fill="#D8D8D8" x="8" y="24" width="27" height="3"></rect>
-                        <rect fill="#D8D8D8" x="8" y="28" width="27" height="3"></rect>
+                <g id="Reporting-Icon" transform="translate(23.000000, 19.000000)">
+                    <g stroke-width="1" transform="translate(5.769231, 5.638298)" id="Rectangle" stroke="#FFFFFF">
+                        <rect stroke-width="3" x="1.5" y="1.5" width="31.6153846" height="40.9787234" rx="2"></rect>
                     </g>
+                    <ellipse id="Oval" stroke="#FFFFFF" stroke-width="2" fill-opacity="0" fill="#D8D8D8" cx="23.0769231" cy="5.63829787" rx="3.46153846" ry="3.38297872"></ellipse>
+                    <g stroke-width="1" transform="translate(8.076923, 7.893617)" fill="#FFFFFF" fill-opacity="0.595391757" id="Rectangle">
+                        <rect x="0" y="0" width="30" height="39.4680851" rx="2"></rect>
+                    </g>
+                    <g stroke-width="1" transform="translate(13.846154, 6.765957)" fill="#FFFFFF" id="Rectangle">
+                        <rect x="0" y="0" width="18.4615385" height="3.38297872" rx="1.69148936"></rect>
+                    </g>
+                    <rect id="Rectangle" stroke="#FFFFFF" stroke-width="1" fill-opacity="0.362007473" fill="#FFFFFF" x="13.1923077" y="15.1595745" width="4.76923077" height="4.63829787"></rect>
+                    <rect id="Rectangle" stroke="#FFFFFF" stroke-width="1" fill-opacity="0.362007473" fill="#FFFFFF" x="13.1923077" y="23.0531915" width="4.76923077" height="4.63829787"></rect>
+                    <rect id="Rectangle" stroke="#FFFFFF" stroke-width="1" fill-opacity="0.362007473" fill="#FFFFFF" x="13.1923077" y="30.9468085" width="4.76923077" height="4.63829787"></rect>
+                    <ellipse id="Oval" fill="#FFFFFF" cx="34.0384615" cy="31.0106383" rx="9.80769231" ry="9.58510638"></ellipse>
+                    <polygon id="Path" fill="#8E8E8E" points="27.6923077 32.1804361 32.9596237 36.399608 41.0223292 27.8018735 38.7268257 25.9361702 32.9596237 32.4856804 29.4246619 29.7162007"></polygon>
                 </g>
             </g>
         </g>
