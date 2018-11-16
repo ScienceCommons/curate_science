@@ -99,7 +99,7 @@ class ArticleDetail extends React.Component {
 		      			<Typography className={classes.journal} gutterBottom>
 			      			<JournalDOIBadge journal={article.journal} doi={article.doi} />
 		      			</Typography>
-						<TransparencyBadge transparencies={article.transparencies} />
+						<TransparencyBadge studies={article.studies} />
 
 						<Keywords keywords={article.keywords} />
 						<Typography className={classes.label} color="textSecondary" gutterBottom>

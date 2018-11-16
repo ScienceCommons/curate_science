@@ -50,7 +50,7 @@ class StudyLI extends React.Component {
 			<Card className={classes.card}>
 				<CardContent>
 					{ ofMultiple ? <Typography className={classes.studyNum} color="textSecondary" gutterBottom>{ "STUDY " + study.study_number }</Typography> : null }
-					<TransparencyBadge transparencies={study.transparencies} />
+					<TransparencyBadge transparencies={study.transparencies} study_level={true} />
 
 					<div hidden={!showReplicationDetails}>
 						<Typography variant="h5">Replication Details</Typography>

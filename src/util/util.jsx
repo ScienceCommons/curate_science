@@ -26,3 +26,8 @@ export const printDate = (date, tz, opts) => {
     }
 }
 
+export const truncate = (s, _chars) => {
+    let chars = _chars || 30;
+    if (s.length > chars) return s.substring(0, _chars) + '...';
+    else return s;
+}
