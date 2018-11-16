@@ -21,7 +21,7 @@ import C from '../constants/constants';
 
 const styles = theme => ({
     sitename: {
-        color: 'black'
+        color: 'white'
     },
     topBar: {
         background: 'linear-gradient(0deg, #EEE 10%, #BBB 100%)',

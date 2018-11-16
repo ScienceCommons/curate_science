@@ -76,7 +76,7 @@ class ArticleDetail extends React.Component {
 		const { classes } = this.props;
 		let {match} = this.props
 		let {article} = this.state
-		if (article == null) return <p>Loading...</p>
+		if (article == null) return <Typography>Loading...</Typography>
 		let update_date = new Date(article.updated)
 		let plural = article.studies.length > 1
 		return (
@@ -115,11 +115,11 @@ class ArticleDetail extends React.Component {
   				    </CardContent>
 				</Card>
 
-				<Typography variant="h4" color="textSecondary" gutterBottom>{ plural ? "Studies" : "Study" }</Typography>
+				<Typography variant="h5" color="textSecondary" gutterBottom>{ plural ? "Studies" : "Study" }</Typography>
 
 				{ article.studies.map(this.render_study) }
 
-				<Typography variant="h4" color="textSecondary" gutterBottom>Related Articles/Collections</Typography>
+				<Typography variant="h5" color="textSecondary" gutterBottom>Related Articles/Collections</Typography>
 
 				<p>...</p>
 

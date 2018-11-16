@@ -18,7 +18,21 @@ import qs from 'query-string';
 
 const styles = {
     root: {
-        padding: 10
+        padding: 13
+    },
+    category: {
+        marginTop: 10
+    },
+    checkboxLabel: {
+        margin: 0,
+        padding: 0
+    },
+    checkbox: {
+        margin: 0,
+        padding: 7
+    },
+    group: {
+        margin: 0
     }
 };
 
@@ -84,10 +98,11 @@ class ArticleSearchFilter extends React.Component {
 	}
 
     render_category(cat) {
+        let {classes} = this.props
     	return (
-			<FormControl component="fieldset" key={cat.category}>
+			<FormControl component="fieldset" key={cat.category} className={classes.category}>
     		    <FormLabel component="legend">{ cat.label }</FormLabel>
-                <FormGroup>
+                <FormGroup className={classes.group}>
 				{ cat.items.map(this.render_item) }
 				</FormGroup>
 			</FormControl>
@@ -95,18 +110,21 @@ class ArticleSearchFilter extends React.Component {
     }
 
     render_item(item) {
+        let {classes} = this.props
     	return (
     		<FormControlLabel
-   			key={item.id}
-	          control={
-	            <Checkbox
-	              checked={this.item_selected(item)}
-	              onChange={this.handleFilterItemCheck(item)}
-	              value={item.id}
-	              color="primary"
-	            />
-	          }
-	          label={item.label}
+       			key={item.id}
+                className={classes.checkboxLabel}
+	            control={
+    	            <Checkbox
+    	              checked={this.item_selected(item)}
+                      className={classes.checkbox}
+    	              onChange={this.handleFilterItemCheck(item)}
+    	              value={item.id}
+    	              color="primary"
+    	            />
+    	          }
+                label={item.label}
 	        />
 		)
 	}
@@ -116,7 +134,7 @@ class ArticleSearchFilter extends React.Component {
  	    let { filter_changes } = this.state;
 		return (
 			<div className={classes.root}>
-				<Typography variant="h3">Filter Articles</Typography>
+				<Typography variant="h5">Filter Articles</Typography>
 
 				<div>
 				{ C.FILTERS.map(this.render_category) }
