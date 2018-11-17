@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TransparencyEditor from '../../components/TransparencyEditor.jsx';
 import ArticleSelector from '../../components/curateform/ArticleSelector.jsx';
 import FigureSelector from '../../components/curateform/FigureSelector.jsx';
+import AutocompleteReactSelect from '../../components/AutocompleteReactSelect.jsx';
 
 import {merge} from 'lodash'
 
@@ -30,6 +31,7 @@ class StudyEditor extends React.Component {
 		};
 
 		this.handleChange = this.handleChange.bind(this)
+		this.handleValueChange = this.handleValueChange.bind(this)
 		this.handleFigureChange = this.handleFigureChange.bind(this)
 		this.renderReplicationInput = this.renderReplicationInput.bind(this)
 		this.handleAddTransparency = this.handleAddTransparency.bind(this)
@@ -75,26 +77,30 @@ class StudyEditor extends React.Component {
 			{
 				name: 'ivs',
 				label: 'IVs',
-				type: 'text',
-				placeholder: "e.g., 'erotica exposure vs. control'"
+				type: 'autocomplete',
+				placeholder: "e.g., 'erotica exposure vs. control'",
+				list_url: '/api/constructs/autocomplete/'
 			},
 			{
 				name: 'dvs',
 				label: 'DVs',
-				type: 'text',
-				placeholder: "e.g., 'partner love'"
+				type: 'autocomplete',
+				placeholder: "e.g., 'partner love'",
+				list_url: '/api/constructs/autocomplete/'
 			},
 			{
 				name: 'iv.methods',
 				label: 'IV methods',
-				type: 'text',
-				placeholder: "e.g., 'Playboy centerfolds vs. abstract art images'"
+				type: 'autocomplete',
+				placeholder: "e.g., 'Playboy centerfolds vs. abstract art images'",
+				list_url: '/api/methods/autocomplete/'
 			},
 			{
 				name: 'dv.methods',
 				label: 'DV methods',
-				type: 'text',
-				placeholder: "e.g., 'Rubin Love Scale (13-item)'"
+				type: 'autocomplete',
+				placeholder: "e.g., 'Rubin Love Scale (13-item)'",
+				list_url: '/api/methods/autocomplete/'
 			}
 		]
 	}
@@ -116,6 +122,12 @@ class StudyEditor extends React.Component {
 		this.setState({formdata})
 	}
 
+	handleValueChange = prop => value => {
+		let {formdata} = this.state
+		formdata[prop] = value
+		this.setState({formdata})
+	}
+
 	handleFigureChange = figure_array => {
 		let {formdata} = this.state
 		formdata.figure_urls = figure_array
@@ -129,7 +141,17 @@ class StudyEditor extends React.Component {
 	renderReplicationInput(params) {
 		let {classes} = this.props
 		let {formdata} = this.state
-		if (params.type == 'text') {
+		if (params.type == 'autocomplete') {
+			return (
+			<AutocompleteReactSelect
+                                 creatable
+                                 labelProp="text"
+                                 listUrl={params.list_url}
+                                 placeholder={params.label}
+                                 multi
+                                 onChange={this.handleValueChange(params.name)} />
+			)
+		} else if (params.type == 'text') {
 			return (
 				<TextField
 			          id={params.name}
