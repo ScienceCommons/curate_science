@@ -34,11 +34,11 @@ var C = {
 	],
 	RESEARCH_AREAS: [
 		{
-			id: "social_science",
+			id: "SOCIAL_SCIENCE",
 			label: "Social Sciences"
 		},
 		{
-			id: "medical_life",
+			id: "MEDICAL_LIFE_SCIENCE",
 			label: "Medical/Life Sciences"
 		}
 	],

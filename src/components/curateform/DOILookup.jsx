@@ -7,14 +7,17 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
+    error: {
+        color: 'red'
+    },
     inputRoot: {
         color: 'inherit',
         width: '100%',
     },
     inputInput: {
-        paddingTop: theme.spacing.unit,
-        paddingRight: theme.spacing.unit,
-        paddingBottom: theme.spacing.unit,
+        paddingTop: theme.spacing.unit * 2,
+        paddingRight: theme.spacing.unit * 2,
+        paddingBottom: theme.spacing.unit * 2,
         paddingLeft: theme.spacing.unit * 6,
         transition: theme.transitions.create('width'),
         width: '100%',
@@ -29,13 +32,7 @@ const styles = theme => ({
         '&:hover': {
           backgroundColor: fade(theme.palette.common.black, 0.25),
         },
-        marginRight: theme.spacing.unit * 2,
-        marginLeft: 0,
         width: '100%',
-        [theme.breakpoints.up('sm')]: {
-          marginLeft: theme.spacing.unit * 3,
-          width: 'auto',
-        }
     },
     searchIcon: {
         width: theme.spacing.unit * 6,
@@ -53,7 +50,7 @@ class DOILookup extends React.Component {
         super(props);
         this.state = {
         	doi: '',
-        	error: false,
+        	error: null,
         	loading: false,
         	populated: false
         };
@@ -66,14 +63,11 @@ class DOILookup extends React.Component {
 
 	handleChange = event => {
     	let doi = event.target.value
-    	if (event.key == 'Enter') {
-            this.lookup()
-        } else {
-		    this.setState({doi: doi, error: false, populated: false, loading: false});
-        }
+	    this.setState({doi: doi, error: null, populated: false, loading: false});
   	}
 
     handleSearchKeyPress(e) {
+        console.log(e)
         if (e.key == 'Enter') {
             this.lookup()
         }
@@ -93,36 +87,40 @@ class DOILookup extends React.Component {
 		  			this.setState({error: !success, loading: false, populated: success}, () => {
 		  				this.props.onLookup(res.message)
 		  			})
-		    	})
+		    	}, (err) => {
+                    // Failure of fetch or parse
+                    this.setState({error: `Article with DOI '${doi}' not found`, loading: false})
+                })
   			})
   		} else {
-  			this.setState({error: true})
+  			this.setState({error: "DOI too short", loading: false})
   		}
   	}
 
 	render() {
 		let {classes} = this.props
 		let {error, doi, populated, loading} = this.state
-		let ht = error ? "Invalid DOI" : ""
 		let ph = loading ? "Looking up..." : "Lookup by DOI"
 		return (
-			<div className={classes.search}>
-                <div className={classes.searchIcon}>
-                    <Icon>search</Icon>
+            <div>
+    			<div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                        <Icon>search</Icon>
+                    </div>
+                    <InputBase
+                        placeholder={ph}
+                        onChange={this.handleChange}
+                        error={error!=null}
+                        value={doi || ''}
+                        onKeyPress={this.handleSearchKeyPress}
+                        fullWidth={true}
+                        classes={{
+                          root: classes.inputRoot,
+                          input: classes.inputInput,
+                        }}
+                    />
                 </div>
-                <InputBase
-                    placeholder={ph}
-                    onChange={this.handleChange}
-                    error={error}
-                    helperText={ht}
-                    onKeyPress={this.handleSearchKeyPress}
-                    value={doi || ''}
-                    fullWidth={true}
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                />
+                <Typography variant="subtitle1" className={classes.error} hidden={error==null}>{ error }</Typography>
             </div>
         )
 	}

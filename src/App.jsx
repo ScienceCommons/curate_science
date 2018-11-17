@@ -30,7 +30,6 @@ import C from './constants/constants';
 import ArticleLI from './components/ArticleLI.jsx';
 
 import css from './App.css';
-// import url('https://fonts.googleapis.com/css?family=Roboto');
 
 const theme = createMuiTheme({
   palette: {

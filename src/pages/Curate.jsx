@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { withCookies, Cookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
 
 import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
@@ -22,7 +25,7 @@ import {printDate} from '../util/util.jsx'
 
 const styles = {
 	root: {
-		padding: 10
+		padding: 20
 	},
 	textField: {
 
@@ -48,6 +51,8 @@ class Curate extends React.Component {
         this.handleDOILookupResults = this.handleDOILookupResults.bind(this)
         this.openStudyEditor = this.toggleStudyEditor.bind(this, true)
         this.closeStudyEditor = this.toggleStudyEditor.bind(this, false)
+        this.handleCheckChange = this.handleCheckChange.bind(this)
+        this.handleValueChange = this.handleValueChange.bind(this)
         this.saveStudy = this.saveStudy.bind(this)
     }
 
@@ -69,7 +74,7 @@ class Curate extends React.Component {
 	    this.setState({formdata});
   	}
 
-  	handleCheckChange = prop => event => checked => {
+  	handleCheckChange = (prop) => (event, checked) => {
   		let {formdata} = this.state
   		formdata[prop] = checked
 	    this.setState({formdata});
@@ -94,8 +99,7 @@ class Curate extends React.Component {
 
 
 	render() {
-		//
-		const { classes } = this.props;
+		const { classes, cookies } = this.props;
 		let {formdata, study_editor_open, studies, study_editor_study} = this.state
 		let at = find(C.ARTICLE_TYPES, {id: formdata.type || 'ORIGINAL'})
 		let show_reanalysis, show_commentary, show_study_section, show_replication
@@ -105,6 +109,7 @@ class Curate extends React.Component {
 			show_study_section = at.relevant_sections.indexOf('studies') > -1
 			show_replication = at.relevant_sections.indexOf('replication') > -1
 		}
+		let csrf_token = cookies.get('csrftoken')
 		return (
 			<div className={classes.root}>
 				<Typography variant="h4">Add/Edit Article</Typography>
@@ -115,6 +120,8 @@ class Curate extends React.Component {
 					autoComplete="off"
 					action="/api/articles/create/"
 					method="POST">
+
+					<input type="hidden" name="csrfmiddlewaretoken" value={csrf_token} />
 
 					<Grid container className={classes.root} spacing={24}>
 						<Grid xs={12} item>
@@ -183,7 +190,7 @@ class Curate extends React.Component {
 						            input={
 						              <OutlinedInput
 	  	                                labelWidth={80}
-						                name="type"
+						                name="article_type"
 						                id="type"
 						              />
 						            }
@@ -291,8 +298,8 @@ class Curate extends React.Component {
 	}
 }
 
-Curate.defaultProps = {
-
+Curate.propTypes = {
+	cookies: instanceOf(Cookies).isRequired
 }
 
-export default withStyles(styles)(Curate);
+export default withCookies(withStyles(styles)(Curate));
