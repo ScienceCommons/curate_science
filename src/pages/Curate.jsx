@@ -106,182 +106,187 @@ class Curate extends React.Component {
 			show_replication = at.relevant_sections.indexOf('replication') > -1
 		}
 		return (
-			<form noValidate
-				autoComplete="off"
-				action="/api/articles/create/"
-				method="POST"
-				className={classes.root}>
-				<Grid container className={classes.root} spacing={24}>
-					<Grid xs={12} item>
-						<Typography variant="h4">Add/Edit Article</Typography>
+			<div className={classes.root}>
+				<Typography variant="h4">Add/Edit Article</Typography>
 
-						<DOILookup onLookup={this.handleDOILookupResults} />
+				<DOILookup onLookup={this.handleDOILookupResults} />
 
-				        <TextField
-				          id="title"
-				          label="Article title"
-				          className={classes.textField}
-				          value={formdata.title || ''}
-				          onChange={this.handleChange('title')}
-				          margin="normal"
-				          name="title"
-				          fullWidth
-				          required
-				          variant="outlined"
-				        />
-				    </Grid>
-				    <Grid item xs={6}>
+				<form noValidate
+					autoComplete="off"
+					action="/api/articles/create/"
+					method="POST">
 
-				        <AuthorSelector />
+					<Grid container className={classes.root} spacing={24}>
+						<Grid xs={12} item>
 
-				        <JournalSelector onChange={this.handleValueChange('journal')} />
+					        <TextField
+					          id="title"
+					          label="Article title"
+					          className={classes.textField}
+					          value={formdata.title || ''}
+					          onChange={this.handleChange('title')}
+					          margin="normal"
+					          name="title"
+					          fullWidth
+					          required
+					          variant="outlined"
+					        />
+					    </Grid>
+					    <Grid item xs={6}>
 
-				    </Grid>
-				    <Grid item xs={3}>
-						<FormControl
-							variant="outlined"
-							fullWidth
-							className={classes.formControl}>
-					        <InputLabel
-					            ref={ref => {
-					              this.InputLabelRef = ref;
-					            }}
-					            htmlFor="research_area"
+					        <AuthorSelector />
+
+					    </Grid>
+					    <Grid item xs={3}>
+							<FormControl
+								variant="outlined"
+								fullWidth
+								className={classes.formControl}>
+						        <InputLabel
+						            ref={ref => {
+						              this.InputLabelRef = ref;
+						            }}
+						            htmlFor="research_area"
+						          >
+						            Research Area
+						        </InputLabel>
+						        <Select
+						            value={formdata.research_area || "social_science"}
+						            onChange={this.handleChange('research_area')}
+						            input={
+						              <OutlinedInput
+						                labelWidth={100}
+						                name="research_area"
+						                id="research_area"
+						              />
+						            }
+						          >
+						            { C.RESEARCH_AREAS.map((ra) => {
+						            	return <MenuItem key={ra.id} value={ra.id}>{ra.label}</MenuItem>
+						            })}
+						        </Select>
+						    </FormControl>
+						</Grid>
+						<Grid item xs={3}>
+							<FormControl variant="outlined" fullWidth className={classes.formControl}>
+						        <InputLabel
+						            ref={ref => {
+						              this.InputLabelRef = ref;
+						            }}
+						            htmlFor="type"
+						          >
+						            Article Type
+						        </InputLabel>
+						        <Select
+						            value={formdata.type || "ORIGINAL"}
+						            onChange={this.handleChange('type')}
+						            input={
+						              <OutlinedInput
+	  	                                labelWidth={80}
+						                name="type"
+						                id="type"
+						              />
+						            }
+						          >
+						          { C.ARTICLE_TYPES.map((at) => {
+						            	return <MenuItem key={at.id} value={at.id}>{at.label}</MenuItem>
+						            })}
+						        </Select>
+						    </FormControl>
+						</Grid>
+						<Grid item xs={6}>
+					        <JournalSelector onChange={this.handleValueChange('journal')} />
+					    </Grid>
+						<Grid item xs={6}>
+						    <TextField
+					          id="year"
+					          label="Year (YYYY)"
+					          className={classes.textField}
+					          value={formdata.year || ''}
+					          onChange={this.handleChange('year')}
+					          inputProps={{pattern: "\d\d\d\d"}}
+					          type="number"
+					          margin="normal"
+					          variant="outlined"
+					          disabled={formdata.in_press}
+					        />
+
+				    		<FormControlLabel
+					            control={
+				    	            <Checkbox
+				    	              checked={formdata.in_press}
+				    	              onChange={this.handleCheckChange('in_press')}
+				    	              checked={formdata.in_press}
+				    	              value={'in_press'}
+				    	              color="primary"
+				    	            />
+				    	          }
+				                label="In press"
+					        />
+					    </Grid>
+					    <Grid item xs={6}>
+							<TextField
+					          id="abstract"
+					          label="Abstract"
+					          className={classes.textField}
+					          value={formdata.abstract}
+					          onChange={this.handleChange('abstract')}
+					          margin="normal"
+					          fullWidth
+					          multiline
+					          variant="outlined"
+					        />
+					    </Grid>
+
+						<Grid item xs={12} hidden={!show_reanalysis}>
+							<Typography variant="h4">Reanalysis Details</Typography>
+							<FormControl component="fieldset" className={classes.formControl}>
+					          <RadioGroup
+					            aria-label="reanalysis_details"
+					            name="reanalysis_details"
+					            className={classes.group}
+					            value={formdata.reanalysis_details}
 					          >
-					            Research Area
-					        </InputLabel>
-					        <Select
-					            value={formdata.research_area || "social_science"}
-					            onChange={this.handleChange('research_area')}
-					            input={
-					              <OutlinedInput
-					                labelWidth={100}
-					                name="research_area"
-					                id="research_area"
-					              />
-					            }
-					          >
-					            { C.RESEARCH_AREAS.map((ra) => {
-					            	return <MenuItem key={ra.id} value={ra.id}>{ra.label}</MenuItem>
-					            })}
-					        </Select>
-					    </FormControl>
-					</Grid>
-					<Grid item xs={3}>
-						<FormControl variant="outlined" fullWidth className={classes.formControl}>
-					        <InputLabel
-					            ref={ref => {
-					              this.InputLabelRef = ref;
-					            }}
-					            htmlFor="type"
-					          >
-					            Article Type
-					        </InputLabel>
-					        <Select
-					            value={formdata.type || "ORIGINAL"}
-					            onChange={this.handleChange('type')}
-					            input={
-					              <OutlinedInput
-  	                                labelWidth={80}
-					                name="type"
-					                id="type"
-					              />
-					            }
-					          >
-					          { C.ARTICLE_TYPES.map((at) => {
-					            	return <MenuItem key={at.id} value={at.id}>{at.label}</MenuItem>
-					            })}
-					        </Select>
-					    </FormControl>
-					</Grid>
-					<Grid item xs={6}>
-					    <TextField
-				          id="year"
-				          label="Year (YYYY)"
-				          className={classes.textField}
-				          value={formdata.year || ''}
-				          onChange={this.handleChange('year')}
-				          inputProps={{pattern: "\d\d\d\d"}}
-				          type="number"
-				          margin="normal"
-				          variant="outlined"
-				          disabled={formdata.in_press}
-				        />
+					            <FormControlLabel value="reproducibility" control={<Radio />} label="Reproducibility" />
+					            <FormControlLabel value="robustness" control={<Radio />} label="Robustness" />
+					          </RadioGroup>
+					        </FormControl>
+							<ArticleSelector />
+						</Grid>
 
-			    		<FormControlLabel
-				            control={
-			    	            <Checkbox
-			    	              checked={formdata.in_press}
-			    	              onChange={this.handleCheckChange('in_press')}
-			    	              checked={formdata.in_press}
-			    	              value={'in_press'}
-			    	              color="primary"
-			    	            />
-			    	          }
-			                label="In press"
-				        />
+						<Grid item xs={12} hidden={!show_commentary}>
+							<Typography variant="h4">Commentary Details</Typography>
+							<ArticleSelector />
+						</Grid>
 
-						<TextField
-				          id="abstract"
-				          label="Abstract"
-				          className={classes.textField}
-				          value={formdata.abstract}
-				          onChange={this.handleChange('abstract')}
-				          margin="normal"
-				          fullWidth
-				          multiline
-				          variant="outlined"
-				        />
-				    </Grid>
+						<Grid item xs={12}>
+							<Typography variant="h4">Key figures/tables (article-level)</Typography>
+							<FigureSelector />
+						</Grid>
 
-					<Grid item xs={12} hidden={!show_reanalysis}>
-						<Typography variant="h4">Reanalysis Details</Typography>
-						<FormControl component="fieldset" className={classes.formControl}>
-				          <RadioGroup
-				            aria-label="reanalysis_details"
-				            name="reanalysis_details"
-				            className={classes.group}
-				            value={formdata.reanalysis_details}
-				          >
-				            <FormControlLabel value="reproducibility" control={<Radio />} label="Reproducibility" />
-				            <FormControlLabel value="robustness" control={<Radio />} label="Robustness" />
-				          </RadioGroup>
-				        </FormControl>
-						<ArticleSelector />
+						<Grid item xs={12} hidden={!show_study_section}>
+							<Typography variant="h3" gutterBottom>Studies</Typography>
+							{ studies.map(study => <StudyLI key={study.id}
+															study={study}
+															showReplicationDetails={show_replication}
+															showActions={true} />) }
+							<Button variant="contained" onClick={this.openStudyEditor}>Add Study</Button>
+						</Grid>
+
+						<Grid item xs={6}>
+							<Button variant="contained" color="primary" size="large" type="submit">Save</Button>
+						</Grid>
+
 					</Grid>
 
-					<Grid item xs={12} hidden={!show_commentary}>
-						<Typography variant="h4">Commentary Details</Typography>
-						<ArticleSelector />
-					</Grid>
+					<StudyEditor open={study_editor_open}
+								 onClose={this.closeStudyEditor}
+								 onSave={this.saveStudy}
+								 article_type={formdata.type}
+								 editStudy={study_editor_study} />
 
-					<Grid item xs={12}>
-						<Typography variant="h4">Key figures/tables (article-level)</Typography>
-						<FigureSelector />
-					</Grid>
-
-					<Grid item xs={12} hidden={!show_study_section}>
-						<Typography variant="h3" gutterBottom>Studies</Typography>
-						{ studies.map(study => <StudyLI key={study.id}
-														study={study}
-														showReplicationDetails={show_replication}
-														showActions={true} />) }
-						<Button variant="contained" onClick={this.openStudyEditor}>Add Study</Button>
-					</Grid>
-
-					<Grid item xs={6}>
-						<Button variant="contained" color="primary" size="large" type="submit">Save</Button>
-					</Grid>
-
-				</Grid>
-
-				<StudyEditor open={study_editor_open}
-							 onClose={this.closeStudyEditor}
-							 onSave={this.saveStudy}
-							 article_type={formdata.type}
-							 editStudy={study_editor_study} />
-
-			</form>
+				</form>
+			</div>
 		)
 	}
 }

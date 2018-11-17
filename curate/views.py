@@ -32,9 +32,9 @@ def index(request):
 # Endpoint for redesigned pages
 def router_index(request, *args, **kwargs):
     # Get logged in user
-    user = {}
+    auth_js = 'true' if request.user.is_authenticated else 'false'
     # article = json.dumps(model_to_dict(Article.objects.order_by('updated')[0]))
-    return render(request, 'router_index.html', {'user': user})
+    return render(request, 'router_index.html', {'authenticated': auth_js})
 
 @require_http_methods(["GET",])
 def view_article(request, pk):

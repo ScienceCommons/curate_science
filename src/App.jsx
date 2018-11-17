@@ -47,19 +47,19 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            auth: true,
+
         };
     }
 
     render() {
-        const { classes } = this.props;
-        const { auth, anchorEl, search_term } = this.state;
+        const { classes, authenticated } = this.props;
+        const { anchorEl, search_term } = this.state;
         const open = Boolean(anchorEl);
         return (
         	<Router forceRefresh={true} basename="/new">
                 <div className="App">
                     <MuiThemeProvider theme={theme}>
-                        <TopBar auth={auth} />
+                        <TopBar auth={authenticated} />
                         <div className="AppContent">
                             <Switch>
                                 <Route exact path="/" component={Splash} />
@@ -79,7 +79,7 @@ class App extends React.Component {
 }
 
 App.defaultProps = {
-	user: {} // If signed in
+	authenticated: false
 }
 
 export default App;

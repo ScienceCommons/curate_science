@@ -29,7 +29,7 @@ class TransparencyBadge extends React.Component {
 		studies.forEach((study) => {
 			let study_transparencies = study.transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
 			n = n + study_transparencies.length
-			transparencies_by_study[study.id] = study_transparencies
+			transparencies_by_study[study.study_number] = study_transparencies
 		})
 		let enabled = n > 0
 		let label = ''
@@ -55,12 +55,12 @@ class TransparencyBadge extends React.Component {
 				<MouseOverPopover target={badge_icon} key={i}>
 					<div style={{padding: 10}}>
 						<Typography variant="h5">{ f.label }</Typography>
-						{ Object.keys(transparencies_by_study).map((study_id) => {
-							let study_transparencies = transparencies_by_study[study_id]
+						{ Object.keys(transparencies_by_study).map((study_num) => {
+							let study_transparencies = transparencies_by_study[study_num]
 							if (study_transparencies.length == 0) return null
 							return (
 								<p>
-									{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_id}</Typography> : null }
+									{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num}</Typography> : null }
 									{ study_transparencies.map((t, idx) => {
 										return <a href={t.url} target="_blank"><Icon>link</Icon> { truncate(t.url) }</a>
 									}) }

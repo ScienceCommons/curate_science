@@ -7,6 +7,21 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
+    inputRoot: {
+        color: 'inherit',
+        width: '100%',
+    },
+    inputInput: {
+        paddingTop: theme.spacing.unit,
+        paddingRight: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit,
+        paddingLeft: theme.spacing.unit * 6,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+          width: 200,
+        },
+    },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -20,10 +35,10 @@ const styles = theme => ({
         [theme.breakpoints.up('sm')]: {
           marginLeft: theme.spacing.unit * 3,
           width: 'auto',
-        },
+        }
     },
     searchIcon: {
-        width: theme.spacing.unit * 9,
+        width: theme.spacing.unit * 6,
         height: '100%',
         position: 'absolute',
         pointerEvents: 'none',
@@ -58,10 +73,9 @@ class DOILookup extends React.Component {
         }
   	}
 
-
     handleSearchKeyPress(e) {
         if (e.key == 'Enter') {
-            this.refreshSearch()
+            this.lookup()
         }
     }
 

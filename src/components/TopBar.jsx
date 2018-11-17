@@ -96,6 +96,10 @@ class TopBar extends React.Component {
         this.handleSearchKeyPress = this.handleSearchKeyPress.bind(this)
     }
 
+    logout() {
+        window.location.replace('/accounts/logout/')
+    }
+
     handleSearchBoxChange(e) {
         this.setState({search_term: e.target.value})
     }
@@ -191,7 +195,7 @@ class TopBar extends React.Component {
                             <Link to="/about">About</Link>
                         </Typography>
 
-                        {auth && (
+                        {auth ? (
                         <div>
                           <IconButton
                             aria-owns={open ? 'menu-appbar' : undefined}
@@ -215,10 +219,10 @@ class TopBar extends React.Component {
                             open={open}
                             onClose={this.handleClose}
                           >
-                            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={this.logout}>Logout</MenuItem>
                           </Menu>
                         </div>
-                      )}
+                      ) : <a href="/accounts/login/"><Button>Login</Button></a>}
                     </Toolbar>
                 </AppBar>
                 <Drawer open={drawerOpen} onClose={this.toggleDrawer(false)}>

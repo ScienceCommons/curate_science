@@ -35,6 +35,7 @@ urlpatterns = [
 
 
 urlpatterns += [
+    path('', views.index),
     path('api/', api.index, name='api-index'),
     path('api/docs/', include_docs_urls(title="Curate Science API")),
     path('api/schema/', api.schema, name='api-schema'),

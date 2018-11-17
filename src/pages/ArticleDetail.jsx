@@ -1,7 +1,10 @@
 import React from 'react';
 
+import { Link } from "react-router-dom";
+
 import { withStyles } from '@material-ui/core/styles';
 
+import {Button, Icon} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -68,8 +71,10 @@ class ArticleDetail extends React.Component {
 
     render_study(s) {
     	let {article} = this.state
+    	let key_figures = article.key_figures.filter(kf => kf.study == s.id)
+    	if (key_figures == null) key_figures = []
     	let multiple = article.studies != null && article.studies.length > 1
-    	return <StudyLI key={s.id} study={s} ofMultiple={multiple} />
+    	return <StudyLI key={s.id} study={s} ofMultiple={multiple} figures={key_figures} />
     }
 
 	render() {
@@ -81,6 +86,16 @@ class ArticleDetail extends React.Component {
 		let plural = article.studies.length > 1
 		return (
 			<div className={classes.root}>
+				<Grid container>
+					<Grid item xs={12} justify="flex-end">
+						<Link to={`/article/edit/${article.id}`}>
+							<Button variant="contained" color="primary">
+								<Icon>edit</Icon>
+								Edit
+							</Button>
+						</Link>
+					</Grid>
+				</Grid>
 				<Card className={classes.card}>
 	      			<CardContent>
 	      				<Grid container justify="flex-end">
