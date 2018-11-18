@@ -63,13 +63,14 @@ const styles = theme => ({
 });
 
 function NoOptionsMessage(props) {
+  let text = "Start typing to search..."
   return (
     <Typography
       color="textSecondary"
       className={props.selectProps.classes.noOptionsMessage}
       {...props.innerProps}
     >
-      {props.children}
+      {text}
     </Typography>
   );
 }

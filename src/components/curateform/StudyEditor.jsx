@@ -40,8 +40,9 @@ class StudyEditor extends React.Component {
 			{
 				name: 'target.effects',
 				label: 'Target Effects',
-				type: 'text',
-				placeholder: "e.g., 'playboy effect'"
+				type: 'autocomplete',
+				placeholder: "e.g., 'playboy effect'",
+				list_url: "/api/effects/autocomplete/"
 			},
 			{
 				name: 'repl.method.similarity',
@@ -130,7 +131,7 @@ class StudyEditor extends React.Component {
 
 	handleFigureChange = figure_array => {
 		let {formdata} = this.state
-		formdata.figure_urls = figure_array
+		formdata.figures = figure_array
 		this.setState({formdata})
 	}
 
@@ -138,12 +139,13 @@ class StudyEditor extends React.Component {
 		this.setState({transparencies: this.state.transparencies.concat({transparency_type: tt})})
 	}
 
-	renderReplicationInput(params) {
+	renderReplicationInput(params, i) {
 		let {classes} = this.props
 		let {formdata} = this.state
 		if (params.type == 'autocomplete') {
 			return (
 			<AutocompleteReactSelect
+								 key={i}
                                  creatable
                                  labelProp="text"
                                  listUrl={params.list_url}
@@ -166,8 +168,13 @@ class StudyEditor extends React.Component {
 			        />
 				)
 		} else if (params.type == 'select') {
+			let lw = params.label.length * 6
 			return (
-				<FormControl key={params.name} variant="outlined" fullWidth className={classes.formControl}>
+				<FormControl
+					key={params.name}
+					variant="outlined"
+					fullWidth
+					className={classes.formControl}>
 			        <InputLabel
 			            ref={ref => {
 			              this.InputLabelRef = ref;
@@ -183,6 +190,7 @@ class StudyEditor extends React.Component {
 			              <OutlinedInput
 			                name={params.name}
 			                id={params.name}
+			                labelWidth={lw}
 			              />
 			            }
 			          >
@@ -211,7 +219,8 @@ class StudyEditor extends React.Component {
 		return (
 			<div>
 				<Dialog
-				fullWidth
+					fullWidth
+					maxWidth='lg'
 					open={open}
 					onClose={this.handleClose}
 					TransitionComponent={Transition}
@@ -228,7 +237,7 @@ class StudyEditor extends React.Component {
 								onAddTransparency={this.handleAddTransparency} />
 
 						<Typography variant="h5" gutterBottom>Key Figures/Tables</Typography>
-						<FigureSelector figure_urls={formdata.figure_urls || [""]} onChange={this.handleFigureChange} />
+						<FigureSelector figures={formdata.figures || []} onChange={this.handleFigureChange} />
 
 						{ replication_details }
 					</DialogContent>

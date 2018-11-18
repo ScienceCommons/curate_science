@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 	FormControl, Select, OutlinedInput, InputBase} from '@material-ui/core';
 
+import FigureList from '../shared/FigureList.jsx';
+
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {}
@@ -12,47 +14,63 @@ class FigureSelector extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
+            form: {
+                url: ''
+            }
         };
         this.addFigure = this.addFigure.bind(this)
+        this.handleDelete = this.handleDelete.bind(this)
+    }
+
+    validUrl() {
+        let {form} = this.state
+        return form.url.length > 5
     }
 
     addFigure() {
-    	let {figure_urls} = this.props
-    	figure_urls.push("")
-    	if (this.props.onChange != null) this.props.onChange(figure_urls)
+        let {form} = this.state
+        let {figures} = this.props
+        if (this.validUrl()) {
+            figures.push({image_url: form.url, figure_number: 0})
+            if (this.props.onChange != null) this.props.onChange(figures)
+        }
     }
 
-    deleteFigure(idx) {
-    	// TODO
+    handleDelete(idx) {
+    	let {figures} = this.props
+        figures.delete(idx)
+        if (this.props.onChange != null) this.props.onChange(figures)
     }
 
-    handleChange(event) {
-
-    }
-
-    render_url_input(id, url) {
-    	let num = id + 1
-    	return (
-    		<TextField
-		          id={`url-${id}`}
-		          key={id}
-		          label={`Figure/Table ${num}`}
-		          value={url || ''}
-		          onChange={this.handleChange}
-		          margin="normal"
-		          fullWidth
-		          variant="outlined"
-		        />
-        )
+    handleChange = prop => event => {
+        let {form} = this.state
+        form[prop] = event.target.value
+        this.setState({form})
     }
 
 	render() {
-		let {classes, figure_urls} = this.props
+		let {classes, figures} = this.props
+        let {form} = this.state
 		return (
-			<div className={classes.search}>
-				{ figure_urls.map((url, i) => this.render_url_input(i, url)) }
+			<div>
+				<FigureList figures={figures} onDelete={this.handleDelete} showDelete={true} />
 
-				<Button onClick={this.addFigure}>Add Figure</Button>
+                <Grid container>
+                    <Grid item xs={8}>
+                        <TextField
+                          id='tfFigure'
+                          label={`Enter figure or table image URL...`}
+                          value={form.url || ''}
+                          onChange={this.handleChange('url')}
+                          margin="normal"
+                          fullWidth
+                          variant="outlined"
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+        				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add Figure</Button>
+                    </Grid>
+                </Grid>
 
             </div>
         )
@@ -64,7 +82,7 @@ FigureSelector.propTypes = {
 }
 
 FigureSelector.defaultProps = {
-	figure_urls: []
+	figures: []
 };
 
 export default withStyles(styles)(FigureSelector);

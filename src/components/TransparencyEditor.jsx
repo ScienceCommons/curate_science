@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 	FormControlLabel, Radio, Icon, InputLabel, Input, InputAdornment,
-	AppBar, Typography, Button, TextField, Menu, MenuItem} from '@material-ui/core';
+	AppBar, Typography, Button, TextField, Menu, MenuItem, Grid} from '@material-ui/core';
 
 import {set, find} from 'lodash'
 
@@ -14,16 +14,19 @@ import C from '../constants/constants';
 
 const styles = {
     root: {
-    	padding: 10,
+    	padding: 15,
 	    flexGrow: 1,
     },
     formControl: {
 
     },
-    tab: {
-    	label: {
-    		fontSize: 8
-    	}
+    radio: {
+        margin: 0,
+        padding: 4
+    },
+    radioGroup: {
+    	margin: 0,
+    	paddingLeft: 7
     }
 }
 
@@ -48,6 +51,14 @@ class URLInput extends React.Component {
 	}
 }
 
+const TransparencyIcon = ({tt, size}) => {
+	return <img
+			   src={`/sitestatic/icons/${tt.icon}.svg`}
+			   width={size}
+			   height={size}
+			   type="image/svg+xml" />
+}
+
 class AddTransparencyMenuItem extends React.Component {
 
 	constructor(props) {
@@ -62,16 +73,9 @@ class AddTransparencyMenuItem extends React.Component {
 
 	render() {
 		let {transparency_type} = this.props
-		let icon = (
-			<img
-			   src={`/sitestatic/icons/${transparency_type.icon}.svg`}
-			   width={30}
-			   height={30}
-			   type="image/svg+xml" />
-	   )
 		return (
 			<MenuItem onClick={this.add}>
-				{ icon }
+				<TransparencyIcon tt={transparency_type} size={30} />
     			{ transparency_type.label }
 			</MenuItem>
 		)
@@ -105,6 +109,8 @@ class TransparencyEditor extends React.Component {
 		this.handleCreateMenuClick = this.handleCreateMenuClick.bind(this)
 		this.handleCreateMenuClose = this.handleCreateMenuClose.bind(this)
 		this.addTransparency = this.addTransparency.bind(this)
+		this.render_transparency = this.render_transparency.bind(this)
+		this.render_transparency_type = this.render_transparency_type.bind(this)
     }
 
     handleChange = (event, transp, key, value) => {
@@ -139,10 +145,23 @@ class TransparencyEditor extends React.Component {
 		this.handleCreateMenuClose()
 	}
 
+	render_transparency_type(tt) {
+		let {transparencies} = this.props
+		let type_transparencies = transparencies.filter((t) => t.transparency_type == tt.id)
+		if (type_transparencies.length > 0) return [
+			<Grid item xs={2} alignContent="center" justify="center">
+				<TransparencyIcon tt={tt} size={30} />
+			</Grid>,
+			<Grid item xs={10}>
+			 { type_transparencies.map(this.render_transparency) }
+			</Grid>
+		]
+		else return null
+	}
+
 	render_transparency(transparency, i) {
 		let {classes} = this.props
 		let {form} = this.state
-		console.log(transparency)
 		let tb = find(C.TRANSPARENCY_BADGES, {id: transparency.transparency_type})
 		let content
 		let protocol_url // TODO
@@ -154,12 +173,12 @@ class TransparencyEditor extends React.Component {
 			          <RadioGroup
 			            aria-label="prereg_rg"
 			            name="prereg_rg"
-			            className={classes.group}
+			            className={classes.radioGroup}
 			            value={form.prereg_type}
 			          >
-			            <FormControlLabel value="format" control={<Radio />} label="Registered Report format" />
-			            <FormControlLabel value="design_analysis" control={<Radio />} label="Preregistered design + analysis" />
-			            <FormControlLabel value="design" control={<Radio />} label="Preregistered design" />
+			            <FormControlLabel value="format" control={<Radio className={classes.radio} />} label="Registered Report format" />
+			            <FormControlLabel value="design_analysis" control={<Radio className={classes.radio} />} label="Preregistered design + analysis" />
+			            <FormControlLabel value="design" control={<Radio className={classes.radio} />} label="Preregistered design" />
 			          </RadioGroup>
 			        </FormControl>
 
@@ -242,16 +261,17 @@ class TransparencyEditor extends React.Component {
 	}
 
 	render() {
-		let {classes, transparencies} = this.props
-
+		let {classes} = this.props
 		return (
 			<Paper className={classes.root}>
-			    <Typography component="h3">Transpariences</Typography>
-			    { transparencies.map((t, i) => {
-			    	return this.render_transparency(t, i)
-			    }) }
+			    <Typography variant="h3">Transpariences</Typography>
+			    <Grid container spacing={16}>
+				    { this.relevant_transparencies().map((tt, i) => {
+				    	return this.render_transparency_type(tt)
+				    }) }
+				</Grid>
 			    <div>
-			    { this.render_create_menu() }
+				    { this.render_create_menu() }
 			    </div>
 	        </Paper>
 		)

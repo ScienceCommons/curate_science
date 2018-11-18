@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import C from '../../constants/constants';
 import TransparencyBadge from '../TransparencyBadge.jsx';
 import JournalDOIBadge from '../JournalDOIBadge.jsx';
+import FigureList from '../shared/FigureList.jsx';
 import AuthorList from '../AuthorList.jsx';
 
 const styles = {
@@ -28,13 +29,6 @@ const styles = {
   },
   thumbnails: {
   	marginTop: 10
-  },
-  thumbnail: {
-  	width: 80,
-  	height: 80,
-  	marginRight: 10,
-  	marginBottom: 10,
-  	border: '1px solid gray'
   }
 };
 
@@ -43,17 +37,6 @@ class StudyLI extends React.Component {
         super(props);
         this.state = {
         };
-    }
-
-    render_figures() {
-    	let {figures, classes} = this.props
-    	return (
-    		<div className={classes.thumbnails}>
-    			{ figures.map((fig) => {
-    				return <img className={classes.thumbnail} src={fig.image_url} title={`Figure ${fig.figure_number}`} />
-	    		})}
-	    	</div>
-    	)
     }
 
 	render() {
@@ -74,7 +57,7 @@ class StudyLI extends React.Component {
 					{ ofMultiple ? <Typography className={classes.studyNum} color="textSecondary" gutterBottom>{ "STUDY " + study.study_number }</Typography> : null }
 					<TransparencyBadge studies={[study]} study_level={true} />
 
-					{ this.render_figures() }
+					<FigureList figures={figures} />
 
 					<div hidden={!showReplicationDetails}>
 						<Typography variant="h5">Replication Details</Typography>

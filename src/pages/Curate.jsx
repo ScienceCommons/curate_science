@@ -158,7 +158,7 @@ class Curate extends React.Component {
 						            Research Area
 						        </InputLabel>
 						        <Select
-						            value={formdata.research_area || "social_science"}
+						            value={formdata.research_area || "SOCIAL_SCIENCE"}
 						            onChange={this.handleChange('research_area')}
 						            input={
 						              <OutlinedInput
@@ -268,7 +268,7 @@ class Curate extends React.Component {
 
 						<Grid item xs={12}>
 							<Typography variant="h4">Key figures/tables (article-level)</Typography>
-							<FigureSelector />
+							<FigureSelector figures={formdata.figures} onChange={this.handleValueChange('figures')} />
 						</Grid>
 
 						<Grid item xs={12} hidden={!show_study_section}>
