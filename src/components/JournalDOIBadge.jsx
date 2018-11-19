@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Icon} from '@material-ui/core';
+
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
@@ -14,7 +16,8 @@ class JournalDOIBadge extends React.Component {
 		let {journal, doi, classes} = this.props
 		let url = `https://dx.doi.org/${doi}`
 		let name = journal == null ? "Unknown Journal" : journal.name
-		return <span><span className="JournalBadge-Journal">{ name }</span> <a href={url} className={classes.doi}>{ doi }</a></span>
+		let link = <a href={url} className={classes.doi}>{ doi } <Icon fontSize="inherit">open_in_new</Icon></a>
+		return <span><span className="JournalBadge-Journal">{ name }</span> {link}</span>
 	}
 }
 

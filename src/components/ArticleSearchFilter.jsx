@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {Typography, Icon, Button} from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -140,7 +139,10 @@ class ArticleSearchFilter extends React.Component {
 				{ C.FILTERS.map(this.render_category) }
 				</div>
 
-				<Button disabled={!filter_changes} onClick={this.refreshSearch} variant="outlined">Refresh Results</Button>
+				<Button disabled={!filter_changes} onClick={this.refreshSearch} variant="outlined">
+                    <Icon>refresh</Icon>
+                    Refresh Results
+                </Button>
 			</div>
 		)
 	}

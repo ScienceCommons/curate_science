@@ -21,10 +21,18 @@ import C from '../constants/constants';
 
 const styles = theme => ({
     sitename: {
-        color: 'white'
+        color: 'white',
+        fontSize: 10
+    },
+    topButton: {
+        color: 'white',
+        borderColor: 'white'
+    },
+    topLink: {
+        color: 'white',
     },
     topBar: {
-        background: 'linear-gradient(0deg, #EEE 10%, #BBB 100%)',
+        background: 'linear-gradient(0deg, #333 70%, #555 100%)',
         boxShadow: 'none'
     },
     grow: {
@@ -38,6 +46,7 @@ const styles = theme => ({
     },
     searchSection: {
         margin: 7,
+        flexGrow: 1,
     },
     search: {
         position: 'relative',
@@ -48,7 +57,7 @@ const styles = theme => ({
         },
         marginRight: theme.spacing.unit * 2,
         marginLeft: 0,
-        width: '100%',
+        maxWidth: 400,
         [theme.breakpoints.up('sm')]: {
           marginLeft: theme.spacing.unit * 3,
           width: 'auto',
@@ -65,7 +74,7 @@ const styles = theme => ({
     },
     inputRoot: {
         color: 'inherit',
-        width: '100%',
+        maxWidth: 400,
     },
     inputInput: {
         paddingTop: theme.spacing.unit,
@@ -73,10 +82,7 @@ const styles = theme => ({
         paddingBottom: theme.spacing.unit,
         paddingLeft: theme.spacing.unit * 10,
         transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-          width: 200,
-        },
+        maxWidth: 400,
     },
 })
 
@@ -87,7 +93,8 @@ class TopBar extends React.Component {
         let q = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).q || ''
 
         this.state = {
-            anchorEl: null,
+            anchors: {},
+            menuOpen: {},
             search_term: q || '',
             drawerOpen: false
         };
@@ -110,13 +117,22 @@ class TopBar extends React.Component {
         }
     }
 
-    handleMenu = event => {
-        this.setState({ anchorEl: event.currentTarget });
+    handleMenu = menu_id => event => {
+        let {anchors} = this.state
+        anchors[menu_id] = event.currentTarget
+        this.setState({anchors})
     };
 
-    handleClose = () => {
-        this.setState({ anchorEl: null });
-    };
+    handleClose = menu_id => () => {
+        let {anchors} = this.state
+        anchors[menu_id] = null
+        this.setState({ anchors })
+    }
+
+    menuOpen = menu_id => {
+        let {anchors} = this.state
+        return Boolean(anchors[menu_id])
+    }
 
     refreshSearch() {
         let {search_term} = this.state
@@ -133,8 +149,7 @@ class TopBar extends React.Component {
     render() {
         const { classes } = this.props;
         let {auth} = this.props
-        const { anchorEl, search_term, drawerOpen } = this.state;
-        const open = Boolean(anchorEl);
+        const { anchors, menuOpen, search_term, drawerOpen } = this.state;
         const menu = (
             <div>
                 <List>
@@ -182,32 +197,52 @@ class TopBar extends React.Component {
                                 />
                             </div>
                             <Typography className={classes.subSearchLinks}>
-                                Browse: <Link to="/recent">Articles</Link> &middot; <Link to="/recent">Replications</Link>
+                                Browse: <Link to="/recent" className={classes.topLink}>Articles</Link> &middot; <Link to="/recent?f=replications,collec_replications" className={classes.topLink}>Replications</Link>
                             </Typography>
                         </div>
 
-                        <div className={classes.grow}>
-                            <Link to="/articles/curate"><Button variant="outlined" size="small">Curate Article Transparency</Button></Link>
-                            <Link to="/articles/curate"><Button variant="outlined" size="small" href="/articles/curate">Add a replication</Button></Link>
-                        </div>
-
                         <Typography>
-                            <Link to="/about">About</Link>
+                            <Link to="/about" className={classes.topLink} style={{marginRight: 20}}>About</Link>
                         </Typography>
 
                         {auth ? (
                         <div>
-                          <IconButton
-                            aria-owns={open ? 'menu-appbar' : undefined}
-                            aria-haspopup="true"
-                            onClick={this.handleMenu}
-                            color="inherit"
-                          >
-                            <AccountCircle />
+                            <IconButton
+                                    aria-owns={this.menuOpen('curate') ? 'menu-curate' : undefined}
+                                    aria-haspopup="true"
+                                    onClick={this.handleMenu('curate')}
+                                    color="inherit"
+                                  >
+                                  <Button variant="outlined" className={classes.topButton}>Curate</Button>
+                            </IconButton>
+                            <Menu
+                                id="menu-curate"
+                                anchorEl={anchors.curate}
+                                anchorOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'right',
+                                }}
+                                transformOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'right',
+                                }}
+                                open={this.menuOpen('curate')}
+                                onClose={this.handleClose('curate')}
+                              >
+                                <Link to="/articles/curate"><MenuItem>Curate Article Transparency</MenuItem></Link>
+                                <Link to="/articles/curate?r=1"><MenuItem>Add Replication</MenuItem></Link>
+                            </Menu>
+                            <IconButton
+                                aria-owns={this.menuOpen('account') ? 'menu-account' : undefined}
+                                aria-haspopup="true"
+                                onClick={this.handleMenu('account')}
+                                color="inherit"
+                              >
+                                <AccountCircle />
                           </IconButton>
                           <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
+                            id="menu-account"
+                            anchorEl={anchors.account}
                             anchorOrigin={{
                               vertical: 'top',
                               horizontal: 'right',
@@ -216,13 +251,13 @@ class TopBar extends React.Component {
                               vertical: 'top',
                               horizontal: 'right',
                             }}
-                            open={open}
-                            onClose={this.handleClose}
+                            open={this.menuOpen('account')}
+                            onClose={this.handleClose('account')}
                           >
                             <MenuItem onClick={this.logout}>Logout</MenuItem>
                           </Menu>
                         </div>
-                      ) : <a href="/accounts/login/"><Button>Login</Button></a>}
+                      ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login to Curate</Button></a>}
                     </Toolbar>
                 </AppBar>
                 <Drawer open={drawerOpen} onClose={this.toggleDrawer(false)}>

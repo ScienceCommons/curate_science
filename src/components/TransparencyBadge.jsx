@@ -55,14 +55,14 @@ class TransparencyBadge extends React.Component {
 				<MouseOverPopover target={badge_icon} key={i}>
 					<div style={{padding: 10}}>
 						<Typography variant="h5">{ f.label }</Typography>
-						{ Object.keys(transparencies_by_study).map((study_num) => {
+						{ Object.keys(transparencies_by_study).map((study_num, i) => {
 							let study_transparencies = transparencies_by_study[study_num]
 							if (study_transparencies.length == 0) return null
 							return (
-								<p>
+								<p key={i}>
 									{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num}</Typography> : null }
 									{ study_transparencies.map((t, idx) => {
-										return <a href={t.url} target="_blank"><Icon>link</Icon> { truncate(t.url) }</a>
+										return <a href={t.url} key={idx} target="_blank"><Icon>link</Icon> { truncate(t.url) }</a>
 									}) }
 								</p>
 							)
@@ -87,7 +87,7 @@ class TransparencyBadge extends React.Component {
 
 TransparencyBadge.propTypes = {
 	transparencies: PropTypes.array,
-	article_type: PropTypes.string.required,
+	article_type: PropTypes.string,
 	study_level: PropTypes.bool,
 	// If article-level
 	studies: PropTypes.array

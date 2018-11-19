@@ -40,6 +40,10 @@ const styles = {
 		color: "#0CC343",
 		marginBottom: 12,
 	},
+	sectionHeading: {
+		marginTop: 15,
+		marginBottom: 15
+	}
 };
 
 function Keywords(props) {
@@ -79,23 +83,21 @@ class ArticleDetail extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		let {match} = this.props
+		let {match, auth} = this.props
 		let {article} = this.state
 		if (article == null) return <Typography>Loading...</Typography>
 		let update_date = new Date(article.updated)
 		let plural = article.studies.length > 1
 		return (
 			<div className={classes.root}>
-				<Grid container>
-					<Grid item xs={12} justify="flex-end">
-						<Link to={`/article/edit/${article.id}`}>
-							<Button variant="contained" color="primary">
-								<Icon>edit</Icon>
-								Edit
-							</Button>
-						</Link>
-					</Grid>
-				</Grid>
+				<div hidden={!auth} align="right" style={{marginBottom: 10}}>
+					<Link to={`/article/edit/${article.id}`}>
+						<Button variant="contained" color="primary">
+							<Icon>edit</Icon>
+							Edit
+						</Button>
+					</Link>
+				</div>
 				<Card className={classes.card}>
 	      			<CardContent>
 	      				<Grid container justify="flex-end">
@@ -114,7 +116,7 @@ class ArticleDetail extends React.Component {
 		      			<Typography className={classes.journal} gutterBottom>
 			      			<JournalDOIBadge journal={article.journal} doi={article.doi} />
 		      			</Typography>
-						<TransparencyBadge studies={article.studies} />
+						<TransparencyBadge icon_size={50} studies={article.studies} />
 
 						<Keywords keywords={article.keywords} />
 						<Typography className={classes.label} color="textSecondary" gutterBottom>
@@ -130,11 +132,11 @@ class ArticleDetail extends React.Component {
   				    </CardContent>
 				</Card>
 
-				<Typography variant="h5" color="textSecondary" gutterBottom>{ plural ? "Studies" : "Study" }</Typography>
+				<Typography variant="h5" color="textSecondary" className={classes.sectionHeading}>{ plural ? "Studies" : "Study" }</Typography>
 
 				{ article.studies.map(this.render_study) }
 
-				<Typography variant="h5" color="textSecondary" gutterBottom>Related Articles/Collections</Typography>
+				<Typography variant="h5" color="textSecondary" className={classes.sectionHeading}>Related Articles/Collections</Typography>
 
 				<p>...</p>
 
@@ -144,7 +146,7 @@ class ArticleDetail extends React.Component {
 }
 
 ArticleDetail.defaultProps = {
-
+	auth: true
 }
 
 export default withStyles(styles)(ArticleDetail);

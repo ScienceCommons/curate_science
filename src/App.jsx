@@ -13,6 +13,7 @@ import FAQ from './pages/FAQ.jsx';
 import About from './pages/About.jsx';
 import ArticleDetail from './pages/ArticleDetail.jsx';
 import Curate from './pages/Curate.jsx';
+import Footer from './components/Footer.jsx';
 
 // UI components
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -70,6 +71,7 @@ class App extends React.Component {
                                 <Route path="/article/:id" component={ArticleDetail} />
                             </Switch>
                         </div>
+                        <Footer />
                     </MuiThemeProvider>
                 </div>
             </Router>

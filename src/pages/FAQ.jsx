@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Typography} from '@material-ui/core';
+
 class FAQ extends React.Component {
 	constructor(props) {
         super(props);
@@ -8,7 +10,7 @@ class FAQ extends React.Component {
     }
 
 	render() {
-		return <h1>FAQ</h1>
+		return <Typography variant="h1">FAQ</Typography>
 	}
 }
 

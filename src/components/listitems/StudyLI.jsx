@@ -72,14 +72,14 @@ class StudyLI extends React.Component {
 							</Grid>
 							<Grid item xs={2}>
 								<Typography variant="h6" className={classes.replicationHeader}>Rep. Method Similarity</Typography>
-								<Typography variant="body">{ study.method_similarity_type }</Typography>
+								<Typography variant="body1">{ study.method_similarity_type }</Typography>
 							</Grid>
 							<Grid item xs={2}>
 								<Typography variant="h6" className={classes.replicationHeader}>Differences</Typography>
 							</Grid>
 							<Grid item xs={2}>
 								<Typography variant="h6" className={classes.replicationHeader}>Aux. Hypotheses</Typography>
-								<Typography variant="body"><ul>{ auxiliary_hypo_evidence.map(text => <li>{text}</li>) }</ul></Typography>
+								<Typography variant="body1"><ul>{ auxiliary_hypo_evidence.map(text => <li>{text}</li>) }</ul></Typography>
 							</Grid>
 						</Grid>
 					</div>

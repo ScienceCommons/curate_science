@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
@@ -17,35 +18,37 @@ class Splash extends React.Component {
 	render() {
 		return (
 			<div>
-                <Carousel showThumbs={false} width="70%">
-                    <div>
-                        <img src="/sitestatic/carousel-png1.png" />
-                    </div>
-                    <div>
-                        <img src="/sitestatic/carousel-png2.png" />
-                    </div>
-                    <div>
-                        <img src="/sitestatic/carousel-png3.png" />
-                    </div>
-                </Carousel>
-                <Grid container alignContent="center" spacing={32}>
-                    <Grid item xs={6}>
+                <Grid container spacing={40} alignItems="center" alignContent="center" justify="center">
+                    <Grid item xs={7} >
+                        <Carousel showThumbs={false} width="100%" autoPlay>
+                            <div>
+                                <img src="/sitestatic/carousel-png1.png" />
+                            </div>
+                            <div>
+                                <img src="/sitestatic/carousel-png2.png" />
+                            </div>
+                            <div>
+                                <img src="/sitestatic/carousel-png3.png" />
+                            </div>
+                        </Carousel>
+                    </Grid>
+                    <Grid item xs={6} style={{textAlign: "center"}}>
                         <Typography variant="h3" color="textPrimary">
                             Are you an author?
                         </Typography>
-                        <Typography variant="body1">
+                        <Typography variant="h5" color="textSecondary">
                             Find out how to get our transparency badges displayed on your article.
                         </Typography>
-                        <Button variant="outlined">Find out more</Button>
+                        <Link to="/about"><Button variant="outlined">Find out more</Button></Link>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} style={{textAlign: "center"}}>
                         <Typography variant="h3" color="textPrimary">
                             Are you a researcher?
                         </Typography>
-                        <Typography variant="body1" color="textPrimary">
+                        <Typography variant="h5" color="textSecondary">
                             Search to find replications of previous findings.
                         </Typography>
-                        <Button variant="outlined">Find out more</Button>
+                        <Link to="/about"><Button variant="outlined">Find out more</Button></Link>
                     </Grid>
                 </Grid>
 
