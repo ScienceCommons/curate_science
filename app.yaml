@@ -4,8 +4,8 @@ entrypoint: gunicorn --bind :8080 curate_science.wsgi:application --log-level de
 
 handlers:
 - url: /favicon.ico
-  static_files: static/favicon.ico
-  upload: static/favicon\.ico
+  static_files: sitestatic/favicon.ico
+  upload: sitestatic/favicon\.ico
 - url: /sitestatic
   static_dir: sitestatic
 - url: /dist

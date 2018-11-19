@@ -40,7 +40,7 @@ class StudyLI extends React.Component {
     }
 
 	render() {
- 	    let { classes, study, ofMultiple, showActions, showReplicationDetails} = this.props;
+ 	    let { classes, figures, study, ofMultiple, showActions, showReplicationDetails} = this.props;
  	    let actions = (
  	    	<CardActions>
  	    		<Button>Edit</Button>

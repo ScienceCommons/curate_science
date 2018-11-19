@@ -21,13 +21,10 @@ from curate.models import (
 )
 
 class AuthorSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
 
     class Meta:
         model=Author
-        fields=('id', 'first_name', 'last_name')
+        fields='__all__'
 
 
 class ConstructSerializer(serializers.ModelSerializer):
@@ -84,8 +81,6 @@ class StudySerializer(serializers.ModelSerializer):
         many=True, allow_null=True, required=False,
         queryset=Effect.objects.all()
     )
-    transparencies = TransparencySerializer(many=True, read_only=True)
-
 
     class Meta:
         model=Study
@@ -95,7 +90,6 @@ class JournalSerializer(serializers.ModelSerializer):
     id = serializers.CharField()
     name = serializers.CharField()
     issn = serializers.CharField()
-
     articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
@@ -103,16 +97,24 @@ class JournalSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 
+class ArticleListSerializer(serializers.ModelSerializer):
+    year = serializers.IntegerField(required=False, allow_null=True)
+    key_figures = KeyFigureSerializer(many=True)
+    authors = AuthorSerializer(many=True)
+    journal = JournalSerializer()
+
+    class Meta:
+        model=Article
+        fields='__all__'
+
+
+
 class ArticleSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
     studies = NestedStudySerializer(many=True)
-    # key_figures = serializers.PrimaryKeyRelatedField(many=True, queryset=KeyFigure.objects.all(), required=False, allow_null=True)
-    key_figures = KeyFigureSerializer(many=True)
-    # transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all(), required=False, allow_null=True)
-    transparencies = TransparencySerializer(many=True)
-    # authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
-    authors = AuthorSerializer(many=True)
-    journal = JournalSerializer()
+    key_figures = serializers.PrimaryKeyRelatedField(many=True, queryset=KeyFigure.objects.all(), required=False, allow_null=True)
+    transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all(), required=False, allow_null=True)
+    authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     robustness_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
@@ -334,6 +336,18 @@ class ArticleSerializer(serializers.ModelSerializer):
                     ).delete()
 
         return instance
+
+    class Meta:
+        model=Article
+        fields='__all__'
+
+
+class ArticleDetailSerializer(serializers.ModelSerializer):
+    key_figures = KeyFigureSerializer(many=True)
+    transparencies = TransparencySerializer(many=True)
+    studies = NestedStudySerializer(many=True)
+    authors = AuthorSerializer(many=True)
+    journal = JournalSerializer()
 
     class Meta:
         model=Article
