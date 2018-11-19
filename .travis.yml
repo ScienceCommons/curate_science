@@ -14,7 +14,9 @@ script:
 deploy:
   provider: gae
   keyfile: curate_science/google_application_credentials.json
-  project: curate-science-216207
+  project:
+    master: curate-science-216207
+    staging: curatescience-staging
   skip_cleanup: true
 env:
   global:

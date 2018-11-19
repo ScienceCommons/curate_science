@@ -16,13 +16,21 @@ load_dotenv()
 
 # Google App Engine sets environment variable GOOGLE_CLOUD_PROJECT
 # If this env var exists, then the app is running on GAE. Else it's local dev environment.
-if os.getenv('GOOGLE_CLOUD_PROJECT'):
+if os.getenv('GCP_PROJECT'):
     #DB_HOST='/cloudsql/curate-science-216207:europe-west1:curatedb'
-    DB_HOST='35.205.158.247' #curatevm
     DEBUG = False
+    DB_HOST='35.205.158.247' #curatevm
+
+    if os.getenv('GCP_PROJECT') == 'curatescience-staging':
+        DB_NAME = 'curate_staging'
+    else:
+        DB_NAME = 'curate'
+
 else:
-    DB_HOST='localhost'
     DEBUG = True
+    DB_HOST='localhost'
+    DB_NAME = 'curate'
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -91,7 +99,7 @@ WSGI_APPLICATION = 'curate_science.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'curate',
+        'NAME': DB_NAME,
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASS'),
         'HOST': DB_HOST,
