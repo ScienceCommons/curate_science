@@ -67,7 +67,7 @@ class FigureSelector extends React.Component {
                           variant="outlined"
                         />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={{padding: 23}}>
         				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add Figure</Button>
                     </Grid>
                 </Grid>

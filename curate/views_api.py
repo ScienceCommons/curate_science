@@ -130,7 +130,7 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
-    queryset=Article.objects.select_related('journal').prefetch_related('studies', 'authors').all()
+    queryset=Article.objects.select_related('journal').prefetch_related('studies', 'studies__transparencies', 'authors').all()
     serializer=ArticleListSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
@@ -657,7 +657,11 @@ def search_articles(request):
         logger.warning("Query: %s" % q)
         search_vector = SearchVector('title', 'abstract', 'authors__last_name')
         search_rank = SearchRank(search_vector, q)
-        queryset=Article.objects.annotate(rank=search_rank).order_by('-rank').distinct()
+        queryset=Article.objects.annotate(rank=search_rank) \
+            .order_by('-rank') \
+            .filter(rank__gt=0) \
+            .select_related('journal') \
+            .prefetch_related('studies', 'studies__transparencies', 'authors', 'transparencies').distinct()
     else:
         queryset=Article.objects.order_by('updated')[:10]
     paginator = PageNumberPagination()

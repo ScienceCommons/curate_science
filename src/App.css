@@ -9,8 +9,9 @@ a:link, a:visited, a:hover, a:active {
 }
 
 .App {
-
 }
 
 .AppContent {
+	min-height: 600px;
+	padding-top: 10px;
 }

@@ -12,6 +12,14 @@ import Grid from '@material-ui/core/Grid';
 import ArticleSearchFilter from '../components/ArticleSearchFilter.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
 
+import { withStyles } from '@material-ui/core/styles';
+
+const style = {
+    root: {
+        paddingTop: 10
+    }
+}
+
 class Home extends React.Component {
 	constructor(props) {
         super(props);
@@ -60,8 +68,9 @@ class Home extends React.Component {
 
 	render() {
 		let {articles, searched} = this.state
+        let {classes} = this.props
 		return (
-			<Grid container>
+			<Grid container className={classes.root}>
                 <Grid item xs={3}>
                     <ArticleSearchFilter />
                 </Grid>
@@ -75,4 +84,4 @@ class Home extends React.Component {
 	}
 }
 
-export default withRouter(Home);
+export default withRouter(withStyles(style)(Home));

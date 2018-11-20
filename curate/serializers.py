@@ -100,6 +100,8 @@ class JournalSerializer(serializers.ModelSerializer):
 class ArticleListSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
     key_figures = KeyFigureSerializer(many=True)
+    transparencies = TransparencySerializer(many=True)
+    studies = NestedStudySerializer(many=True)
     authors = AuthorSerializer(many=True)
     journal = JournalSerializer()
 

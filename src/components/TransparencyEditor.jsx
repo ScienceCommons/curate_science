@@ -149,10 +149,10 @@ class TransparencyEditor extends React.Component {
 		let {transparencies} = this.props
 		let type_transparencies = transparencies.filter((t) => t.transparency_type == tt.id)
 		if (type_transparencies.length > 0) return [
-			<Grid item xs={2} alignContent="center" justify="center">
+			<Grid item xs={1} alignContent="center" justify="center" style={{verticalAlign: 'center'}}>
 				<TransparencyIcon tt={tt} size={30} />
 			</Grid>,
-			<Grid item xs={10}>
+			<Grid item xs={11}>
 			 { type_transparencies.map(this.render_transparency) }
 			</Grid>
 		]
@@ -264,13 +264,13 @@ class TransparencyEditor extends React.Component {
 		let {classes} = this.props
 		return (
 			<Paper className={classes.root}>
-			    <Typography variant="h3">Transpariences</Typography>
+			    <Typography variant="h4" gutterBottom>Transpariences</Typography>
 			    <Grid container spacing={16}>
 				    { this.relevant_transparencies().map((tt, i) => {
 				    	return this.render_transparency_type(tt)
 				    }) }
 				</Grid>
-			    <div>
+			    <div style={{marginTop: 20}}>
 				    { this.render_create_menu() }
 			    </div>
 	        </Paper>

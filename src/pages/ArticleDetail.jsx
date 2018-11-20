@@ -38,7 +38,6 @@ const styles = {
 	},
 	authors: {
 		color: "#0CC343",
-		marginBottom: 12,
 	},
 	sectionHeading: {
 		marginTop: 15,
@@ -78,20 +77,20 @@ class ArticleDetail extends React.Component {
     	let key_figures = article.key_figures.filter(kf => kf.study == s.id)
     	if (key_figures == null) key_figures = []
     	let multiple = article.studies != null && article.studies.length > 1
-    	return <StudyLI key={s.id} study={s} ofMultiple={multiple} figures={key_figures} />
+    	return <StudyLI key={s.id} study={s} ofMultiple={multiple} figures={key_figures} article_type={article.article_type} />
     }
 
 	render() {
 		const { classes } = this.props;
 		let {match, auth} = this.props
 		let {article} = this.state
-		if (article == null) return <Typography>Loading...</Typography>
+		if (article == null) return <Typography variant="h3" style={{textAlign: 'center'}}>Loading...</Typography>
 		let update_date = new Date(article.updated)
 		let plural = article.studies.length > 1
 		return (
 			<div className={classes.root}>
 				<div hidden={!auth} align="right" style={{marginBottom: 10}}>
-					<Link to={`/article/edit/${article.id}`}>
+					<Link to={`/article/${article.id}/edit`}>
 						<Button variant="contained" color="primary">
 							<Icon>edit</Icon>
 							Edit
@@ -110,13 +109,13 @@ class ArticleDetail extends React.Component {
 		      			<Typography className={classes.title} variant="h2" component="h2" gutterBottom>
 		      			{ article.title }
 		      			</Typography>
-		      			<Typography className={classes.authors} gutterBottom>
+		      			<Typography className={classes.authors}>
 		      				<AuthorList authors={article.authors} />
 		      			</Typography>
 		      			<Typography className={classes.journal} gutterBottom>
 			      			<JournalDOIBadge journal={article.journal} doi={article.doi} />
 		      			</Typography>
-						<TransparencyBadge icon_size={50} studies={article.studies} />
+						<TransparencyBadge icon_size={50} studies={article.studies} article_type={article.article_type} />
 
 						<Keywords keywords={article.keywords} />
 						<Typography className={classes.label} color="textSecondary" gutterBottom>

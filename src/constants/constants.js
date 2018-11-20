@@ -66,25 +66,30 @@ var C = {
 			label: "Content type",
 			items: [
 				{
-					id: 'replications',
+					id: 'REPLICATION',
 					icon: '',
 					label: "Replications"
 				},
 				{
-					id: 'collec_replications',
+					id: 'COLLECTION',
 					icon: '',
 					label: "Collections of replications",
 					disabled: true
 				},
 				{
-					id: 'rean_reproducibility',
+					id: 'REPRODUCIBILITY',
 					icon: '',
 					label: "Renalyses - Reproducibility/Robustness"
 				},
 				{
-					id: 'rean_meta',
+					id: 'META_ANALYSIS',
 					icon: '',
 					label: "Renalyses - Meta-analyses (traditional)"
+				},
+				{
+					id: 'ORIGINAL',
+					icon: '',
+					label: "Original Research"
 				}
 			]
 		},
@@ -132,7 +137,7 @@ var C = {
 			id: "materials",
 			label: "Public Materials",
 			icon: "materials",
-			article_types: ['ORIGINAL']
+			article_types: ['ORIGINAL', 'REPLICATION']
 		},
 		{
 			id: "data",

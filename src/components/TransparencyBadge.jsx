@@ -21,7 +21,7 @@ class TransparencyBadge extends React.Component {
     }
 
 	render_feature(f, i) {
-		let {icon_size, study_level, studies} = this.props
+		let {icon_size, study_level, studies, transparencies} = this.props
 		let sole_study = studies.length == 1
 		let transparencies_by_study = {}
 		// Collect this feature's transparencies across all studies
@@ -62,7 +62,7 @@ class TransparencyBadge extends React.Component {
 								<p key={i}>
 									{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num}</Typography> : null }
 									{ study_transparencies.map((t, idx) => {
-										return <a href={t.url} key={idx} target="_blank"><Icon>link</Icon> { truncate(t.url) }</a>
+										return <Typography><a href={t.url} key={idx} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(t.url) }</a></Typography>
 									}) }
 								</p>
 							)

@@ -40,7 +40,7 @@ class StudyLI extends React.Component {
     }
 
 	render() {
- 	    let { classes, figures, study, ofMultiple, showActions, showReplicationDetails} = this.props;
+ 	    let { classes, figures, study, ofMultiple, showActions, showReplicationDetails, article_type} = this.props;
  	    let actions = (
  	    	<CardActions>
  	    		<Button>Edit</Button>
@@ -55,7 +55,7 @@ class StudyLI extends React.Component {
 			<Card className={classes.card}>
 				<CardContent>
 					{ ofMultiple ? <Typography className={classes.studyNum} color="textSecondary" gutterBottom>{ "STUDY " + study.study_number }</Typography> : null }
-					<TransparencyBadge studies={[study]} study_level={true} />
+					<TransparencyBadge studies={[study]} study_level={true} article_type={article_type} />
 
 					<FigureList figures={figures} />
 
@@ -95,7 +95,8 @@ StudyLI.defaultProps = {
 	ofMultiple: true,
 	showActions: false,
 	figures: [],
-	showReplicationDetails: true
+	showReplicationDetails: true,
+	article_type: "ORIGINAL"
 };
 
 StudyLI.propTypes = {

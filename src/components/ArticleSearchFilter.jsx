@@ -20,7 +20,10 @@ const styles = {
         padding: 13
     },
     category: {
-        marginTop: 10
+        marginTop: 10,
+    },
+    categoryLabel: {
+        marginBottom: 5
     },
     checkboxLabel: {
         margin: 0,
@@ -28,7 +31,7 @@ const styles = {
     },
     checkbox: {
         margin: 0,
-        padding: 7
+        padding: 5
     },
     group: {
         margin: 0
@@ -100,7 +103,7 @@ class ArticleSearchFilter extends React.Component {
         let {classes} = this.props
     	return (
 			<FormControl component="fieldset" key={cat.category} className={classes.category}>
-    		    <FormLabel component="legend">{ cat.label }</FormLabel>
+    		    <FormLabel component="legend" className={classes.categoryLabel}>{ cat.label }</FormLabel>
                 <FormGroup className={classes.group}>
 				{ cat.items.map(this.render_item) }
 				</FormGroup>

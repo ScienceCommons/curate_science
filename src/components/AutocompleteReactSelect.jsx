@@ -154,7 +154,7 @@ function MultiValue(props) {
 
 function Menu(props) {
   return (
-    <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
+    <Paper square className={props.selectProps.classes.paper} {...props.innerProps} style={{zIndex: 1000}}>
       {props.children}
     </Paper>
   );

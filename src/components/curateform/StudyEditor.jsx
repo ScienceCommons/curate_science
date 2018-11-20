@@ -15,7 +15,10 @@ import AutocompleteReactSelect from '../../components/AutocompleteReactSelect.js
 import {merge} from 'lodash'
 
 const styles = {
-
+	sectionHeading: {
+		marginTop: 15,
+		marginBottom: 15
+	}
 }
 
 function Transition(props) {
@@ -80,28 +83,32 @@ class StudyEditor extends React.Component {
 				label: 'IVs',
 				type: 'autocomplete',
 				placeholder: "e.g., 'erotica exposure vs. control'",
-				list_url: '/api/constructs/autocomplete/'
+				list_url: '/api/constructs/autocomplete/',
+				xs: 6
 			},
 			{
 				name: 'dvs',
 				label: 'DVs',
 				type: 'autocomplete',
 				placeholder: "e.g., 'partner love'",
-				list_url: '/api/constructs/autocomplete/'
+				list_url: '/api/constructs/autocomplete/',
+				xs: 6
 			},
 			{
 				name: 'iv.methods',
 				label: 'IV methods',
 				type: 'autocomplete',
 				placeholder: "e.g., 'Playboy centerfolds vs. abstract art images'",
-				list_url: '/api/methods/autocomplete/'
+				list_url: '/api/methods/autocomplete/',
+				xs: 6
 			},
 			{
 				name: 'dv.methods',
 				label: 'DV methods',
 				type: 'autocomplete',
 				placeholder: "e.g., 'Rubin Love Scale (13-item)'",
-				list_url: '/api/methods/autocomplete/'
+				list_url: '/api/methods/autocomplete/',
+				xs: 6
 			}
 		]
 	}
@@ -142,8 +149,9 @@ class StudyEditor extends React.Component {
 	renderReplicationInput(params, i) {
 		let {classes} = this.props
 		let {formdata} = this.state
+		let cell_content
 		if (params.type == 'autocomplete') {
-			return (
+			cell_content = (
 			<AutocompleteReactSelect
 								 key={i}
                                  creatable
@@ -154,7 +162,7 @@ class StudyEditor extends React.Component {
                                  onChange={this.handleValueChange(params.name)} />
 			)
 		} else if (params.type == 'text') {
-			return (
+			cell_content = (
 				<TextField
 			          id={params.name}
 			          key={params.name}
@@ -169,7 +177,7 @@ class StudyEditor extends React.Component {
 				)
 		} else if (params.type == 'select') {
 			let lw = params.label.length * 6
-			return (
+			cell_content = (
 				<FormControl
 					key={params.name}
 					variant="outlined"
@@ -201,6 +209,7 @@ class StudyEditor extends React.Component {
 			    </FormControl>
 				)
 		}
+		return <Grid item xs={params.xs || 12}>{ cell_content }</Grid>
 	}
 
 	render() {
@@ -211,8 +220,10 @@ class StudyEditor extends React.Component {
 		if (article_type == "ORIGINAL") {
 			replication_details = (
 				<div>
-					<Typography variant="h5" gutterBottom>Replication Details</Typography>
-					{ this.replicationInputs.map(this.renderReplicationInput)}
+					<Typography variant="h5" className={classes.sectionHeading}>Replication Details</Typography>
+					<Grid container spacing={16}>
+						{ this.replicationInputs.map(this.renderReplicationInput)}
+					</Grid>
 				</div>
 			)
 		}
@@ -236,7 +247,7 @@ class StudyEditor extends React.Component {
 								article_type={article_type || "ORIGINAL"}
 								onAddTransparency={this.handleAddTransparency} />
 
-						<Typography variant="h5" gutterBottom>Key Figures/Tables</Typography>
+						<Typography variant="h5" className={classes.sectionHeading}>Key Figures/Tables</Typography>
 						<FigureSelector figures={formdata.figures || []} onChange={this.handleFigureChange} />
 
 						{ replication_details }

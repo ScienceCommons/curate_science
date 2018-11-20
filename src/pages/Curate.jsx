@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
 	FormControl, FormControlLabel, RadioGroup, Radio, Checkbox,
-	Select, OutlinedInput, Paper} from '@material-ui/core';
+	Select, OutlinedInput, Paper, Snackbar} from '@material-ui/core';
 
 import C from '../constants/constants';
 
@@ -54,10 +54,15 @@ class Curate extends React.Component {
         this.handleCheckChange = this.handleCheckChange.bind(this)
         this.handleValueChange = this.handleValueChange.bind(this)
         this.saveStudy = this.saveStudy.bind(this)
+        this.snackClose = this.snackClose.bind(this)
     }
 
     componentDidMount() {
 
+    }
+
+    snackClose() {
+    	this.setState({snack_message: null})
     }
 
     handleDOILookupResults(res) {
@@ -65,7 +70,7 @@ class Curate extends React.Component {
     	formdata.title = res.title[0]
     	formdata.authors = res.author.map((author) => author.family).join(', ')
     	formdata.year = get(res, ['journal-issue', 'published-print', 'date-parts', 0, 0])
-		this.setState({formdata})
+		this.setState({formdata: formdata, snack_message: "Found article"})
     }
 
     handleChange = prop => event => {
@@ -100,7 +105,7 @@ class Curate extends React.Component {
 
 	render() {
 		const { classes, cookies } = this.props;
-		let {formdata, study_editor_open, studies, study_editor_study} = this.state
+		let {formdata, study_editor_open, studies, study_editor_study, snack_message} = this.state
 		let at = find(C.ARTICLE_TYPES, {id: formdata.type || 'ORIGINAL'})
 		let show_reanalysis, show_commentary, show_study_section, show_replication
 		if (at != null) {
@@ -112,9 +117,14 @@ class Curate extends React.Component {
 		let csrf_token = cookies.get('csrftoken')
 		return (
 			<div className={classes.root}>
-				<Typography variant="h4">Add/Edit Article</Typography>
-
-				<DOILookup onLookup={this.handleDOILookupResults} />
+				<Grid container className={classes.root} spacing={24}>
+					<Grid item xs={12}>
+						<Typography variant="h4">Add/Edit Article</Typography>
+					</Grid>
+					<Grid item xs={12}>
+						<DOILookup onLookup={this.handleDOILookupResults} />
+					</Grid>
+				</Grid>
 
 				<form noValidate
 					autoComplete="off"
@@ -293,6 +303,20 @@ class Curate extends React.Component {
 								 editStudy={study_editor_study} />
 
 				</form>
+
+				<Snackbar
+		          anchorOrigin={{
+		            vertical: 'bottom',
+		            horizontal: 'left',
+		          }}
+		          open={snack_message != null}
+		          autoHideDuration={1000}
+		          onClose={this.snackClose}
+		          ContentProps={{
+		            'aria-describedby': 'message-id',
+		          }}
+		          message={<span id="message-id">{ snack_message }</span>}
+		          />
 			</div>
 		)
 	}
