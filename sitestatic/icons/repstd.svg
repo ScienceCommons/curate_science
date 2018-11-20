@@ -1,0 +1,38 @@
+
+<svg width="86px" height="92px" viewBox="0 0 86 92" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path d="M55,5.19615242 L76.8371686,17.8038476 C82.406388,21.0192379 85.8371686,26.9615242 85.8371686,33.3923048 L85.8371686,58.6076952 C85.8371686,65.0384758 82.406388,70.9807621 76.8371686,74.1961524 L55,86.8038476 C49.4307806,90.0192379 42.5692194,90.0192379 37,86.8038476 L15.1628314,74.1961524 C9.59361204,70.9807621 6.16283143,65.0384758 6.16283143,58.6076952 L6.16283143,33.3923048 C6.16283143,26.9615242 9.59361204,21.0192379 15.1628314,17.8038476 L37,5.19615242 C42.5692194,1.98076211 49.4307806,1.98076211 55,5.19615242 Z" id="path-1"></path>
+        <filter x="0.7%" y="-0.8%" width="98.6%" height="105.9%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.221524004 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Enabled" transform="translate(-449.000000, -2.000000)">
+            <g id="reporting" transform="translate(446.000000, 0.000000)">
+                <g id="Polygon">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#7ED321" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g id="Reporting-Icon" transform="translate(22.000000, 19.000000)">
+                    <g stroke-width="1" transform="translate(5.769231, 5.638298)" id="Rectangle" stroke="#FFFFFF">
+                        <rect stroke-width="3" x="1.5" y="1.5" width="31.6153846" height="40.9787234" rx="2"></rect>
+                    </g>
+                    <ellipse id="Oval" stroke="#FFFFFF" stroke-width="2" fill-opacity="0" fill="#D8D8D8" cx="23.0769231" cy="5.63829787" rx="3.46153846" ry="3.38297872"></ellipse>
+                    <g stroke-width="1" transform="translate(8.076923, 7.893617)" fill="#FFFFFF" fill-opacity="0.595391757" id="Rectangle">
+                        <rect x="0" y="0" width="30" height="39.4680851" rx="2"></rect>
+                    </g>
+                    <g stroke-width="1" transform="translate(13.846154, 6.765957)" fill="#FFFFFF" id="Rectangle">
+                        <rect x="0" y="0" width="18.4615385" height="3.38297872" rx="1.69148936"></rect>
+                    </g>
+                    <rect id="Rectangle" stroke="#FFFFFF" stroke-width="1" fill-opacity="0.362007473" fill="#FFFFFF" x="13.1923077" y="15.1595745" width="4.76923077" height="4.63829787"></rect>
+                    <rect id="Rectangle" stroke="#FFFFFF" stroke-width="1" fill-opacity="0.362007473" fill="#FFFFFF" x="13.1923077" y="23.0531915" width="4.76923077" height="4.63829787"></rect>
+                    <rect id="Rectangle" stroke="#FFFFFF" stroke-width="1" fill-opacity="0.362007473" fill="#FFFFFF" x="13.1923077" y="30.9468085" width="4.76923077" height="4.63829787"></rect>
+                    <ellipse id="Oval" fill="#FFFFFF" cx="34.0384615" cy="31.0106383" rx="9.80769231" ry="9.58510638"></ellipse>
+                    <polygon id="Path" fill="#8E8E8E" points="27.6923077 32.1804361 32.9596237 36.399608 41.0223292 27.8018735 38.7268257 25.9361702 32.9596237 32.4856804 29.4246619 29.7162007"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

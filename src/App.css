@@ -1,0 +1,17 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #EEE;
+}
+
+a:link, a:visited, a:hover, a:active {
+	text-decoration: none;
+}
+
+.App {
+}
+
+.AppContent {
+	min-height: 600px;
+	padding-top: 10px;
+}

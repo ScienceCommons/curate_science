@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
+import json
 from curate.forms import (
     ArticleForm,
     KeyFigureForm,
@@ -26,6 +28,13 @@ from curate.view_utils import sync_child_m2m_instances
 def index(request):
     articles = Article.objects.order_by('updated')[:10]
     return render(request, 'index.html', {'articles': articles})
+
+# Endpoint for redesigned pages
+def router_index(request, *args, **kwargs):
+    # Get logged in user
+    auth_js = 'true' if request.user.is_authenticated else 'false'
+    # article = json.dumps(model_to_dict(Article.objects.order_by('updated')[0]))
+    return render(request, 'router_index.html', {'authenticated': auth_js})
 
 @require_http_methods(["GET",])
 def view_article(request, pk):

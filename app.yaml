@@ -1,12 +1,28 @@
 # [START django_app]
 runtime: python37
-entrypoint: gunicorn --bind :8080 curate_science.wsgi:application
+entrypoint: gunicorn --bind :8080 curate_science.wsgi:application --log-level debug
 
 handlers:
-- url: /static
-  static_dir: static/
+- url: /favicon.ico
+  static_files: sitestatic/favicon.ico
+  upload: sitestatic/favicon\.ico
+- url: /sitestatic
+  static_dir: sitestatic
+- url: /dist
+  static_dir: dist
 - url: /.*
   script: auto
+
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*\.scss$
+- ^(.*/)?.*\.less$
+- ^(.*/)?\..*$
+- ^(node_modules/.*)
+- .*node_modules
+- ^(vector/.*)
 
 # Only pure Python libraries can be vendored
 # Python libraries that use C extensions can

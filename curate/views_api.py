@@ -3,6 +3,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.contrib.postgres.search import SearchVector, SearchRank
+import logging
 from dal import autocomplete
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
@@ -28,6 +29,8 @@ from curate.models import (
 from curate.serializers import (
     AuthorSerializer,
     ArticleSerializer,
+    ArticleDetailSerializer,
+    ArticleListSerializer,
     CollectionSerializer,
     ConstructSerializer,
     EffectSerializer,
@@ -40,6 +43,8 @@ from curate.serializers import (
     TransparencySerializer,
     UserProfileSerializer,
 )
+
+logger = logging.getLogger()
 
 @api_view(('GET',))
 @renderer_classes([renderers.CoreJSONRenderer])
@@ -125,8 +130,8 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
-    queryset=Article.objects.all()
-    serializer=ArticleSerializer(instance=queryset, many=True)
+    queryset=Article.objects.select_related('journal').prefetch_related('studies', 'studies__transparencies', 'authors').all()
+    serializer=ArticleListSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
 @api_view(('GET', ))
@@ -134,8 +139,8 @@ def view_article(request, pk):
     '''
     View one specific article.
     '''
-    queryset=get_object_or_404(Article, id=pk)
-    serializer=ArticleSerializer(instance=queryset)
+    queryset=get_object_or_404(Article.objects.select_related('journal').prefetch_related('studies', 'studies__transparencies', 'authors'), id=pk)
+    serializer=ArticleDetailSerializer(instance=queryset)
     return Response(serializer.data)
 
 @api_view(('GET', 'POST', ))
@@ -554,7 +559,7 @@ def delete_statistical_result(request, pk):
 #Study views
 @api_view(('GET', ))
 def list_studies(request):
-    queryset=Study.objects.all()
+    queryset=Study.objects.prefetch_related('transparencies').all()
     serializer=StudySerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
@@ -649,15 +654,20 @@ def search_articles(request):
     q = request.GET.get('q','')
     page_size = int(request.GET.get('page_size', 25))
     if q:
+        logger.warning("Query: %s" % q)
         search_vector = SearchVector('title', 'abstract', 'authors__last_name')
         search_rank = SearchRank(search_vector, q)
-        queryset=Article.objects.annotate(rank=search_rank).order_by('-rank').distinct()
+        queryset=Article.objects.annotate(rank=search_rank) \
+            .order_by('-rank') \
+            .filter(rank__gt=0) \
+            .select_related('journal') \
+            .prefetch_related('studies', 'studies__transparencies', 'authors', 'transparencies').distinct()
     else:
         queryset=Article.objects.order_by('updated')[:10]
     paginator = PageNumberPagination()
     paginator.page_size = page_size
     result_page = paginator.paginate_queryset(queryset, request)
-    serializer=ArticleSerializer(instance=result_page, many=True)
+    serializer=ArticleListSerializer(instance=result_page, many=True)
     return Response(serializer.data)
 
 # Autocomplete views

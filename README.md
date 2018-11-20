@@ -15,7 +15,7 @@ We are developing harmonized “suites” of transparency (and replication) stan
 
 ### Application Structure
 
-Curate Science is a web application written in Python 3 using the [Django](https://www.djangoproject.com/) framework 2.1. with PostgreSQL 9.6, running on Google App Engine. The master branch is continuously deployed to production with Travis CI. The application features a REST API for interacting with the curated data programmatically.
+Curate Science is a web application written in Python 3 using the [Django](https://www.djangoproject.com/) framework 2.1. with PostgreSQL 9.6, running on Google App Engine Standard Environment. The master branch is continuously deployed to production with Travis CI. The application features a REST API for interacting with the curated data programmatically.
 
 * Entity models are in `curate/models.py`
 * REST API view controllers use [Django REST Framework](http://django-rest-framework.org/) and are in `views_api.py`
@@ -26,6 +26,18 @@ Curate Science is a web application written in Python 3 using the [Django](https
 * JS, CSS, and image files go in `static/curate/`
 * Application configurations are in `curate_science/settings.py`
 
+### Useful Documentation
+
+### Back-end
+
+* GCP [documentation](https://cloud.google.com/appengine/docs/python/)
+* Django [documentation](https://docs.djangoproject.com/en/2.1/)
+
+### Front-end
+
+* React-Router [documentation](https://reacttraining.com/react-router/web/guides/quick-start)
+* Material UI (React component library) [documentation](https://material-ui.com/)
+
 ### Setup
 
 To set up the app locally:
@@ -34,6 +46,7 @@ To set up the app locally:
 2. Install Python >= 3.6
 3. Install PostgreSQL >= 9.4 (command may be sql or psql depending on install method)
 4. Create a .env file and set the environment variables `DB_USER`, `DB_PASS`, and `SECRET_KEY`
+5. Create a superuser to access Django admin: `python manage.py createsuperuser` and follow prompts
 
 ```sql
 
@@ -59,3 +72,17 @@ python manage.py runserver_plus
 python manage.py test
 
 ```
+
+### Starting Local Server for Development
+
+```bash
+
+python manage.py runserver_plus
+# In a new terminal (to compile JS bundle(s) and HTML)
+yarn start
+```
+
+App should be running at `localhost:8000`.
+Django admin should be available at `localhost:8000/admin`.
+
+

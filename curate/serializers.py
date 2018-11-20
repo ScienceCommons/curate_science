@@ -21,9 +21,44 @@ from curate.models import (
 )
 
 class AuthorSerializer(serializers.ModelSerializer):
+
     class Meta:
         model=Author
         fields='__all__'
+
+
+class ConstructSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Construct
+        fields='__all__'
+
+
+class MethodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Method
+        fields='__all__'
+
+
+class TransparencySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    transparency_type = serializers.CharField(read_only=True)
+    url = serializers.CharField(read_only=True)
+
+    class Meta:
+        model=Transparency
+        fields= ('id', 'transparency_type', 'url')
+
+
+class KeyFigureSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    figure_number = serializers.CharField(read_only=True)
+    image_url = serializers.CharField(read_only=True)
+    study = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model=KeyFigure
+        fields= ('id', 'figure_number', 'image_url', 'study')
+
 
 class NestedStudySerializer(serializers.ModelSerializer):
     id = serializers.ModelField(model_field=Study()._meta.get_field('id'))
@@ -31,6 +66,12 @@ class NestedStudySerializer(serializers.ModelSerializer):
         many=True, allow_null=True, required=False,
         queryset=Effect.objects.all()
     )
+    transparencies = TransparencySerializer(many=True, read_only=True)
+    ind_vars = ConstructSerializer(many=True)
+    dep_vars = ConstructSerializer(many=True)
+    ind_var_methods = MethodSerializer(many=True)
+    dep_var_methods = MethodSerializer(many=True)
+
     class Meta:
         model=Study
         exclude=('article',)
@@ -40,9 +81,35 @@ class StudySerializer(serializers.ModelSerializer):
         many=True, allow_null=True, required=False,
         queryset=Effect.objects.all()
     )
+
     class Meta:
         model=Study
         fields='__all__'
+
+class JournalSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
+    name = serializers.CharField()
+    issn = serializers.CharField()
+    articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    class Meta:
+        model=Journal
+        fields='__all__'
+
+
+class ArticleListSerializer(serializers.ModelSerializer):
+    year = serializers.IntegerField(required=False, allow_null=True)
+    key_figures = KeyFigureSerializer(many=True)
+    transparencies = TransparencySerializer(many=True)
+    studies = NestedStudySerializer(many=True)
+    authors = AuthorSerializer(many=True)
+    journal = JournalSerializer()
+
+    class Meta:
+        model=Article
+        fields='__all__'
+
+
 
 class ArticleSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
@@ -276,14 +343,21 @@ class ArticleSerializer(serializers.ModelSerializer):
         model=Article
         fields='__all__'
 
+
+class ArticleDetailSerializer(serializers.ModelSerializer):
+    key_figures = KeyFigureSerializer(many=True)
+    transparencies = TransparencySerializer(many=True)
+    studies = NestedStudySerializer(many=True)
+    authors = AuthorSerializer(many=True)
+    journal = JournalSerializer()
+
+    class Meta:
+        model=Article
+        fields='__all__'
+
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model=Collection
-        fields='__all__'
-
-class ConstructSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Construct
         fields='__all__'
 
 class EffectSerializer(serializers.ModelSerializer):
@@ -307,32 +381,11 @@ class HypothesisSerializer(serializers.ModelSerializer):
         model=Hypothesis
         fields='__all__'
 
-class JournalSerializer(serializers.ModelSerializer):
-    articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
-    class Meta:
-        model=Journal
-        fields='__all__'
-
-class KeyFigureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=KeyFigure
-        fields='__all__'
-
-class MethodSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Method
-        fields='__all__'
-
 class StatisticalResultSerializer(serializers.ModelSerializer):
     class Meta:
         model=StatisticalResult
         fields='__all__'
 
-class TransparencySerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Transparency
-        fields='__all__'
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:

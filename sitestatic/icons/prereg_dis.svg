@@ -1,0 +1,24 @@
+
+<svg width="86px" height="92px" viewBox="0 0 86 92" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path d="M55,5.19615242 L76.8371686,17.8038476 C82.406388,21.0192379 85.8371686,26.9615242 85.8371686,33.3923048 L85.8371686,58.6076952 C85.8371686,65.0384758 82.406388,70.9807621 76.8371686,74.1961524 L55,86.8038476 C49.4307806,90.0192379 42.5692194,90.0192379 37,86.8038476 L15.1628314,74.1961524 C9.59361204,70.9807621 6.16283143,65.0384758 6.16283143,58.6076952 L6.16283143,33.3923048 C6.16283143,26.9615242 9.59361204,21.0192379 15.1628314,17.8038476 L37,5.19615242 C42.5692194,1.98076211 49.4307806,1.98076211 55,5.19615242 Z" id="path-1"></path>
+        <filter x="0.7%" y="-0.8%" width="98.6%" height="105.9%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.221524004 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Disabled" transform="translate(-93.000000, -2.000000)">
+            <g id="pr_dis" transform="translate(90.000000, 0.000000)">
+                <g id="Polygon">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#ADADAD" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g id="Prereg-Icon" transform="translate(22.000000, 29.000000)" fill="#FFFFFF">
+                    <polygon id="Path" points="0 20.4566182 18 34.2788976 45.5526853 6.11216438 37.7082607 0 18 21.4566182 5.91997455 12.3836238"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
