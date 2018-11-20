@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
-import {Typography, Icon, Button} from '@material-ui/core';
+import {Typography, Icon, Button, Radio, RadioGroup} from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -30,6 +30,14 @@ const styles = {
         padding: 0
     },
     checkbox: {
+        margin: 0,
+        padding: 5
+    },
+    radioGroup: {
+        margin: 0,
+        padding: 5
+    },
+    radio: {
         margin: 0,
         padding: 5
     },
@@ -101,19 +109,45 @@ class ArticleSearchFilter extends React.Component {
 
     render_category(cat) {
         let {classes} = this.props
+        let group
+        let controls = cat.items.map((item) => {
+            return this.render_item(item, cat.type)
+        })
+        if (cat.type == 'radio') group = (<RadioGroup
+                aria-label={cat.id}
+                name={cat.id}
+                className={classes.radioGroup}
+              >{ controls }</RadioGroup>)
+        else group = (
+            <FormGroup className={classes.group}>
+                { controls }
+            </FormGroup>
+        )
     	return (
 			<FormControl component="fieldset" key={cat.category} className={classes.category}>
     		    <FormLabel component="legend" className={classes.categoryLabel}>{ cat.label }</FormLabel>
-                <FormGroup className={classes.group}>
-				{ cat.items.map(this.render_item) }
-				</FormGroup>
+                { group }
 			</FormControl>
 		)
     }
 
-    render_item(item) {
+    render_item(item, type) {
         let {classes} = this.props
-    	return (
+        if (type == 'radio') return (
+            <FormControlLabel
+                value="format"
+                key={item.id}
+                control={
+                    <Radio
+                        checked={this.item_selected(item)}
+                        className={classes.radio}
+                        onChange={this.handleFilterItemCheck(item)}
+                        value={item.id}
+                        color="primary" />
+                }
+                label={item.label} />
+        )
+        else return (
     		<FormControlLabel
        			key={item.id}
                 className={classes.checkboxLabel}

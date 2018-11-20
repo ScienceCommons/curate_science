@@ -46,6 +46,7 @@ var C = {
 		{
 			category: 'area',
 			label: "Research area",
+			type: 'radio',
 			items: [
 				{
 					id: "social_science",
