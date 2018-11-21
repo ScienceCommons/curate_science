@@ -7,9 +7,18 @@ import {truncate} from '../util/util.jsx'
 
 import MouseOverPopover from '../components/shared/MouseOverPopover.jsx';
 
-import {Icon, Typography} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
+import {Icon, Typography, Popover, Menu} from '@material-ui/core';
 
+const styles = theme => ({
+  popover: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    padding: theme.spacing.unit,
+  },
+})
 
 class TransparencyBadge extends React.Component {
 	constructor(props) {
@@ -21,7 +30,7 @@ class TransparencyBadge extends React.Component {
     }
 
 	render_feature(f, i) {
-		let {icon_size, study_level, studies, transparencies} = this.props
+		let {icon_size, study_level, studies, transparencies, classes} = this.props
 		let sole_study = studies.length == 1
 		let transparencies_by_study = {}
 		// Collect this feature's transparencies across all studies
@@ -41,6 +50,7 @@ class TransparencyBadge extends React.Component {
 		}
 		let badge_icon = (
 			<img
+   			   key={i}
 			   src={`/sitestatic/icons/${icon}.svg`}
 			   title={label}
 			   width={icon_size}
@@ -51,23 +61,26 @@ class TransparencyBadge extends React.Component {
 			return badge_icon
 		} else {
 			// Collect transparencies across all studies
+			let popover_content = (
+				<div style={{padding: 10}}>
+					<Typography variant="h5">{ f.label }</Typography>
+					{ Object.keys(transparencies_by_study).map((study_num, j) => {
+						let study_transparencies = transparencies_by_study[study_num]
+						if (study_transparencies.length == 0) return null
+						return (
+							<div key={j}>
+								{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num}</Typography> : null }
+								{ study_transparencies.map((t, idx) => {
+									return <Typography key={idx}><a href={t.url} key={idx} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(t.url) }</a></Typography>
+								}) }
+							</div>
+						)
+					}) }
+				</div>
+			)
 			return (
-				<MouseOverPopover target={badge_icon} key={i}>
-					<div style={{padding: 10}}>
-						<Typography variant="h5">{ f.label }</Typography>
-						{ Object.keys(transparencies_by_study).map((study_num, i) => {
-							let study_transparencies = transparencies_by_study[study_num]
-							if (study_transparencies.length == 0) return null
-							return (
-								<p key={i}>
-									{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num}</Typography> : null }
-									{ study_transparencies.map((t, idx) => {
-										return <Typography><a href={t.url} key={idx} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(t.url) }</a></Typography>
-									}) }
-								</p>
-							)
-						}) }
-					</div>
+				<MouseOverPopover target={badge_icon}>
+					{ popover_content }
 				</MouseOverPopover>
 			)
 		}
@@ -101,4 +114,4 @@ TransparencyBadge.defaultProps = {
 	studies: []
 };
 
-export default TransparencyBadge;
+export default withStyles(styles)(TransparencyBadge);

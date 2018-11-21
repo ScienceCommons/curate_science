@@ -4,9 +4,10 @@ import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
+const CLOSE_DELAY = 2000
+
 const styles = theme => ({
   popover: {
-    pointerEvents: 'none',
   },
   paper: {
     padding: theme.spacing.unit,
@@ -23,7 +24,8 @@ class MouseOverPopover extends React.Component {
   };
 
   handlePopoverClose = () => {
-    this.setState({ anchorEl: null });
+    console.log("Closing")
+    this.setState({ anchorEl: null })
   };
 
   render() {
@@ -37,7 +39,6 @@ class MouseOverPopover extends React.Component {
           aria-owns={open ? 'mouse-over-popover' : undefined}
           aria-haspopup="true"
           onMouseEnter={this.handlePopoverOpen}
-          onMouseLeave={this.handlePopoverClose}
         >
           { target }
         </span>
@@ -50,7 +51,7 @@ class MouseOverPopover extends React.Component {
           open={open}
           anchorEl={anchorEl}
           anchorOrigin={{
-            vertical: 'bottom',
+            vertical: 'center',
             horizontal: 'left',
           }}
           transformOrigin={{
@@ -59,8 +60,11 @@ class MouseOverPopover extends React.Component {
           }}
           onClose={this.handlePopoverClose}
           disableRestoreFocus
+          useLayerForClickAway={false}
         >
+          <div onMouseLeave={this.handlePopoverClose}>
           { this.props.children }
+          </div>
         </Popover>
       </span>
     );

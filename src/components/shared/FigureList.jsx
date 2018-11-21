@@ -40,9 +40,8 @@ class FigureList extends React.Component {
         let {classes, showDelete} = this.props
         let tt = `Figure ${kf.figure_number}`
         if (showDelete) tt = tt + ' (click to delete)'
-        console.log(tt)
     	return (
-            <Tooltip title={tt}>
+            <Tooltip title={tt} key={i}>
                 <span className={classes.thumbnail} style={{backgroundImage: `url(${kf.image_url})`}} onClick={this.deleteFigure(kf)} />
             </Tooltip>
         )
