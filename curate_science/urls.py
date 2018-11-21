@@ -31,7 +31,7 @@ urlpatterns = [
     path('articles/create/', views.create_article, name='create-article'),
     path('articles/<int:pk>/', views.view_article, name='view-article'),
     path('articles/<int:pk>/update/', views.update_article, name='update-article'),
-] + static("/dist/js/", document_root="dist/js") + static("/sitestatic/", document_root="sitestatic")
+] + static("/dist/", document_root="dist") + static("/sitestatic/", document_root="sitestatic")
 
 
 urlpatterns += [
