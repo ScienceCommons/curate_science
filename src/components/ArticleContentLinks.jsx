@@ -15,7 +15,7 @@ class ArticleContentLinks extends React.Component {
     }
 
 	render_link(url, link_type) {
-		return <Button href={url} target="_blank" variant="outlined">{link_type}</Button>
+		return <Button href={url} key={url} target="_blank" variant="outlined">{link_type}</Button>
 	}
 
 	render() {

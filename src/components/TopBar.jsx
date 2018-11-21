@@ -228,6 +228,7 @@ class TopBar extends React.Component {
                                 }}
                                 open={this.menuOpen('curate')}
                                 onClose={this.handleClose('curate')}
+                                disableRestoreFocus
                               >
                                 <Link to="/articles/curate"><MenuItem>Curate Article Transparency</MenuItem></Link>
                                 <Link to="/articles/curate?r=1"><MenuItem>Add Replication</MenuItem></Link>
