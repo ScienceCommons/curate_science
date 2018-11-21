@@ -12,9 +12,12 @@ handlers:
   static_dir: dist
 - url: /.*
   script: auto
+- url: /_ah/remote_api(/.*)?
+  script: auto
 
 builtins:
 - remote_api: on
+
 
 # Only pure Python libraries can be vendored
 # Python libraries that use C extensions can
