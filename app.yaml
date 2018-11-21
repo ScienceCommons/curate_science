@@ -13,6 +13,8 @@ handlers:
 - url: /.*
   script: auto
 
+builtins:
+- remote_api: on
 
 # Only pure Python libraries can be vendored
 # Python libraries that use C extensions can
