@@ -1,5 +1,6 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
 import AutocompleteReactSelect from '../AutocompleteReactSelect.jsx';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -15,25 +16,27 @@ class JournalSelector extends React.Component {
     }
 
     handleChange(value) {
+        console.log(value)
         this.props.onChange(value)
     }
 
 	render() {
-		let {classes, name} = this.props
+		let {classes, value} = this.props
 		return (
 			<AutocompleteReactSelect
-                                     creatable
-                                     labelProp="text"
-                                     listUrl="/api/journals/autocomplete/"
-                                     createUrl="/api/journals/create/"
-                                     placeholder="Journal name *"
-                                     onChange={this.handleChange} />
+                 creatable
+                 labelProp="text"
+                 value={value}
+                 listUrl="/api/journals/autocomplete/"
+                 createUrl="/api/journals/create/"
+                 placeholder="Journal name *"
+                 onChange={this.handleChange} />
         )
 	}
 }
 
 JournalSelector.defaultProps = {
-
+    value: PropTypes.object
 };
 
 export default withStyles(styles)(JournalSelector);
