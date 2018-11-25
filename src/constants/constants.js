@@ -132,31 +132,36 @@ var C = {
 			id: "prereg",
 			label: "Preregistration",
 			icon: "prereg",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY']
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
+			color: '#C60018'
 		},
 		{
 			id: "materials",
 			label: "Public Materials",
 			icon: "materials",
-			article_types: ['ORIGINAL', 'REPLICATION']
+			article_types: ['ORIGINAL', 'REPLICATION'],
+			color: '#F5A623'
 		},
 		{
 			id: "data",
 			label: "Public Data",
 			icon: "data",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY']
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
+			color: '#2D96E8'
 		},
 		{
 			id: "code",
 			label: "Public Code",
 			icon: "code",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY']
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
+			color: '#50E3C2'
 		},
 		{
 			id: "repstd",
 			label: "Reporting Standards",
 			icon: "repstd",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH']
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH'],
+			color: '#7ED321'
 		}
 	]
 }

@@ -36,7 +36,8 @@ class TransparencyBadge extends React.Component {
 		// Collect this feature's transparencies across all studies
 		let n = 0
 		studies.forEach((study) => {
-			let study_transparencies = study.transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
+			let transparencies = study.transparencies || []
+			let study_transparencies = transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
 			n = n + study_transparencies.length
 			transparencies_by_study[study.study_number] = study_transparencies
 		})

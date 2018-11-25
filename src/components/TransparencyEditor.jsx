@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 	FormControlLabel, Radio, Icon, InputLabel, Input, InputAdornment,
-	AppBar, Typography, Button, TextField, Menu, MenuItem, Grid} from '@material-ui/core';
+	AppBar, Typography, IconButton, Button, TextField, Menu, MenuItem, Grid} from '@material-ui/core';
 
 import {set, find} from 'lodash'
 
@@ -51,6 +51,14 @@ class URLInput extends React.Component {
 	}
 }
 
+const TransparencyHeader = ({badge}) => {
+	return (
+		<div style={{borderBottom: `1px solid ${badge.color}`, width: '100%'}}>
+			<Typography variant="button" align="center" justify="center"><TransparencyIcon tt={{icon: badge.icon}} size={30} /> { badge.label }</Typography>
+		</div>
+	)
+}
+
 const TransparencyIcon = ({tt, size}) => {
 	return <img
 			   src={`/sitestatic/icons/${tt.icon}.svg`}
@@ -87,9 +95,6 @@ class TransparencyEditor extends React.Component {
         super(props);
         this.state = {
         	tab: 0,
-        	form: {
-        		rs: 1
-        	},
         	anchorEl: null
         };
 
@@ -110,18 +115,8 @@ class TransparencyEditor extends React.Component {
 		this.handleCreateMenuClose = this.handleCreateMenuClose.bind(this)
 		this.addTransparency = this.addTransparency.bind(this)
 		this.render_transparency = this.render_transparency.bind(this)
-		this.render_transparency_type = this.render_transparency_type.bind(this)
+		this.render_transparency_section = this.render_transparency_section.bind(this)
     }
-
-    handleChange = (event, transp, key, value) => {
-    	let {form} = this.state
-    	set(form, [transp, key, value])
-	    this.setState({form})
-	}
-
-    handleTabChange = (event, value) => {
-	    this.setState({tab: value })
-	}
 
 	handleCreateMenuClick = event => {
 	    this.setState({ anchorEl: event.currentTarget });
@@ -145,27 +140,37 @@ class TransparencyEditor extends React.Component {
 		this.handleCreateMenuClose()
 	}
 
-	render_transparency_type(tt) {
+	deleteTransparency = idx => (event) => {
+		this.props.onDeleteTransparency(idx)
+	}
+
+	changeTransparency = (idx, prop) => (event) => {
 		let {transparencies} = this.props
-		let type_transparencies = transparencies.filter((t) => t.transparency_type == tt.id)
-		if (type_transparencies.length > 0) return [
-			<Grid item xs={1} alignContent="center" justify="center" style={{verticalAlign: 'center'}}>
-				<TransparencyIcon tt={tt} size={30} />
-			</Grid>,
-			<Grid item xs={11}>
-			 { type_transparencies.map(this.render_transparency) }
-			</Grid>
-		]
+		let tt = transparencies[idx]
+		tt[prop] = event.target.value
+		this.props.onChangeTransparency(idx, tt)
+	}
+
+	render_transparency_section(badge) {
+		let {transparencies} = this.props
+		let type_transparencies = transparencies.filter((t) => t.transparency_type == badge.id)
+		if (type_transparencies.length > 0) {
+			return (
+				<div>
+					<TransparencyHeader badge={badge} />
+		   		    { type_transparencies.map((tt, idx) => {
+		   		    	return this.render_transparency(tt, idx, badge)
+		   		    }) }
+				</div>
+			)
+		}
 		else return null
 	}
 
-	render_transparency(transparency, i) {
+	render_transparency(transparency, i, badge) {
 		let {classes} = this.props
-		let {form} = this.state
-		let tb = find(C.TRANSPARENCY_BADGES, {id: transparency.transparency_type})
 		let content
-		let protocol_url // TODO
-		if (tb.id == 'prereg') {
+		if (badge.id == 'prereg') {
 			content = (
 				<div key={i}>
 					<FormControl component="fieldset" className={classes.formControl}>
@@ -174,7 +179,7 @@ class TransparencyEditor extends React.Component {
 			            aria-label="prereg_rg"
 			            name="prereg_rg"
 			            className={classes.radioGroup}
-			            value={form.prereg_type}
+			            value={transparency.prereg_type}
 			          >
 			            <FormControlLabel value="format" control={<Radio className={classes.radio} />} label="Registered Report format" />
 			            <FormControlLabel value="design_analysis" control={<Radio className={classes.radio} />} label="Preregistered design + analysis" />
@@ -182,24 +187,25 @@ class TransparencyEditor extends React.Component {
 			          </RadioGroup>
 			        </FormControl>
 
-					<TextField
-					  id='protocol-url'
-					  label={`Preregistered protocol URL`}
-					  value={protocol_url || ''}
-					  onChange={this.handleChange}
-					  margin="normal"
-					  fullWidth
-					  variant="outlined"
-					/>
+			        <URLInput
+			        	label="Preregistered protocol URL"
+			        	onChange={this.changeTransparency(i, 'url')}
+			        	url={transparency.url} />
 		        </div>
 				)
-		} else if (tb.id == 'materials') {
-			content = <URLInput label="Study materials URL" urls={[""]} />
-		} else if (tb.id == 'data') {
-			content = <URLInput label="Data URL" urls={[""]} />
-		} else if (tb.id == 'code') {
-			content = <URLInput label="Code URL" urls={[""]} />
-		} else if (tb.id == 'repstd') {
+		} else if (badge.id == 'materials') {
+			content = <URLInput label="Study materials URL"
+						onChange={this.changeTransparency(i, 'url')}
+						url={transparency.url} />
+		} else if (badge.id == 'data') {
+			content = <URLInput label="Data URL"
+						onChange={this.changeTransparency(i, 'url')}
+						url={transparency.url} />
+		} else if (badge.id == 'code') {
+			content = <URLInput label="Code URL"
+						onChange={this.changeTransparency(i, 'url')}
+						url={transparency.url} />
+		} else if (badge.id == 'repstd') {
 			content = (
 				<div id="rs1">
 					<span>Compliance to relevant reporting standard:</span>
@@ -221,7 +227,14 @@ class TransparencyEditor extends React.Component {
 				</div>
 			)
 		}
-		return content
+		return (
+			<div>
+				<IconButton onClick={this.deleteTransparency(i)}>
+					<Icon>delete</Icon>
+				</IconButton>
+				{ content }
+			</div>
+		)
 	}
 
 	relevant_transparencies() {
@@ -264,12 +277,10 @@ class TransparencyEditor extends React.Component {
 		let {classes} = this.props
 		return (
 			<Paper className={classes.root}>
-			    <Typography variant="h4" gutterBottom>Transpariences</Typography>
-			    <Grid container spacing={16}>
-				    { this.relevant_transparencies().map((tt, i) => {
-				    	return this.render_transparency_type(tt)
-				    }) }
-				</Grid>
+			    <Typography variant="h5" gutterBottom>Transpariences</Typography>
+			    { this.relevant_transparencies().map((tt, i) => {
+			    	return this.render_transparency_section(tt)
+			    }) }
 			    <div style={{marginTop: 20}}>
 				    { this.render_create_menu() }
 			    </div>

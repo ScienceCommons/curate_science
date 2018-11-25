@@ -126,17 +126,22 @@ class Article(models.Model):
 
     @property
     def et_al(self):
-        first_author = self.authors.first().last_name
-        has_two_authors = self.authors.count() == 2
-        has_many_authors = self.authors.count() > 2
-        if has_two_authors:
-            second_author = self.articleauthor_set.get(order=2).author.last_name
-            et_al = f"{first_author} & {second_author}"
-        elif has_many_authors:
-            et_al = f"{first_author} et al."
+        n = self.authors.count()
+        has_authors = n > 0
+        if has_authors:
+            first_author = self.authors.first().last_name
+            has_two_authors = n == 2
+            has_many_authors = self.authors.count() > 2
+            if has_two_authors:
+                second_author = self.articleauthor_set.get(order=2).author.last_name
+                et_al = f"{first_author} & {second_author}"
+            elif has_many_authors:
+                et_al = f"{first_author} et al."
+            else:
+                et_al = first_author
+            return et_al
         else:
-            et_al = first_author
-        return et_al
+            return "--"
 
     @property
     def commentary_of(self):

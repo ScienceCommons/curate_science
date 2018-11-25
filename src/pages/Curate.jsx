@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { withRouter } from 'react-router-dom';
+
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 
@@ -7,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
 	FormControl, FormControlLabel, RadioGroup, Radio, Checkbox,
-	Select, OutlinedInput, Paper, Snackbar} from '@material-ui/core';
+	Select, OutlinedInput, Paper, Snackbar, Icon} from '@material-ui/core';
 
 import C from '../constants/constants';
 
@@ -43,26 +45,61 @@ class Curate extends React.Component {
         super(props);
         this.state = {
         	formdata: {},
-        	studies: [],
-        	study_editor_open: false,
-        	study_editor_study: null
+        	study_editor_idx: -1
         };
 
         this.handleDOILookupResults = this.handleDOILookupResults.bind(this)
-        this.openStudyEditor = this.toggleStudyEditor.bind(this, true)
-        this.closeStudyEditor = this.toggleStudyEditor.bind(this, false)
+        this.addNewStudy = this.addNewStudy.bind(this)
+        this.closeStudyEditor = this.closeStudyEditor.bind(this)
         this.handleCheckChange = this.handleCheckChange.bind(this)
         this.handleValueChange = this.handleValueChange.bind(this)
         this.saveStudy = this.saveStudy.bind(this)
         this.snackClose = this.snackClose.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleStudyDelete = this.handleStudyDelete.bind(this)
+        this.handleStudyEdit = this.handleStudyEdit.bind(this)
     }
 
     componentDidMount() {
+    	let id = this.editing_id()
+    	if (id != null) {
+    		this.fetch_article(id)
+    	}
+    }
 
+    fetch_article(id) {
+    	fetch(`/api/articles/${id}`).then(res => res.json()).then((res) => {
+    		console.log(res)
+    		this.setState({formdata: res})
+    	})
+    }
+
+    editing_id() {
+		let {match} = this.props
+    	return match.params.id
+    }
+
+    editing() {
+    	return this.editing_id() != null
     }
 
     snackClose() {
     	this.setState({snack_message: null})
+    }
+
+    handleStudyEdit(idx) {
+    	console.log(`Edit ${idx}`)
+    	this.setState({study_editor_idx: idx})
+    }
+
+    handleStudyDelete(idx) {
+    	console.log(`Delete idx ${idx}`)
+	    let {formdata} = this.state
+	    let studies = formdata.studies
+	    if (idx < studies.length) {
+	    	studies.splice(idx, 1)
+		    this.setState({formdata})
+	    }
     }
 
     handleDOILookupResults(res) {
@@ -91,47 +128,88 @@ class Curate extends React.Component {
 	    this.setState({formdata});
   	}
 
-  	toggleStudyEditor(open) {
-  		this.setState({study_editor_open: open})
+  	closeStudyEditor() {
+  		this.setState({study_editor_idx: -1})
   	}
 
-  	saveStudy(study) {
-  		this.toggleStudyEditor(false)
-  		let {studies} = this.state
-  		studies.push(study)
-  		this.setState({studies})
+  	addNewStudy() {
+  		let {formdata} = this.state
+  		formdata.studies.push({}) // New blank study object
+  		this.setState({formdata: formdata, study_editor_idx: formdata.studies.length - 1})
   	}
 
+  	saveStudy(idx, study) {
+  		this.closeStudyEditor()
+  		let {formdata} = this.state
+  		console.log(`Saving study ${idx}`)
+  		console.log(study)
+  		formdata.studies[idx] = study
+  		this.setState({formdata})
+  	}
+
+  	handleSubmit(e) {
+  		const { cookies } = this.props;
+  		e.preventDefault()
+  		// TODO: Add study data
+  		// TODO: Confirm study deletion, figure deletion working
+  		var form = document.getElementById('curateForm');
+		let formData = new FormData(form);
+  		let editing_id = this.editing_id()
+  		let creating_new = editing_id == null
+  		let url = creating_new ? `/api/articles/create/` : `/api/articles/${editing_id}/update/`
+  		let method = creating_new ? 'POST' : 'PATCH'
+  		let csrf_token = cookies.get('csrftoken')
+  		let fetch_opts = {
+		    credentials: 'include',
+  			method: method,
+  			body: formData,
+  			headers: {
+  				'X-CSRFToken': csrf_token
+  			}
+  		}
+  		fetch(url, fetch_opts).then(res => res.json().then(data => {
+  			console.log(res.status)
+  			console.log(data)
+    		if (res.ok) {
+    			// Created or updated
+    			window.location.replace(`/new/article/${creating_new ? data.id : editing_id}/`)
+    		} else if (!res.ok) {
+    			// Handle error
+    			let detail = data.detail
+    			if (detail != null) this.setState({snack_message: detail})
+    		}
+    	}))
+  	}
 
 	render() {
 		const { classes, cookies } = this.props;
-		let {formdata, study_editor_open, studies, study_editor_study, snack_message} = this.state
-		let at = find(C.ARTICLE_TYPES, {id: formdata.type || 'ORIGINAL'})
+		let {formdata, study_editor_idx, snack_message} = this.state
+		let studies = formdata.studies || []
+		let at = find(C.ARTICLE_TYPES, {id: formdata.article_type || 'ORIGINAL'})
 		let show_reanalysis, show_commentary, show_study_section, show_replication
+		let form_action = this.editing() ? "Edit" : "Add"
 		if (at != null) {
 			show_reanalysis = at.relevant_sections.indexOf('reanalysis') > -1
 			show_commentary = at.relevant_sections.indexOf('commentary') > -1
 			show_study_section = at.relevant_sections.indexOf('studies') > -1
 			show_replication = at.relevant_sections.indexOf('replication') > -1
 		}
-		let csrf_token = cookies.get('csrftoken')
 		return (
 			<div className={classes.root}>
 				<Grid container className={classes.root} spacing={24}>
 					<Grid item xs={12}>
-						<Typography variant="h4">Add/Edit Article</Typography>
+						<Typography variant="h2">{form_action} Article</Typography>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item xs={12} hidden={this.editing()}>
 						<DOILookup onLookup={this.handleDOILookupResults} />
 					</Grid>
 				</Grid>
 
-				<form noValidate
+				<form
+					id="curateForm"
 					autoComplete="off"
-					action="/api/articles/create/"
+					onSubmit={this.handleSubmit}
 					method="POST">
-
-					<input type="hidden" name="csrfmiddlewaretoken" value={csrf_token} />
 
 					<Grid container className={classes.root} spacing={24}>
 						<Grid xs={12} item>
@@ -190,18 +268,18 @@ class Curate extends React.Component {
 						            ref={ref => {
 						              this.InputLabelRef = ref;
 						            }}
-						            htmlFor="type"
+						            htmlFor="article_type"
 						          >
 						            Article Type
 						        </InputLabel>
 						        <Select
-						            value={formdata.type || "ORIGINAL"}
-						            onChange={this.handleChange('type')}
+						            value={formdata.article_type || "ORIGINAL"}
+						            onChange={this.handleChange('article_type')}
 						            input={
 						              <OutlinedInput
 	  	                                labelWidth={80}
 						                name="article_type"
-						                id="type"
+						                id="article_type"
 						              />
 						            }
 						          >
@@ -212,7 +290,7 @@ class Curate extends React.Component {
 						    </FormControl>
 						</Grid>
 						<Grid item xs={6}>
-					        <JournalSelector onChange={this.handleValueChange('journal')} />
+					        <JournalSelector onChange={this.handleValueChange('journal')} value={formdata.journal} />
 					    </Grid>
 						<Grid item xs={6}>
 						    <TextField
@@ -223,12 +301,14 @@ class Curate extends React.Component {
 					          onChange={this.handleChange('year')}
 					          inputProps={{pattern: "\d\d\d\d"}}
 					          type="number"
+					          name="year"
 					          margin="normal"
 					          variant="outlined"
 					          disabled={formdata.in_press}
 					        />
 
 				    		<FormControlLabel
+				    			style={{padding: 18}}
 					            control={
 				    	            <Checkbox
 				    	              checked={formdata.in_press}
@@ -282,25 +362,37 @@ class Curate extends React.Component {
 						</Grid>
 
 						<Grid item xs={12} hidden={!show_study_section}>
-							<Typography variant="h3" gutterBottom>Studies</Typography>
-							{ studies.map(study => <StudyLI key={study.id}
+							<Typography variant="h4" gutterBottom>Studies</Typography>
+							{ studies.map((study, idx) => <StudyLI key={study.id}
 															study={study}
+															idx={idx}
 															showReplicationDetails={show_replication}
+															onDelete={this.handleStudyDelete}
+															onEdit={this.handleStudyEdit}
 															showActions={true} />) }
-							<Button variant="contained" onClick={this.openStudyEditor}>Add Study</Button>
+							<Button variant="contained" onClick={this.addNewStudy}>
+								<Icon>add</Icon>
+								Add Study
+							</Button>
 						</Grid>
 
 						<Grid item xs={6}>
-							<Button variant="contained" color="primary" size="large" type="submit">Save</Button>
+							<Button
+								variant="contained"
+								color="primary"
+								size="large"
+								type="submit">Save</Button>
 						</Grid>
 
 					</Grid>
 
-					<StudyEditor open={study_editor_open}
-								 onClose={this.closeStudyEditor}
-								 onSave={this.saveStudy}
-								 article_type={formdata.type}
-								 editStudy={study_editor_study} />
+					<StudyEditor
+							 open={study_editor_idx != -1}
+							 onClose={this.closeStudyEditor}
+							 onSave={this.saveStudy}
+							 article_type={formdata.type}
+							 idx={study_editor_idx}
+							 editStudy={studies[study_editor_idx]} />
 
 				</form>
 
@@ -310,7 +402,7 @@ class Curate extends React.Component {
 		            horizontal: 'left',
 		          }}
 		          open={snack_message != null}
-		          autoHideDuration={1000}
+		          autoHideDuration={2000}
 		          onClose={this.snackClose}
 		          ContentProps={{
 		            'aria-describedby': 'message-id',
@@ -326,4 +418,4 @@ Curate.propTypes = {
 	cookies: instanceOf(Cookies).isRequired
 }
 
-export default withCookies(withStyles(styles)(Curate));
+export default withRouter(withCookies(withStyles(styles)(Curate)));
