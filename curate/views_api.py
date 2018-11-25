@@ -160,9 +160,11 @@ def create_article(request):
 @api_view(('GET', 'PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
 def update_article(request, pk):
+    logging.warning(pk)
     queryset=get_object_or_404(Article, id=pk)
     if request.method in ('PUT', 'PATCH'):
         if request.method=="PATCH":
+            logging.warning(request.data)
             is_partial=True
         else:
             is_partial=False

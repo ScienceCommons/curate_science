@@ -209,7 +209,7 @@ class StudyEditor extends React.Component {
 			    </FormControl>
 				)
 		}
-		return <Grid item xs={params.xs || 12}>{ cell_content }</Grid>
+		return <Grid item xs={params.xs || 12} key={i}>{ cell_content }</Grid>
 	}
 
 	render() {
@@ -239,7 +239,7 @@ class StudyEditor extends React.Component {
 					<DialogTitle id="form-dialog-title">{ creating_new ? "Add" : "Edit" } Study</DialogTitle>
 
 					<DialogContent>
-						<Typography variant="h5">Original Article/Study</Typography>
+						<Typography variant="h5" className={classes.sectionHeading}>Original Article/Study</Typography>
 						<ArticleSelector selectStudy={true} />
 
 						<TransparencyEditor

@@ -264,7 +264,7 @@ class TransparencyEditor extends React.Component {
 		let {classes} = this.props
 		return (
 			<Paper className={classes.root}>
-			    <Typography variant="h4" gutterBottom>Transpariences</Typography>
+			    <Typography variant="h5" gutterBottom>Transpariences</Typography>
 			    <Grid container spacing={16}>
 				    { this.relevant_transparencies().map((tt, i) => {
 				    	return this.render_transparency_type(tt)

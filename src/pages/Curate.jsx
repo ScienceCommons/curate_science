@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { withRouter } from 'react-router-dom';
+
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 
@@ -7,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
 	FormControl, FormControlLabel, RadioGroup, Radio, Checkbox,
-	Select, OutlinedInput, Paper, Snackbar} from '@material-ui/core';
+	Select, OutlinedInput, Paper, Snackbar, Icon} from '@material-ui/core';
 
 import C from '../constants/constants';
 
@@ -55,10 +57,30 @@ class Curate extends React.Component {
         this.handleValueChange = this.handleValueChange.bind(this)
         this.saveStudy = this.saveStudy.bind(this)
         this.snackClose = this.snackClose.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     componentDidMount() {
+    	let id = this.editing_id()
+    	if (id != null) {
+    		this.fetch_article(id)
+    	}
+    }
 
+    fetch_article(id) {
+    	fetch(`/api/articles/${id}`).then(res => res.json()).then((res) => {
+    		console.log(res)
+    		this.setState({formdata: res})
+    	})
+    }
+
+    editing_id() {
+		let {match} = this.props
+    	return match.params.id
+    }
+
+    editing() {
+    	return this.editing_id() != null
     }
 
     snackClose() {
@@ -102,6 +124,32 @@ class Curate extends React.Component {
   		this.setState({studies})
   	}
 
+  	handleSubmit(e) {
+  		e.preventDefault()
+  		// TODO: Add study data
+  		// TODO: Confirm study deletion, figure deletion working
+  		var form = document.getElementById('curateForm');
+		let formData = new FormData(form);
+  		let editing_id = this.editing_id()
+  		let creating_new = editing_id == null
+  		let url = creating_new ? `/api/articles/create/` : `/api/articles/${editing_id}/update/`
+  		let method = creating_new ? 'POST' : 'PATCH'
+  		let fetch_opts = {
+  			method: method,
+  			body: formData
+  		}
+  		fetch(url, fetch_opts).then(res => res.json().then(data => {
+  			console.log(res.status)
+    		if (res.status == 201) {
+    			// Created
+    			window.location.replace(`/article/${data.id}/`)
+    		} else if (!res.ok) {
+    			// Handle error
+    			let detail = data.detail
+    			if (detail != null) this.setState({snack_message: detail})
+    		}
+    	}))
+  	}
 
 	render() {
 		const { classes, cookies } = this.props;
@@ -119,16 +167,17 @@ class Curate extends React.Component {
 			<div className={classes.root}>
 				<Grid container className={classes.root} spacing={24}>
 					<Grid item xs={12}>
-						<Typography variant="h4">Add/Edit Article</Typography>
+						<Typography variant="h2">Add/Edit Article</Typography>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item xs={12} hidden={this.editing()}>
 						<DOILookup onLookup={this.handleDOILookupResults} />
 					</Grid>
 				</Grid>
 
-				<form noValidate
+				<form
+					id="curateForm"
 					autoComplete="off"
-					action="/api/articles/create/"
+					onSubmit={this.handleSubmit}
 					method="POST">
 
 					<input type="hidden" name="csrfmiddlewaretoken" value={csrf_token} />
@@ -223,12 +272,14 @@ class Curate extends React.Component {
 					          onChange={this.handleChange('year')}
 					          inputProps={{pattern: "\d\d\d\d"}}
 					          type="number"
+					          name="year"
 					          margin="normal"
 					          variant="outlined"
 					          disabled={formdata.in_press}
 					        />
 
 				    		<FormControlLabel
+				    			style={{padding: 18}}
 					            control={
 				    	            <Checkbox
 				    	              checked={formdata.in_press}
@@ -282,16 +333,23 @@ class Curate extends React.Component {
 						</Grid>
 
 						<Grid item xs={12} hidden={!show_study_section}>
-							<Typography variant="h3" gutterBottom>Studies</Typography>
+							<Typography variant="h4" gutterBottom>Studies</Typography>
 							{ studies.map(study => <StudyLI key={study.id}
 															study={study}
 															showReplicationDetails={show_replication}
 															showActions={true} />) }
-							<Button variant="contained" onClick={this.openStudyEditor}>Add Study</Button>
+							<Button variant="contained" onClick={this.openStudyEditor}>
+								<Icon>add</Icon>
+								Add Study
+							</Button>
 						</Grid>
 
 						<Grid item xs={6}>
-							<Button variant="contained" color="primary" size="large" type="submit">Save</Button>
+							<Button
+								variant="contained"
+								color="primary"
+								size="large"
+								type="submit">Save</Button>
 						</Grid>
 
 					</Grid>
@@ -310,7 +368,7 @@ class Curate extends React.Component {
 		            horizontal: 'left',
 		          }}
 		          open={snack_message != null}
-		          autoHideDuration={1000}
+		          autoHideDuration={2000}
 		          onClose={this.snackClose}
 		          ContentProps={{
 		            'aria-describedby': 'message-id',
@@ -326,4 +384,4 @@ Curate.propTypes = {
 	cookies: instanceOf(Cookies).isRequired
 }
 
-export default withCookies(withStyles(styles)(Curate));
+export default withRouter(withCookies(withStyles(styles)(Curate)));

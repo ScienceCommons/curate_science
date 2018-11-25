@@ -78,7 +78,7 @@ class FigureSelector extends React.Component {
 }
 
 FigureSelector.propTypes = {
-    onChange: PropTypes.func.required
+    onChange: PropTypes.func
 }
 
 FigureSelector.defaultProps = {

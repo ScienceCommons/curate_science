@@ -34,11 +34,22 @@ import css from './App.css';
 
 const theme = createMuiTheme({
   palette: {
-    secondary: { main: '#007CC9' },
+    primary: { main: '#793DF7' },
+    secondary: { main: '#8F0DCC' },
   },
   typography: {
     useNextVariants: true,
     fontSize: 12
+  },
+  overrides: {
+    MuiButton: {
+        containedPrimary: {
+            background: 'linear-gradient(45deg, #4F0FF8 30%, #793DF7 90%)',
+        },
+        sizeLarge: {
+           padding: 20
+        }
+    }
   }
 });
 
