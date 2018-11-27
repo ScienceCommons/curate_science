@@ -80,7 +80,7 @@ class TransparencyBadge extends React.Component {
 				</div>
 			)
 			return (
-				<MouseOverPopover target={badge_icon}>
+				<MouseOverPopover target={badge_icon} key={i}>
 					{ popover_content }
 				</MouseOverPopover>
 			)

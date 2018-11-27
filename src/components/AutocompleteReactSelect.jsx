@@ -174,9 +174,7 @@ const components = {
 class AutocompleteReactSelect extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: null
-    };
+    this.state = {}
 
     this.handleChange = this.handleChange.bind(this)
     this.loadOptions = debounce(this.loadOptions.bind(this), 400)
@@ -190,11 +188,7 @@ class AutocompleteReactSelect extends React.Component {
   }
 
   handleChange = (value, action) => {
-    this.setState({
-      value: value,
-    }, () => {
-      this.props.onChange(value, action)
-    })
+    this.props.onChange(value, action)
   }
 
   loadOptions(inputValue, cb) {
@@ -220,19 +214,20 @@ class AutocompleteReactSelect extends React.Component {
   }
 
   filterOption(op, text) {
-    let {labelProp} = this.props
+    let label = op.data.text
+    console.log(label)
     if (text.length == 0) return false
-    else return op.label != null && op.label.toLowerCase().indexOf(text.toLowerCase()) > -1
+    else return label != null && label.toLowerCase().indexOf(text.toLowerCase()) > -1
   }
 
   renderOptionLabel(option) {
-    let {labelProp} = this.props
-    return option[labelProp]
+    let {labelProp, optionRenderer} = this.props
+    if (optionRenderer != null) return optionRenderer(option)
+    else return option[labelProp]
   }
 
   renderOptionValue(option) {
-    let {labelProp} = this.props
-    return option[labelProp]
+    return option.id
   }
 
   formatCreateLabel(inputValue) {
@@ -248,7 +243,7 @@ class AutocompleteReactSelect extends React.Component {
   }
 
   render() {
-    const { classes, theme, suggestions, placeholder, creatable, multi, labelProp } = this.props;
+    const { classes, theme, suggestions, placeholder, creatable, multi, labelProp, value } = this.props;
     let {loading} = this.state
 
     const selectStyles = {
@@ -265,7 +260,7 @@ class AutocompleteReactSelect extends React.Component {
       classes: classes,
       styles: selectStyles,
       components: components,
-      value: this.state.value,
+      value: value,
       placeholder: placeholder
     }
     if (creatable) {

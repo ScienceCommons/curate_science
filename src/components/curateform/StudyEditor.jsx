@@ -29,8 +29,7 @@ class StudyEditor extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-			formdata: {},
-			transparencies: []
+			formdata: {}
 		};
 
 		this.handleChange = this.handleChange.bind(this)
@@ -127,10 +126,9 @@ class StudyEditor extends React.Component {
 	}
 
 	handleSave = () => {
-		let {editStudy, idx} = this.props
+		let {idx} = this.props
 		let {formdata} = this.state
-		let merged = merge(editStudy, formdata)
-		this.props.onSave(idx, merged)
+		this.props.onSave(idx, formdata)
 	}
 
 	handleChange = prop => event => {
@@ -152,19 +150,21 @@ class StudyEditor extends React.Component {
 	}
 
 	handleAddTransparency(tt) {
-		this.setState({transparencies: this.state.transparencies.concat({transparency_type: tt})})
+		let {formdata} = this.state
+		formdata.transparencies.push({transparency_type: tt})
+		this.setState({formdata})
 	}
 
 	handleChangeTransparency(idx, tt) {
-		let {transparencies} = this.state
-		transparencies[idx] = tt
-		this.setState({transparencies})
+		let {formdata} = this.state
+		formdata.transparencies[idx] = tt
+		this.setState({formdata})
 	}
 
 	handleDeleteTransparency(idx) {
-		let {transparencies} = this.state
-		transparencies.splice(idx, 1)
-		this.setState({transparencies})
+		let {formdata} = this.state
+		formdata.transparencies.splice(idx, 1)
+		this.setState({formdata})
 	}
 
 	renderReplicationInput(params, i) {
@@ -235,7 +235,8 @@ class StudyEditor extends React.Component {
 
 	render() {
 		const { classes, open, editStudy, article_type } = this.props;
-		let {formdata, transparencies} = this.state
+		let {formdata} = this.state
+		let transparencies = formdata.transparencies
 		let creating_new = editStudy == null
 		let replication_details
 		if (article_type == "ORIGINAL") {

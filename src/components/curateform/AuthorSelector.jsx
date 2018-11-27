@@ -11,41 +11,43 @@ const styles = {}
 class AuthorSelector extends React.Component {
 	constructor(props) {
         super(props);
-        this.state = {
-            authors: []
-        };
+        this.state = {}
         this.handleChange = this.handleChange.bind(this)
+        this.render_author = this.render_author.bind(this)
     }
 
     handleChange(value, action) {
         console.log(action)
-        let {authors} = this.state
-        if (action == 'select-option') {
-            authors.push(value.text)
-        } else if (action == 'create-option') {
-            authors.push(value.text)
+        console.log(value)
+        if (action == 'create-option') {
+            // authors.push(value.text)
         }
-        this.setState({authors})
+        this.props.onChange(value)
+    }
+
+    render_author(author) {
+        return [author.first_name, author.last_name].join(' ')
     }
 
 	render() {
-		let {classes, name} = this.props
+		let {classes, value} = this.props
         let {authors} = this.state
 		return (
 			<AutocompleteReactSelect
                                  creatable
-                                 labelProp="text"
                                  listUrl="/api/authors/autocomplete/"
                                  createUrl="/api/authors/create/"
                                  placeholder="Authors *"
+                                 optionRenderer={this.render_author}
                                  multi
+                                 value={value}
                                  onChange={this.handleChange} />
         )
 	}
 }
 
 AuthorSelector.defaultProps = {
-
+    value: []
 };
 
 export default withStyles(styles)(AuthorSelector);

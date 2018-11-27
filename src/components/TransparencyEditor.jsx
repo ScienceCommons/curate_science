@@ -8,7 +8,7 @@ import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 
 import {set, find} from 'lodash'
 
-import MultiURLInput from '../components/curateform/MultiURLInput.jsx';
+import URLInput from '../components/curateform/URLInput.jsx';
 
 import C from '../constants/constants';
 
@@ -28,27 +28,6 @@ const styles = {
     	margin: 0,
     	paddingLeft: 7
     }
-}
-
-class URLInput extends React.Component {
-
-	render() {
-		let {label, urls} = this.props
-		return (
-			<FormControl>
-		        <InputLabel htmlFor="materials">{ label }</InputLabel>
-		        <Input
-		          id="materials"
-		          fullWidth
-		          startAdornment={
-		            <InputAdornment position="start">
-		              <Icon>link</Icon>
-		            </InputAdornment>
-		          }
-		        />
-		    </FormControl>
-			)
-	}
 }
 
 const TransparencyHeader = ({badge}) => {
@@ -188,21 +167,27 @@ class TransparencyEditor extends React.Component {
 			        </FormControl>
 
 			        <URLInput
+			        	id="prereg"
 			        	label="Preregistered protocol URL"
 			        	onChange={this.changeTransparency(i, 'url')}
 			        	url={transparency.url} />
 		        </div>
 				)
 		} else if (badge.id == 'materials') {
-			content = <URLInput label="Study materials URL"
+			content = <URLInput
+						id="materials"
+						label="Study materials URL"
 						onChange={this.changeTransparency(i, 'url')}
 						url={transparency.url} />
 		} else if (badge.id == 'data') {
-			content = <URLInput label="Data URL"
+			content = <URLInput
+						id="data"
+						label="Data URL"
 						onChange={this.changeTransparency(i, 'url')}
 						url={transparency.url} />
 		} else if (badge.id == 'code') {
 			content = <URLInput label="Code URL"
+						id="code"
 						onChange={this.changeTransparency(i, 'url')}
 						url={transparency.url} />
 		} else if (badge.id == 'repstd') {

@@ -60,7 +60,6 @@ class MouseOverPopover extends React.Component {
           }}
           onClose={this.handlePopoverClose}
           disableRestoreFocus
-          useLayerForClickAway={false}
         >
           <div onMouseLeave={this.handlePopoverClose}>
           { this.props.children }

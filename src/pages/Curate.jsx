@@ -21,6 +21,7 @@ import JournalSelector from '../components/curateform/JournalSelector.jsx';
 import AuthorSelector from '../components/curateform/AuthorSelector.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 import FigureSelector from '../components/curateform/FigureSelector.jsx';
+import URLInput from '../components/curateform/URLInput.jsx';
 
 import {get, find} from 'lodash'
 import {printDate} from '../util/util.jsx'
@@ -58,6 +59,12 @@ class Curate extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleStudyDelete = this.handleStudyDelete.bind(this)
         this.handleStudyEdit = this.handleStudyEdit.bind(this)
+
+        this.TEXT_LINKS = [
+        	{ label: 'PDF URL', property: 'pdf_url' },
+        	{ label: 'HTML URL', property: 'html_url' },
+        	{ label: 'Preprint URL', property: 'preprint_url' }
+        ]
     }
 
     componentDidMount() {
@@ -229,7 +236,9 @@ class Curate extends React.Component {
 					    </Grid>
 					    <Grid item xs={6}>
 
-					        <AuthorSelector />
+					        <AuthorSelector
+					        	onChange={this.handleValueChange('authors')}
+					        	value={formdata.authors} />
 
 					    </Grid>
 					    <Grid item xs={3}>
@@ -290,7 +299,9 @@ class Curate extends React.Component {
 						    </FormControl>
 						</Grid>
 						<Grid item xs={6}>
-					        <JournalSelector onChange={this.handleValueChange('journal')} value={formdata.journal} />
+					        <JournalSelector
+					        	onChange={this.handleValueChange('journal')}
+					        	value={formdata.journal} />
 					    </Grid>
 						<Grid item xs={6}>
 						    <TextField
@@ -359,6 +370,19 @@ class Curate extends React.Component {
 						<Grid item xs={12}>
 							<Typography variant="h4">Key figures/tables (article-level)</Typography>
 							<FigureSelector figures={formdata.figures} onChange={this.handleValueChange('figures')} />
+						</Grid>
+
+						<Grid item xs={12}>
+							<Typography variant="h4">Full Text Links</Typography>
+
+							{ this.TEXT_LINKS.map((link_type) => {
+								return <URLInput
+											key={link_type.property}
+											id={link_type.property}
+											url={formdata[link_type.property] || ''}
+											label={link_type.label}
+	  							            onChange={this.handleChange(link_type.property)} />
+							})}
 						</Grid>
 
 						<Grid item xs={12} hidden={!show_study_section}>

@@ -16,8 +16,13 @@ class JournalSelector extends React.Component {
     }
 
     handleChange(value) {
-        console.log(value)
         this.props.onChange(value)
+    }
+
+    journal_option() {
+        let {value} = this.props
+        console.log(value)
+        return {id: value.id, text: value.text != null ? value.text : value.name}
     }
 
 	render() {
@@ -26,7 +31,7 @@ class JournalSelector extends React.Component {
 			<AutocompleteReactSelect
                  creatable
                  labelProp="text"
-                 value={value}
+                 value={this.journal_option()}
                  listUrl="/api/journals/autocomplete/"
                  createUrl="/api/journals/create/"
                  placeholder="Journal name *"

@@ -17,7 +17,9 @@ const styles = {
     marginBottom: '5px'
   },
   replicationHeader: {
-    fontSize: 16,
+    fontSize: 14,
+    color: '#aaa',
+    fontWeight: 'normal'
   },
   authors: {
   	color: "#0CC343",
