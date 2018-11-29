@@ -18,13 +18,15 @@ load_dotenv()
 # If this env var exists, then the app is running on GAE. Else it's local dev environment.
 if os.getenv('GOOGLE_CLOUD_PROJECT'):
     #DB_HOST='/cloudsql/curate-science-216207:europe-west1:curatedb'
-    DEBUG = False
+    #DEBUG = False
     DB_HOST='35.205.158.247' #curatevm
 
     if os.getenv('GOOGLE_CLOUD_PROJECT') == 'curatescience-staging':
         DB_NAME = 'curate_staging'
+        DEBUG = True
     else:
         DB_NAME = 'curate'
+        DEBUG = False
 
 else:
     DEBUG = True
