@@ -17,8 +17,8 @@ const styles = {
 		color: "#444"
 	},
 	avatar: {
-		width: 150,
-		height: 150,
+		width: 80,
+		height: 80,
 		margin: 15
 	},
 	box: {
@@ -228,25 +228,22 @@ class About extends React.Component {
 						<div className="row" >
 							<div className="col-md-4 center">
 								<Typography variant="h3" className={classes.about}>Method/Data Transparency</Typography>
-								<img src='logos/method-data-transparency-diagram.png' width="275px" />
+								<img src='/sitestatic/about/method-data-transparency-diagram.png' width="275px" />
 							</div>
 							<div className="col-md-4 center" >
 								<Typography variant="h3" className={classes.about}>Effect Replicability Transparency</Typography>
-								<img src='logos/sprite-icons/replicability-logo.png' />
-								<img src='logos/sprite-icons/reproducible-code.png' className='shrunk-28'/>
+								<img src='/sitestatic/about/replicability-logo.png' />
+								<img src='/sitestatic/about/reproducible-code.png' className='shrunk-28'/>
 								<br/>
 								<span className="transp-text-description">Transparent new sample replications of published effects.</span>
 								<div className="popUpOnHover" >
-									<img src="logos/replicability-diagram-about-section.png"  className="responsive" />
-									<span className='toDisplayRepDiagram popUpStyle'>
-										<img src="logos/replicability-diagram-about-section.png" width="700px;" />
-									</span>
+									<img src="/sitestatic/about/replicability-diagram-about-section.png"  className="responsive" />
 								</div>
 							</div>
 							<div className="col-md-4 center" >
 								<Typography variant="h3" className={classes.about}>Analytic Reproducibility Transparency</Typography>
-								<img src='logos/sprite-icons/scatterplot.png' className='shrunk-28'/>
-								<img src='logos/sprite-icons/reproducible-code.png' className='shrunk-28'/>
+								<img src='/sitestatic/about/scatterplot.png' className='shrunk-28'/>
+								<img src='/sitestatic/about/reproducible-code.png' className='shrunk-28'/>
 								<div className="transp-text-description">Transparent analytic reproducibility and robustness re-analyses.</div>
 								<div className="transp-text-description" >Analytic Reproducibility:</div>
 								<div className="transp-text-description" >A study's primary result is reproducible by repeating the <i>same</i> statistical analyses (and data processing choices) on the data.</div>

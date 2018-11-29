@@ -12,6 +12,8 @@ import ArticleSelector from '../../components/curateform/ArticleSelector.jsx';
 import FigureSelector from '../../components/curateform/FigureSelector.jsx';
 import AutocompleteReactSelect from '../../components/AutocompleteReactSelect.jsx';
 
+import C from '../../constants/constants';
+
 import {merge, clone} from 'lodash'
 
 const styles = {
@@ -42,33 +44,20 @@ class StudyEditor extends React.Component {
 
 		this.replicationInputs = [
 			{
-				name: 'target.effects',
+				name: 'effects',
 				label: 'Target Effects',
 				type: 'autocomplete',
 				placeholder: "e.g., 'playboy effect'",
 				list_url: "/api/effects/autocomplete/"
 			},
 			{
-				name: 'repl.method.similarity',
+				name: 'method_similarity_type',
 				label: 'Replication Method Similarity',
 				type: 'select',
-				options: [
-					{
-						value: 'close',
-						label: "Close"
-					},
-					{
-						value: 'very_close',
-						label: "Very Close"
-					},
-					{
-						value: 'exact',
-						label: "Exact"
-					}
-				]
+				options: C.METHOD_SIMILARITY
 			},
 			{
-				name: 'repl.differences',
+				name: 'method_differences',
 				label: 'Replication Differences',
 				type: 'text',
 				placeholder: "e.g., 'diff. DV stimuli'"
@@ -80,7 +69,7 @@ class StudyEditor extends React.Component {
 				placeholder: "e.g., 'success. manip. check'"
 			},
 			{
-				name: 'ivs',
+				name: 'ind_vars',
 				label: 'IVs',
 				type: 'autocomplete',
 				placeholder: "e.g., 'erotica exposure vs. control'",
@@ -88,7 +77,7 @@ class StudyEditor extends React.Component {
 				xs: 6
 			},
 			{
-				name: 'dvs',
+				name: 'dep_vars',
 				label: 'DVs',
 				type: 'autocomplete',
 				placeholder: "e.g., 'partner love'",
@@ -96,7 +85,7 @@ class StudyEditor extends React.Component {
 				xs: 6
 			},
 			{
-				name: 'iv.methods',
+				name: 'ind_var_methods',
 				label: 'IV methods',
 				type: 'autocomplete',
 				placeholder: "e.g., 'Playboy centerfolds vs. abstract art images'",
@@ -104,7 +93,7 @@ class StudyEditor extends React.Component {
 				xs: 6
 			},
 			{
-				name: 'dv.methods',
+				name: 'dep_var_methods',
 				label: 'DV methods',
 				type: 'autocomplete',
 				placeholder: "e.g., 'Rubin Love Scale (13-item)'",
@@ -117,7 +106,13 @@ class StudyEditor extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		let opening = !this.props.open && nextProps.open && nextProps.editStudy != null
 		if (opening) {
-			this.setState({formdata: clone(nextProps.editStudy)})
+			let data = clone(nextProps.editStudy)
+			if (data.effects != null) data.effects = data.effects.map(x => ({id: x.id, text: x.name}))
+			if (data.dep_vars != null) data.dep_vars = data.dep_vars.map(x => ({id: x.id, text: x.name}))
+			if (data.dep_var_methods != null) data.dep_var_methods = data.dep_var_methods.map(x => ({id: x.id, text: x.name}))
+			if (data.ind_vars != null) data.ind_vars = data.ind_vars.map(x => ({id: x.id, text: x.name}))
+			if (data.ind_var_methods != null) data.ind_var_methods = data.ind_var_methods.map(x => ({id: x.id, text: x.name}))
+			this.setState({formdata: data})
 		}
 	}
 
@@ -151,6 +146,7 @@ class StudyEditor extends React.Component {
 
 	handleAddTransparency(tt) {
 		let {formdata} = this.state
+		if (formdata.transparencies == null) formdata.transparencies = []
 		formdata.transparencies.push({transparency_type: tt})
 		this.setState({formdata})
 	}
@@ -180,6 +176,7 @@ class StudyEditor extends React.Component {
                                  listUrl={params.list_url}
                                  placeholder={params.label}
                                  multi
+                                 value={formdata[params.name]}
                                  onChange={this.handleValueChange(params.name)} />
 			)
 		} else if (params.type == 'text') {
@@ -237,6 +234,7 @@ class StudyEditor extends React.Component {
 		const { classes, open, editStudy, article_type } = this.props;
 		let {formdata} = this.state
 		let transparencies = formdata.transparencies
+		console.log(transparencies)
 		let creating_new = editStudy == null
 		let replication_details
 		if (article_type == "ORIGINAL") {

@@ -243,7 +243,8 @@ class AutocompleteReactSelect extends React.Component {
   }
 
   render() {
-    const { classes, theme, suggestions, placeholder, creatable, multi, labelProp, value } = this.props;
+    const { classes, theme, suggestions, placeholder, creatable,
+      multi, labelProp, name, value } = this.props;
     let {loading} = this.state
 
     const selectStyles = {
@@ -261,7 +262,8 @@ class AutocompleteReactSelect extends React.Component {
       styles: selectStyles,
       components: components,
       value: value,
-      placeholder: placeholder
+      placeholder: placeholder,
+      name: name
     }
     if (creatable) {
       sel = (
@@ -315,6 +317,7 @@ AutocompleteReactSelect.propTypes = {
   listUrl: PropTypes.string,
   createUrl: PropTypes.string,
   labelProp: PropTypes.string,
+  name: PropTypes.string,
   multi: PropTypes.bool
 };
 

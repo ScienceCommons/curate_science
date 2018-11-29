@@ -21,7 +21,7 @@ class JournalSelector extends React.Component {
 
     journal_option() {
         let {value} = this.props
-        console.log(value)
+        if (value == null) return null
         return {id: value.id, text: value.text != null ? value.text : value.name}
     }
 
@@ -31,6 +31,7 @@ class JournalSelector extends React.Component {
 			<AutocompleteReactSelect
                  creatable
                  labelProp="text"
+                 name="journal"
                  value={this.journal_option()}
                  listUrl="/api/journals/autocomplete/"
                  createUrl="/api/journals/create/"

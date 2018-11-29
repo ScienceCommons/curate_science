@@ -37,12 +37,17 @@ class FigureList extends React.Component {
     }
 
     render_thumbnail(kf, i) {
-        let {classes, showDelete} = this.props
+        let {classes, showDelete, renderHiddenInputs} = this.props
         let tt = `Figure ${kf.figure_number}`
         if (showDelete) tt = tt + ' (click to delete)'
+        let hiddenInput
+        if (renderHiddenInputs) hiddenInput = <input type="hidden" name={`keyfigure-${i}-image_url`} value={kf.image_url} />
     	return (
             <Tooltip title={tt} key={i}>
-                <span className={classes.thumbnail} style={{backgroundImage: `url(${kf.image_url})`}} onClick={this.deleteFigure(kf)} />
+                <div>
+                    <span className={classes.thumbnail} style={{backgroundImage: `url(${kf.image_url})`}} onClick={this.deleteFigure(kf)} />
+                    { hiddenInput }
+                </div>
             </Tooltip>
         )
     }
@@ -64,7 +69,8 @@ FigureList.propTypes = {
 
 FigureList.defaultProps = {
 	figures: [],
-    showDelete: false
+    showDelete: false,
+    renderHiddenInputs: false
 };
 
 export default withStyles(styles)(FigureList);

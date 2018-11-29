@@ -59,6 +59,8 @@ class Curate extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleStudyDelete = this.handleStudyDelete.bind(this)
         this.handleStudyEdit = this.handleStudyEdit.bind(this)
+        this.authorsToAutocomplete = this.authorsToAutocomplete.bind(this)
+        this.journalToAutocomplete = this.journalToAutocomplete.bind(this)
 
         this.TEXT_LINKS = [
         	{ label: 'PDF URL', property: 'pdf_url' },
@@ -77,6 +79,8 @@ class Curate extends React.Component {
     fetch_article(id) {
     	fetch(`/api/articles/${id}`).then(res => res.json()).then((res) => {
     		console.log(res)
+    		if (res.authors != null) res.authors = this.authorsToAutocomplete(res.authors)
+    		if (res.journal != null) res.journal = this.journalToAutocomplete(res.journal)
     		this.setState({formdata: res})
     	})
     }
@@ -141,7 +145,7 @@ class Curate extends React.Component {
 
   	addNewStudy() {
   		let {formdata} = this.state
-  		formdata.studies.push({}) // New blank study object
+  		formdata.studies.push({method_similarity_type: 'close'}) // New blank study object
   		this.setState({formdata: formdata, study_editor_idx: formdata.studies.length - 1})
   	}
 
@@ -163,8 +167,13 @@ class Curate extends React.Component {
 		let formData = new FormData(form);
   		let editing_id = this.editing_id()
   		let creating_new = editing_id == null
-  		let url = creating_new ? `/api/articles/create/` : `/api/articles/${editing_id}/update/`
-  		let method = creating_new ? 'POST' : 'PATCH'
+  		const USE_API_URL = true
+  		let url = creating_new ? `/articles/create/` : `/articles/${editing_id}/update/`
+  		let method = 'POST'
+  		if (USE_API_URL) {
+  			url = '/api' + url
+  			method = creating_new ? 'POST' : 'PATCH'
+  		}
   		let csrf_token = cookies.get('csrftoken')
   		let fetch_opts = {
 		    credentials: 'include',
@@ -188,6 +197,17 @@ class Curate extends React.Component {
     	}))
   	}
 
+  	authorsToAutocomplete(authors) {
+  		if (authors == null) authors = []
+  		return authors.map((author) => {
+  			return {id: author.id, text: [author.first_name, author.last_name].join(' ')}
+  		})
+  	}
+
+  	journalToAutocomplete(journal) {
+  		return {id: journal.id, text: journal.name}
+  	}
+
 	render() {
 		const { classes, cookies } = this.props;
 		let {formdata, study_editor_idx, snack_message} = this.state
@@ -207,8 +227,12 @@ class Curate extends React.Component {
 					<Grid item xs={12}>
 						<Typography variant="h2">{form_action} Article</Typography>
 					</Grid>
-					<Grid item xs={12} hidden={this.editing()}>
-						<DOILookup onLookup={this.handleDOILookupResults} />
+					<Grid item xs={12}>
+						<DOILookup
+							onLookup={this.handleDOILookupResults}
+							canLookup={!this.editing()}
+							onChange={this.handleValueChange('doi')}
+							value={formdata.doi || ''} />
 					</Grid>
 				</Grid>
 
@@ -217,6 +241,8 @@ class Curate extends React.Component {
 					autoComplete="off"
 					onSubmit={this.handleSubmit}
 					method="POST">
+
+					<input type="hidden" name="doi" value={formdata.doi || ''} />
 
 					<Grid container className={classes.root} spacing={24}>
 						<Grid xs={12} item>
@@ -335,9 +361,10 @@ class Curate extends React.Component {
 					    <Grid item xs={6}>
 							<TextField
 					          id="abstract"
+					          name="abstract"
 					          label="Abstract"
 					          className={classes.textField}
-					          value={formdata.abstract}
+					          value={formdata.abstract || ''}
 					          onChange={this.handleChange('abstract')}
 					          margin="normal"
 					          fullWidth

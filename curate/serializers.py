@@ -59,13 +59,18 @@ class KeyFigureSerializer(serializers.ModelSerializer):
         model=KeyFigure
         fields= ('id', 'figure_number', 'image_url', 'study')
 
+class EffectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Effect
+        fields='__all__'
 
 class NestedStudySerializer(serializers.ModelSerializer):
     id = serializers.ModelField(model_field=Study()._meta.get_field('id'))
-    effects = serializers.PrimaryKeyRelatedField(
-        many=True, allow_null=True, required=False,
-        queryset=Effect.objects.all()
-    )
+    # effects = serializers.PrimaryKeyRelatedField(
+    #     many=True, allow_null=True, required=False,
+    #     queryset=Effect.objects.all()
+    # )
+    effects = EffectSerializer(many=True, read_only=True)
     transparencies = TransparencySerializer(many=True, read_only=True)
     ind_vars = ConstructSerializer(many=True)
     dep_vars = ConstructSerializer(many=True)
@@ -358,11 +363,6 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model=Collection
-        fields='__all__'
-
-class EffectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Effect
         fields='__all__'
 
 class VariableRelationshipSerializer(serializers.ModelSerializer):

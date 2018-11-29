@@ -139,7 +139,14 @@ def view_article(request, pk):
     '''
     View one specific article.
     '''
-    queryset=get_object_or_404(Article.objects.select_related('journal').prefetch_related('studies', 'studies__transparencies', 'authors'), id=pk)
+    queryset=get_object_or_404(Article.objects \
+            .select_related('journal') \
+            .prefetch_related(
+                'studies',
+                'studies__transparencies',
+                'studies__effects',
+                'studies__ind_vars',
+                'authors'), id=pk)
     serializer=ArticleDetailSerializer(instance=queryset)
     return Response(serializer.data)
 
@@ -161,9 +168,9 @@ def create_article(request):
 @permission_classes((IsAuthenticated,))
 def update_article(request, pk):
     queryset=get_object_or_404(Article, id=pk)
+    logging.warning(request.data)
     if request.method in ('PUT', 'PATCH'):
         if request.method=="PATCH":
-            logging.warning(request.data)
             is_partial=True
         else:
             is_partial=False

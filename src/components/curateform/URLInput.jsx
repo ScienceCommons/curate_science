@@ -26,8 +26,10 @@ class URLInput extends React.Component {
 		        <InputLabel htmlFor={id}>{ label }</InputLabel>
 		        <Input
 		          id={id}
+		          name={id}
 		          fullWidth
 		          onChange={this.handleChange}
+		          type="url"
 		          value={url || ''}
 		          startAdornment={
 		            <InputAdornment position="start">

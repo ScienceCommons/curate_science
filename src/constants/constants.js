@@ -42,6 +42,20 @@ var C = {
 			label: "Medical/Life Sciences"
 		}
 	],
+	METHOD_SIMILARITY: [
+		{
+			value: 'close',
+			label: "Close"
+		},
+		{
+			value: 'very_close',
+			label: "Very Close"
+		},
+		{
+			value: 'exact',
+			label: "Exact"
+		}
+	],
 	FILTERS: [
 		{
 			category: 'area',

@@ -32,7 +32,9 @@ class FigureSelector extends React.Component {
         let {figures} = this.props
         if (this.validUrl()) {
             figures.push({image_url: form.url, figure_number: 0})
+            form.url = ''
             if (this.props.onChange != null) this.props.onChange(figures)
+            this.setState({form})
         }
     }
 
@@ -53,7 +55,11 @@ class FigureSelector extends React.Component {
         let {form} = this.state
 		return (
 			<div>
-				<FigureList figures={figures} onDelete={this.handleDelete} showDelete={true} />
+				<FigureList
+                    figures={figures}
+                    onDelete={this.handleDelete}
+                    renderHiddenInputs={true}
+                    showDelete={true} />
 
                 <Grid container>
                     <Grid item xs={8}>

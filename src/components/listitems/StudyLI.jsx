@@ -11,6 +11,8 @@ import JournalDOIBadge from '../JournalDOIBadge.jsx';
 import FigureList from '../shared/FigureList.jsx';
 import AuthorList from '../AuthorList.jsx';
 
+import {find} from 'lodash'
+
 const styles = {
   card: {
     minWidth: 275,
@@ -42,18 +44,23 @@ class StudyLI extends React.Component {
         this.handleDelete = this.handleDelete.bind(this)
 
         this.STUDY_FORM_INPUTS = [
-        	'id',
-        	'study_number',
-        	'reporting_standards_type',
-        	'replication_of',
-        	'effects',
-        	'method_similarity_type',
-        	'method_differences',
-        	'auxiliary_hypo_evidence',
-        	'ind_vars',
-        	'dep_vars',
-        	'ind_var_methods',
-        	'dep_var_methods'
+        	{name: 'id'},
+        	{name: 'study_number'},
+        	{name: 'reporting_standards_type'},
+        	{name: 'replication_of'},
+        	{name: 'effects', multi: true, prop: 'id'},
+        	{name: 'method_similarity_type'},
+        	{name: 'method_differences'},
+        	{name: 'auxiliary_hypo_evidence'},
+        	{name: 'ind_vars', multi: true, prop: 'id'},
+        	{name: 'dep_vars', multi: true, prop: 'id'},
+        	{name: 'ind_var_methods', multi: true, prop: 'id'},
+        	{name: 'dep_var_methods', multi: true, prop: 'id'}
+        ]
+        this.STUDY_TRANSPARENCY_FORM_INPUTS = [
+          'id',
+          'transparency_type',
+          'url'
         ]
     }
 
@@ -67,14 +74,43 @@ class StudyLI extends React.Component {
     }
 
     render_hidden_inputs() {
-    	let {study} = this.props
-    	return this.STUDY_FORM_INPUTS.map((name) => {
-    		<input type='hidden' name={name} value={study[name] || ''} />
+    	let {study, idx} = this.props
+      let inputs = []
+    	this.STUDY_FORM_INPUTS.forEach((params) => {
+        let name = params.name
+        let prefixed_name = `study-${idx}-${name}`
+        let values = []
+        if (params.multi) {
+          let els = study[name] || []
+          values = els.map((el) => el[params.prop])
+        }
+        else values = [study[name]]
+        values.forEach((value) => {
+          inputs.push(<input type='hidden' key={prefixed_name} name={prefixed_name} value={value || ''} />)
+        })
     	})
+      this.STUDY_TRANSPARENCY_FORM_INPUTS.forEach((name) => {
+        let t_idx = '?'  // TODO
+        let prefixed_name = `study-${idx}-transparency-${t_idx}-${name}`
+        inputs.push(<input type='hidden' key={prefixed_name} name={prefixed_name} value={study[name] || ''} />)
+      })
+      return inputs
     }
+
+  render_list(arr, prop) {
+    arr = arr == null ? [] : arr
+    return (
+      <ul>
+        { arr.map(el => {
+          return <li><Typography variant="body1">{prop == null ? el : el[prop]}</Typography></li>
+        }) }
+      </ul>
+      )
+  }
 
 	render() {
  	    let { classes, study, ofMultiple, showActions, showReplicationDetails, article_type} = this.props;
+      let similarity_label = study.method_similarity_type == null ? "--" : find(C.METHOD_SIMILARITY, {value: study.method_similarity_type}).label
  	    let actions = (
  	    	<CardActions>
  	    		<IconButton onClick={this.handleEdit}>
@@ -100,21 +136,23 @@ class StudyLI extends React.Component {
 						<Grid container>
 							<Grid item xs={2}>
 								<Typography variant="h6" className={classes.replicationHeader}>Original Study</Typography>
-
+                <Typography variant="body1">{ study.replication_of || '' }</Typography>
 							</Grid>
 							<Grid item xs={2}>
 								<Typography variant="h6" className={classes.replicationHeader}>Target Effect</Typography>
+                { this.render_list(study.effects, 'name') }
 							</Grid>
 							<Grid item xs={2}>
 								<Typography variant="h6" className={classes.replicationHeader}>Rep. Method Similarity</Typography>
-								<Typography variant="body1">{ study.method_similarity_type }</Typography>
+								<Typography variant="body1">{ similarity_label }</Typography>
 							</Grid>
 							<Grid item xs={2}>
 								<Typography variant="h6" className={classes.replicationHeader}>Differences</Typography>
+                <Typography variant="body1">{ study.method_differences || '' }</Typography>
 							</Grid>
 							<Grid item xs={2}>
 								<Typography variant="h6" className={classes.replicationHeader}>Aux. Hypotheses</Typography>
-								<ul>{ auxiliary_hypo_evidence.map((text, i) => <li key={i}><Typography variant="body1">{text}</Typography></li>) }</ul>
+                { this.render_list(auxiliary_hypo_evidence) }
 							</Grid>
 						</Grid>
 					</div>

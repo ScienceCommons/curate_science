@@ -27,13 +27,19 @@ const styles = {
     radioGroup: {
     	margin: 0,
     	paddingLeft: 7
+    },
+    one_transparency: {
+    	marginTop: 10
     }
 }
 
 const TransparencyHeader = ({badge}) => {
 	return (
 		<div style={{borderBottom: `1px solid ${badge.color}`, width: '100%'}}>
-			<Typography variant="button" align="center" justify="center"><TransparencyIcon tt={{icon: badge.icon}} size={30} /> { badge.label }</Typography>
+			<Typography variant="button" align="center" justify="center">
+				<TransparencyIcon tt={{icon: badge.icon}} size={20} style={{marginRight: 5}} />
+				{ badge.label }
+			</Typography>
 		</div>
 	)
 }
@@ -110,10 +116,6 @@ class TransparencyEditor extends React.Component {
 		return {__html: this.RS_TEXT[idx]}
 	}
 
-	addTransparencyURL(url) {
-
-	}
-
 	addTransparency(type) {
 		this.props.onAddTransparency(type)
 		this.handleCreateMenuClose()
@@ -130,9 +132,20 @@ class TransparencyEditor extends React.Component {
 		this.props.onChangeTransparency(idx, tt)
 	}
 
+	transparencies_of_type(type) {
+		let res = []
+		this.props.transparencies.forEach((t, i) => {
+			if (t.transparency_type.toLowerCase() == type) {
+				t.original_index = i  // Used to update correct value in original array
+				res.push(t)
+			}
+		})
+		return res
+	}
+
 	render_transparency_section(badge) {
 		let {transparencies} = this.props
-		let type_transparencies = transparencies.filter((t) => t.transparency_type == badge.id)
+		let type_transparencies = this.transparencies_of_type(badge.id)
 		if (type_transparencies.length > 0) {
 			return (
 				<div>
@@ -149,6 +162,7 @@ class TransparencyEditor extends React.Component {
 	render_transparency(transparency, i, badge) {
 		let {classes} = this.props
 		let content
+		let idx = transparency.original_index
 		if (badge.id == 'prereg') {
 			content = (
 				<div key={i}>
@@ -158,7 +172,8 @@ class TransparencyEditor extends React.Component {
 			            aria-label="prereg_rg"
 			            name="prereg_rg"
 			            className={classes.radioGroup}
-			            value={transparency.prereg_type}
+			            onChange={this.changeTransparency(idx, 'prereg_type')}
+			            value={transparency.prereg_type || 'format'}
 			          >
 			            <FormControlLabel value="format" control={<Radio className={classes.radio} />} label="Registered Report format" />
 			            <FormControlLabel value="design_analysis" control={<Radio className={classes.radio} />} label="Preregistered design + analysis" />
@@ -169,7 +184,7 @@ class TransparencyEditor extends React.Component {
 			        <URLInput
 			        	id="prereg"
 			        	label="Preregistered protocol URL"
-			        	onChange={this.changeTransparency(i, 'url')}
+			        	onChange={this.changeTransparency(idx, 'url')}
 			        	url={transparency.url} />
 		        </div>
 				)
@@ -177,25 +192,27 @@ class TransparencyEditor extends React.Component {
 			content = <URLInput
 						id="materials"
 						label="Study materials URL"
-						onChange={this.changeTransparency(i, 'url')}
+						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
 		} else if (badge.id == 'data') {
 			content = <URLInput
 						id="data"
 						label="Data URL"
-						onChange={this.changeTransparency(i, 'url')}
+						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
 		} else if (badge.id == 'code') {
 			content = <URLInput label="Code URL"
 						id="code"
-						onChange={this.changeTransparency(i, 'url')}
+						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
 		} else if (badge.id == 'repstd') {
 			content = (
 				<div id="rs1">
 					<span>Compliance to relevant reporting standard:</span>
 					<br/>
-					<select name="rs.name" value={form.rs}>
+					<select name="rs.name"
+							value={transparency.rep_std || '1'}
+							onChange={this.changeTransparency(idx, 'rep_std')}>
 						<option value="1">Basic-4 (at submission; PSCI, 2014)</option>
 						<option value="2">Basic-4 (retroactive; 2012)</option>
 						<option value="3">CONSORT-SPI (2018)</option>
@@ -213,11 +230,18 @@ class TransparencyEditor extends React.Component {
 			)
 		}
 		return (
-			<div>
-				<IconButton onClick={this.deleteTransparency(i)}>
-					<Icon>delete</Icon>
-				</IconButton>
-				{ content }
+			<div className={classes.one_transparency}>
+				<Grid container>
+					<Grid item xs={10}>
+						{ content }
+					</Grid>
+					<Grid item xs={2}>
+						<Button onClick={this.deleteTransparency(i)}>
+							<Icon>delete</Icon>
+							Remove
+						</Button>
+					</Grid>
+				</Grid>
 			</div>
 		)
 	}

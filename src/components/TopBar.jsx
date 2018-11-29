@@ -197,7 +197,7 @@ class TopBar extends React.Component {
                                 />
                             </div>
                             <Typography className={classes.subSearchLinks}>
-                                Browse: <Link to="/recent" className={classes.topLink}>Articles</Link> &middot; <Link to="/recent?f=replications,collec_replications" className={classes.topLink}>Replications</Link>
+                                Browse: <Link to="/recent" className={classes.topLink}>Articles</Link> &middot; <Link to="/recent?f=REPLICATION,COLLECTION" className={classes.topLink}>Replications</Link>
                             </Typography>
                         </div>
 
