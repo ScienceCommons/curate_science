@@ -273,7 +273,7 @@ class StudyEditor extends React.Component {
 				        />
 
 						<Typography variant="h5" className={classes.sectionHeading}>Original Article/Study</Typography>
-						<ArticleSelector selectStudy={true} />
+						<ArticleSelector selectStudy={true} withCreator={true} />
 
 						<TransparencyEditor
 								transparencies={transparencies}
