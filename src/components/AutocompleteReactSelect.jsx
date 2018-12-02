@@ -179,7 +179,7 @@ class AutocompleteReactSelect extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.loadOptions = debounce(this.loadOptions.bind(this), 400)
     this.validateNew = this.validateNew.bind(this)
-    this.createOption = this.createOption.bind(this)
+    this.handleCreateOption = this.handleCreateOption.bind(this)
     this.filterOption = this.filterOption.bind(this)
     this.renderOptionLabel = this.renderOptionLabel.bind(this)
     this.renderOptionValue = this.renderOptionValue.bind(this)
@@ -209,13 +209,12 @@ class AutocompleteReactSelect extends React.Component {
     return valid
   }
 
-  createOption(d) {
-
+  handleCreateOption(input) {
+    this.props.onCreate(input)
   }
 
   filterOption(op, text) {
     let label = op.data.text
-    console.log(label)
     if (text.length == 0) return false
     else return label != null && label.toLowerCase().indexOf(text.toLowerCase()) > -1
   }
@@ -269,6 +268,7 @@ class AutocompleteReactSelect extends React.Component {
       sel = (
         <AsyncCreatableSelect
           onChange={this.handleChange}
+          onCreateOption={this.handleCreateOption}
           cacheOptions={false}
           isLoading={loading}
           allowCreateWhileLoading
