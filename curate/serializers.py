@@ -348,13 +348,13 @@ class ArticleSerializer(serializers.ModelSerializer):
         model=Article
         fields='__all__'
 
-
 class ArticleDetailSerializer(serializers.ModelSerializer):
     key_figures = KeyFigureSerializer(many=True)
     transparencies = TransparencySerializer(many=True)
     studies = NestedStudySerializer(many=True)
     authors = AuthorSerializer(many=True)
     journal = JournalSerializer()
+    publication_year = serializers.ReadOnlyField()
 
     class Meta:
         model=Article

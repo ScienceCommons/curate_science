@@ -54,6 +54,10 @@ urlpatterns += [
     path('api/articles/<int:pk>/', api.view_article, name='api-view-article'),
     path('api/articles/<int:pk>/update/', api.update_article, name='api-update-article'),
     path('api/articles/<int:pk>/delete/', api.delete_article, name='api-delete-article'),
+    # RelatedArticle paths
+    path('api/articles/<int:pk>/relatedarticles/',
+         api.list_article_relatedarticles,
+         name='api-article-list-relatedarticles'),
     # Collection paths
     path('api/collections/', api.list_collections, name='api-list-collections'),
     path('api/collections/create/', api.create_collection, name='api-create-collection'),

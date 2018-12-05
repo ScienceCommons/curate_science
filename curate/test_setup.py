@@ -267,6 +267,12 @@ def create_model_instances():
     Zhong and Liljenquist (2006) reported evidence of a “Macbeth Effect” in social psychology: a threat to people's moral purity leads them to seek, literally, to cleanse themselves. In an attempt to build upon these findings, we conducted a series of direct replications of Study 2 from Z&L's seminal report. We used Z&L's original materials and methods, investigated samples that were more representative of the general population, investigated samples from different countries and cultures, and substantially increased the power of our statistical tests. Despite multiple good-faith efforts, however, we were unable to detect a “Macbeth Effect” in any of our experiments. We discuss these findings in the context of recent concerns about replicability in the field of experimental social psychology.
     """,
     )
+    RelatedArticle.objects.create(
+        original_article=znl,
+        related_article=earp_et_al,
+        is_reproducibility=True,
+        order=1
+    )
     ArticleAuthor.objects.create(
         article=earp_et_al,
         author=earp,
@@ -372,6 +378,12 @@ def create_model_instances():
     and helping behaviour but not with cleansing as a way to reduce their threatened
     morality.
     """,
+    )
+    RelatedArticle.objects.create(
+        original_article=znl,
+        related_article=gamez_2011,
+        is_reproducibility=True,
+        order=2
     )
     ArticleAuthor.objects.create(
         article=gamez_2011,

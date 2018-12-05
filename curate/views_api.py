@@ -192,6 +192,13 @@ def delete_article(request, pk):
     article.delete()
     return Response(status=status.HTTP_200_OK)
 
+# RelatedArticle views
+@api_view(('GET', ))
+def list_article_relatedarticles(request, pk):
+    queryset=Article.objects.filter(related_to_articles__original_article_id=pk)
+    serializer=ArticleSerializer(instance=queryset, many=True)
+    return Response(serializer.data)
+
 # Collection views
 @api_view(('GET', ))
 def list_collections(request):

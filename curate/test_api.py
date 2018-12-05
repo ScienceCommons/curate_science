@@ -90,6 +90,11 @@ class TestAPIViews(TestCase):
         })
         a = models.Article.objects.get(doi="000")
         assert a.publication_year == "In Press"
+        url = reverse('api-view-article', kwargs={'pk': a.id})
+        # also test that the API returns this field in the JSON
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert d['publication_year'] == "In Press"
 
     def test_authenticated_user_can_create_article_with_replications(self):
         self.client.login(username='admin', password='password')
@@ -262,6 +267,20 @@ class TestAPIViews(TestCase):
         url = reverse('api-delete-article', kwargs={'pk': 9999})
         r = self.client.delete(url)
         assert r.status_code == 404
+
+    # Test list  related articles for an article
+    # e.g. /api/articles/1/relatedarticles/
+
+    def test_list_related_articles(self):
+        self.client.login(username='admin', password='password')
+        a = models.Article.objects.get(doi='10.1126/science.1130726')
+        related = models.Article.objects.filter(related_to_articles__original_article_id=a.id)
+        related_ct = len(related)
+        url = reverse('api-article-list-relatedarticles', kwargs={'pk': a.id})
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert(len(d) == related_ct)
+        assert(d[0]['doi'] =='10.1080/01973533.2013.856792')
 
     # Author tests
     # List Authors
