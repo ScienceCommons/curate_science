@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Link } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -177,7 +178,7 @@ class ArticleDetail extends React.Component {
 }
 
 ArticleDetail.defaultProps = {
-	auth: true
+
 }
 
-export default withStyles(styles)(ArticleDetail);
+export default withRouter(withStyles(styles)(ArticleDetail));

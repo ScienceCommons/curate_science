@@ -107,11 +107,11 @@ class StudyEditor extends React.Component {
 		let opening = !this.props.open && nextProps.open && nextProps.editStudy != null
 		if (opening) {
 			let data = clone(nextProps.editStudy)
-			if (data.effects != null) data.effects = data.effects.map(x => ({id: x.id, text: x.name}))
-			if (data.dep_vars != null) data.dep_vars = data.dep_vars.map(x => ({id: x.id, text: x.name}))
-			if (data.dep_var_methods != null) data.dep_var_methods = data.dep_var_methods.map(x => ({id: x.id, text: x.name}))
-			if (data.ind_vars != null) data.ind_vars = data.ind_vars.map(x => ({id: x.id, text: x.name}))
-			if (data.ind_var_methods != null) data.ind_var_methods = data.ind_var_methods.map(x => ({id: x.id, text: x.name}))
+			if (data.effects != null) data.effects = data.effects.map(x => ({id: x.id, text: x.name || x.text}))
+			if (data.dep_vars != null) data.dep_vars = data.dep_vars.map(x => ({id: x.id, text: x.name || x.text}))
+			if (data.dep_var_methods != null) data.dep_var_methods = data.dep_var_methods.map(x => ({id: x.id, text: x.name || x.text}))
+			if (data.ind_vars != null) data.ind_vars = data.ind_vars.map(x => ({id: x.id, text: x.name || x.text}))
+			if (data.ind_var_methods != null) data.ind_var_methods = data.ind_var_methods.map(x => ({id: x.id, text: x.name || x.text}))
 			this.setState({formdata: data})
 		}
 	}
@@ -234,7 +234,6 @@ class StudyEditor extends React.Component {
 		const { classes, open, editStudy, article_type } = this.props;
 		let {formdata} = this.state
 		let transparencies = formdata.transparencies
-		console.log(transparencies)
 		let creating_new = editStudy == null
 		let replication_details
 		if (article_type == "ORIGINAL") {
