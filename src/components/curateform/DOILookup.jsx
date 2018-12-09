@@ -34,6 +34,11 @@ const styles = theme => ({
         },
         width: '100%',
     },
+    button: {
+        position: 'absolute',
+        right: 5,
+        top: 6
+    },
     searchIcon: {
         width: theme.spacing.unit * 6,
         height: '100%',
@@ -100,9 +105,9 @@ class DOILookup extends React.Component {
 	render() {
 		let {classes, canLookup, value} = this.props
 		let {error, populated, loading} = this.state
-		let ph = loading ? "Looking up..." : (canLookup ? "Lookup by DOI" : "Article DOI")
-        let icon
-        icon = canLookup ? 'search' : 'import_contacts'
+		let button_text = loading ? "Looking up..." : "Lookup"
+        let icon = 'import_contacts'
+        let doi_text = value || ''
 		return (
             <div>
     			<div className={classes.search}>
@@ -110,18 +115,23 @@ class DOILookup extends React.Component {
                         <Icon>{icon}</Icon>
                     </div>
                     <InputBase
-                        placeholder={ph}
+                        placeholder="Article DOI"
                         onChange={this.handleChange}
                         error={error!=null}
-                        value={value || ''}
+                        value={doi_text}
                         onKeyPress={this.handleSearchKeyPress}
                         fullWidth={true}
+                        required
+                        inputProps={{'data-lpignore': "true"}}
                         name='doi'
                         classes={{
                           root: classes.inputRoot,
                           input: classes.inputInput,
                         }}
                     />
+                    <div className={classes.button}>
+                        <Button disabled={!canLookup || doi_text.length == 0} onClick={this.lookup}>{button_text}</Button>
+                    </div>
                 </div>
                 <Typography variant="subtitle1" className={classes.error} hidden={error==null}>{ error }</Typography>
             </div>

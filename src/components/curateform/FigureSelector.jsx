@@ -68,6 +68,7 @@ class FigureSelector extends React.Component {
                           label={`Enter figure or table image URL...`}
                           value={form.url || ''}
                           onChange={this.handleChange('url')}
+                          inputProps={{'data-lpignore': "true"}}
                           margin="normal"
                           fullWidth
                           variant="outlined"

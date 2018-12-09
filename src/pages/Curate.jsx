@@ -145,6 +145,7 @@ class Curate extends React.Component {
 
   	addNewStudy() {
   		let {formdata} = this.state
+  		if (formdata.studies == null) formdata.studies = []
   		formdata.studies.push({method_similarity_type: 'close'}) // New blank study object
   		this.setState({formdata: formdata, study_editor_idx: formdata.studies.length - 1})
   	}
@@ -227,13 +228,6 @@ class Curate extends React.Component {
 					<Grid item xs={12}>
 						<Typography variant="h2">{form_action} Article</Typography>
 					</Grid>
-					<Grid item xs={12}>
-						<DOILookup
-							onLookup={this.handleDOILookupResults}
-							canLookup={!this.editing()}
-							onChange={this.handleValueChange('doi')}
-							value={formdata.doi || ''} />
-					</Grid>
 				</Grid>
 
 				<form
@@ -245,11 +239,21 @@ class Curate extends React.Component {
 					<input type="hidden" name="doi" value={formdata.doi || ''} />
 
 					<Grid container className={classes.root} spacing={24}>
+
+						<Grid item xs={12}>
+							<DOILookup
+								onLookup={this.handleDOILookupResults}
+								canLookup={!this.editing()}
+								onChange={this.handleValueChange('doi')}
+								value={formdata.doi || ''} />
+						</Grid>
+
 						<Grid xs={12} item>
 
 					        <TextField
 					          id="title"
 					          label="Article title"
+					          inputProps={{'data-lpignore': "true"}}
 					          className={classes.textField}
 					          value={formdata.title || ''}
 					          onChange={this.handleChange('title')}
@@ -327,7 +331,7 @@ class Curate extends React.Component {
 						<Grid item xs={6}>
 					        <JournalSelector
 					        	onChange={this.handleValueChange('journal')}
-					        	value={formdata.journal} />
+					        	value={formdata.journal || null} />
 					    </Grid>
 						<Grid item xs={6}>
 						    <TextField
@@ -339,13 +343,13 @@ class Curate extends React.Component {
 					          inputProps={{pattern: "\d\d\d\d"}}
 					          type="number"
 					          name="year"
-					          margin="normal"
+					          margin="none"
 					          variant="outlined"
 					          disabled={formdata.in_press}
 					        />
 
 				    		<FormControlLabel
-				    			style={{padding: 18}}
+				    			style={{paddingLeft: 15}}
 					            control={
 				    	            <Checkbox
 				    	              checked={formdata.in_press}
@@ -366,7 +370,7 @@ class Curate extends React.Component {
 					          className={classes.textField}
 					          value={formdata.abstract || ''}
 					          onChange={this.handleChange('abstract')}
-					          margin="normal"
+					          margin="none"
 					          fullWidth
 					          multiline
 					          variant="outlined"

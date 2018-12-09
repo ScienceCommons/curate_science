@@ -13,6 +13,7 @@ class JournalSelector extends React.Component {
         this.state = {
         };
         this.handleChange = this.handleChange.bind(this)
+        this.journal_option = this.journal_option.bind(this)
     }
 
     handleChange(value) {
@@ -22,7 +23,9 @@ class JournalSelector extends React.Component {
     journal_option() {
         let {value} = this.props
         if (value == null) return null
-        return {id: value.id, text: value.text != null ? value.text : value.name}
+        let text = (value.text != null) ? value.text : value.name
+        console.log(text)
+        return {id: value.id, text: text}
     }
 
 	render() {

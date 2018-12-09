@@ -80,7 +80,7 @@ class App extends React.Component {
                                 <Route path="/about" component={About} />
                                 <Route path="/faq" component={FAQ} />
                                 <Route path="/article/:id(\d+)/edit" component={Curate} />
-                                <Route path="/article/:id(\d+)" component={ArticleDetail} />
+                                <Route path="/article/:id(\d+)" component={ArticleDetail} auth={authenticated} />
                             </Switch>
                         </div>
                         <Footer />
