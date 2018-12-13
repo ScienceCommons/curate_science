@@ -23,3 +23,9 @@ sudo nano /etc/postgresql/10/main/pg_hba.conf
 
 sudo nano /etc/postgresql/10/main/postgresql.conf
 sudo service postgresql restart
+
+exit
+
+gcloud compute firewall-rules create pg-rule --allow tcp:5432
+
+# create stating environment

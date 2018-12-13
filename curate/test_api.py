@@ -199,6 +199,96 @@ class TestAPIViews(TestCase):
         a = models.Article.objects.get(doi="0003")
         assert a.title == "TEST Washing away your sins: threatened morality and physical cleansing."
 
+    # Edit a study nested under an article
+    def test_update_article_nested_studies(self):
+        self.client.login(username='new_user', password='password1')
+        article = models.Article.objects.get(doi='10.1126/science.1130726')
+        studies = article.studies.all()
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        payload_dict = {
+            "id": article.id,
+            "studies": [
+                {
+                         "id": studies[0].id,
+                    "effects": [
+                        {
+                            "id": studies[0].effects.all()[0].id,
+                            "name": "Macbeth Effect #1",
+                            "constraints_on_generality": None
+                        }
+                    ],
+                    "transparencies": [],
+                    "ind_vars": [],
+                    "dep_vars": [],
+                    "ind_var_methods": [],
+                    "dep_var_methods": [],
+                    "study_type": "PATCHED",
+                    "study_number": "2",
+                    "evidence_type": None,
+                    "reporting_standards_type": None,
+                    "method_similarity_type": None,
+                    "method_differences": None,
+                    "auxiliary_hypo_evidence": None,
+                    "rep_outcome_category": None,
+                    "replication_of": None
+                },
+                {
+                    "id": studies[1].id,
+                    "effects": [
+                        {
+                            "id": studies[1].effects.all()[0].id,
+                            "name": "Macbeth Effect #1",
+                            "constraints_on_generality": None
+                        }
+                    ],
+                    "transparencies": [],
+                    "ind_vars": [],
+                    "dep_vars": [],
+                    "ind_var_methods": [],
+                    "dep_var_methods": [],
+                    "study_type": None,
+                    "study_number": "3",
+                    "evidence_type": None,
+                    "reporting_standards_type": None,
+                    "method_similarity_type": None,
+                    "method_differences": None,
+                    "auxiliary_hypo_evidence": None,
+                    "rep_outcome_category": None,
+                    "replication_of": None
+                },
+                {
+                    "id": studies[2].id,
+                    "effects": [
+                        {
+                            "id": studies[2].effects.all()[0].id,
+                            "name": "Macbeth Effect #2",
+                            "constraints_on_generality": None
+                        }
+                    ],
+                    "transparencies": [],
+                    "ind_vars": [],
+                    "dep_vars": [],
+                    "ind_var_methods": [],
+                    "dep_var_methods": [],
+                    "study_type": None,
+                    "study_number": "4",
+                    "evidence_type": None,
+                    "reporting_standards_type": None,
+                    "method_similarity_type": None,
+                    "method_differences": None,
+                    "auxiliary_hypo_evidence": None,
+                    "rep_outcome_category": None,
+                    "replication_of": None
+                }
+            ]
+        }
+        r = self.client.patch(url,
+                              json.dumps(payload_dict),
+                              content_type="application/json")
+
+        assert r.status_code == 200
+        assert article.studies.filter(study_number=2).first().study_type=="PATCHED"
+
     # Update Articles
     def test_authenticated_user_can_edit_article_with_api(self):
         self.client.login(username='new_user', password='password1')

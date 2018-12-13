@@ -198,15 +198,46 @@ class ArticleSerializer(serializers.ModelSerializer):
         if studies is not None:
             for s in studies:
                 effects = None
+                ind_vars = None
+                dep_vars = None
+                ind_var_methods = None
+                dep_var_methods = None
+
                 if 'effects' in s:
                     effects = s.pop('effects')
+                if 'ind_vars' in s:
+                    ind_vars = s.pop('ind_vars')
+                if 'dep_vars' in s:
+                    dep_vars = s.pop('dep_vars')
+                if 'ind_var_methods' in s:
+                    ind_var_methods = s.pop('ind_var_methods')
+                if 'dep_var_methods' in s:
+                    dep_var_methods = s.pop('dep_var_methods')
+
                 study = Study.objects.create(
                     article=instance,
                     **s
                 )
+
                 if effects is not None:
                     for effect in effects:
                         study.effects.add(effect)
+
+                if ind_vars is not None:
+                    for ind_var in ind_vars:
+                        study.ind_vars.add(ind_var)
+
+                if dep_vars is not None:
+                    for dep_var in dep_vars:
+                        study.dep_vars.add(dep_var)
+
+                if ind_var_methods is not None:
+                    for ind_var_method in ind_var_methods:
+                        study.ind_var_methods.add(ind_var_method)
+
+                if dep_var_methods is not None:
+                    for dep_var_method in dep_var_methods:
+                        study.dep_var_methods.add(dep_var_method)
 
         if transparencies is not None:
             for t in transparencies:
@@ -274,14 +305,26 @@ class ArticleSerializer(serializers.ModelSerializer):
         if studies is not None:
             for s in studies:
                 effects = None
+                ind_vars = None
+                dep_vars = None
+                ind_var_methods = None
+                dep_var_methods = None
+
                 if 'effects' in s:
                     effects = s.pop('effects')
+                if 'ind_vars' in s:
+                    ind_vars = s.pop('ind_vars')
+                if 'dep_vars' in s:
+                    dep_vars = s.pop('dep_vars')
+                if 'ind_var_methods' in s:
+                    ind_var_methods = s.pop('ind_var_methods')
+                if 'dep_var_methods' in s:
+                    dep_var_methods = s.pop('dep_var_methods')
                 if 'id' in s:
                     study = Study.objects.filter(id=s['id'])
                     study.update(**s)
                     study = study.first()
                 else:
-                    raise Exception("id not in s")
                     study = Study.objects.create(
                         article=instance,
                         **s
@@ -293,6 +336,34 @@ class ArticleSerializer(serializers.ModelSerializer):
                     for e in study.effects.all():
                         if e not in effects:
                             study.effects.remove(e)
+
+                if ind_vars is not None:
+                    for ind_var in ind_vars:
+                        study.ind_vars.add(ind_var)
+                    for i in study.ind_vars.all():
+                        if i not in ind_vars:
+                            study.ind_vars.remove(i)
+
+                if dep_vars is not None:
+                    for dep_var in dep_vars:
+                        study.dep_vars.add(dep_var)
+                    for d in study.dep_vars.all():
+                        if d not in dep_vars:
+                            study.dep_vars.remove(d)
+
+                if ind_var_methods is not None:
+                    for ind_var_method in ind_var_methods:
+                        study.ind_var_methods.add(ind_var_method)
+                    for i in study.ind_var_methods.all():
+                        if i not in ind_var_methods:
+                            study.ind_var_methods.remove(i)
+
+                if dep_var_methods is not None:
+                    for dep_var_method in dep_var_methods:
+                        study.dep_var_methods.add(dep_var_method)
+                    for d in study.dep_var_methods.all():
+                        if d not in dep_var_methods:
+                            study.dep_var_methods.remove(d)
 
         if commentary_of is not None:
             for index, article in enumerate(commentary_of):
