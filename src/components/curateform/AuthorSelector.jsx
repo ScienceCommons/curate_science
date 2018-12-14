@@ -35,7 +35,8 @@ class AuthorSelector extends React.Component {
                                  name="authors"
                                  multi
                                  value={value}
-                                 onChange={this.handleChange} />
+                                 onChange={this.handleChange}
+                                 onCreate={this.handleCreate} />
         )
 	}
 }

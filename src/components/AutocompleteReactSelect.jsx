@@ -312,13 +312,14 @@ AutocompleteReactSelect.propTypes = {
   creatable: PropTypes.bool,
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  onChange: PropTypes.func,
   creatable: PropTypes.bool,
   listUrl: PropTypes.string,
   createUrl: PropTypes.string,
   labelProp: PropTypes.string,
   name: PropTypes.string,
-  multi: PropTypes.bool
+  multi: PropTypes.bool,
+  onChange: PropTypes.func,
+  onCreate: PropTypes.func,
 };
 
 export default withStyles(styles, { withTheme: true })(AutocompleteReactSelect);

@@ -52,7 +52,7 @@ class Curate extends React.Component {
         this.handleDOILookupResults = this.handleDOILookupResults.bind(this)
         this.addNewStudy = this.addNewStudy.bind(this)
         this.closeStudyEditor = this.closeStudyEditor.bind(this)
-        this.handleCheckChange = this.handleCheckChange.bind(this)
+        this.handleInPressChange = this.handleInPressChange.bind(this)
         this.handleValueChange = this.handleValueChange.bind(this)
         this.saveStudy = this.saveStudy.bind(this)
         this.snackClose = this.snackClose.bind(this)
@@ -127,16 +127,16 @@ class Curate extends React.Component {
 	    this.setState({formdata});
   	}
 
-  	handleCheckChange = (prop) => (event, checked) => {
+  	handleInPressChange(event, checked) {
   		let {formdata} = this.state
-  		formdata[prop] = checked
-	    this.setState({formdata});
+  		formdata.year = checked ? null : ''
+	    this.setState({formdata})
   	}
 
     handleValueChange = prop => value => {
     	let {formdata} = this.state
     	formdata[prop] = value
-	    this.setState({formdata});
+	    this.setState({formdata})
   	}
 
   	closeStudyEditor() {
@@ -161,27 +161,24 @@ class Curate extends React.Component {
 
   	handleSubmit(e) {
   		const { cookies } = this.props;
+  		let {formdata} = this.state
   		e.preventDefault()
   		// TODO: Add study data
   		// TODO: Confirm study deletion, figure deletion working
-  		var form = document.getElementById('curateForm');
-		let formData = new FormData(form);
   		let editing_id = this.editing_id()
   		let creating_new = editing_id == null
-  		const USE_API_URL = true
-  		let url = creating_new ? `/articles/create/` : `/articles/${editing_id}/update/`
-  		let method = 'POST'
-  		if (USE_API_URL) {
-  			url = '/api' + url
-  			method = creating_new ? 'POST' : 'PATCH'
-  		}
+  		let url = creating_new ? `/api/articles/create/` : `/api/articles/${editing_id}/update/`
+		let method = creating_new ? 'PUT' : 'PATCH'
   		let csrf_token = cookies.get('csrftoken')
+  		console.log(formdata)
   		let fetch_opts = {
 		    credentials: 'include',
   			method: method,
-  			body: formData,
+  			body: JSON.stringify(formdata),
   			headers: {
-  				'X-CSRFToken': csrf_token
+  				'X-CSRFToken': csrf_token,
+			    'Accept': 'application/json',
+			    'Content-Type': 'application/json'
   			}
   		}
   		fetch(url, fetch_opts).then(res => res.json().then(data => {
@@ -216,6 +213,7 @@ class Curate extends React.Component {
 		let at = find(C.ARTICLE_TYPES, {id: formdata.article_type || 'ORIGINAL'})
 		let show_reanalysis, show_commentary, show_study_section, show_replication
 		let form_action = this.editing() ? "Edit" : "Add"
+		let in_press = formdata.year == null
 		if (at != null) {
 			show_reanalysis = at.relevant_sections.indexOf('reanalysis') > -1
 			show_commentary = at.relevant_sections.indexOf('commentary') > -1
@@ -345,16 +343,16 @@ class Curate extends React.Component {
 					          name="year"
 					          margin="none"
 					          variant="outlined"
-					          disabled={formdata.in_press}
+					          disabled={in_press}
 					        />
 
 				    		<FormControlLabel
 				    			style={{paddingLeft: 15}}
 					            control={
 				    	            <Checkbox
-				    	              checked={formdata.in_press}
-				    	              onChange={this.handleCheckChange('in_press')}
-				    	              checked={formdata.in_press}
+				    	              checked={in_press}
+				    	              onChange={this.handleInPressChange}
+				    	              checked={in_press}
 				    	              value={'in_press'}
 				    	              color="primary"
 				    	            />

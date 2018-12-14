@@ -101,8 +101,8 @@ class StudyLI extends React.Component {
     arr = arr == null ? [] : arr
     return (
       <ul>
-        { arr.map(el => {
-          return <li><Typography variant="body1">{prop == null ? el : el[prop]}</Typography></li>
+        { arr.map((el, i) => {
+          return <li key={i}><Typography variant="body1">{prop == null ? el : el[prop]}</Typography></li>
         }) }
       </ul>
       )

@@ -7,16 +7,22 @@ import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
-  thumbnail: {
-    display: 'inline-block',
-    width: 110,
-    height: 110,
-    marginRight: 10,
-    marginTop: 10,
-    border: '1px solid gray',
-    backgroundSize: 'cover',
-    backgroundPosition: '50% 50%'
-  }
+    container: {
+       display: 'flex',
+       flexDirection: 'row'
+    },
+    thumbnail: {
+        display: 'inline-block',
+        width: 110,
+        height: 110,
+        marginRight: 10,
+        marginTop: 10,
+        border: '1px solid gray',
+        backgroundSize: 'cover',
+        backgroundPosition: '50% 50%',
+        borderRadius: 3,
+        cursor: 'pointer'
+    }
 }
 
 class FigureList extends React.Component {
@@ -28,8 +34,8 @@ class FigureList extends React.Component {
         this.render_thumbnail = this.render_thumbnail.bind(this)
     }
 
-    deleteFigure = kf => event => {
-    	console.log(`Delete ${kf.image_url}`)
+    deleteFigure = idx => event => {
+        this.props.onDelete(idx)
     }
 
     handleChange(event) {
@@ -45,7 +51,7 @@ class FigureList extends React.Component {
     	return (
             <Tooltip title={tt} key={i}>
                 <div>
-                    <span className={classes.thumbnail} style={{backgroundImage: `url(${kf.image_url})`}} onClick={this.deleteFigure(kf)} />
+                    <span className={classes.thumbnail} style={{backgroundImage: `url(${kf.image_url})`}} onClick={this.deleteFigure(i)} />
                     { hiddenInput }
                 </div>
             </Tooltip>
@@ -55,7 +61,7 @@ class FigureList extends React.Component {
 	render() {
 		let {classes, figures} = this.props
 		return (
-			<div>
+			<div className={classes.container}>
 				{ figures.map(this.render_thumbnail) }
             </div>
         )
