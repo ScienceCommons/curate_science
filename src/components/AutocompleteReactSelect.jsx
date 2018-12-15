@@ -230,7 +230,8 @@ class AutocompleteReactSelect extends React.Component {
   }
 
   formatCreateLabel(inputValue) {
-    return <span>{ `Create '${inputValue}'` }</span>
+    let text = `Create '${inputValue}'`
+    return <span>{ text }</span>
   }
 
   newOptionData(inputValue, optionLabel) {

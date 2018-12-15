@@ -45,7 +45,9 @@ class Curate extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-        	formdata: {},
+        	formdata: {
+        		year: ''
+        	},
         	study_editor_idx: -1
         };
 

@@ -115,27 +115,22 @@ var C = {
 			items: [
 				{
 					id: 'prereg',
-					icon: '',
 					label: "Preregistration"
 				},
 				{
 					id: 'materials',
-					icon: '',
 					label: "Open Study Materials"
 				},
 				{
 					id: 'data',
-					icon: '',
 					label: "Open Data"
 				},
 				{
 					id: 'code',
-					icon: '',
 					label: "Open Code"
 				},
 				{
 					id: 'repstd',
-					icon: '',
 					label: "Reporting Standards"
 				}
 			]

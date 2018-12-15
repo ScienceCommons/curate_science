@@ -9,6 +9,7 @@ import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 import {set, find} from 'lodash'
 
 import URLInput from '../components/curateform/URLInput.jsx';
+import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 import C from '../constants/constants';
 
@@ -42,14 +43,6 @@ const TransparencyHeader = ({badge}) => {
 			</Typography>
 		</div>
 	)
-}
-
-const TransparencyIcon = ({tt, size}) => {
-	return <img
-			   src={`/sitestatic/icons/${tt.icon}.svg`}
-			   width={size}
-			   height={size}
-			   type="image/svg+xml" />
 }
 
 class AddTransparencyMenuItem extends React.Component {

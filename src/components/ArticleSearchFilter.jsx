@@ -12,6 +12,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import C from '../constants/constants';
+import {TransparencyIcon} from './shared/TransparencyIcon.jsx';
 
 import qs from 'query-string';
 
@@ -111,7 +112,7 @@ class ArticleSearchFilter extends React.Component {
         let {classes} = this.props
         let group
         let controls = cat.items.map((item) => {
-            return this.render_item(item, cat.type)
+            return this.render_item(item, cat.type, cat.category)
         })
         if (cat.type == 'radio') group = (<RadioGroup
                 aria-label={cat.id}
@@ -131,8 +132,12 @@ class ArticleSearchFilter extends React.Component {
 		)
     }
 
-    render_item(item, type) {
+    render_item(item, type, category) {
         let {classes} = this.props
+        let icon
+        if (category == 'transparency') {
+            icon = <TransparencyIcon tt={{icon: item.id}} size={10} />
+        }
         if (type == 'radio') return (
             <FormControlLabel
                 value="format"
@@ -145,7 +150,7 @@ class ArticleSearchFilter extends React.Component {
                         value={item.id}
                         color="primary" />
                 }
-                label={item.label} />
+                label={<span>{icon} {item.label}</span>} />
         )
         else return (
     		<FormControlLabel
@@ -160,7 +165,7 @@ class ArticleSearchFilter extends React.Component {
     	              color="primary"
     	            />
     	          }
-                label={item.label}
+                label={<span>{icon} {item.label}</span>}
 	        />
 		)
 	}
