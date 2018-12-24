@@ -35,7 +35,7 @@ class FigureList extends React.Component {
     }
 
     deleteFigure = idx => event => {
-        this.props.onDelete(idx)
+        if (this.props.onDelete != null) this.props.onDelete(idx)
     }
 
     handleChange(event) {

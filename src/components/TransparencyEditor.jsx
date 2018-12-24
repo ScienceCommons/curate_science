@@ -4,7 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 	FormControlLabel, Radio, Icon, InputLabel, Input, InputAdornment,
-	AppBar, Typography, IconButton, Button, TextField, Menu, MenuItem, Grid} from '@material-ui/core';
+	AppBar, Typography, IconButton, Button, TextField, Menu, MenuItem, Grid,
+	ListItemIcon} from '@material-ui/core';
 
 import {set, find} from 'lodash'
 
@@ -61,8 +62,10 @@ class AddTransparencyMenuItem extends React.Component {
 		let {transparency_type} = this.props
 		return (
 			<MenuItem onClick={this.add}>
-				<TransparencyIcon tt={transparency_type} size={30} />
-    			{ transparency_type.label }
+				<ListItemIcon>
+					<TransparencyIcon tt={transparency_type} size={30} />
+				</ListItemIcon>
+    			<Typography variant="inherit">{ transparency_type.label }</Typography>
 			</MenuItem>
 		)
 	}

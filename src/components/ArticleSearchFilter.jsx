@@ -12,7 +12,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import C from '../constants/constants';
-import {TransparencyIcon} from './shared/TransparencyIcon.jsx';
+import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 import qs from 'query-string';
 
@@ -136,7 +136,7 @@ class ArticleSearchFilter extends React.Component {
         let {classes} = this.props
         let icon
         if (category == 'transparency') {
-            icon = <TransparencyIcon tt={{icon: item.id}} size={10} />
+            icon = <TransparencyIcon tt={{icon: item.id}} size={11} />
         }
         if (type == 'radio') return (
             <FormControlLabel

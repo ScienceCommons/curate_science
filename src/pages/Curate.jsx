@@ -111,7 +111,7 @@ class Curate extends React.Component {
 	    let studies = formdata.studies
 	    if (idx < studies.length) {
 	    	studies.splice(idx, 1)
-		    this.setState({formdata})
+		    this.setState({formdata: formdata, snack_message: "Study deleted"})
 	    }
     }
 
