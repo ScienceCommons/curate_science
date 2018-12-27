@@ -59,6 +59,8 @@ class AutocompleteCreateConfirmation extends React.Component {
             console.log(res)
             if (res.status == 200) {
                 this.handleCreated()
+            } else {
+                this.dismiss()
             }
         })
     }
@@ -71,8 +73,8 @@ class AutocompleteCreateConfirmation extends React.Component {
     }
 
 	render() {
-		let {classes, value, objectLabel} = this.props
-        let {name, confirmationShowing, create_value} = this.state
+		let {classes, value, objectLabel, listUrl, createUrl, placeholder, name} = this.props
+        let {confirmationShowing, create_value} = this.state
         let dialog = (
             <Dialog
               open={confirmationShowing}
@@ -100,9 +102,9 @@ class AutocompleteCreateConfirmation extends React.Component {
     			<AutocompleteReactSelect
                                  creatable
                                  labelProp="text"
-                                 listUrl="/api/authors/autocomplete/"
-                                 placeholder="Authors *"
-                                 name="authors"
+                                 listUrl={listUrl}
+                                 placeholder={placeholder}
+                                 name={name}
                                  multi
                                  value={value}
                                  onChange={this.handleChange}
