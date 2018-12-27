@@ -39,7 +39,12 @@ const theme = createMuiTheme({
   },
   typography: {
     useNextVariants: true,
-    fontSize: 12
+    fontSize: 12,
+    h4: {
+        textTransform: 'uppercase',
+        fontSize: 18,
+        color: 'gray'
+    }
   },
   overrides: {
     MuiButton: {

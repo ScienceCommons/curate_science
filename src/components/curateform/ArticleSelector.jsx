@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AutocompleteReactSelect from '../AutocompleteReactSelect.jsx';
+import AutocompleteReactSelect from '../shared/AutocompleteReactSelect.jsx';
 import QuickArticleCreator from '../../components/shared/QuickArticleCreator.jsx';
 
 import { withStyles } from '@material-ui/core/styles';

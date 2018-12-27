@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TransparencyEditor from '../../components/TransparencyEditor.jsx';
 import ArticleSelector from '../../components/curateform/ArticleSelector.jsx';
 import FigureSelector from '../../components/curateform/FigureSelector.jsx';
-import AutocompleteReactSelect from '../../components/AutocompleteReactSelect.jsx';
+import AutocompleteCreateConfirmation from '../../components/shared/AutocompleteCreateConfirmation.jsx';
 
 import C from '../../constants/constants';
 
@@ -48,7 +48,8 @@ class StudyEditor extends React.Component {
 				label: 'Target Effects',
 				type: 'autocomplete',
 				placeholder: "e.g., 'playboy effect'",
-				list_url: "/api/effects/autocomplete/"
+				listUrl: "/api/effects/autocomplete/",
+				createUrl: "/api/effects/create/"
 			},
 			{
 				name: 'method_similarity_type',
@@ -71,33 +72,41 @@ class StudyEditor extends React.Component {
 			{
 				name: 'ind_vars',
 				label: 'IVs',
+				objectLabel: "construct",
 				type: 'autocomplete',
 				placeholder: "e.g., 'erotica exposure vs. control'",
-				list_url: '/api/constructs/autocomplete/',
+				listUrl: '/api/constructs/autocomplete/',
+				createUrl: '/api/constructs/create/',
 				xs: 6
 			},
 			{
 				name: 'dep_vars',
 				label: 'DVs',
+				objectLabel: "construct",
 				type: 'autocomplete',
 				placeholder: "e.g., 'partner love'",
-				list_url: '/api/constructs/autocomplete/',
+				listUrl: '/api/constructs/autocomplete/',
+				createUrl: '/api/constructs/create/',
 				xs: 6
 			},
 			{
 				name: 'ind_var_methods',
 				label: 'IV methods',
+				objectLabel: "method",
 				type: 'autocomplete',
 				placeholder: "e.g., 'Playboy centerfolds vs. abstract art images'",
-				list_url: '/api/methods/autocomplete/',
+				listUrl: '/api/methods/autocomplete/',
+				createUrl: '/api/methods/create/',
 				xs: 6
 			},
 			{
 				name: 'dep_var_methods',
 				label: 'DV methods',
+				objectLabel: "method",
 				type: 'autocomplete',
 				placeholder: "e.g., 'Rubin Love Scale (13-item)'",
-				list_url: '/api/methods/autocomplete/',
+				listUrl: '/api/methods/autocomplete/',
+				createUrl: '/api/methods/create/',
 				xs: 6
 			}
 		]
@@ -169,12 +178,13 @@ class StudyEditor extends React.Component {
 		let cell_content
 		if (params.type == 'autocomplete') {
 			cell_content = (
-			<AutocompleteReactSelect
+			<AutocompleteCreateConfirmation
 								 key={i}
                                  creatable
-                                 labelProp="text"
-                                 listUrl={params.list_url}
+                                 listUrl={params.listUrl}
+                                 createtUrl={params.createtUrl}
                                  placeholder={params.label}
+                                 objectLabel={params.objectLabel}
                                  multi
                                  value={formdata[params.name]}
                                  onChange={this.handleValueChange(params.name)} />

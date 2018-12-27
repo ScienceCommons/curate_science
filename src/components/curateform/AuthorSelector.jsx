@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AutocompleteReactSelect from '../AutocompleteReactSelect.jsx';
+import AutocompleteReactSelect from '../shared/AutocompleteReactSelect.jsx';
 import QuickAuthorCreator from '../../components/shared/QuickAuthorCreator.jsx';
 
 import {ListItem, List, ListItemText, ListItemSecondaryAction, IconButton, Icon} from '@material-ui/core';

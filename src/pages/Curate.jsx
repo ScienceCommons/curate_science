@@ -9,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {TextField, Button, Card, Grid, Typography, Menu, MenuItem, InputLabel,
 	FormControl, FormControlLabel, RadioGroup, Radio, Checkbox,
-	Select, OutlinedInput, Paper, Snackbar, Icon} from '@material-ui/core';
+	Select, OutlinedInput, Paper, Snackbar, Icon, Fab} from '@material-ui/core';
 
 import C from '../constants/constants';
 
@@ -38,6 +38,12 @@ const styles = {
 	},
 	formControl: {
 
+	},
+	fabHolder: {
+		display: 'flex',
+		alignItems: 'center',
+	    justifyContent: 'center',
+	    padding: 15
 	}
 }
 
@@ -362,7 +368,7 @@ class Curate extends React.Component {
 				                label="In press"
 					        />
 					    </Grid>
-					    <Grid item xs={6}>
+					    <Grid item xs={12}>
 							<TextField
 					          id="abstract"
 					          name="abstract"
@@ -420,15 +426,19 @@ class Curate extends React.Component {
 							<Typography variant="h4" gutterBottom>Studies</Typography>
 							{ studies.map((study, idx) => <StudyLI key={study.id}
 															study={study}
+															key={idx}
 															idx={idx}
 															showReplicationDetails={show_replication}
 															onDelete={this.handleStudyDelete}
 															onEdit={this.handleStudyEdit}
 															showActions={true} />) }
-							<Button variant="contained" onClick={this.addNewStudy}>
-								<Icon>add</Icon>
-								Add Study
-							</Button>
+
+							<div className={classes.fabHolder}>
+								<Fab variant="extended" aria-label="Add" onClick={this.addNewStudy}>
+	        						<Icon>add</Icon>
+							        Add Study
+						        </Fab>
+					        </div>
 						</Grid>
 
 						<Grid item xs={6}>
