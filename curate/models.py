@@ -298,7 +298,11 @@ class Hypothesis(models.Model):
 
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='key_figures')
-    study = models.ForeignKey(Study, on_delete=models.CASCADE, null=True, blank=True)
+    study = models.ForeignKey(Study,
+                              on_delete=models.CASCADE,
+                              null=True,
+                              blank=True,
+                              related_name="key_figures")
     figure_number = models.PositiveIntegerField()
     image_url = models.URLField(null=True, blank=True)
     file_name = models.CharField(max_length=255,null=True, blank=True)
@@ -365,7 +369,11 @@ class Transparency(models.Model):
     REPSTD = 'REPSTD'
 
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='transparencies')
-    study = models.ForeignKey(Study, on_delete=models.CASCADE, null=True, blank=True, related_name='transparencies')
+    study = models.ForeignKey(Study,
+                              on_delete=models.CASCADE,
+                              null=True,
+                              blank=True,
+                              related_name='transparencies')
     transparency_type = models.CharField(max_length=255, choices=(
         (PREREG,'prereg'),
         (MATERIALS,'materials'),
@@ -376,3 +384,6 @@ class Transparency(models.Model):
     url = models.URLField(default="")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together=('article', 'study', 'transparency_type', 'url')

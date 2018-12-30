@@ -71,7 +71,8 @@ class NestedStudySerializer(serializers.ModelSerializer):
     #     queryset=Effect.objects.all()
     # )
     effects = EffectSerializer(many=True, read_only=True)
-    transparencies = TransparencySerializer(many=True, read_only=True)
+    key_figures = KeyFigureSerializer(many=True)
+    transparencies = TransparencySerializer(many=True)
     ind_vars = ConstructSerializer(many=True)
     dep_vars = ConstructSerializer(many=True)
     ind_var_methods = MethodSerializer(many=True)
@@ -101,7 +102,6 @@ class JournalSerializer(serializers.ModelSerializer):
         model=Journal
         fields='__all__'
 
-
 class ArticleListSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
     key_figures = KeyFigureSerializer(many=True)
@@ -114,143 +114,113 @@ class ArticleListSerializer(serializers.ModelSerializer):
         model=Article
         fields='__all__'
 
-
-
 class ArticleSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False, allow_null=True)
     studies = NestedStudySerializer(many=True)
-    key_figures = serializers.PrimaryKeyRelatedField(many=True, queryset=KeyFigure.objects.all(), required=False, allow_null=True)
-    transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all(), required=False, allow_null=True)
+    #key_figures = serializers.PrimaryKeyRelatedField(many=True, queryset=KeyFigure.objects.all(), required=False, allow_null=True)
+    #transparencies = serializers.PrimaryKeyRelatedField(many=True, queryset=Transparency.objects.all(), required=False, allow_null=True)
+    key_figures = KeyFigureSerializer(many=True)
+    transparencies = TransparencySerializer(many=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     robustness_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
 
     def create(self, validated_data):
-        if 'authors' in validated_data:
-            authors = validated_data.pop('authors')
-        else:
-            authors = None
-
-        if 'commentary_of' in validated_data:
-            commentary_of = validated_data.pop('commentary_of')
-        else:
-            commentary_of = None
-
-        if 'reproducibility_of' in validated_data:
-            reproducibility_of = validated_data.pop('reproducibility_of')
-        else:
-            reproducibility_of = None
-
-        if 'robustness_of' in validated_data:
-            robustness_of = validated_data.pop('robustness_of')
-        else:
-            robustness_of = None
-
-        if 'studies' in validated_data:
-            studies = validated_data.pop('studies')
-        else:
-            studies = None
-
-        if 'key_figures' in validated_data:
-            key_figures = validated_data.pop('key_figures')
-
-        if 'transparencies' in validated_data:
-            transparencies = validated_data.pop('transparencies')
+        authors = validated_data.pop('authors', [])
+        commentary_of = validated_data.pop('commentary_of', [])
+        reproducibility_of = validated_data.pop('reproducibility_of', [])
+        robustness_of = validated_data.pop('robustness_of', [])
+        studies = validated_data.pop('studies', [])
+        key_figures = validated_data.pop('key_figures', [])
+        transparencies = validated_data.pop('transparencies', [])
 
         instance = Article.objects.create(**validated_data)
 
-        if authors is not None:
-            for index, author in enumerate(authors):
-                aa = ArticleAuthor.objects.create(
-                    author=author,
+        for index, author in enumerate(authors):
+            ArticleAuthor.objects.create(
+                author=author,
+                article=instance,
+                order=index+1
+            )
+
+        for index, article in enumerate(commentary_of):
+            RelatedArticle.objects.create(
+                original_article=instance,
+                related_article=article,
+                is_commentary=True,
+                order=index+1
+            )
+
+        for index, article in enumerate(reproducibility_of):
+            RelatedArticle.objects.create(
+                original_article=instance,
+                related_article=article,
+                is_reproducibility=True,
+                order=index+1
+            )
+
+        for index, article in enumerate(robustness_of):
+            RelatedArticle.objects.create(
+                original_article=instance,
+                related_article=article,
+                is_robustness=True,
+                order=index+1
+            )
+
+        for t in transparencies:
+            Transparency.objects.create(
+                article=instance,
+                **t
+            )
+
+        for k in key_figures:
+            KeyFigure.objects.create(
+                article=instance,
+                **k
+            )
+
+        for s in studies:
+            effects = s.pop('effects', [])
+            ind_vars = s.pop('ind_vars', [])
+            dep_vars = s.pop('dep_vars', [])
+            ind_var_methods = s.pop('ind_var_methods', [])
+            dep_var_methods = s.pop('dep_var_methods', [])
+            study_transparencies = s.pop('transparencies', [])
+            study_key_figures = s.pop('key_figures', [])
+
+            study = Study.objects.create(
+                article=instance,
+                **s
+            )
+
+            for effect in effects:
+                study.effects.add(effect)
+
+            for ind_var in ind_vars:
+                study.ind_vars.add(ind_var)
+
+            for dep_var in dep_vars:
+                study.dep_vars.add(dep_var)
+
+            for ind_var_method in ind_var_methods:
+                study.ind_var_methods.add(ind_var_method)
+
+            for dep_var_method in dep_var_methods:
+                study.dep_var_methods.add(dep_var_method)
+
+            for st in study_transparencies:
+                Transparency.objects.create(
                     article=instance,
-                    order=index+1
-                )
-        else:
-            raise Exception(str(validated_data))
-
-        if commentary_of is not None:
-            for index, article in enumerate(commentary_of):
-                ra = RelatedArticle.objects.create(
-                    original_article=instance,
-                    related_article=article,
-                    is_commentary=True,
-                    order=index+1
-                )
-        if reproducibility_of is not None:
-            for index, article in enumerate(reproducibility_of):
-                ra = RelatedArticle.objects.create(
-                    original_article=instance,
-                    related_article=article,
-                    is_reproducibility=True,
-                    order=index+1
-                )
-        if robustness_of is not None:
-            for index, article in enumerate(robustness_of):
-                ra = RelatedArticle.objects.create(
-                    original_article=instance,
-                    related_article=article,
-                    is_robustness=True,
-                    order=index+1
+                    study=s,
+                    **st
                 )
 
-        if studies is not None:
-            for s in studies:
-                effects = None
-                ind_vars = None
-                dep_vars = None
-                ind_var_methods = None
-                dep_var_methods = None
-
-                if 'effects' in s:
-                    effects = s.pop('effects')
-                if 'ind_vars' in s:
-                    ind_vars = s.pop('ind_vars')
-                if 'dep_vars' in s:
-                    dep_vars = s.pop('dep_vars')
-                if 'ind_var_methods' in s:
-                    ind_var_methods = s.pop('ind_var_methods')
-                if 'dep_var_methods' in s:
-                    dep_var_methods = s.pop('dep_var_methods')
-
-                study = Study.objects.create(
+            for k in study_key_figures:
+                KeyFigure.objects.create(
                     article=instance,
-                    **s
-                )
-
-                if effects is not None:
-                    for effect in effects:
-                        study.effects.add(effect)
-
-                if ind_vars is not None:
-                    for ind_var in ind_vars:
-                        study.ind_vars.add(ind_var)
-
-                if dep_vars is not None:
-                    for dep_var in dep_vars:
-                        study.dep_vars.add(dep_var)
-
-                if ind_var_methods is not None:
-                    for ind_var_method in ind_var_methods:
-                        study.ind_var_methods.add(ind_var_method)
-
-                if dep_var_methods is not None:
-                    for dep_var_method in dep_var_methods:
-                        study.dep_var_methods.add(dep_var_method)
-
-        if transparencies is not None:
-            for t in transparencies:
-                tr = Transparency.objects.create(
-                    article=instance,
-                    **t
-                )
-
-        if key_figures is not None:
-            for k in key_figures:
-                kf = KeyFigure.objects.create(
-                    article=instance,
-                    **k
+                    study=s,
+                    **st
                 )
 
         instance.save()
@@ -259,27 +229,13 @@ class ArticleSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         info = model_meta.get_field_info(instance)
 
-        if 'authors' in validated_data:
-            authors = validated_data.pop('authors')
-        else:
-            authors = None
-        if 'commentary_of' in validated_data:
-            commentary_of = validated_data.pop('commentary_of')
-        else:
-            commentary_of = None
-        if 'reproducibility_of' in validated_data:
-            reproducibility_of = validated_data.pop('reproducibility_of')
-        else:
-            reproducibility_of = None
-        if 'robustness_of' in validated_data:
-            robustness_of = validated_data.pop('robustness_of')
-        else:
-            robustness_of = None
-
-        if 'studies' in validated_data:
-            studies = validated_data.pop('studies')
-        else:
-            studies = None
+        authors = validated_data.pop('authors', [])
+        commentary_of = validated_data.pop('commentary_of', [])
+        reproducibility_of = validated_data.pop('reproducibility_of', [])
+        robustness_of = validated_data.pop('robustness_of', [])
+        studies = validated_data.pop('studies', [])
+        key_figures = validated_data.pop('key_figures', [])
+        transparencies = validated_data.pop('transparencies', [])
 
         for attr, value in validated_data.items():
             if attr in info.relations and info.relations[attr].to_many:
@@ -290,128 +246,148 @@ class ArticleSerializer(serializers.ModelSerializer):
 
         instance.save()
 
-        if authors is not None:
-            for index, author in enumerate(authors):
-                aa = ArticleAuthor.objects.update_or_create(
-                    author=author,
+        for index, author in enumerate(authors):
+            ArticleAuthor.objects.update_or_create(
+                author=author,
+                article=instance,
+                defaults={'order': index + 1}
+            )
+
+        for a in instance.authors.all():
+            if a not in authors:
+                instance.articleauthor_set.filter(author=a).delete()
+
+        for t in transparencies:
+            url = t.pop('url', '')
+            transparency_type = t.pop('transparency_type')
+            Transparency.objects.update_or_create(
+                article=instance,
+                url=url,
+                transparency_type=transparency_type,
+                defaults=t
+            )
+
+        for k in key_figures:
+            figure_number=k.pop('figure_number', None)
+            KeyFigure.objects.update_or_create(
+                article=instance,
+                figure_number=figure_number,
+                defaults=k
+            )
+
+        for s in studies:
+            effects = s.pop('effects', [])
+            ind_vars = s.pop('ind_vars', [])
+            dep_vars = s.pop('dep_vars', [])
+            ind_var_methods = s.pop('ind_var_methods', [])
+            dep_var_methods = s.pop('dep_var_methods', [])
+            study_transparencies = s.pop('transparencies', [])
+            study_key_figures = s.pop('key_figures', [])
+
+            if 'id' in s:
+                study = Study.objects.filter(id=s['id'])
+                study.update(**s)
+                study = study.first()
+            else:
+                study = Study.objects.create(
                     article=instance,
-                    defaults={'order': index + 1}
+                    **s
                 )
 
-            for a in instance.authors.all():
-                if a not in authors:
-                    instance.articleauthor_set.filter(author=a).delete()
+            for effect in effects:
+                study.effects.add(effect)
+            for e in study.effects.all():
+                if e not in effects:
+                    study.effects.remove(e)
 
-        if studies is not None:
-            for s in studies:
-                effects = None
-                ind_vars = None
-                dep_vars = None
-                ind_var_methods = None
-                dep_var_methods = None
+            study_ind_vars = study.ind_vars.all()
+            for ind_var in ind_vars:
+                study.ind_vars.add(ind_var)
+            for i in study_ind_vars:
+                if i not in ind_vars:
+                    study.ind_vars.remove(i)
 
-                if 'effects' in s:
-                    effects = s.pop('effects')
-                if 'ind_vars' in s:
-                    ind_vars = s.pop('ind_vars')
-                if 'dep_vars' in s:
-                    dep_vars = s.pop('dep_vars')
-                if 'ind_var_methods' in s:
-                    ind_var_methods = s.pop('ind_var_methods')
-                if 'dep_var_methods' in s:
-                    dep_var_methods = s.pop('dep_var_methods')
-                if 'id' in s:
-                    study = Study.objects.filter(id=s['id'])
-                    study.update(**s)
-                    study = study.first()
-                else:
-                    study = Study.objects.create(
-                        article=instance,
-                        **s
-                    )
+            for dep_var in dep_vars:
+                study.dep_vars.add(dep_var)
+            for d in study.dep_vars.all():
+                if d not in dep_vars:
+                    study.dep_vars.remove(d)
 
-                if effects is not None:
-                    for effect in effects:
-                        study.effects.add(effect)
-                    for e in study.effects.all():
-                        if e not in effects:
-                            study.effects.remove(e)
+            for ind_var_method in ind_var_methods:
+                study.ind_var_methods.add(ind_var_method)
+            for i in study.ind_var_methods.all():
+                if i not in ind_var_methods:
+                    study.ind_var_methods.remove(i)
 
-                if ind_vars is not None:
-                    for ind_var in ind_vars:
-                        study.ind_vars.add(ind_var)
-                    for i in study.ind_vars.all():
-                        if i not in ind_vars:
-                            study.ind_vars.remove(i)
+            for dep_var_method in dep_var_methods:
+                study.dep_var_methods.add(dep_var_method)
+            for d in study.dep_var_methods.all():
+                if d not in dep_var_methods:
+                    study.dep_var_methods.remove(d)
 
-                if dep_vars is not None:
-                    for dep_var in dep_vars:
-                        study.dep_vars.add(dep_var)
-                    for d in study.dep_vars.all():
-                        if d not in dep_vars:
-                            study.dep_vars.remove(d)
-
-                if ind_var_methods is not None:
-                    for ind_var_method in ind_var_methods:
-                        study.ind_var_methods.add(ind_var_method)
-                    for i in study.ind_var_methods.all():
-                        if i not in ind_var_methods:
-                            study.ind_var_methods.remove(i)
-
-                if dep_var_methods is not None:
-                    for dep_var_method in dep_var_methods:
-                        study.dep_var_methods.add(dep_var_method)
-                    for d in study.dep_var_methods.all():
-                        if d not in dep_var_methods:
-                            study.dep_var_methods.remove(d)
-
-        if commentary_of is not None:
-            for index, article in enumerate(commentary_of):
-                ra = RelatedArticle.objects.update_or_create(
-                    original_article=instance,
-                    related_article=article,
-                    is_commentary=True,
-                    defaults={'order': index + 1}
+            for t in study_transparencies:
+                url = t.pop('url', None)
+                transparency_type = t.pop('transparency_type', None)
+                tr, c = Transparency.objects.update_or_create(
+                    article=instance,
+                    study=study,
+                    url=url,
+                    transparency_type=transparency_type
                 )
 
-            for ra in instance.commentary_of:
-                if ra not in commentary_of:
-                    instance.related_articles.filter(
-                        related_article=ra,
-                        is_commentary=True
-                    ).delete()
+            for k in study_key_figures:
+                figure_number=k.pop('figure_number', None)
+                KeyFigure.objects.update_or_create(
+                    article=instance,
+                    study=study,
+                    figure_number=figure_number,
+                    defaults=k
+                )
 
-        if reproducibility_of is not None:
-            for index, article in enumerate(reproducibility_of):
-                ra = RelatedArticle.objects.update_or_create(
+        for index, article in enumerate(commentary_of):
+            RelatedArticle.objects.update_or_create(
+                original_article=instance,
+                related_article=article,
+                is_commentary=True,
+                defaults={'order': index + 1}
+            )
+
+        for ra in instance.commentary_of:
+            if ra not in commentary_of:
+                instance.related_articles.filter(
+                    related_article=ra,
+                    is_commentary=True
+                ).delete()
+
+        for index, article in enumerate(reproducibility_of):
+            RelatedArticle.objects.update_or_create(
                     original_article=instance,
                     related_article=article,
                     is_reproducibility=True,
                     defaults={'order': index + 1}
                 )
 
-            for ra in instance.reproducibility_of:
-                if ra not in reproducibility_of:
-                    instance.related_articles.filter(
-                        related_article=ra,
-                        is_reproducibility=True
-                    ).delete()
+        for ra in instance.reproducibility_of:
+            if ra not in reproducibility_of:
+                instance.related_articles.filter(
+                    related_article=ra,
+                    is_reproducibility=True
+                ).delete()
 
-        if robustness_of is not None:
-            for index, article in enumerate(robustness_of):
-                ra = RelatedArticle.objects.update_or_create(
-                    original_article=instance,
-                    related_article=article,
-                    is_robustness=True,
-                    defaults={'order': index + 1}
-                )
+        for index, article in enumerate(robustness_of):
+            RelatedArticle.objects.update_or_create(
+                original_article=instance,
+                related_article=article,
+                is_robustness=True,
+                defaults={'order': index + 1}
+            )
 
-            for ra in instance.robustness_of:
-                if ra not in robustness_of:
-                    instance.related_articles.filter(
-                        related_article=ra,
-                        is_robustness=True
-                    ).delete()
+        for ra in instance.robustness_of:
+            if ra not in robustness_of:
+                instance.related_articles.filter(
+                    related_article=ra,
+                    is_robustness=True
+                ).delete()
 
         return instance
 

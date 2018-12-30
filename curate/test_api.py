@@ -209,7 +209,7 @@ class TestAPIViews(TestCase):
             "id": article.id,
             "studies": [
                 {
-                         "id": studies[0].id,
+                    "id": studies[0].id,
                     "effects": [
                         {
                             "id": studies[0].effects.all()[0].id,
@@ -217,7 +217,22 @@ class TestAPIViews(TestCase):
                             "constraints_on_generality": None
                         }
                     ],
-                    "transparencies": [],
+                    "transparencies": [
+                        {
+                            "transparency_type": "PREREG",
+                            "url": "https://osf.io/6xqju/"
+                        },
+                        {
+                            "transparency_type": "MATERIALS",
+                            "url": "https://osf.io/nrkej/"
+                        },
+                    ],
+                    "key_figures": [
+                        {
+                            "figure_number": "1",
+                            "image_url": "http://www.curatescience.org/logos/interactions-popup2.png"
+                        }
+                    ],
                     "ind_vars": [],
                     "dep_vars": [],
                     "ind_var_methods": [],
@@ -287,7 +302,13 @@ class TestAPIViews(TestCase):
                               content_type="application/json")
 
         assert r.status_code == 200
-        assert article.studies.filter(study_number=2).first().study_type=="PATCHED"
+        s2 = article.studies.filter(study_number=2).first()
+        assert s2.study_type=="PATCHED"
+        ts = s2.transparencies.all()
+        assert len(ts) == 2
+        kfs = s2.key_figures.all()
+        assert len(kfs) == 1
+        assert ts[0]['url'] == "https://osf.io/6xqju/"
 
     # Update Articles
     def test_authenticated_user_can_edit_article_with_api(self):
