@@ -29,6 +29,7 @@ from curate.models import (
 from curate.serializers import (
     AuthorSerializer,
     ArticleSerializer,
+    ArticleSerializerNested,
     ArticleDetailSerializer,
     ArticleListSerializer,
     CollectionSerializer,
@@ -154,14 +155,14 @@ def view_article(request, pk):
 @permission_classes((IsAuthenticated,))
 def create_article(request):
     if request.method=='POST':
-        serializer=ArticleSerializer(data=request.data)
+        serializer=ArticleSerializerNested(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        serializer = ArticleSerializer()
+        serializer = ArticleSerializerNested()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(('GET', 'PUT', 'PATCH', ))
@@ -174,7 +175,7 @@ def update_article(request, pk):
             is_partial=True
         else:
             is_partial=False
-        serializer = ArticleSerializer(queryset, data=request.data, partial=is_partial)
+        serializer = ArticleSerializerNested(queryset, data=request.data, partial=is_partial)
         if serializer.is_valid():
             serializer.save()
             result_status=status.HTTP_200_OK
@@ -182,7 +183,7 @@ def update_article(request, pk):
             result_status=status.HTTP_400_BAD_REQUEST
         return Response(serializer.errors, status=result_status)
     else:
-        serializer = ArticleSerializer(instance=queryset)
+        serializer = ArticleSerializerNested(instance=queryset)
         return Response(serializer.data)
 
 @api_view(('DELETE', ))

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.utils import model_meta
 from django.shortcuts import get_object_or_404
+from drf_writable_nested import WritableNestedModelSerializer, UniqueFieldsMixin
 from curate.models import (
     Author,
     Article,
@@ -40,37 +41,29 @@ class MethodSerializer(serializers.ModelSerializer):
 
 
 class TransparencySerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    transparency_type = serializers.CharField(read_only=True)
-    url = serializers.CharField(read_only=True)
-
     class Meta:
         model=Transparency
-        fields= ('id', 'transparency_type', 'url')
+        exclude=('article',)
 
 
 class KeyFigureSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    figure_number = serializers.CharField(read_only=True)
-    image_url = serializers.CharField(read_only=True)
-    study = serializers.PrimaryKeyRelatedField(read_only=True)
-
     class Meta:
         model=KeyFigure
-        fields= ('id', 'figure_number', 'image_url', 'study')
+        exclude=('article',)
 
-class EffectSerializer(serializers.ModelSerializer):
+class EffectSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model=Effect
         fields='__all__'
 
-class NestedStudySerializer(serializers.ModelSerializer):
+#class NestedStudySerializer(serializers.ModelSerializer):
+class NestedStudySerializer(WritableNestedModelSerializer):
     id = serializers.ModelField(model_field=Study()._meta.get_field('id'))
     # effects = serializers.PrimaryKeyRelatedField(
     #     many=True, allow_null=True, required=False,
     #     queryset=Effect.objects.all()
     # )
-    effects = EffectSerializer(many=True, read_only=True)
+    effects = EffectSerializer(many=True)
     key_figures = KeyFigureSerializer(many=True)
     transparencies = TransparencySerializer(many=True)
     ind_vars = ConstructSerializer(many=True)
@@ -82,11 +75,14 @@ class NestedStudySerializer(serializers.ModelSerializer):
         model=Study
         exclude=('article',)
 
-class StudySerializer(serializers.ModelSerializer):
-    effects = serializers.PrimaryKeyRelatedField(
-        many=True, allow_null=True, required=False,
-        queryset=Effect.objects.all()
-    )
+class StudySerializer(WritableNestedModelSerializer):
+    effects = EffectSerializer(many=True)
+    key_figures = KeyFigureSerializer(many=True)
+    transparencies = TransparencySerializer(many=True)
+    ind_vars = ConstructSerializer(many=True)
+    dep_vars = ConstructSerializer(many=True)
+    ind_var_methods = MethodSerializer(many=True)
+    dep_var_methods = MethodSerializer(many=True)
 
     class Meta:
         model=Study
@@ -109,6 +105,20 @@ class ArticleListSerializer(serializers.ModelSerializer):
     studies = NestedStudySerializer(many=True)
     authors = AuthorSerializer(many=True)
     journal = JournalSerializer()
+
+    class Meta:
+        model=Article
+        fields='__all__'
+
+class ArticleSerializerNested(WritableNestedModelSerializer):
+    year = serializers.IntegerField(required=False, allow_null=True)
+    studies = NestedStudySerializer(many=True)
+    key_figures = KeyFigureSerializer(many=True)
+    transparencies = TransparencySerializer(many=True)
+    authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+    commentary_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
+    reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
+    robustness_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
 
     class Meta:
         model=Article

@@ -297,7 +297,11 @@ class Hypothesis(models.Model):
         return self.name
 
 class KeyFigure(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='key_figures')
+    article = models.ForeignKey(Article,
+                                on_delete=models.CASCADE,
+                                related_name='key_figures',
+                                null=True,
+                                blank=True)
     study = models.ForeignKey(Study,
                               on_delete=models.CASCADE,
                               null=True,
@@ -368,7 +372,11 @@ class Transparency(models.Model):
     CODE = 'CODE'
     REPSTD = 'REPSTD'
 
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='transparencies')
+    article = models.ForeignKey(Article,
+                                on_delete=models.CASCADE,
+                                null=True,
+                                blank=True,
+                                related_name='transparencies')
     study = models.ForeignKey(Study,
                               on_delete=models.CASCADE,
                               null=True,

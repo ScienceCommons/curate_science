@@ -230,7 +230,9 @@ class TestAPIViews(TestCase):
                     "key_figures": [
                         {
                             "figure_number": "1",
-                            "image_url": "http://www.curatescience.org/logos/interactions-popup2.png"
+                            "image_url": "http://www.curatescience.org/logos/interactions-popup2.png",
+                            "is_figure": True,
+                            "is_table": False
                         }
                     ],
                     "ind_vars": [],
@@ -300,7 +302,9 @@ class TestAPIViews(TestCase):
         r = self.client.patch(url,
                               json.dumps(payload_dict),
                               content_type="application/json")
-
+        print(r)
+        d = json.loads(r.content.decode('utf-8'))
+        print(d)
         assert r.status_code == 200
         s2 = article.studies.filter(study_number=2).first()
         assert s2.study_type=="PATCHED"
@@ -308,7 +312,7 @@ class TestAPIViews(TestCase):
         assert len(ts) == 2
         kfs = s2.key_figures.all()
         assert len(kfs) == 1
-        assert ts[0]['url'] == "https://osf.io/6xqju/"
+        assert ts.first().url == "https://osf.io/6xqju/"
 
     # Update Articles
     def test_authenticated_user_can_edit_article_with_api(self):
