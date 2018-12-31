@@ -150,7 +150,12 @@ class TestAPIViews(TestCase):
                 'year': 2007,
                 'studies': [
                     {
-                        'study_type': None,
+                        "effects": [],
+                        "ind_vars": [],
+                        "dep_vars": [],
+                        "ind_var_methods": [],
+                        "dep_var_methods": [],
+                        "study_type": "test",
                         'study_number': '3',
                         'evidence_type': None,
                         'reporting_standards_type': None,
@@ -158,29 +163,21 @@ class TestAPIViews(TestCase):
                         'method_differences': None,
                         'auxiliary_hypo_evidence': None,
                         'rep_outcome_category': None,
-                        'replication_of': None
-                    },
-                    {
-                        'study_type': None,
-                        'study_number': '4',
-                        'evidence_type': None,
-                        'reporting_standards_type': None,
-                        'method_similarity_type': None,
-                        'method_differences': None,
-                        'auxiliary_hypo_evidence': None,
-                        'rep_outcome_category': None,
-                        'replication_of': None
-                    },
-                    {
-                        'study_type': None,
-                        'study_number': '2',
-                        'evidence_type': None,
-                        'reporting_standards_type': None,
-                        'method_similarity_type': None,
-                        'method_differences': None,
-                        'auxiliary_hypo_evidence': None,
-                        'rep_outcome_category': None,
-                        'replication_of': None
+                        'replication_of': None,
+                        'transparencies': [
+                            {
+                                "transparency_type": "PREREG",
+                                "url": "https://osf.io/6xqju/"
+                            }
+                        ],
+                        'key_figures': [
+                            {
+                                "figure_number": "1",
+                                "image_url": "http://www.curatescience.org/logos/interactions-popup2.png",
+                                "is_figure": True,
+                                "is_table": False
+                            }
+                        ]
                     }
                 ],
                 'authors': [models.Author.objects.first().id,],
@@ -196,8 +193,17 @@ class TestAPIViews(TestCase):
                 'updated': '2018-09-28T03:39:41.488042Z',
                 'journal': models.Journal.objects.first().id}
         )
+        d = json.loads(r.content.decode('utf-8'))
+        print(d)
         a = models.Article.objects.get(doi="0003")
         assert a.title == "TEST Washing away your sins: threatened morality and physical cleansing."
+        # assert len(a.studies.all()) == 1
+        # s3 = a.studies.filter(study_number=3).first()
+        # ts = s3.transparencies.all()
+        # assert len(ts) == 1
+        # kfs = s3.key_figures.all()
+        # assert len(kfs) == 1
+        # assert ts.first().url == "https://osf.io/6xqju/"
 
     # Edit a study nested under an article
     def test_update_article_nested_studies(self):

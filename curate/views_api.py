@@ -28,7 +28,6 @@ from curate.models import (
 )
 from curate.serializers import (
     AuthorSerializer,
-    ArticleSerializer,
     ArticleSerializerNested,
     ArticleDetailSerializer,
     ArticleListSerializer,
@@ -197,7 +196,7 @@ def delete_article(request, pk):
 @api_view(('GET', ))
 def list_article_relatedarticles(request, pk):
     queryset=Article.objects.filter(related_to_articles__original_article_id=pk)
-    serializer=ArticleSerializer(instance=queryset, many=True)
+    serializer=ArticleSerializerNested(instance=queryset, many=True)
     return Response(serializer.data)
 
 # Collection views
