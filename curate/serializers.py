@@ -120,6 +120,111 @@ class ArticleSerializerNested(WritableNestedModelSerializer):
     reproducibility_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
     robustness_of = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all())
 
+    def create(self, validated_data):
+        authors = validated_data.pop('authors', [])
+        commentary_of = validated_data.pop('commentary_of', [])
+        reproducibility_of = validated_data.pop('reproducibility_of', [])
+        robustness_of = validated_data.pop('robustness_of', [])
+        instance = super().create(validated_data)
+
+        for index, author in enumerate(authors):
+            ArticleAuthor.objects.create(
+                author=author,
+                article=instance,
+                order=index+1
+            )
+
+        for index, article in enumerate(commentary_of):
+            RelatedArticle.objects.create(
+                original_article=instance,
+                related_article=article,
+                is_commentary=True,
+                order=index+1
+            )
+
+        for index, article in enumerate(reproducibility_of):
+            RelatedArticle.objects.create(
+                original_article=instance,
+                related_article=article,
+                is_reproducibility=True,
+                order=index+1
+            )
+
+        for index, article in enumerate(robustness_of):
+            RelatedArticle.objects.create(
+                original_article=instance,
+                related_article=article,
+                is_robustness=True,
+                order=index+1
+            )
+
+        return instance
+
+    def update(self, instance, validated_data):
+        authors = validated_data.pop('authors', [])
+        commentary_of = validated_data.pop('commentary_of', [])
+        reproducibility_of = validated_data.pop('reproducibility_of', [])
+        robustness_of = validated_data.pop('robustness_of', [])
+        instance = super().update(instance, validated_data)
+
+        for index, author in enumerate(authors):
+            ArticleAuthor.objects.update_or_create(
+                author=author,
+                article=instance,
+                defaults={'order': index + 1}
+            )
+
+        for a in instance.authors.all():
+            if a not in authors:
+                instance.articleauthor_set.filter(author=a).delete()
+
+        for index, article in enumerate(commentary_of):
+            RelatedArticle.objects.update_or_create(
+                original_article=instance,
+                related_article=article,
+                is_commentary=True,
+                defaults={'order': index + 1}
+            )
+
+        for ra in instance.commentary_of:
+            if ra not in commentary_of:
+                instance.related_articles.filter(
+                    related_article=ra,
+                    is_commentary=True
+                ).delete()
+
+        for index, article in enumerate(reproducibility_of):
+            RelatedArticle.objects.update_or_create(
+                    original_article=instance,
+                    related_article=article,
+                    is_reproducibility=True,
+                    defaults={'order': index + 1}
+                )
+
+        for ra in instance.reproducibility_of:
+            if ra not in reproducibility_of:
+                instance.related_articles.filter(
+                    related_article=ra,
+                    is_reproducibility=True
+                ).delete()
+
+        for index, article in enumerate(robustness_of):
+            RelatedArticle.objects.update_or_create(
+                original_article=instance,
+                related_article=article,
+                is_robustness=True,
+                defaults={'order': index + 1}
+            )
+
+        for ra in instance.robustness_of:
+            if ra not in robustness_of:
+                instance.related_articles.filter(
+                    related_article=ra,
+                    is_robustness=True
+                ).delete()
+
+        return instance
+
     class Meta:
         model=Article
         fields='__all__'
