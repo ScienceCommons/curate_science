@@ -116,11 +116,6 @@ class StudyEditor extends React.Component {
 		let opening = !this.props.open && nextProps.open && nextProps.editStudy != null
 		if (opening) {
 			let data = clone(nextProps.editStudy)
-			if (data.effects != null) data.effects = data.effects.map(x => ({id: x.id, text: x.name || x.text}))
-			if (data.dep_vars != null) data.dep_vars = data.dep_vars.map(x => ({id: x.id, text: x.name || x.text}))
-			if (data.dep_var_methods != null) data.dep_var_methods = data.dep_var_methods.map(x => ({id: x.id, text: x.name || x.text}))
-			if (data.ind_vars != null) data.ind_vars = data.ind_vars.map(x => ({id: x.id, text: x.name || x.text}))
-			if (data.ind_var_methods != null) data.ind_var_methods = data.ind_var_methods.map(x => ({id: x.id, text: x.name || x.text}))
 			this.setState({formdata: data})
 		}
 	}
@@ -143,6 +138,12 @@ class StudyEditor extends React.Component {
 
 	handleValueChange = prop => value => {
 		let {formdata} = this.state
+		value.name = value.text
+		if (Array.isArray(value)) {
+			value = value.map((val) => ({id: val.id, name: val.text}))
+		} else {
+			value = {id: value.id, name: value.text}
+		}
 		formdata[prop] = value
 		this.setState({formdata})
 	}
@@ -177,17 +178,24 @@ class StudyEditor extends React.Component {
 		let {formdata} = this.state
 		let cell_content
 		if (params.type == 'autocomplete') {
+			let form_vals = formdata[params.name]
+			let vals = []
+			if (form_vals != null) {
+				vals = form_vals.map((fv) => {
+					return {id: fv.id, text: fv.name}
+				})
+			}
 			cell_content = (
-			<AutocompleteCreateConfirmation
-								 key={i}
-                                 creatable
-                                 listUrl={params.listUrl}
-                                 createtUrl={params.createtUrl}
-                                 placeholder={params.label}
-                                 objectLabel={params.objectLabel}
-                                 multi
-                                 value={formdata[params.name]}
-                                 onChange={this.handleValueChange(params.name)} />
+				<AutocompleteCreateConfirmation
+					 key={i}
+                     creatable
+                     listUrl={params.listUrl}
+                     createtUrl={params.createtUrl}
+                     placeholder={params.label}
+                     objectLabel={params.objectLabel}
+                     multi
+                     value={vals}
+                     onChange={this.handleValueChange(params.name)} />
 			)
 		} else if (params.type == 'text') {
 			cell_content = (

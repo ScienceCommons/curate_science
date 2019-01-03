@@ -32,3 +32,23 @@ export const truncate = (s, _chars) => {
     if (s.length > chars) return s.substring(0, _chars) + '...';
     else return s;
 }
+
+export const json_api_req = (method, url, data, csrf_token, success, fail) => {
+    let fetch_opts = {
+        credentials: 'include',
+        method: method,
+        body: JSON.stringify(data),
+        headers: {
+            'X-CSRFToken': csrf_token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }
+    fetch(url, fetch_opts).then(res => res.json().then(data => {
+        if (res.ok) {
+            success(data)
+        } else {
+            fail(data)
+        }
+    }))
+}

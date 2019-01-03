@@ -131,7 +131,7 @@ class TransparencyEditor extends React.Component {
 	transparencies_of_type(type) {
 		let res = []
 		this.props.transparencies.forEach((t, i) => {
-			if (t.transparency_type.toLowerCase() == type) {
+			if (t.transparency_type.toUpperCase() == type) {
 				t.original_index = i  // Used to update correct value in original array
 				res.push(t)
 			}
@@ -159,7 +159,7 @@ class TransparencyEditor extends React.Component {
 		let {classes} = this.props
 		let content
 		let idx = transparency.original_index
-		if (badge.id == 'prereg') {
+		if (badge.id == 'PREREG') {
 			content = (
 				<div key={i}>
 					<FormControl component="fieldset" className={classes.formControl}>
@@ -184,26 +184,26 @@ class TransparencyEditor extends React.Component {
 			        	url={transparency.url} />
 		        </div>
 				)
-		} else if (badge.id == 'materials') {
+		} else if (badge.id == 'MATERIALS') {
 			content = <URLInput
 						id="materials"
 						label="Study materials URL"
 						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
-		} else if (badge.id == 'data') {
+		} else if (badge.id == 'DATA') {
 			content = <URLInput
 						id="data"
 						label="Data URL"
 						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
-		} else if (badge.id == 'code') {
+		} else if (badge.id == 'CODE') {
 			content = <URLInput label="Code URL"
 						id="code"
 						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
-		} else if (badge.id == 'repstd') {
+		} else if (badge.id == 'REPSTD') {
 			content = (
-				<div id="rs1">
+				<div id="rs1" key={i}>
 					<span>Compliance to relevant reporting standard:</span>
 					<br/>
 					<select name="rs.name"

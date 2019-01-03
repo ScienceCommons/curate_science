@@ -31,6 +31,7 @@ class URLInput extends React.Component {
 		          onChange={this.handleChange}
 		          type="url"
 		          value={url || ''}
+		          inputProps={{pattern: "https?://.+"}}
 		          startAdornment={
 		            <InputAdornment position="start">
 		              <Icon>link</Icon>

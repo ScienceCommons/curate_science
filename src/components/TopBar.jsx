@@ -207,14 +207,14 @@ class TopBar extends React.Component {
 
                         {auth ? (
                         <div>
-                            <IconButton
+                            <Button
+                                className={classes.topButton}
                                     aria-owns={this.menuOpen('curate') ? 'menu-curate' : undefined}
                                     aria-haspopup="true"
                                     onClick={this.handleMenu('curate')}
                                     color="inherit"
-                                  >
-                                  <Button variant="outlined" className={classes.topButton}>Curate</Button>
-                            </IconButton>
+                                    variant="outlined"
+                                  >Curate</Button>
                             <Menu
                                 id="menu-curate"
                                 anchorEl={anchors.curate}

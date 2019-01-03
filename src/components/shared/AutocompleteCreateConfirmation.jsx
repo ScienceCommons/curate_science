@@ -8,6 +8,8 @@ import {ListItem, List, ListItemText, ListItemSecondaryAction, IconButton, Icon,
     Dialog, DialogContent, DialogTitle, DialogActions, Button, DialogContentText} from '@material-ui/core';
 import Slide from '@material-ui/core/Slide';
 
+import {json_api_req} from '../../util/util.jsx'
+
 import { withStyles } from '@material-ui/core/styles';
 
 function Transition(props) {
@@ -45,23 +47,10 @@ class AutocompleteCreateConfirmation extends React.Component {
     create() {
         let {createUrl} = this.props
         let data = {}
-        let fetch_opts = {
-            credentials: 'include',
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                // 'X-CSRFToken': csrf_token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }
-        fetch(createUrl, fetch_opts).then(res => res.json()).then((res) => {
-            console.log(res)
-            if (res.status == 200) {
-                this.handleCreated()
-            } else {
-                this.dismiss()
-            }
+        json_api_req('POST', createUrl, data, null, (res) => {
+            this.handleCreated()
+        }, (res) => {
+            this.dismiss()
         })
     }
 
@@ -73,7 +62,7 @@ class AutocompleteCreateConfirmation extends React.Component {
     }
 
 	render() {
-		let {classes, value, objectLabel, listUrl, createUrl, placeholder, name} = this.props
+		let {classes, value, objectLabel, labelProp, listUrl, createUrl, placeholder, name} = this.props
         let {confirmationShowing, create_value} = this.state
         let dialog = (
             <Dialog
@@ -101,7 +90,7 @@ class AutocompleteCreateConfirmation extends React.Component {
             <div>
     			<AutocompleteReactSelect
                                  creatable
-                                 labelProp="text"
+                                 labelProp='text'
                                  listUrl={listUrl}
                                  placeholder={placeholder}
                                  name={name}
@@ -127,7 +116,7 @@ AutocompleteCreateConfirmation.propTypes = {
 AutocompleteCreateConfirmation.defaultProps = {
     listUrl: "/api/constructs/autocomplete/",
     createUrl: "/api/constructs/create/",
-    objectLable: "construct",
+    objectLabel: "construct",
     placeholder: "e.g., 'erotica exposure vs. control'",
     name: "ind_vars",
     value: []

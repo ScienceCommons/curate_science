@@ -23,8 +23,8 @@ import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 import FigureSelector from '../components/curateform/FigureSelector.jsx';
 import URLInput from '../components/curateform/URLInput.jsx';
 
-import {get, find} from 'lodash'
-import {printDate} from '../util/util.jsx'
+import {get, find, clone} from 'lodash'
+import {printDate, json_api_req} from '../util/util.jsx'
 
 const styles = {
 	root: {
@@ -75,6 +75,9 @@ class Curate extends React.Component {
         	{ label: 'HTML URL', property: 'html_url' },
         	{ label: 'Preprint URL', property: 'preprint_url' }
         ]
+
+        this.PK_ARTICLE_FIELDS = ['journal', 'authors']
+        this.PK_STUDY_FIELDS = []
     }
 
     componentDidMount() {
@@ -144,6 +147,7 @@ class Curate extends React.Component {
     handleValueChange = prop => value => {
     	let {formdata} = this.state
     	formdata[prop] = value
+    	console.log(value)
 	    this.setState({formdata})
   	}
 
@@ -161,15 +165,38 @@ class Curate extends React.Component {
   	saveStudy(idx, study) {
   		this.closeStudyEditor()
   		let {formdata} = this.state
-  		console.log(`Saving study ${idx}`)
-  		console.log(study)
   		formdata.studies[idx] = study
   		this.setState({formdata})
   	}
 
+  	updateParams() {
+  		let {formdata} = this.state
+  		console.log(formdata)
+  		let params = clone(formdata)
+  		this.PK_ARTICLE_FIELDS.forEach((field) => {
+  			let val = formdata[field]
+  			if (Array.isArray(val)) {
+  				params[field] = val.map((one_val) => one_val.id)
+  			} else {
+  				params[field] = val.id
+  			}
+  		})
+		params.studies.forEach((study, i) => {
+			this.PK_STUDY_FIELDS.forEach((field) => {
+	  			let val = params.studies[i][field]
+	  			if (Array.isArray(val)) {
+	  				params.studies[i][field] = val.map((one_val) => one_val.id)
+	  			} else {
+	  				params.studies[i][field] = val.id
+	  			}
+  			})
+  		})
+  		console.log(params)
+  		return params
+  	}
+
   	handleSubmit(e) {
   		const { cookies } = this.props;
-  		let {formdata} = this.state
   		e.preventDefault()
   		// TODO: Add study data
   		// TODO: Confirm study deletion, figure deletion working
@@ -178,29 +205,14 @@ class Curate extends React.Component {
   		let url = creating_new ? `/api/articles/create/` : `/api/articles/${editing_id}/update/`
 		let method = creating_new ? 'PUT' : 'PATCH'
   		let csrf_token = cookies.get('csrftoken')
-  		console.log(formdata)
-  		let fetch_opts = {
-		    credentials: 'include',
-  			method: method,
-  			body: JSON.stringify(formdata),
-  			headers: {
-  				'X-CSRFToken': csrf_token,
-			    'Accept': 'application/json',
-			    'Content-Type': 'application/json'
-  			}
-  		}
-  		fetch(url, fetch_opts).then(res => res.json().then(data => {
-  			console.log(res.status)
-  			console.log(data)
-    		if (res.ok) {
-    			// Created or updated
-    			window.location.replace(`/new/article/${creating_new ? data.id : editing_id}/`)
-    		} else if (!res.ok) {
-    			// Handle error
-    			let detail = data.detail
-    			if (detail != null) this.setState({snack_message: detail})
-    		}
-    	}))
+  		json_api_req(method, url, this.updateParams(), csrf_token, (data) => {
+			// Created or updated
+			window.location.replace(`/new/article/${creating_new ? data.id : editing_id}/`)
+    	}, (data) => {
+			// Handle error
+			console.log(data)
+			this.setState({snack_message: "Error saving article"})
+		})
   	}
 
   	authorsToAutocomplete(authors) {
@@ -406,7 +418,7 @@ class Curate extends React.Component {
 
 						<Grid item xs={12}>
 							<Typography variant="h4">Key figures/tables (article-level)</Typography>
-							<FigureSelector figures={formdata.figures} onChange={this.handleValueChange('figures')} />
+							<FigureSelector figures={formdata.key_figures} onChange={this.handleValueChange('key_figures')} />
 						</Grid>
 
 						<Grid item xs={12}>

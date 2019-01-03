@@ -305,7 +305,7 @@ AutocompleteReactSelect.defaultProps = {
   creatable: false,
   listUrl: null,
   createUrl: null,
-  labelProp: 'name',
+  labelProp: 'text',
   multi: false
 }
 

@@ -138,35 +138,35 @@ var C = {
 	],
 	TRANSPARENCY_BADGES: [
 		{
-			id: "prereg",
+			id: "PREREG",
 			label: "Preregistration",
 			icon: "prereg",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
 			color: '#C60018'
 		},
 		{
-			id: "materials",
+			id: "MATERIALS",
 			label: "Public Materials",
 			icon: "materials",
 			article_types: ['ORIGINAL', 'REPLICATION'],
 			color: '#F5A623'
 		},
 		{
-			id: "data",
+			id: "DATA",
 			label: "Public Data",
 			icon: "data",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
 			color: '#2D96E8'
 		},
 		{
-			id: "code",
+			id: "CODE",
 			label: "Public Code",
 			icon: "code",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
 			color: '#50E3C2'
 		},
 		{
-			id: "repstd",
+			id: "REPSTD",
 			label: "Reporting Standards",
 			icon: "repstd",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH'],

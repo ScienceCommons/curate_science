@@ -37,65 +37,41 @@ const styles = {
 
 class StudyLI extends React.Component {
 	constructor(props) {
-        super(props);
-        this.state = {
-        }
-        this.handleEdit = this.handleEdit.bind(this)
-        this.handleDelete = this.handleDelete.bind(this)
+      super(props);
+      this.state = {
+      }
+      this.handleEdit = this.handleEdit.bind(this)
+      this.handleDelete = this.handleDelete.bind(this)
 
-        this.STUDY_FORM_INPUTS = [
-        	{name: 'id'},
-        	{name: 'study_number'},
-        	{name: 'reporting_standards_type'},
-        	{name: 'replication_of'},
-        	{name: 'effects', multi: true, prop: 'id'},
-        	{name: 'method_similarity_type'},
-        	{name: 'method_differences'},
-        	{name: 'auxiliary_hypo_evidence'},
-        	{name: 'ind_vars', multi: true, prop: 'id'},
-        	{name: 'dep_vars', multi: true, prop: 'id'},
-        	{name: 'ind_var_methods', multi: true, prop: 'id'},
-        	{name: 'dep_var_methods', multi: true, prop: 'id'}
-        ]
-        this.STUDY_TRANSPARENCY_FORM_INPUTS = [
-          'id',
-          'transparency_type',
-          'url'
-        ]
-    }
+      this.STUDY_FORM_INPUTS = [
+      	{name: 'id'},
+      	{name: 'study_number'},
+      	{name: 'reporting_standards_type'},
+      	{name: 'replication_of'},
+      	{name: 'effects', multi: true, prop: 'id'},
+      	{name: 'method_similarity_type'},
+      	{name: 'method_differences'},
+      	{name: 'auxiliary_hypo_evidence'},
+      	{name: 'ind_vars', multi: true, prop: 'id'},
+      	{name: 'dep_vars', multi: true, prop: 'id'},
+      	{name: 'ind_var_methods', multi: true, prop: 'id'},
+      	{name: 'dep_var_methods', multi: true, prop: 'id'}
+      ]
+      this.STUDY_TRANSPARENCY_FORM_INPUTS = [
+        'id',
+        'transparency_type',
+        'url'
+      ]
+  }
 
-    handleEdit() {
-    	let {idx} = this.props
-    	this.props.onEdit(idx)
-    }
+  handleEdit() {
+  	let {idx} = this.props
+  	this.props.onEdit(idx)
+  }
 
-    handleDelete() {
-    	this.props.onDelete(this.props.idx)
-    }
-
-    render_hidden_inputs() {
-    	let {study, idx} = this.props
-      let inputs = []
-    	this.STUDY_FORM_INPUTS.forEach((params) => {
-        let name = params.name
-        let prefixed_name = `study-${idx}-${name}`
-        let values = []
-        if (params.multi) {
-          let els = study[name] || []
-          values = els.map((el) => el[params.prop])
-        }
-        else values = [study[name]]
-        values.forEach((value) => {
-          inputs.push(<input type='hidden' key={prefixed_name} name={prefixed_name} value={value || ''} />)
-        })
-    	})
-      this.STUDY_TRANSPARENCY_FORM_INPUTS.forEach((name) => {
-        let t_idx = '?'  // TODO
-        let prefixed_name = `study-${idx}-transparency-${t_idx}-${name}`
-        inputs.push(<input type='hidden' key={prefixed_name} name={prefixed_name} value={study[name] || ''} />)
-      })
-      return inputs
-    }
+  handleDelete() {
+  	this.props.onDelete(this.props.idx)
+  }
 
   render_list(arr, prop) {
     arr = arr == null ? [] : arr
@@ -158,7 +134,6 @@ class StudyLI extends React.Component {
 					</div>
 	  			</CardContent>
 				{ showActions ? actions : null }
-				{ this.render_hidden_inputs() }
 			</Card>
 		)
 	}

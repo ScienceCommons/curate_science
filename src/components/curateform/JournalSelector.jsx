@@ -24,7 +24,6 @@ class JournalSelector extends React.Component {
         let {value} = this.props
         if (value == null) return null
         let text = (value.text != null) ? value.text : value.name
-        console.log(text)
         return {id: value.id, text: text}
     }
 

@@ -31,7 +31,12 @@ class FigureSelector extends React.Component {
         let {form} = this.state
         let {figures} = this.props
         if (this.validUrl()) {
-            figures.push({image_url: form.url, figure_number: figures.length + 1})
+            figures.push({
+                image_url: form.url,
+                figure_number: figures.length + 1,
+                is_figure: true,
+                is_table: false
+            })
             form.url = ''
             if (this.props.onChange != null) this.props.onChange(figures)
             this.setState({form})

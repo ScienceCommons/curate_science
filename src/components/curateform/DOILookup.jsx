@@ -121,7 +121,6 @@ class DOILookup extends React.Component {
                         value={doi_text}
                         onKeyPress={this.handleSearchKeyPress}
                         fullWidth={true}
-                        required
                         inputProps={{'data-lpignore': "true"}}
                         name='doi'
                         classes={{

@@ -28,13 +28,13 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 
-class ConstructSerializer(serializers.ModelSerializer):
+class ConstructSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model=Construct
         fields='__all__'
 
 
-class MethodSerializer(serializers.ModelSerializer):
+class MethodSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model=Method
         fields='__all__'
