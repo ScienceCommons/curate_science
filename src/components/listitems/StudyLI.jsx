@@ -107,29 +107,29 @@ class StudyLI extends React.Component {
             study_level={true}
             article_type={article_type} />
 
-					<FigureList figures={study.figures} />
+					<FigureList figures={study.key_figures} />
 
 					<div hidden={!showReplicationDetails}>
 						<Typography variant="h5">Replication Details</Typography>
 
 						<Grid container>
-							<Grid item xs={2}>
+							<Grid item xs={4}>
 								<Typography variant="h6" className={classes.replicationHeader}>Original Study</Typography>
                 <Typography variant="body1">{ study.replication_of || '' }</Typography>
 							</Grid>
-							<Grid item xs={2}>
+							<Grid item xs={4}>
 								<Typography variant="h6" className={classes.replicationHeader}>Target Effect</Typography>
                 { this.render_list(study.effects, 'name') }
 							</Grid>
-							<Grid item xs={2}>
+							<Grid item xs={4}>
 								<Typography variant="h6" className={classes.replicationHeader}>Rep. Method Similarity</Typography>
 								<Typography variant="body1">{ similarity_label }</Typography>
 							</Grid>
-							<Grid item xs={2}>
+							<Grid item xs={2} hidden>
 								<Typography variant="h6" className={classes.replicationHeader}>Differences</Typography>
                 <Typography variant="body1">{ study.method_differences || '' }</Typography>
 							</Grid>
-							<Grid item xs={2}>
+							<Grid item xs={2} hidden>
 								<Typography variant="h6" className={classes.replicationHeader}>Aux. Hypotheses</Typography>
                 { this.render_list(auxiliary_hypo_evidence) }
 							</Grid>

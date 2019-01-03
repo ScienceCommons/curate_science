@@ -76,11 +76,14 @@ class TransparencyEditor extends React.Component {
         super(props);
         this.state = {
         	tab: 0,
-        	anchorEl: null
+        	anchorEl: null,
+        	copyAnchorEl: null
         };
 
 		this.handleCreateMenuClick = this.handleCreateMenuClick.bind(this)
 		this.handleCreateMenuClose = this.handleCreateMenuClose.bind(this)
+		this.handleCopyMenuClick = this.handleCopyMenuClick.bind(this)
+		this.handleCopyMenuClose = this.handleCopyMenuClose.bind(this)
 		this.changeReportingStandardsType = this.changeReportingStandardsType.bind(this)
 		this.addTransparency = this.addTransparency.bind(this)
 		this.render_transparency = this.render_transparency.bind(this)
@@ -95,10 +98,23 @@ class TransparencyEditor extends React.Component {
 	    this.setState({ anchorEl: null });
 	}
 
+	handleCopyMenuClick = event => {
+	    this.setState({ copyAnchorEl: event.currentTarget });
+	}
+
+	handleCopyMenuClose = () => {
+	    this.setState({ copyAnchorEl: null });
+	}
+
 	renderRSText(rst) {
 		let o = find(C.REPORTING_STANDARDS_TYPES, {value: rst})
 		if (o != null) return {__html: o.html_detail}
 		else return null
+	}
+
+	copyTransparencies = study => () => {
+		this.props.onCopyTransparencies(study)
+		this.handleCopyMenuClose()
 	}
 
 	addTransparency(type) {
@@ -137,7 +153,7 @@ class TransparencyEditor extends React.Component {
 		let type_transparencies = this.transparencies_of_type(badge.id)
 		if (type_transparencies.length > 0) {
 			return (
-				<div>
+				<div key={badge.id}>
 					<TransparencyHeader badge={badge} />
 		   		    { type_transparencies.map((tt, idx) => {
 		   		    	return this.render_transparency(tt, idx, badge)
@@ -200,7 +216,7 @@ class TransparencyEditor extends React.Component {
 			        	onChange={this.changeTransparency(idx, 'url')}
 			        	url={transparency.url} />
 		        </div>
-				)
+			)
 		} else if (badge.id == 'MATERIALS') {
 			content = <URLInput
 						id="materials"
@@ -275,6 +291,38 @@ class TransparencyEditor extends React.Component {
 		)
 	}
 
+	render_copy_menu() {
+		const { copyAnchorEl } = this.state;
+		let {other_studies} = this.props
+		if (other_studies.length == 0) return
+		return (
+			<div>
+		        <Button
+		          aria-owns={copyAnchorEl ? 'copy-menu' : undefined}
+		          aria-haspopup="true"
+		          onClick={this.handleCopyMenuClick}
+		        >
+		        	<Icon>copy</Icon>
+	  	          Copy from study
+		        </Button>
+		        <Menu
+		          id="copy-menu"
+		          anchorEl={copyAnchorEl}
+		          open={Boolean(copyAnchorEl)}
+		          onClose={this.handleCopyMenuClose}
+		        >
+		        	{ other_studies.map((study, i) => {
+		        		return <MenuItem
+		        					key={i}
+		        					onClick={this.copyTransparencies(study)}>
+		        					<Typography variant="inherit">Study { study.study_number }</Typography>
+		        				</MenuItem>
+		        	}) }
+		        </Menu>
+		      </div>
+		)
+	}
+
 	render() {
 		let {classes} = this.props
 		return (
@@ -286,6 +334,7 @@ class TransparencyEditor extends React.Component {
 			    { this.render_reporting_standards() }
 			    <div style={{marginTop: 20}}>
 				    { this.render_create_menu() }
+				    { this.render_copy_menu() }
 			    </div>
 	        </Paper>
 		)
@@ -294,6 +343,7 @@ class TransparencyEditor extends React.Component {
 
 TransparencyEditor.defaultProps = {
 	transparencies: [], // List of objects (see Transparency serializer)
+	other_studies: [],
 	reporting_standards_type: null, // This transparency is singular, and so stored separately
 	article_type: "ORIGINAL",
 	icon_size: 20

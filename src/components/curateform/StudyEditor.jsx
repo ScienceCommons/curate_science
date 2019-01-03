@@ -39,6 +39,7 @@ class StudyEditor extends React.Component {
 		this.handleFigureChange = this.handleFigureChange.bind(this)
 		this.renderReplicationInput = this.renderReplicationInput.bind(this)
 		this.handleAddTransparency = this.handleAddTransparency.bind(this)
+		this.handleCopyTransparencies = this.handleCopyTransparencies.bind(this)
 		this.handleChangeTransparency = this.handleChangeTransparency.bind(this)
 		this.handleChangeReportingStandardsType = this.handleChangeReportingStandardsType.bind(this)
 		this.handleDeleteTransparency = this.handleDeleteTransparency.bind(this)
@@ -151,7 +152,7 @@ class StudyEditor extends React.Component {
 
 	handleFigureChange = figure_array => {
 		let {formdata} = this.state
-		formdata.figures = figure_array
+		formdata.key_figures = figure_array
 		this.setState({formdata})
 	}
 
@@ -171,6 +172,13 @@ class StudyEditor extends React.Component {
 	handleDeleteTransparency(idx) {
 		let {formdata} = this.state
 		formdata.transparencies.splice(idx, 1)
+		this.setState({formdata})
+	}
+
+	handleCopyTransparencies(from_study) {
+		let {formdata} = this.state
+		formdata.transparencies = clone(from_study.transparencies)
+		formdata.reporting_standards_type = from_study.reporting_standards_type
 		this.setState({formdata})
 	}
 
@@ -256,8 +264,11 @@ class StudyEditor extends React.Component {
 	}
 
 	render() {
-		const { classes, open, editStudy, article_type } = this.props;
+		const { classes, open, editStudy, article_type, all_studies } = this.props;
 		let {formdata} = this.state
+		let other_studies = all_studies.filter((s) => {
+			return editStudy == null || s.id != editStudy.id
+		})
 		let transparencies = formdata.transparencies
 		let creating_new = editStudy == null
 		let replication_details
@@ -293,6 +304,7 @@ class StudyEditor extends React.Component {
 				          onChange={this.handleChange('study_number')}
 				          margin="normal"
 				          fullWidth
+				          required
 				          variant="outlined"
 				        />
 
@@ -301,15 +313,17 @@ class StudyEditor extends React.Component {
 
 						<TransparencyEditor
 								transparencies={transparencies}
+								other_studies={other_studies}
 								reporting_standards_type={formdata.reporting_standards_type}
 								article_type={article_type || "ORIGINAL"}
 								onChangeReportingStandardsType={this.handleChangeReportingStandardsType}
 								onChangeTransparency={this.handleChangeTransparency}
 								onDeleteTransparency={this.handleDeleteTransparency}
-								onAddTransparency={this.handleAddTransparency} />
+								onAddTransparency={this.handleAddTransparency}
+								onCopyTransparencies={this.handleCopyTransparencies} />
 
 						<Typography variant="h5" className={classes.sectionHeading}>Key Figures/Tables</Typography>
-						<FigureSelector figures={formdata.figures || []} onChange={this.handleFigureChange} />
+						<FigureSelector figures={formdata.key_figures || []} onChange={this.handleFigureChange} />
 
 						{ replication_details }
 					</DialogContent>
@@ -331,7 +345,8 @@ class StudyEditor extends React.Component {
 StudyEditor.defaultProps = {
 	open: false,
 	article_type: "ORIGINAL",
-	editStudy: null
+	editStudy: null,
+	all_studies: []
 };
 
 export default withStyles(styles)(StudyEditor);

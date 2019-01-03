@@ -39,17 +39,19 @@ class TransparencyBadge extends React.Component {
 		// Collect this feature's transparencies across all studies
 		let n = 0
 		studies.forEach((study) => {
+			let study_transparencies = []
 			if (repstd) {
 				if (study.reporting_standards_type != null) {
-					n += 1
 					reporting_standards.push(study.reporting_standards_type)
+					let rs_label = find(C.REPORTING_STANDARDS_TYPES, {value: study.reporting_standards_type}).label
+					study_transparencies.push({reporting_standards_type: study.reporting_standards_type, label: rs_label})
 				}
 			} else {
 				let transparencies = study.transparencies || []
-				let study_transparencies = transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
-				n = n + study_transparencies.length
-				transparencies_by_study[study.study_number] = study_transparencies
+				study_transparencies = transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
 			}
+			n = n + study_transparencies.length
+			transparencies_by_study[study.study_number] = study_transparencies
 		})
 		let enabled = n > 0
 		let label = ''
@@ -75,19 +77,19 @@ class TransparencyBadge extends React.Component {
 			let popover_content = (
 				<div style={{padding: 10}}>
 					<Typography variant="h5">{ f.label }</Typography>
-					{ repstd ? reporting_standards.map((rs, i) => {
-						let rs_label = find(C.REPORTING_STANDARDS_TYPES, {value: rs}).label
-						return <Typography key={i}>{rs_label}</Typography>
-					}) : null }
 					{ Object.keys(transparencies_by_study).map((study_num, j) => {
 						let study_transparencies = transparencies_by_study[study_num]
 						if (study_transparencies.length == 0) return null
 						return (
 							<div key={j}>
-								{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num}</Typography> : null }
+								{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num || '?'}</Typography> : null }
 								{ study_transparencies.map((t, idx) => {
-									if (t.url == null || t.url.length == 0) return null
-									return <Typography key={idx}><a href={t.url} key={idx} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(t.url) }</a></Typography>
+									if (repstd) {
+										return <Typography key={idx}>{ t.label }</Typography>
+									} else {
+										if (t.url == null || t.url.length == 0) return null
+										return <Typography key={idx}><a href={t.url} key={idx} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(t.url) }</a></Typography>
+									}
 								}) }
 							</div>
 						)

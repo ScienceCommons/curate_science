@@ -176,7 +176,7 @@ var C = {
 	],
 	REPORTING_STANDARDS_TYPES: [
 		{
-			value: null,
+			value: '',
 			label: "None"
 		},
 		{

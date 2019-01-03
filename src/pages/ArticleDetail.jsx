@@ -18,6 +18,7 @@ import TransparencyBadge from '../components/TransparencyBadge.jsx';
 import JournalDOIBadge from '../components/JournalDOIBadge.jsx';
 import AuthorList from '../components/AuthorList.jsx';
 import StudyLI from '../components/listitems/StudyLI.jsx';
+import FigureList from '../components/shared/FigureList.jsx';
 
 import {printDate, truncate} from '../util/util.jsx'
 
@@ -82,9 +83,7 @@ class ArticleDetail extends React.Component {
 
     render_study(s) {
     	let {article} = this.state
-    	let key_figures = article.key_figures.filter(kf => kf.study == s.id)
-    	if (key_figures == null) key_figures = []
-    	return <StudyLI key={s.id} study={s} ofMultiple={this.multiple_studies()} figures={key_figures} article_type={article.article_type} />
+    	return <StudyLI key={s.id} study={s} ofMultiple={this.multiple_studies()} article_type={article.article_type} />
     }
 
     multiple_studies() {
@@ -105,6 +104,7 @@ class ArticleDetail extends React.Component {
 		let update_date = new Date(article.updated)
 		let abstract = article.abstract || ''
 		let long = abstract.length > this.ABSTRACT_CHAR_LIM
+		let year_text = article.year || "In Press"
 		if (long) abstract = (
 			<div>
 				{ truncate(abstract, truncate_abstract ? this.ABSTRACT_CHAR_LIM : 5000) }
@@ -136,7 +136,7 @@ class ArticleDetail extends React.Component {
 				          { article.article_type }
 				        </Typography>
 		      			<Typography className={classes.title} variant="h2" component="h2" gutterBottom>
-		      			{ article.title }
+		      			{ article.title } ({ year_text })
 		      			</Typography>
 		      			<Typography className={classes.authors}>
 		      				<AuthorList authors={article.authors} />
@@ -156,6 +156,8 @@ class ArticleDetail extends React.Component {
 				        <Typography className={classes.abstract} color="default" gutterBottom>
 			      			{ abstract }
 		      			</Typography>
+
+		      			<FigureList figures={article.key_figures} />
 
 						<Typography className={classes.editor} color="textSecondary" gutterBottom>
 							{ "Updated " + printDate(update_date) }

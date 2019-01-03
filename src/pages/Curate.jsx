@@ -165,7 +165,8 @@ class Curate extends React.Component {
   			dep_var_methods: [],
   			ind_var_methods: [],
   			key_figures: [],
-  			effects: []
+  			effects: [],
+  			study_number: formdata.studies.length + 1
 		}) // New blank study object
   		this.setState({formdata: formdata, study_editor_idx: formdata.studies.length - 1})
   	}
@@ -477,7 +478,8 @@ class Curate extends React.Component {
 							 onSave={this.saveStudy}
 							 article_type={formdata.type}
 							 idx={study_editor_idx}
-							 editStudy={studies[study_editor_idx]} />
+							 editStudy={studies[study_editor_idx]}
+							 all_studies={studies} />
 
 				</form>
 
