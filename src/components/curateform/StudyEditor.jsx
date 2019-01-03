@@ -189,7 +189,7 @@ class StudyEditor extends React.Component {
 	}
 
 	renderReplicationInput(params, i) {
-		let {classes} = this.props
+		let {classes, csrftoken} = this.props
 		let {formdata} = this.state
 		let cell_content
 		if (params.type == 'autocomplete') {
@@ -209,6 +209,7 @@ class StudyEditor extends React.Component {
                      placeholder={params.label}
                      objectLabel={params.objectLabel}
                      multi
+                     csrftoken={csrftoken}
                      value={vals}
                      onChange={this.handleValueChange(params.name)} />
 			)
@@ -346,7 +347,8 @@ StudyEditor.defaultProps = {
 	open: false,
 	article_type: "ORIGINAL",
 	editStudy: null,
-	all_studies: []
+	all_studies: [],
+	csrftoken: null
 };
 
 export default withStyles(styles)(StudyEditor);

@@ -476,7 +476,8 @@ class Curate extends React.Component {
 							 article_type={formdata.type}
 							 idx={study_editor_idx}
 							 editStudy={studies[study_editor_idx]}
-							 all_studies={studies} />
+							 all_studies={studies}
+							 csrftoken={cookies.get('csrftoken')} />
 
 				</form>
 

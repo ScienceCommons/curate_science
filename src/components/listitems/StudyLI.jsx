@@ -102,7 +102,7 @@ class StudyLI extends React.Component {
     		</CardActions>
 		)
 		let auxiliary_hypo_evidence = (study.auxiliary_hypo_evidence == null) ? [] : study.auxiliary_hypo_evidence
-    let replication_of
+    let replication_of = 'N/A'
     if (study.replication_of != null) replication_of = <Link to={`/article/${study.replication_of.article}`}>{ study.replication_of.__str__ }</Link>
 		return (
 			<Card className={classes.card}>

@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 	FormControlLabel, Radio, Icon, InputLabel, Input, InputAdornment,
 	AppBar, Typography, IconButton, Button, TextField, Menu, MenuItem, Grid,
-	ListItemIcon, Select} from '@material-ui/core';
+	ListItemIcon, ListItemText, Select} from '@material-ui/core';
 
 import {set, find} from 'lodash'
 
@@ -65,7 +65,7 @@ class AddTransparencyMenuItem extends React.Component {
 				<ListItemIcon>
 					<TransparencyIcon tt={transparency_type} size={30} />
 				</ListItemIcon>
-    			<Typography variant="inherit">{ transparency_type.label }</Typography>
+    			<ListItemText primary={ transparency_type.label } />
 			</MenuItem>
 		)
 	}
@@ -183,9 +183,7 @@ class TransparencyEditor extends React.Component {
 						return <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
 					}) }
 				</Select>
-				<Typography variant="body1">
-					<div id="RS_TEXT_DIV" dangerouslySetInnerHTML={this.renderRSText(reporting_standards_type)}></div>
-				</Typography>
+				<div id="RS_TEXT_DIV" dangerouslySetInnerHTML={this.renderRSText(reporting_standards_type)}></div>
 			</div>
 		)
 	}
@@ -241,7 +239,7 @@ class TransparencyEditor extends React.Component {
 						url={transparency.url} />
 		}
 		return (
-			<div className={classes.one_transparency}>
+			<div className={classes.one_transparency} key={i}>
 				<Grid container>
 					<Grid item xs={10}>
 						{ content }
@@ -316,9 +314,7 @@ class TransparencyEditor extends React.Component {
 		        	{ other_studies.map((study, i) => {
 		        		return <MenuItem
 		        					key={i}
-		        					onClick={this.copyTransparencies(study)}>
-		        					<Typography variant="inherit">Study { study.study_number }</Typography>
-		        				</MenuItem>
+		        					onClick={this.copyTransparencies(study)}>Study { study.study_number }</MenuItem>
 		        	}) }
 		        </Menu>
 		      </div>

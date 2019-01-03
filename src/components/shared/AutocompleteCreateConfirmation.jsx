@@ -16,14 +16,19 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-const styles = {}
+const styles = {
+    error: {
+        color: 'red'
+    }
+}
 
 class AutocompleteCreateConfirmation extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
             confirmationShowing: false,
-            create_value: ''
+            entered_value: '',
+            error_message: null
         }
         this.handleChange = this.handleChange.bind(this)
         this.showConfirmationDialog = this.showConfirmationDialog.bind(this)
@@ -37,33 +42,45 @@ class AutocompleteCreateConfirmation extends React.Component {
     }
 
     showConfirmationDialog(input) {
-        this.setState({confirmationShowing: true, create_value: input})
+        this.setState({confirmationShowing: true, entered_value: input})
+    }
+
+    showError(msg) {
+      this.setState({error_message: msg})
     }
 
     dismiss(input) {
-        this.setState({confirmationShowing: false, create_value: ''})
+        this.setState({confirmationShowing: false, entered_value: '', error_message: null})
     }
 
     create() {
-        let {createUrl} = this.props
+        let {createUrl, csrftoken, enteredValuePropName, objectLabel} = this.props
+        let {entered_value} = this.state
         let data = {}
-        json_api_req('POST', createUrl, data, null, (res) => {
-            this.handleCreated()
+        data[enteredValuePropName] = entered_value
+        json_api_req('POST', createUrl, data, csrftoken, (res) => {
+          this.handleCreated(res)
         }, (res) => {
-            this.dismiss()
+          this.showError(`Error creating ${objectLabel} - Duplicate?`)
         })
     }
 
     handleCreated(obj) {
         let {value} = this.props
+        obj.text = obj.name
+        delete obj.name
         value.push(obj)
-        this.props.onChange(obj)
+        this.props.onChange(value)
         this.dismiss()
     }
 
 	render() {
 		let {classes, value, objectLabel, labelProp, listUrl, createUrl, placeholder, name} = this.props
-        let {confirmationShowing, create_value} = this.state
+        let {confirmationShowing, entered_value, error_message} = this.state
+        let error
+        if (error_message != null) error = <DialogContentText>
+            <div className={classes.error}>{ error_message }</div>
+        </DialogContentText>
         let dialog = (
             <Dialog
               open={confirmationShowing}
@@ -74,8 +91,11 @@ class AutocompleteCreateConfirmation extends React.Component {
               aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle id="alert-dialog-slide-title">
-                    Create new { objectLabel }: <b>{ create_value }</b>?
+                    Create new { objectLabel }: <b>{ entered_value }</b>?
                 </DialogTitle>
+                <DialogContent>
+                    { error }
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={this.dismiss} color="primary">
                       Cancel
@@ -110,7 +130,9 @@ AutocompleteCreateConfirmation.propTypes = {
     objectLabel: PropTypes.string,
     placeholder: PropTypes.string,
     name: PropTypes.string,
-    value: PropTypes.array
+    value: PropTypes.array,
+    csrftoken: PropTypes.string,
+    enteredValuePropName: PropTypes.string
 }
 
 AutocompleteCreateConfirmation.defaultProps = {
@@ -119,7 +141,9 @@ AutocompleteCreateConfirmation.defaultProps = {
     objectLabel: "construct",
     placeholder: "e.g., 'erotica exposure vs. control'",
     name: "ind_vars",
-    value: []
+    enteredValuePropName: 'name',
+    value: [],
+    csrftoken: null
 };
 
 export default withStyles(styles)(AutocompleteCreateConfirmation);
