@@ -41,7 +41,7 @@ class TransparencyBadge extends React.Component {
 		studies.forEach((study) => {
 			let study_transparencies = []
 			if (repstd) {
-				if (study.reporting_standards_type != null) {
+				if (study.reporting_standards_type != null && study.reporting_standards_type.length > 0) {
 					reporting_standards.push(study.reporting_standards_type)
 					let rs_label = find(C.REPORTING_STANDARDS_TYPES, {value: study.reporting_standards_type}).label
 					study_transparencies.push({reporting_standards_type: study.reporting_standards_type, label: rs_label})

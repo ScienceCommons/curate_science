@@ -18,7 +18,8 @@ const style = {
 		color: 'white'
 	},
 	link: {
-		color: 'gray'
+		color: 'gray',
+		marginRight: 10
 	}
 }
 
@@ -26,10 +27,12 @@ class Footer extends React.Component {
 
 	render() {
 		let {classes} = this.props
+		let year = new Date().getFullYear()
 		return (
 			<div className={classes.footer}>
 				<Typography className={classes.text}>
-					Copyright &copy; 2018, Curate Science <br/>
+					Copyright &copy; 2018-{year}, Curate Science <br/>
+					<Link to="/about" className={classes.link}>About</Link>
 					<Link to="/privacy" className={classes.link}>Privacy Policy</Link>
 				</Typography>
 

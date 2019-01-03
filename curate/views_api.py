@@ -146,6 +146,9 @@ def view_article(request, pk):
                 'studies__transparencies',
                 'studies__effects',
                 'studies__ind_vars',
+                'studies__dep_vars',
+                'studies__ind_var_methods',
+                'studies__dep_var_methods',
                 'authors'), id=pk)
     serializer=ArticleDetailSerializer(instance=queryset)
     return Response(serializer.data)

@@ -34,10 +34,16 @@ class ConstructSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
         fields='__all__'
 
 
+class StudyBasicsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Study
+        fields = ('id', 'article', '__str__',)
+
+
 class MethodSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
     class Meta:
-        model=Method
-        fields='__all__'
+        model = Method
+        fields = '__all__'
 
 
 class TransparencySerializer(serializers.ModelSerializer):
@@ -65,6 +71,7 @@ class NestedStudySerializer(WritableNestedModelSerializer):
     dep_vars = ConstructSerializer(many=True)
     ind_var_methods = MethodSerializer(many=True)
     dep_var_methods = MethodSerializer(many=True)
+    replication_of = StudyBasicsSerializer()
 
     class Meta:
         model=Study

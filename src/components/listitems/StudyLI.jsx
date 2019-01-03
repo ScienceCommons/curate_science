@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {Card, CardActions, CardContent, Button, Icon, IconButton} from '@material-ui/core';
@@ -85,7 +87,9 @@ class StudyLI extends React.Component {
   }
 
 	render() {
- 	    let { classes, study, ofMultiple, showActions, showReplicationDetails, article_type} = this.props;
+ 	    let { classes, study, ofMultiple, showActions, article_type} = this.props;
+      let at = find(C.ARTICLE_TYPES, {id: article_type})
+      let show_replication = at.relevant_sections.indexOf('replication') > -1
       let similarity_label = study.method_similarity_type == null ? "--" : find(C.METHOD_SIMILARITY, {value: study.method_similarity_type}).label
  	    let actions = (
  	    	<CardActions>
@@ -98,6 +102,8 @@ class StudyLI extends React.Component {
     		</CardActions>
 		)
 		let auxiliary_hypo_evidence = (study.auxiliary_hypo_evidence == null) ? [] : study.auxiliary_hypo_evidence
+    let replication_of
+    if (study.replication_of != null) replication_of = <Link to={`/article/${study.replication_of.article}`}>{ study.replication_of.__str__ }</Link>
 		return (
 			<Card className={classes.card}>
 				<CardContent>
@@ -109,13 +115,13 @@ class StudyLI extends React.Component {
 
 					<FigureList figures={study.key_figures} />
 
-					<div hidden={!showReplicationDetails}>
+					<div hidden={!show_replication}>
 						<Typography variant="h5">Replication Details</Typography>
 
 						<Grid container>
 							<Grid item xs={4}>
 								<Typography variant="h6" className={classes.replicationHeader}>Original Study</Typography>
-                <Typography variant="body1">{ study.replication_of || '' }</Typography>
+                <Typography variant="body1">{ replication_of }</Typography>
 							</Grid>
 							<Grid item xs={4}>
 								<Typography variant="h6" className={classes.replicationHeader}>Target Effect</Typography>
@@ -147,14 +153,12 @@ StudyLI.defaultProps = {
 	idx: null,
 	ofMultiple: true,
 	showActions: false,
-	showReplicationDetails: true,
 	article_type: "ORIGINAL"
 };
 
 StudyLI.propTypes = {
   classes: PropTypes.object.isRequired,
-  showActions: PropTypes.bool,
-  showReplicationDetails: PropTypes.bool
+  showActions: PropTypes.bool
 };
 
 export default withStyles(styles)(StudyLI);

@@ -110,7 +110,6 @@ class Curate extends React.Component {
     }
 
     handleStudyEdit(idx) {
-    	console.log(`Edit ${idx}`)
     	this.setState({study_editor_idx: idx})
     }
 
@@ -147,7 +146,6 @@ class Curate extends React.Component {
     handleValueChange = prop => value => {
     	let {formdata} = this.state
     	formdata[prop] = value
-    	console.log(value)
 	    this.setState({formdata})
   	}
 
@@ -166,7 +164,9 @@ class Curate extends React.Component {
   			ind_var_methods: [],
   			key_figures: [],
   			effects: [],
-  			study_number: formdata.studies.length + 1
+  			study_number: formdata.studies.length + 1,
+  			reporting_standards_type: '',
+  			transparencies: []
 		}) // New blank study object
   		this.setState({formdata: formdata, study_editor_idx: formdata.studies.length - 1})
   	}
@@ -180,7 +180,6 @@ class Curate extends React.Component {
 
   	updateParams() {
   		let {formdata} = this.state
-  		console.log(formdata)
   		let params = clone(formdata)
   		this.PK_ARTICLE_FIELDS.forEach((field) => {
   			let val = formdata[field]
@@ -200,7 +199,6 @@ class Curate extends React.Component {
 	  			}
   			})
   		})
-  		console.log(params)
   		return params
   	}
 
@@ -240,14 +238,13 @@ class Curate extends React.Component {
 		let {formdata, study_editor_idx, snack_message} = this.state
 		let studies = formdata.studies || []
 		let at = find(C.ARTICLE_TYPES, {id: formdata.article_type || 'ORIGINAL'})
-		let show_reanalysis, show_commentary, show_study_section, show_replication
+		let show_reanalysis, show_commentary, show_study_section
 		let form_action = this.editing() ? "Edit" : "Add"
 		let in_press = formdata.year == null
 		if (at != null) {
 			show_reanalysis = at.relevant_sections.indexOf('reanalysis') > -1
 			show_commentary = at.relevant_sections.indexOf('commentary') > -1
 			show_study_section = at.relevant_sections.indexOf('studies') > -1
-			show_replication = at.relevant_sections.indexOf('replication') > -1
 		}
 		return (
 			<div className={classes.root}>
@@ -449,9 +446,9 @@ class Curate extends React.Component {
 															study={study}
 															key={idx}
 															idx={idx}
-															showReplicationDetails={show_replication}
 															onDelete={this.handleStudyDelete}
 															onEdit={this.handleStudyEdit}
+															article_type={formdata.article_type}
 															showActions={true} />) }
 
 							<div className={classes.fabHolder}>

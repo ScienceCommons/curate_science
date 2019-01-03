@@ -176,6 +176,8 @@ class TransparencyEditor extends React.Component {
 				<br/>
 				<Select
 					value={reporting_standards_type || ''}
+					variant="outlined"
+					displayEmpty
 					onChange={this.changeReportingStandardsType}>
 					{ C.REPORTING_STANDARDS_TYPES.map((opt) => {
 						return <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>

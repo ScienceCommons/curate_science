@@ -166,13 +166,19 @@ class ArticleDetail extends React.Component {
   				    </CardContent>
 				</Card>
 
-				<Typography variant="h5" color="textSecondary" className={classes.sectionHeading}>{ this.multiple_studies() ? "Studies" : "Study" }</Typography>
+				<div hidden={this.studies().length == 0}>
 
-				{ article.studies.map(this.render_study) }
+					<Typography variant="h5" color="textSecondary" className={classes.sectionHeading}>{ this.multiple_studies() ? "Studies" : "Study" }</Typography>
 
-				<Typography variant="h5" color="textSecondary" className={classes.sectionHeading}>Related Articles/Collections</Typography>
+					{ article.studies.map(this.render_study) }
 
-				<p>...</p>
+				</div>
+
+				<div hidden>
+					<Typography variant="h5" color="textSecondary" className={classes.sectionHeading}>Related Articles/Collections</Typography>
+
+					<p>...</p>
+				</div>
 
 			</div>
 		)
