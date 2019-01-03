@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import C from '../constants/constants';
 import {truncate} from '../util/util.jsx'
+import {find} from 'lodash'
 
 import MouseOverPopover from '../components/shared/MouseOverPopover.jsx';
 
@@ -33,13 +34,22 @@ class TransparencyBadge extends React.Component {
 		let {icon_size, study_level, studies, transparencies, classes} = this.props
 		let sole_study = studies.length == 1
 		let transparencies_by_study = {}
+		let repstd = f.id == 'REPSTD'
+		let reporting_standards = []
 		// Collect this feature's transparencies across all studies
 		let n = 0
 		studies.forEach((study) => {
-			let transparencies = study.transparencies || []
-			let study_transparencies = transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
-			n = n + study_transparencies.length
-			transparencies_by_study[study.study_number] = study_transparencies
+			if (repstd) {
+				if (study.reporting_standards_type != null) {
+					n += 1
+					reporting_standards.push(study.reporting_standards_type)
+				}
+			} else {
+				let transparencies = study.transparencies || []
+				let study_transparencies = transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
+				n = n + study_transparencies.length
+				transparencies_by_study[study.study_number] = study_transparencies
+			}
 		})
 		let enabled = n > 0
 		let label = ''
@@ -61,10 +71,14 @@ class TransparencyBadge extends React.Component {
 		if (!enabled) {
 			return badge_icon
 		} else {
-			// Collect transparencies across all studies
+			// Collect transparencies of this type across all studies
 			let popover_content = (
 				<div style={{padding: 10}}>
 					<Typography variant="h5">{ f.label }</Typography>
+					{ repstd ? reporting_standards.map((rs, i) => {
+						let rs_label = find(C.REPORTING_STANDARDS_TYPES, {value: rs}).label
+						return <Typography key={i}>{rs_label}</Typography>
+					}) : null }
 					{ Object.keys(transparencies_by_study).map((study_num, j) => {
 						let study_transparencies = transparencies_by_study[study_num]
 						if (study_transparencies.length == 0) return null
@@ -72,6 +86,7 @@ class TransparencyBadge extends React.Component {
 							<div key={j}>
 								{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num}</Typography> : null }
 								{ study_transparencies.map((t, idx) => {
+									if (t.url == null || t.url.length == 0) return null
 									return <Typography key={idx}><a href={t.url} key={idx} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(t.url) }</a></Typography>
 								}) }
 							</div>
@@ -103,12 +118,14 @@ TransparencyBadge.propTypes = {
 	transparencies: PropTypes.array,
 	article_type: PropTypes.string,
 	study_level: PropTypes.bool,
+	reporting_standards_type: PropTypes.string,
 	// If article-level
 	studies: PropTypes.array
 }
 
 TransparencyBadge.defaultProps = {
 	transparencies: [], // List of objects (see Transparency serializer)
+	reporting_standards_type: null,
 	article_type: "ORIGINAL",
 	icon_size: 30,
 	study_level: false,

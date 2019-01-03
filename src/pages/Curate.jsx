@@ -158,7 +158,15 @@ class Curate extends React.Component {
   	addNewStudy() {
   		let {formdata} = this.state
   		if (formdata.studies == null) formdata.studies = []
-  		formdata.studies.push({method_similarity_type: 'close'}) // New blank study object
+  		formdata.studies.push({
+  			method_similarity_type: C.METHOD_SIMILARITY[0].value,
+  			dep_vars: [],
+  			ind_vars: [],
+  			dep_var_methods: [],
+  			ind_var_methods: [],
+  			key_figures: [],
+  			effects: []
+		}) // New blank study object
   		this.setState({formdata: formdata, study_editor_idx: formdata.studies.length - 1})
   	}
 

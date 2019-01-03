@@ -40,6 +40,7 @@ class StudyEditor extends React.Component {
 		this.renderReplicationInput = this.renderReplicationInput.bind(this)
 		this.handleAddTransparency = this.handleAddTransparency.bind(this)
 		this.handleChangeTransparency = this.handleChangeTransparency.bind(this)
+		this.handleChangeReportingStandardsType = this.handleChangeReportingStandardsType.bind(this)
 		this.handleDeleteTransparency = this.handleDeleteTransparency.bind(this)
 
 		this.replicationInputs = [
@@ -173,6 +174,12 @@ class StudyEditor extends React.Component {
 		this.setState({formdata})
 	}
 
+	handleChangeReportingStandardsType(event) {
+		let {formdata} = this.state
+		formdata.reporting_standards_type = event.target.value
+		this.setState({formdata})
+	}
+
 	renderReplicationInput(params, i) {
 		let {classes} = this.props
 		let {formdata} = this.state
@@ -294,7 +301,9 @@ class StudyEditor extends React.Component {
 
 						<TransparencyEditor
 								transparencies={transparencies}
+								reporting_standards_type={formdata.reporting_standards_type}
 								article_type={article_type || "ORIGINAL"}
+								onChangeReportingStandardsType={this.handleChangeReportingStandardsType}
 								onChangeTransparency={this.handleChangeTransparency}
 								onDeleteTransparency={this.handleDeleteTransparency}
 								onAddTransparency={this.handleAddTransparency} />

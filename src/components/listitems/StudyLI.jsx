@@ -102,7 +102,10 @@ class StudyLI extends React.Component {
 			<Card className={classes.card}>
 				<CardContent>
 					{ ofMultiple ? <Typography className={classes.studyNum} color="textSecondary" gutterBottom>{ "STUDY " + (study.study_number || '?') }</Typography> : null }
-					<TransparencyBadge studies={[study]} study_level={true} article_type={article_type} />
+					<TransparencyBadge
+            studies={[study]}
+            study_level={true}
+            article_type={article_type} />
 
 					<FigureList figures={study.figures} />
 

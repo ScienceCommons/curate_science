@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {Paper, Tabs, Tab, TabContainer, RadioGroup, FormControl, FormLabel,
 	FormControlLabel, Radio, Icon, InputLabel, Input, InputAdornment,
 	AppBar, Typography, IconButton, Button, TextField, Menu, MenuItem, Grid,
-	ListItemIcon} from '@material-ui/core';
+	ListItemIcon, Select} from '@material-ui/core';
 
 import {set, find} from 'lodash'
 
@@ -79,21 +79,9 @@ class TransparencyEditor extends React.Component {
         	anchorEl: null
         };
 
-        this.RS_TEXT = [
-        	"<ol style='margin-top:5px;margin-bottom:5px;padding-left:10px;'><li><strong>Excluded data (subjects/observations):</strong> Full details reported in article.</li>  <li><strong>Experimental conditions:</strong> Full details reported in article.</li><li><strong>Outcome measures:</strong> Full details reported in article.</li>	   <li><strong>Sample size determination:</strong> Full details reported in article.</li></ol><input type='text' name='disclosureDate' placeholder='Retroactive disclosure date (MM/DD/YYYY)' style='color:#999999;' size='35'><br><br><a href='https://psychdisclosure.org/' target='_blank'>Details of the 'Basic 4 (retroactive) reporting standard (2012)'</a>",
-			"<br/><a href='https://trialsjournal.biomedcentral.com/track/pdf/10.1186/s13063-018-2733-1' target='_blank'>Randomized trials of social and psychological interventions (CONSORT-SPI 2018; 26 items)</a> ",
-			"<br/><a href='http://www.consort-statement.org/media/default/downloads/consort%202010%20checklist.pdf' target='_blank'>Parallel-group RCTs reporting checklist (CONSORT 2010; 25 items)</a>",
-			"<br/><a href='http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf' target='_blank'>Journal article reporting standards for articles reporting new data (APA's JARS; see Table 1)</a>",
-			"<br/><a href='https://www.strobe-statement.org/fileadmin/Strobe/uploads/checklists/STROBE_checklist_v4_combined.pdf' target='_blank'>Observational/correlational studies reporting checklist (STROBE 2007; 22 items)</a>",
-			"<br/><a href='https://www.nc3rs.org.uk/sites/default/files/documents/Guidelines/NC3Rs%20ARRIVE%20Guidelines%20Checklist%20%28fillable%29.pdf' target='_blank'>Animal research reporting checklist (ARRIVE 2010; 20 items)</a>",
-			"<br/><a href='https://www.nature.com/authors/policies/reporting.pdf' target='_blank'>Life Science research checklist (Nature Neuroscience, 2015)</a>",
-			"<br/><a href='http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf' target='_blank'>Meta-Analysis Reporting Standards (APA's MARS; see Table 9)</a>",
-			"<br/><a href='http://prisma-statement.org/documents/PRISMA%202009%20checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (PRISMA 2009; 27 items)</a>",
-			"<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
-		]
-
 		this.handleCreateMenuClick = this.handleCreateMenuClick.bind(this)
 		this.handleCreateMenuClose = this.handleCreateMenuClose.bind(this)
+		this.changeReportingStandardsType = this.changeReportingStandardsType.bind(this)
 		this.addTransparency = this.addTransparency.bind(this)
 		this.render_transparency = this.render_transparency.bind(this)
 		this.render_transparency_section = this.render_transparency_section.bind(this)
@@ -107,9 +95,10 @@ class TransparencyEditor extends React.Component {
 	    this.setState({ anchorEl: null });
 	}
 
-	renderRSText(idx) {
-		if (idx == null) idx = 0
-		return {__html: this.RS_TEXT[idx]}
+	renderRSText(rst) {
+		let o = find(C.REPORTING_STANDARDS_TYPES, {value: rst})
+		if (o != null) return {__html: o.html_detail}
+		else return null
 	}
 
 	addTransparency(type) {
@@ -126,6 +115,10 @@ class TransparencyEditor extends React.Component {
 		let tt = transparencies[idx]
 		tt[prop] = event.target.value
 		this.props.onChangeTransparency(idx, tt)
+	}
+
+	changeReportingStandardsType(val) {
+		this.props.onChangeReportingStandardsType(val)
 	}
 
 	transparencies_of_type(type) {
@@ -153,6 +146,30 @@ class TransparencyEditor extends React.Component {
 			)
 		}
 		else return null
+	}
+
+	render_reporting_standards() {
+		let {reporting_standards_type, article_type} = this.props
+		const REP_STD = find(C.TRANSPARENCY_BADGES, {id: 'REPSTD'})
+		let show = REP_STD.article_types.includes(article_type)
+		if (!show) return
+		return (
+			<div id="rs1">
+				<TransparencyHeader badge={REP_STD} />
+				<Typography>Compliance to relevant reporting standard:</Typography>
+				<br/>
+				<Select
+					value={reporting_standards_type || ''}
+					onChange={this.changeReportingStandardsType}>
+					{ C.REPORTING_STANDARDS_TYPES.map((opt) => {
+						return <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+					}) }
+				</Select>
+				<Typography variant="body1">
+					<div id="RS_TEXT_DIV" dangerouslySetInnerHTML={this.renderRSText(reporting_standards_type)}></div>
+				</Typography>
+			</div>
+		)
 	}
 
 	render_transparency(transparency, i, badge) {
@@ -187,43 +204,23 @@ class TransparencyEditor extends React.Component {
 		} else if (badge.id == 'MATERIALS') {
 			content = <URLInput
 						id="materials"
+						key={i}
 						label="Study materials URL"
 						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
 		} else if (badge.id == 'DATA') {
 			content = <URLInput
 						id="data"
+						key={i}
 						label="Data URL"
 						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
 		} else if (badge.id == 'CODE') {
 			content = <URLInput label="Code URL"
 						id="code"
+						key={i}
 						onChange={this.changeTransparency(idx, 'url')}
 						url={transparency.url} />
-		} else if (badge.id == 'REPSTD') {
-			content = (
-				<div id="rs1" key={i}>
-					<span>Compliance to relevant reporting standard:</span>
-					<br/>
-					<select name="rs.name"
-							value={transparency.rep_std || '1'}
-							onChange={this.changeTransparency(idx, 'rep_std')}>
-						<option value="1">Basic-4 (at submission; PSCI, 2014)</option>
-						<option value="2">Basic-4 (retroactive; 2012)</option>
-						<option value="3">CONSORT-SPI (2018)</option>
-						<option value="4">CONSORT (2010)</option>
-						<option value="5">JARS (2018)</option>
-						<option value="6">STROBE (2007)</option>
-						<option value="7">ARRIVE (2010)</option>
-						<option value="8">Nature Neuroscience (2015)</option>
-						<option value="9">MARS (2018)</option>
-						<option value="10">PRISMA (2009)</option>
-						<option value="11">PRISMA-P (2015)</option>
-					</select>
-					<div id="RS_TEXT_DIV" dangerouslySetInnerHTML={this.renderRSText(form.rs)}></div>
-				</div>
-			)
 		}
 		return (
 			<div className={classes.one_transparency}>
@@ -245,7 +242,7 @@ class TransparencyEditor extends React.Component {
 	relevant_transparencies() {
 		let {article_type} = this.props
 		return C.TRANSPARENCY_BADGES.filter((tb) => {
-			return tb.article_types.includes(article_type)
+			return tb.article_types.includes(article_type) && !tb.singular
 		})
 	}
 
@@ -286,6 +283,7 @@ class TransparencyEditor extends React.Component {
 			    { this.relevant_transparencies().map((tt, i) => {
 			    	return this.render_transparency_section(tt)
 			    }) }
+			    { this.render_reporting_standards() }
 			    <div style={{marginTop: 20}}>
 				    { this.render_create_menu() }
 			    </div>
@@ -296,6 +294,7 @@ class TransparencyEditor extends React.Component {
 
 TransparencyEditor.defaultProps = {
 	transparencies: [], // List of objects (see Transparency serializer)
+	reporting_standards_type: null, // This transparency is singular, and so stored separately
 	article_type: "ORIGINAL",
 	icon_size: 20
 };

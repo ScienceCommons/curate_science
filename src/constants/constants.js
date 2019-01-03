@@ -44,15 +44,15 @@ var C = {
 	],
 	METHOD_SIMILARITY: [
 		{
-			value: 'close',
+			value: 'SIMILAR',
 			label: "Close"
 		},
 		{
-			value: 'very_close',
+			value: 'VERY_SIMILAR',
 			label: "Very Close"
 		},
 		{
-			value: 'exact',
+			value: 'EXACT',
 			label: "Exact"
 		}
 	],
@@ -170,9 +170,71 @@ var C = {
 			label: "Reporting Standards",
 			icon: "repstd",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH'],
+			singular: true,
 			color: '#7ED321'
 		}
-	]
+	],
+	REPORTING_STANDARDS_TYPES: [
+		{
+			value: null,
+			label: "None"
+		},
+		{
+			value: 'BASIC_4_AT_SUBMISSION',
+			label: "Basic-4 (at submission; PSCI, 2014)",
+			html_detail: ""
+		},
+		{
+			value: 'BASIC_4_RETROACTIVE',
+			label: "Basic-4 (retroactive; 2012)",
+			html_detail: "<ol style='margin-top:5px;margin-bottom:5px;padding-left:10px;'><li><strong>Excluded data (subjects/observations):</strong> Full details reported in article.</li>  <li><strong>Experimental conditions:</strong> Full details reported in article.</li><li><strong>Outcome measures:</strong> Full details reported in article.</li>	   <li><strong>Sample size determination:</strong> Full details reported in article.</li></ol><input type='text' name='disclosureDate' placeholder='Retroactive disclosure date (MM/DD/YYYY)' style='color:#999999;' size='35'><br><br><a href='https://psychdisclosure.org/' target='_blank'>Details of the 'Basic 4 (retroactive) reporting standard (2012)'</a>"
+		},
+		{
+			value: 'CONSORT_SPI',
+			label: "CONSORT-SPI (2018)",
+			html_detail: "<br/><a href='https://trialsjournal.biomedcentral.com/track/pdf/10.1186/s13063-018-2733-1' target='_blank'>Randomized trials of social and psychological interventions (CONSORT-SPI 2018; 26 items)</a> "
+		},
+		{
+			value: 'CONSORT',
+			label: "CONSORT (2010)",
+			html_detail: "<br/><a href='http://www.consort-statement.org/media/default/downloads/consort%202010%20checklist.pdf' target='_blank'>Parallel-group RCTs reporting checklist (CONSORT 2010; 25 items)</a>"
+		},
+		{
+			value: 'JARS',
+			label: "JARS (2018)",
+			html_detail: "<br/><a href='http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf' target='_blank'>Journal article reporting standards for articles reporting new data (APA's JARS; see Table 1)</a>"
+		},
+		{
+			value: 'STROBE',
+			label: "STROBE (2007)",
+			html_detail: "<br/><a href='https://www.strobe-statement.org/fileadmin/Strobe/uploads/checklists/STROBE_checklist_v4_combined.pdf' target='_blank'>Observational/correlational studies reporting checklist (STROBE 2007; 22 items)</a>"
+		},
+		{
+			value: 'ARRIVE',
+			label: "ARRIVE (2010)",
+			html_detail: "<br/><a href='https://www.nc3rs.org.uk/sites/default/files/documents/Guidelines/NC3Rs%20ARRIVE%20Guidelines%20Checklist%20%28fillable%29.pdf' target='_blank'>Animal research reporting checklist (ARRIVE 2010; 20 items)</a>"
+		},
+		{
+			value: 'NATURE_NEUROSCIENCE',
+			label: "Nature Neuroscience (2015)",
+			html_detail: "<br/><a href='https://www.nature.com/authors/policies/reporting.pdf' target='_blank'>Life Science research checklist (Nature Neuroscience, 2015)</a>"
+		},
+		{
+			value: 'MARS',
+			label: "MARS (2018)",
+			html_detail: "<br/><a href='http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf' target='_blank'>Meta-Analysis Reporting Standards (APA's MARS; see Table 9)</a>"
+		},
+		{
+			value: 'PRISMA',
+			label: "PRISMA (2009)",
+			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA%202009%20checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (PRISMA 2009; 27 items)</a>"
+		},
+		{
+			value: 'PRISMA_P',
+			label: "PRISMA-P (2015)",
+			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
+		}
+    ]
 }
 
 export default C;
