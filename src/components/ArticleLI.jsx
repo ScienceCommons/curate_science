@@ -38,14 +38,14 @@ class ArticleLI extends React.Component {
     }
 
 	render() {
- 	    let { classes, id, title, authors, journal, doi, transparencies, article_type, studies } = this.props;
+ 	    let { classes, id, title, authors, journal, doi, transparencies, article_type, studies, year } = this.props;
  	    let url = `/new/article/${id}`
 		return (
 			<Card className={classes.card}>
 				<CardContent>
 					<a href={url} className={classes.title_a}><Typography className={classes.title} variant="h2" color="textPrimary">{title}</Typography></a>
 					<Typography className={classes.authors} color="textSecondary" gutterBottom>
-						<AuthorList authors={authors} />
+						<AuthorList authors={authors} year={year} />
 					</Typography>
 					<TransparencyBadge studies={studies} article_type={article_type} />
 		  			<Typography className={classes.journal} color="textSecondary" gutterBottom>
@@ -65,7 +65,8 @@ ArticleLI.defaultProps = {
 	doi: "",
 	article_type: "ORIGINAL",
 	transparencies: [],
-	studies: []
+	studies: [],
+	year: null
 };
 
 ArticleLI.propTypes = {

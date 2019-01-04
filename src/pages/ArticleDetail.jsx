@@ -104,7 +104,6 @@ class ArticleDetail extends React.Component {
 		let update_date = new Date(article.updated)
 		let abstract = article.abstract || ''
 		let long = abstract.length > this.ABSTRACT_CHAR_LIM
-		let year_text = article.year || "In Press"
 		if (long) abstract = (
 			<div>
 				{ truncate(abstract, truncate_abstract ? this.ABSTRACT_CHAR_LIM : 5000) }
@@ -136,7 +135,7 @@ class ArticleDetail extends React.Component {
 				          { article.article_type }
 				        </Typography>
 		      			<Typography className={classes.title} variant="h2" component="h2" gutterBottom>
-		      			{ article.title } ({ year_text })
+		      			{ article.title }
 		      			</Typography>
 		      			<Typography className={classes.authors}>
 		      				<AuthorList authors={article.authors} />

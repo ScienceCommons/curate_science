@@ -18,7 +18,7 @@ const styles = {
 		margin: 15
 	},
 	boxHeader: {
-		fontSize: 32,
+		fontSize: 26,
 		color: 'gray',
 		textAlign: 'center'
 	}
@@ -87,7 +87,7 @@ class FAQ extends React.Component {
 					},
 					{
 						q: "Curate Science seems to have good intentions, but isn't it going to \"stigmatize\" older research conducted according to different standards?",
-						a: "Kind of, but no. It <strong>is</strong> true that today's (much needed) higher transparency standards in some ways make older research seem less impressive. However, Curate Science is committed to rewarding positive scientific behaviors rather than punishing questionable behaviors. Indeed, we make it easy to get the most credit possible for conducting and reporting one's research only a little bit more transparently. That is, as transparent as you currently have time for and/or are comfortable with. For example, if you're uncomfortable publicly posting your data for an article, you could still earn credit by publicly posting your code and linking to it on Curate Science (only 1 transparency component is required to be eligible for being added to our database).",
+						a: <div>Kind of, but no. It <b>is</b> true that today's (much needed) higher transparency standards in some ways make older research seem less impressive. However, Curate Science is committed to rewarding positive scientific behaviors rather than punishing questionable behaviors. Indeed, we make it easy to get the most credit possible for conducting and reporting one's research only a little bit more transparently. That is, as transparent as you currently have time for and/or are comfortable with. For example, if you're uncomfortable publicly posting your data for an article, you could still earn credit by publicly posting your code and linking to it on Curate Science (only 1 transparency component is required to be eligible for being added to our database).</div>,
 					}
 				]
 			},

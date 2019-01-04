@@ -2,24 +2,43 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
-	FormControl, Select, OutlinedInput, InputBase} from '@material-ui/core';
+	FormControl, Select, OutlinedInput, InputBase, RadioGroup, FormControlLabel,
+    Radio, FormGroup} from '@material-ui/core';
 
 import FigureList from '../shared/FigureList.jsx';
 
+import {find} from 'lodash'
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = {}
+const styles = {
+    radioGroup: {
+        margin: 17
+    }
+}
 
 class FigureSelector extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
             form: {
-                url: ''
+                url: '',
+                type: 'figure'
             }
         };
         this.addFigure = this.addFigure.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
+        this.handleTypeChange = this.handleTypeChange.bind(this)
+
+        this.TYPES = [
+            {
+                value: 'figure',
+                label: "Figure"
+            },
+            {
+                value: 'table',
+                label: "Table"
+            },
+        ]
     }
 
     validUrl() {
@@ -34,8 +53,8 @@ class FigureSelector extends React.Component {
             figures.push({
                 image_url: form.url,
                 figure_number: figures.length + 1,
-                is_figure: true,
-                is_table: false
+                is_figure: form.type == 'figure',
+                is_table: form.type == 'table'
             })
             form.url = ''
             if (this.props.onChange != null) this.props.onChange(figures)
@@ -55,9 +74,16 @@ class FigureSelector extends React.Component {
         this.setState({form})
     }
 
+    handleTypeChange(event) {
+        let {form} = this.state
+        form.type = event.target.value
+        this.setState({ form })
+    }
+
 	render() {
 		let {classes, figures} = this.props
         let {form} = this.state
+        let type_label = find(this.TYPES, {value: form.type}).label
 		return (
 			<div>
 				<FigureList
@@ -67,7 +93,7 @@ class FigureSelector extends React.Component {
                     showDelete={true} />
 
                 <Grid container>
-                    <Grid item xs={8}>
+                    <Grid item xs={6}>
                         <TextField
                           id='tfFigure'
                           label={`Enter figure or table image URL...`}
@@ -79,8 +105,22 @@ class FigureSelector extends React.Component {
                           variant="outlined"
                         />
                     </Grid>
-                    <Grid item xs={4} style={{padding: 23}}>
-        				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add Figure</Button>
+                    <Grid item xs={3}>
+                        <RadioGroup row
+                            aria-label="Type"
+                            name="type"
+                            value={form.type}
+                            onChange={this.handleTypeChange}
+                            className={classes.radioGroup}
+                          >
+                            { this.TYPES.map((type, i) => {
+                                return <FormControlLabel key={i} value={type.value} control={<Radio />} label={type.label} />
+                            }) }
+
+                        </RadioGroup>
+                    </Grid>
+                    <Grid item xs={3} style={{padding: 23}}>
+        				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add {type_label}</Button>
                     </Grid>
                 </Grid>
 

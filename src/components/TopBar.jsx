@@ -24,6 +24,10 @@ const styles = theme => ({
         color: 'white',
         fontSize: 10
     },
+    sitelogo: {
+        height: 20,
+        verticalAlign: 'middle'
+    },
     topButton: {
         color: 'white',
         borderColor: 'white'
@@ -176,7 +180,7 @@ class TopBar extends React.Component {
                         </IconButton>
                         <a href="/new" className={classes.sitename}>
                             <Typography variant="h6" color="inherit">
-                              {C.SITENAME}
+                              <img src="/sitestatic/cssnail.png" className={classes.sitelogo} /> {C.SITENAME}
                             </Typography>
                         </a>
                         <div className={classes.searchSection}>
