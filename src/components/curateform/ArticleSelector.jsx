@@ -28,14 +28,14 @@ class ArticleSelector extends React.Component {
     }
 
     articleCreated(a) {
-
+        console.log(a)
     }
 
     render() {
-        let {classes, name, withCreator} = this.props
+        let {classes, name, withCreator, csrftoken} = this.props
         let {creatorShowing} = this.state
         let creator
-        if (withCreator && creatorShowing) creator = <QuickArticleCreator onCreate={this.articleCreated} />
+        if (withCreator && creatorShowing) creator = <QuickArticleCreator csrftoken={csrftoken} onCreate={this.articleCreated} />
         return (
             <div>
                 <AutocompleteReactSelect
@@ -52,7 +52,8 @@ class ArticleSelector extends React.Component {
 }
 
 ArticleSelector.propTypes = {
-    withCreator: PropTypes.bool
+    withCreator: PropTypes.bool,
+    csrftoken: PropTypes.string
 }
 
 ArticleSelector.defaultProps = {

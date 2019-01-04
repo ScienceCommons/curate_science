@@ -6,6 +6,7 @@ import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 
 import JournalSelector from '../../components/curateform/JournalSelector.jsx';
 import AuthorSelector from '../../components/curateform/AuthorSelector.jsx';
+import {json_api_req} from '../../util/util.jsx'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -47,13 +48,15 @@ class QuickArticleCreator extends React.Component {
 
     save() {
         let {formdata} = this.state
-        console.log(formdata)
-        fetch("/api/articles/create/", {
-            method: "POST",
-            data: formdata
-        }).then(res => res.json()).then((article) => {
-            this.props.onCreate(article)
-        })
+        let {csrftoken} = this.props
+        json_api_req('POST', "/api/articles/create/", formdata, csrftoken, (res) => {
+                let text = res.title
+                this.props.onCreate({id: res.id, text: text})
+            }, (res) => {
+                // Error
+                console.log(res)
+            }
+        )
     }
 
 	render() {
@@ -106,17 +109,19 @@ class QuickArticleCreator extends React.Component {
                         />
                     </Grid>
                 </Grid>
-                <Button variant="outlined" onClick={this.save}>Create Article</Button>
+                <Button variant="contained" color="primary" onClick={this.save}>Create Article</Button>
             </Paper>
         )
 	}
 }
 
 QuickArticleCreator.propTypes = {
-    onCreate: PropTypes.func
+    onCreate: PropTypes.func,
+    csrftoken: PropTypes.string
 }
 
 QuickArticleCreator.defaultProps = {
+    csrftoken: null
 };
 
 export default withStyles(styles)(QuickArticleCreator);

@@ -265,7 +265,7 @@ class StudyEditor extends React.Component {
 	}
 
 	render() {
-		const { classes, open, editStudy, article_type, all_studies } = this.props;
+		const { classes, open, editStudy, article_type, all_studies, csrftoken } = this.props;
 		let {formdata} = this.state
 		let other_studies = all_studies.filter((s) => {
 			return editStudy == null || s.id != editStudy.id
@@ -295,7 +295,6 @@ class StudyEditor extends React.Component {
 					<DialogTitle id="form-dialog-title">{ creating_new ? "Add" : "Edit" } Study</DialogTitle>
 
 					<DialogContent>
-						<Typography variant="h5" className={classes.sectionHeading}>Study Number</Typography>
 						<TextField
 				          id="study_number"
 				          key="study_number"
@@ -310,7 +309,7 @@ class StudyEditor extends React.Component {
 				        />
 
 						<Typography variant="h5" className={classes.sectionHeading}>Original Article/Study</Typography>
-						<ArticleSelector selectStudy={true} withCreator={true} />
+						<ArticleSelector selectStudy={true} withCreator={true} csrftoken={csrftoken} />
 
 						<TransparencyEditor
 								transparencies={transparencies}
