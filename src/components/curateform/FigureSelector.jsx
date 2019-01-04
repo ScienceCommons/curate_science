@@ -23,11 +23,13 @@ class FigureSelector extends React.Component {
             form: {
                 url: '',
                 type: 'figure'
-            }
+            },
+            creator_showing: false
         };
         this.addFigure = this.addFigure.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
         this.handleTypeChange = this.handleTypeChange.bind(this)
+        this.showCreator = this.showCreator.bind(this)
 
         this.TYPES = [
             {
@@ -41,9 +43,13 @@ class FigureSelector extends React.Component {
         ]
     }
 
+    showCreator() {
+        this.setState({creator_showing: true})
+    }
+
     validUrl() {
         let {form} = this.state
-        return form.url.length > 5
+        return form.url.length > 5 && form.url.startsWith('http')
     }
 
     addFigure() {
@@ -58,7 +64,7 @@ class FigureSelector extends React.Component {
             })
             form.url = ''
             if (this.props.onChange != null) this.props.onChange(figures)
-            this.setState({form})
+            this.setState({form: form, creator_showing: false})
         }
     }
 
@@ -82,7 +88,7 @@ class FigureSelector extends React.Component {
 
 	render() {
 		let {classes, figures} = this.props
-        let {form} = this.state
+        let {form, creator_showing} = this.state
         let type_label = find(this.TYPES, {value: form.type}).label
 		return (
 			<div>
@@ -90,39 +96,43 @@ class FigureSelector extends React.Component {
                     figures={figures}
                     onDelete={this.handleDelete}
                     renderHiddenInputs={true}
-                    showDelete={true} />
+                    showDelete={true}
+                    showAdd={true}
+                    onAdd={this.showCreator} />
 
-                <Grid container>
-                    <Grid item xs={6}>
-                        <TextField
-                          id='tfFigure'
-                          label={`Enter figure or table image URL...`}
-                          value={form.url || ''}
-                          onChange={this.handleChange('url')}
-                          inputProps={{'data-lpignore': "true"}}
-                          margin="normal"
-                          fullWidth
-                          variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <RadioGroup row
-                            aria-label="Type"
-                            name="type"
-                            value={form.type}
-                            onChange={this.handleTypeChange}
-                            className={classes.radioGroup}
-                          >
-                            { this.TYPES.map((type, i) => {
-                                return <FormControlLabel key={i} value={type.value} control={<Radio />} label={type.label} />
-                            }) }
+                <div hidden={!creator_showing}>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            <TextField
+                              id='tfFigure'
+                              label={`Enter figure or table image URL (must start with http)...`}
+                              value={form.url || ''}
+                              onChange={this.handleChange('url')}
+                              inputProps={{'data-lpignore': "true"}}
+                              margin="normal"
+                              fullWidth
+                              variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <RadioGroup row
+                                aria-label="Type"
+                                name="type"
+                                value={form.type}
+                                onChange={this.handleTypeChange}
+                                className={classes.radioGroup}
+                              >
+                                { this.TYPES.map((type, i) => {
+                                    return <FormControlLabel key={i} value={type.value} control={<Radio />} label={type.label} />
+                                }) }
 
-                        </RadioGroup>
+                            </RadioGroup>
+                        </Grid>
+                        <Grid item xs={3} style={{padding: 23}}>
+            				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add {type_label}</Button>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={3} style={{padding: 23}}>
-        				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add {type_label}</Button>
-                    </Grid>
-                </Grid>
+                </div>
 
             </div>
         )

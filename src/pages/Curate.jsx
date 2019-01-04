@@ -74,6 +74,7 @@ class Curate extends React.Component {
         this.handleStudyEdit = this.handleStudyEdit.bind(this)
         this.authorsToAutocomplete = this.authorsToAutocomplete.bind(this)
         this.journalToAutocomplete = this.journalToAutocomplete.bind(this)
+        this.discard = this.discard.bind(this)
 
         this.TEXT_LINKS = [
         	{ label: 'PDF URL', property: 'pdf_url' },
@@ -225,6 +226,10 @@ class Curate extends React.Component {
 			console.log(data)
 			this.setState({snack_message: "Error saving article"})
 		})
+  	}
+
+  	discard() {
+		window.location.replace(`/new/article/${this.editing_id()}/`)
   	}
 
   	authorsToAutocomplete(authors) {
@@ -472,6 +477,9 @@ class Curate extends React.Component {
 								color="primary"
 								size="large"
 								type="submit">Save</Button>
+							<Button
+								size="large"
+								onClick={this.discard}>Discard changes</Button>
 						</Grid>
 
 					</Grid>
