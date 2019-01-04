@@ -194,7 +194,8 @@ class AutocompleteReactSelect extends React.Component {
   loadOptions(inputValue, cb) {
     let {listUrl} = this.props
     this.setState({loading: true}, () => {
-      return fetch(listUrl).then((res) => {
+      let query = encodeURIComponent(inputValue)
+      return fetch(`${listUrl}?q=${query}`).then((res) => {
         return res.json()
       }).then((json) => {
         return this.setState({loading: false}, () => {

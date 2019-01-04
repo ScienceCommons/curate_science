@@ -2,25 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
-	FormControl, Select, OutlinedInput, Dialog, DialogContent, DialogActions, DialogTitle} from '@material-ui/core';
+	FormControl, Select, OutlinedInput, Dialog, DialogContent,
+    DialogActions, DialogTitle, DialogContentText} from '@material-ui/core';
 
 import JournalSelector from '../../components/curateform/JournalSelector.jsx';
 import AuthorSelector from '../../components/curateform/AuthorSelector.jsx';
 
 import { withStyles } from '@material-ui/core/styles';
+import {json_api_req} from '../../util/util.jsx'
 
 const styles = {
-
+    error: {
+        color: 'red'
+    }
 }
 
 class QuickAuthorCreator extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-            formdata: {}
+            formdata: {},
+            error_message: null
         }
         this.save = this.save.bind(this)
-        this.cancel = this.cancel.bind(this)
+        this.dismiss = this.dismiss.bind(this)
         this.handleChange = this.handleChange.bind(this)
     }
 
@@ -44,6 +49,10 @@ class QuickAuthorCreator extends React.Component {
         }
     }
 
+    setError(msg) {
+        this.setState({error_message: msg})
+    }
+
     handleChange = prop => event => {
         let {formdata} = this.state
         formdata[prop] = event.target.value
@@ -51,25 +60,35 @@ class QuickAuthorCreator extends React.Component {
     }
 
     save() {
+        let {csrftoken} = this.props
         let {formdata} = this.state
-        console.log(formdata)
-        fetch("/api/authors/create/", {
-            method: "POST",
-            data: formdata
-        }).then(res => res.json()).then((article) => {
-            this.props.onCreate(article)
-        })
+        if (formdata.orcid != null && formdata.orcid.length > 0) {
+            json_api_req('POST', "/api/authors/create/", formdata, csrftoken, (res) => {
+                console.log(res)
+                let text = `${res.first_name} ${res.last_name}`
+                this.props.onCreate({id: res.id, text: text})
+            }, (res) => {
+                // Error
+                console.log(res)
+            })
+        } else {
+            this.setError("ORC ID is required")
+        }
     }
 
-    cancel() {
-        this.props.onClose()
+    dismiss() {
+        this.setState({formdata: {}, error_message: null}, () => {
+            this.props.onClose()
+        })
     }
 
 	render() {
 		let {classes, open} = this.props
-        let {formdata} = this.state
+        let {formdata, error_message} = this.state
+        let error
+        if (error_message != null) error = <DialogContentText className={classes.error}>{ error_message }</DialogContentText>
 		return (
-			<Dialog className={classes.root} open={open} onClose={this.cancel}>
+			<Dialog className={classes.root} open={open} onClose={this.dismiss}>
                 <DialogTitle>Create Author</DialogTitle>
                 <DialogContent>
                       <TextField
@@ -119,10 +138,11 @@ class QuickAuthorCreator extends React.Component {
                         required
                         variant="outlined"
                       />
+                      { error }
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.cancel}>Cancel</Button>
-                  <Button variant="outlined" onClick={this.save}>Save Author</Button>
+                    <Button onClick={this.dismiss}>Cancel</Button>
+                  <Button variant="contained" color="primary" onClick={this.save}>Create Author</Button>
                 </DialogActions>
             </Dialog>
         )
@@ -131,7 +151,8 @@ class QuickAuthorCreator extends React.Component {
 
 QuickAuthorCreator.propTypes = {
     onCreate: PropTypes.func,
-    open: PropTypes.bool
+    open: PropTypes.bool,
+    csrftoken: PropTypes.string
 }
 
 QuickAuthorCreator.defaultProps = {

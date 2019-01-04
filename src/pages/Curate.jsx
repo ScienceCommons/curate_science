@@ -50,9 +50,14 @@ const styles = {
 class Curate extends React.Component {
 	constructor(props) {
         super(props);
+
+        // TODO: Better method
+        let search = props.location.search
+        let replication = search == '?r=1'
         this.state = {
         	formdata: {
-        		year: ''
+        		year: '',
+        		article_type: replication ? 'REPLICATION' : 'ORIGINAL'
         	},
         	study_editor_idx: -1
         };
@@ -235,6 +240,7 @@ class Curate extends React.Component {
 
 	render() {
 		const { classes, cookies } = this.props;
+		let csrftoken = cookies.get('csrftoken')
 		let {formdata, study_editor_idx, snack_message} = this.state
 		let studies = formdata.studies || []
 		let at = find(C.ARTICLE_TYPES, {id: formdata.article_type || 'ORIGINAL'})
@@ -291,6 +297,7 @@ class Curate extends React.Component {
 					    <Grid item xs={6}>
 
 					        <AuthorSelector
+					        	csrftoken={csrftoken}
 					        	onChange={this.handleValueChange('authors')}
 					        	value={formdata.authors} />
 
@@ -477,7 +484,7 @@ class Curate extends React.Component {
 							 idx={study_editor_idx}
 							 editStudy={studies[study_editor_idx]}
 							 all_studies={studies}
-							 csrftoken={cookies.get('csrftoken')} />
+							 csrftoken={csrftoken} />
 
 				</form>
 

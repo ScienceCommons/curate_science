@@ -30,7 +30,10 @@ class Author(models.Model):
     articles = models.ManyToManyField('Article', through='ArticleAuthor', related_name='authors', blank=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        s = "%s %s" % (self.first_name, self.last_name)
+        if self.orcid:
+            s += ' (%s)' % self.orcid
+        return s
 
 class Journal(models.Model):
     """A periodical that publishes many Articles"""

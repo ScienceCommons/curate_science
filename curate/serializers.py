@@ -71,7 +71,7 @@ class NestedStudySerializer(WritableNestedModelSerializer):
     dep_vars = ConstructSerializer(many=True)
     ind_var_methods = MethodSerializer(many=True)
     dep_var_methods = MethodSerializer(many=True)
-    replication_of = StudyBasicsSerializer()
+    replication_of = StudyBasicsSerializer(allow_null=True)
 
     class Meta:
         model=Study

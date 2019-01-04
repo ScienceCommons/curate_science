@@ -108,6 +108,7 @@ class DOILookup extends React.Component {
 		let button_text = loading ? "Looking up..." : "Lookup"
         let icon = 'import_contacts'
         let doi_text = value || ''
+        let valid_input = doi_text.length > 0
 		return (
             <div>
     			<div className={classes.search}>
@@ -128,8 +129,8 @@ class DOILookup extends React.Component {
                           input: classes.inputInput,
                         }}
                     />
-                    <div className={classes.button}>
-                        <Button disabled={!canLookup || doi_text.length == 0} onClick={this.lookup}>{button_text}</Button>
+                    <div className={classes.button} hidden={!canLookup}>
+                        <Button disabled={!valid_input} onClick={this.lookup}>{button_text}</Button>
                     </div>
                 </div>
                 <Typography variant="subtitle1" className={classes.error} hidden={error==null}>{ error }</Typography>

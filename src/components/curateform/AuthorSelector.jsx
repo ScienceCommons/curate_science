@@ -36,14 +36,14 @@ class AuthorSelector extends React.Component {
     }
 
     authorCreated(a) {
-        console.log(a)
         let {value} = this.props
         value.push(a)
         this.props.onChange(value)
+        this.closeCreator()
     }
 
 	render() {
-		let {classes, value, withCreator} = this.props
+		let {classes, value, withCreator, csrftoken} = this.props
         let {name, creatorShowing} = this.state
         let creator
         if (withCreator) creator = (
@@ -51,7 +51,8 @@ class AuthorSelector extends React.Component {
                 onCreate={this.authorCreated}
                 onClose={this.closeCreator}
                 open={creatorShowing}
-                name={name} />
+                name={name}
+                csrftoken={csrftoken} />
         )
 		return (
             <div>
@@ -72,12 +73,14 @@ class AuthorSelector extends React.Component {
 }
 
 AuthorSelector.propTypes = {
-    withCreator: PropTypes.bool
+    withCreator: PropTypes.bool,
+    csrftoken: PropTypes.string
 }
 
 AuthorSelector.defaultProps = {
     value: [],
-    withCreator: true
+    withCreator: true,
+    csrftoken: null
 };
 
 export default withStyles(styles)(AuthorSelector);
