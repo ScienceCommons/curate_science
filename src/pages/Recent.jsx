@@ -48,7 +48,7 @@ class Home extends React.Component {
         let {classes} = this.props
 		let {articles, searched} = this.state
 		return (
-			<Grid container spacing={24} className={classes.root}>
+			<Grid container spacing={0} className={classes.root}>
                 <Grid item xs={3}>
                     <ArticleSearchFilter />
                 </Grid>

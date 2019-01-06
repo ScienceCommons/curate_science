@@ -11,7 +11,7 @@ import { withRouter } from 'react-router-dom';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import {AppBar, Toolbar, Typography, IconButton, Button, Grid, Menu, MenuItem,
-    Drawer, List, ListItem, ListItemText, Divider} from '@material-ui/core';
+    Drawer, List, ListItem, ListItemText, Divider, ListSubheader} from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
@@ -152,7 +152,7 @@ class TopBar extends React.Component {
 
     render() {
         const { classes } = this.props;
-        let {auth} = this.props
+        let {user_session} = this.props
         const { anchors, menuOpen, search_term, drawerOpen } = this.state;
         const menu = (
             <div>
@@ -209,7 +209,7 @@ class TopBar extends React.Component {
                             <Link to="/about" className={classes.topLink} style={{marginRight: 20}}>About</Link>
                         </Typography>
 
-                        {auth ? (
+                        {user_session.authenticated ? (
                         <div>
                             <Button
                                 className={classes.topButton}
@@ -259,6 +259,7 @@ class TopBar extends React.Component {
                             open={this.menuOpen('account')}
                             onClose={this.handleClose('account')}
                           >
+                            <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
                             <MenuItem onClick={this.logout}>Logout</MenuItem>
                           </Menu>
                         </div>

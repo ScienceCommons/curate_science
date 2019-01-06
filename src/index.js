@@ -4,4 +4,4 @@ import App from './App.jsx';
 
 import { CookiesProvider } from 'react-cookie';
 
-ReactDOM.render(<CookiesProvider><App authenticated={auth} /></CookiesProvider>, document.getElementById('root'));
+ReactDOM.render(<CookiesProvider><App user_session={user_session} /></CookiesProvider>, document.getElementById('root'));

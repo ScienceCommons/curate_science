@@ -68,14 +68,14 @@ class App extends React.Component {
     }
 
     render() {
-        const { classes, authenticated } = this.props;
+        const { classes, user_session } = this.props;
         const { anchorEl, search_term } = this.state;
         const open = Boolean(anchorEl);
         return (
         	<Router forceRefresh={true} basename="/new">
                 <div className="App">
                     <MuiThemeProvider theme={theme}>
-                        <TopBar auth={authenticated} />
+                        <TopBar user_session={user_session} />
                         <div className="AppContent">
                             <Switch>
                                 <Route exact path="/" component={Splash} />

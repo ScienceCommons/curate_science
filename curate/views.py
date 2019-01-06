@@ -33,8 +33,11 @@ def index(request):
 def router_index(request, *args, **kwargs):
     # Get logged in user
     auth_js = 'true' if request.user.is_authenticated else 'false'
-    # article = json.dumps(model_to_dict(Article.objects.order_by('updated')[0]))
-    return render(request, 'router_index.html', {'authenticated': auth_js})
+    session_data = {
+        'authenticated': auth_js,
+        'username': request.user
+    }
+    return render(request, 'router_index.html', session_data)
 
 @require_http_methods(["GET",])
 def view_article(request, pk):
