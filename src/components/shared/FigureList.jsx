@@ -23,6 +23,13 @@ const styles = {
         borderRadius: 3,
         cursor: 'pointer',
         textAlign: 'center'
+    },
+    add: {
+        width: 110,
+        height: 110,
+        display: 'inline-block',
+        paddingTop: 30,
+        color: 'black'
     }
 }
 
@@ -63,7 +70,11 @@ class FigureList extends React.Component {
 	render() {
 		let {classes, figures, showAdd} = this.props
         let addButton
-        if (showAdd) addButton = <a href="javascript:void(0)" onClick={this.handleAdd} className={classes.thumbnail}>Add</a>
+        if (showAdd) addButton = <a href="javascript:void(0)" onClick={this.handleAdd} className={classes.thumbnail}>
+            <span className={classes.add}>
+                <Icon fontSize='large'>add</Icon> <Typography>Add</Typography>
+            </span>
+        </a>
 		return (
 			<div className={classes.container}>
 				{ figures.map(this.renderThumbnail) }

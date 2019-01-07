@@ -86,7 +86,7 @@ class App extends React.Component {
                                 <Route path="/faq" component={FAQ} />
                                 <Route path="/article/:id(\d+)/edit" component={Curate} />
                                 <Route path="/article/:id(\d+)" component={() => {
-                                    return <ArticleDetail auth={authenticated} />
+                                    return <ArticleDetail auth={user_session.authenticated} />
                                 }} />
                             </Switch>
                         </div>
@@ -99,7 +99,6 @@ class App extends React.Component {
 }
 
 App.defaultProps = {
-	authenticated: false
 }
 
 export default App;

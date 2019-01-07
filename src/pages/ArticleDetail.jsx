@@ -19,6 +19,7 @@ import JournalDOIBadge from '../components/JournalDOIBadge.jsx';
 import AuthorList from '../components/AuthorList.jsx';
 import StudyLI from '../components/listitems/StudyLI.jsx';
 import FigureList from '../components/shared/FigureList.jsx';
+import Loader from '../components/shared/Loader.jsx';
 
 import {printDate, truncate} from '../util/util.jsx'
 
@@ -100,7 +101,7 @@ class ArticleDetail extends React.Component {
 		const { classes } = this.props;
 		let {match, auth} = this.props
 		let {article, truncate_abstract} = this.state
-		if (article == null) return <Typography variant="h3" style={{textAlign: 'center'}}>Loading...</Typography>
+		if (article == null) return <Typography variant="h3" style={{textAlign: 'center'}}><Loader /></Typography>
 		let update_date = new Date(article.updated)
 		let abstract = article.abstract || ''
 		let long = abstract.length > this.ABSTRACT_CHAR_LIM

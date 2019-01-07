@@ -16,7 +16,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 const style = {
     root: {
-        paddingTop: 10
+        paddingTop: 10,
+        alignContent: 'space-around'
     }
 }
 
@@ -48,11 +49,11 @@ class Home extends React.Component {
         let {classes} = this.props
 		let {articles, searched} = this.state
 		return (
-			<Grid container spacing={0} className={classes.root}>
-                <Grid item xs={3}>
+			<Grid container spacing={8} className={classes.root}>
+                <Grid item md={3}>
                     <ArticleSearchFilter />
                 </Grid>
-                <Grid item xs={9}>
+                <Grid item md={9}>
     				<Typography variant="h2">Recently Curated</Typography>
                     <Typography variant="subtitle1">Showing <b>{ articles.length }</b> articles</Typography>
     				{ articles.map(a => <ArticleLI key={a.id} {...a} />) }

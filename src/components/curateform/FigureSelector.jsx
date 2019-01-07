@@ -30,6 +30,7 @@ class FigureSelector extends React.Component {
         this.handleDelete = this.handleDelete.bind(this)
         this.handleTypeChange = this.handleTypeChange.bind(this)
         this.showCreator = this.showCreator.bind(this)
+        this.hideCreator = this.hideCreator.bind(this)
 
         this.TYPES = [
             {
@@ -45,6 +46,10 @@ class FigureSelector extends React.Component {
 
     showCreator() {
         this.setState({creator_showing: true})
+    }
+
+    hideCreator() {
+        this.setState({creator_showing: false})
     }
 
     validUrl() {
@@ -105,7 +110,8 @@ class FigureSelector extends React.Component {
                         <Grid item xs={6}>
                             <TextField
                               id='tfFigure'
-                              label={`Enter figure or table image URL (must start with http)...`}
+                              label={`Enter figure or table image URL`}
+                              placeholder="http..."
                               value={form.url || ''}
                               onChange={this.handleChange('url')}
                               inputProps={{'data-lpignore': "true"}}
@@ -130,6 +136,7 @@ class FigureSelector extends React.Component {
                         </Grid>
                         <Grid item xs={3} style={{padding: 23}}>
             				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add {type_label}</Button>
+                            <Button onClick={this.hideCreator}>Cancel</Button>
                         </Grid>
                     </Grid>
                 </div>
