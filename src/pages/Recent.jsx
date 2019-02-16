@@ -25,40 +25,22 @@ class Home extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-        	articles: [],
-            searched: false
         };
     }
 
     componentDidMount() {
-        this.fetch_recent_articles()
     }
 
     componentWillUnmount() {
-    }
-
-    fetch_recent_articles() {
-        let {match} = this.props
-        fetch(`/api/articles/`).then(res => res.json()).then((res) => {
-            console.log(res)
-            this.setState({articles: res, searched: false})
-        })
     }
 
 	render() {
         let {classes} = this.props
 		let {articles, searched} = this.state
 		return (
-			<Grid container spacing={8} className={classes.root}>
-                <Grid item md={3}>
-                    <ArticleSearchFilter />
-                </Grid>
-                <Grid item md={9}>
-    				<Typography variant="h2">Recently Curated</Typography>
-                    <Typography variant="subtitle1">Showing <b>{ articles.length }</b> articles</Typography>
-    				{ articles.map(a => <ArticleLI key={a.id} {...a} />) }
-                </Grid>
-			</Grid>
+			<div>
+                <Typography variant="h1">Recently Added</Typography>
+			</div>
 		)
 	}
 }

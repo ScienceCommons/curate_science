@@ -42,40 +42,6 @@ const styles = theme => ({
     grow: {
         flexGrow: 1,
     },
-    subSearchLinks: {
-        color: 'gray',
-        fontSize: 12,
-        marginTop: 5,
-        marginLeft: 25
-    },
-    searchSection: {
-        margin: 7,
-        flexGrow: 1,
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-          backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginRight: theme.spacing.unit * 2,
-        marginLeft: 0,
-        maxWidth: 400,
-        [theme.breakpoints.up('sm')]: {
-          marginLeft: theme.spacing.unit * 3,
-          width: 'auto',
-        },
-    },
-    searchIcon: {
-        width: theme.spacing.unit * 9,
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     inputRoot: {
         color: 'inherit',
         maxWidth: 400,
@@ -183,27 +149,6 @@ class TopBar extends React.Component {
                               <img src="/sitestatic/cssnail.png" className={classes.sitelogo} /> {C.SITENAME}
                             </Typography>
                         </a>
-                        <div className={classes.searchSection}>
-                            <div className={classes.search}>
-                                <div className={classes.searchIcon}>
-                                    <SearchIcon />
-                                </div>
-                                <InputBase
-                                    placeholder="Search for articles… (try 'bias' or 'love')"
-                                    onChange={this.handleSearchBoxChange}
-                                    onKeyPress={this.handleSearchKeyPress}
-                                    value={search_term || ''}
-                                    fullWidth={true}
-                                    classes={{
-                                      root: classes.inputRoot,
-                                      input: classes.inputInput,
-                                    }}
-                                />
-                            </div>
-                            <Typography className={classes.subSearchLinks}>
-                                Browse: <Link to="/recent" className={classes.topLink}>Articles</Link> &middot; <Link to="/recent?f=REPLICATION,COLLECTION" className={classes.topLink}>Replications</Link>
-                            </Typography>
-                        </div>
 
                         <Typography>
                             <Link to="/about" className={classes.topLink} style={{marginRight: 20}}>About</Link>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="250px" height="250px" viewBox="0 0 250 250" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.1 (72631) - https://sketchapp.com -->
+    <title>OrcID</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="OrcID" transform="translate(-0.036194, 0.000000)">
+            <g id="Group">
+                <circle id="Oval" fill="#000000" cx="125.036194" cy="125" r="125"></circle>
+                <circle id="Oval" fill="#FFFFFF" cx="77.0361937" cy="56" r="10"></circle>
+                <rect id="Rectangle" fill="#FFFFFF" x="68.0361937" y="77" width="17" height="105"></rect>
+                <path d="M107,77 C125.079179,77 140.674401,77 153.785664,77 C173.45256,77 201.880213,82.959491 201.880213,131.480395 C201.880213,174.925759 178.766314,182 153.785664,182 C137.131898,182 121.536676,182 107,182 L107,77 Z M121.677294,91.6099393 L121.677294,167.239491 C136.103975,167.239491 147.024912,167.239491 154.440106,167.239491 C165.562898,167.239491 186.964075,160.541724 186.964075,129.424715 C186.964075,98.3077066 162.934731,91.6099393 154.5,91.6099393 C148.876846,91.6099393 137.935944,91.6099393 121.677294,91.6099393 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

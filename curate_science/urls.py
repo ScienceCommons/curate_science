@@ -25,7 +25,7 @@ import curate.views_api as api
 
 urlpatterns = [
     # path('', views.index),
-    re_path(r'^new/(.*)$', views.router_index),
+    re_path(r'^app/(.*)$', views.router_index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('articles/create/', views.create_article, name='create-article'),
@@ -35,7 +35,6 @@ urlpatterns = [
 
 
 urlpatterns += [
-    path('', views.index),
     path('api/', api.index, name='api-index'),
     path('api/docs/', include_docs_urls(title="Curate Science API")),
     path('api/schema/', api.schema, name='api-schema'),

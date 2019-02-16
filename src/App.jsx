@@ -7,12 +7,9 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import TopBar from './components/TopBar.jsx';
 
 import Splash from './pages/Splash.jsx';
-import ArticleSearch from './pages/ArticleSearch.jsx';
-import Recent from './pages/Recent.jsx';
-import FAQ from './pages/FAQ.jsx';
 import About from './pages/About.jsx';
-import ArticleDetail from './pages/ArticleDetail.jsx';
-import Curate from './pages/Curate.jsx';
+import Recent from './pages/Recent.jsx';
+import AuthorPage from './pages/AuthorPage.jsx';
 import Footer from './components/Footer.jsx';
 
 // UI components
@@ -36,6 +33,7 @@ const theme = createMuiTheme({
   palette: {
     primary: { main: '#793DF7' },
     secondary: { main: '#8F0DCC' },
+    bg: '#EEE'
   },
   typography: {
     useNextVariants: true,
@@ -72,22 +70,16 @@ class App extends React.Component {
         const { anchorEl, search_term } = this.state;
         const open = Boolean(anchorEl);
         return (
-        	<Router forceRefresh={true} basename="/new">
-                <div className="App">
+        	<Router forceRefresh={true} basename="/app">
+                <div style={{backgroundColor: theme.palette.bg}}>
                     <MuiThemeProvider theme={theme}>
                         <TopBar user_session={user_session} />
                         <div className="AppContent">
                             <Switch>
                                 <Route exact path="/" component={Splash} />
                                 <Route exact path="/recent" component={Recent} />
-                                <Route path="/articles/search" component={ArticleSearch} />
-                                <Route path="/articles/curate" component={Curate} />
                                 <Route path="/about" component={About} />
-                                <Route path="/faq" component={FAQ} />
-                                <Route path="/article/:id(\d+)/edit" component={Curate} />
-                                <Route path="/article/:id(\d+)" component={() => {
-                                    return <ArticleDetail auth={user_session.authenticated} />
-                                }} />
+                                <Route path="/author/:id(.+)" component={AuthorPage} />
                             </Switch>
                         </div>
                         <Footer />

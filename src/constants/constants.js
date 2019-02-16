@@ -234,7 +234,24 @@ var C = {
 			label: "PRISMA-P (2015)",
 			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
 		}
-    ]
+    ],
+    AUTHOR_LINKS: {
+    	orcid: {
+    		name: "ORCID"
+    	},
+    	gscholar: {
+    		name: "Google Scholar"
+    	},
+    	email: {
+    		name: "Email"
+    	},
+    	internet: {
+    		name: "Internet"
+    	},
+    	twitter: {
+    		name: "Twitter"
+    	}
+    }
 }
 
 export default C;
