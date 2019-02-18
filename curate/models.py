@@ -75,19 +75,19 @@ class Article(models.Model):
     REGISTERED_REPORT = "REGISTERED_REPORT"
 
     prereg_choices = (
-        (PREREG_STUDY_DESIGN_ANALYSIS = "Preregistered study design + analysis"),
-        (PREREG_STUDY_DESIGN = "Preregistered study design"),
-        (REGISTERED_REPORT = "Registered report"),
+        (PREREG_STUDY_DESIGN_ANALYSIS, "Preregistered study design + analysis"),
+        (PREREG_STUDY_DESIGN, "Preregistered study design"),
+        (REGISTERED_REPORT, "Registered report"),
     )
 
     doi = models.CharField(max_length=255, null=True, blank=True, unique=True)
     journal = models.CharField(max_length=255, null=True, blank=True)
-    author_list = models.CharField(max_length=255)
+    author_list = models.CharField(max_length=255, null=True, blank=True)
     year = models.PositiveIntegerField(null=True, blank=True)
     in_press = models.BooleanField(default=False)
     title = models.CharField(max_length=255)
     abstract = models.TextField(null=True, blank=True, max_length=4000)
-    keywords = models.CharField(null=True, blank=True)
+    keywords = models.CharField(max_length=255, null=True, blank=True)
     article_type = models.CharField(max_length=255, choices=(
         (ORIGINAL, 'original'),
         (REPLICATION, 'replication'),
@@ -107,7 +107,7 @@ class Article(models.Model):
     target_effects = models.CharField(max_length=255, null=True, blank=True)
     original_article_url = models.URLField(null=True, blank=True, max_length=1000)
     prereg_protocol_url = models.URLField(null=True, blank=True, max_length=1000)
-    prereg_protocol_type = models.CharField(max_length=255, choices=prereg_choices)
+    prereg_protocol_type = models.CharField(max_length=255, choices=prereg_choices, null=True, blank=True)
     public_study_materials_url = models.URLField(null=True, blank=True, max_length=1000)
     public_data_url = models.URLField(null=True, blank=True, max_length=1000)
     public_code_url = models.URLField(null=True, blank=True, max_length=1000)

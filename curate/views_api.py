@@ -21,7 +21,6 @@ from curate.models import (
 from curate.serializers import (
     AuthorSerializer,
     ArticleSerializerNested,
-    ArticleDetailSerializer,
     ArticleListSerializer,
     CommentarySerializer,
     KeyFigureSerializer,
@@ -106,7 +105,7 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
-    queryset=Article.objects.select_related('journal').prefetch_related('studies', 'studies__transparencies', 'authors').all()
+    queryset=Article.objects.all()
     serializer=ArticleListSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
@@ -116,14 +115,8 @@ def view_article(request, pk):
     View one specific article.
     '''
     queryset=get_object_or_404(Article.objects \
-            .select_related('journal') \
-            .prefetch_related(
-                'studies',
-                'studies__transparencies',
-                'studies__effects',
-                'studies__ind_vars',
-                'authors'), id=pk)
-    serializer=ArticleDetailSerializer(instance=queryset)
+            .prefetch_related('authors'), id=pk)
+    serializer=ArticleSerializerNested(instance=queryset)
     return Response(serializer.data)
 
 @api_view(('GET', 'POST', ))
@@ -168,6 +161,51 @@ def delete_article(request, pk):
     article.delete()
     return Response(status=status.HTTP_200_OK)
 
+# Commentary views
+@api_view(('GET', ))
+def list_commentaries(request):
+    queryset=Commentary.objects.all()
+    serializer=CommentarySerializer(instance=queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(('GET', ))
+def view_commentary(request, pk):
+    queryset=get_object_or_404(Commentary, id=pk)
+    serializer=CommentarySerializer(instance=queryset)
+    return Response(serializer.data)
+
+@api_view(('POST', ))
+@permission_classes((IsAuthenticated,))
+def create_commentary(request):
+    serializer=CommentarySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(('PUT', 'PATCH', ))
+@permission_classes((IsAuthenticated,))
+def update_commentary(request, pk):
+    commentary=get_object_or_404(Commentary, id=pk)
+    if request.method=="PATCH":
+        is_partial=True
+    else:
+        is_partial=False
+    serializer = CommentarySerializer(commentary, data=request.data, partial=is_partial)
+    if serializer.is_valid():
+        serializer.save()
+        result_status=status.HTTP_200_OK
+    else:
+        result_status=status.HTTP_400_BAD_REQUEST
+    return Response(serializer.errors, status=result_status)
+
+@api_view(('DELETE', ))
+@permission_classes((IsAuthenticated, IsAdminUser,))
+def delete_commentary(request, pk):
+    commentary=get_object_or_404(Commentary, id=pk)
+    commentary.delete()
+    return Response(status=status.HTTP_200_OK)
 
 # KeyFigure views
 @api_view(('GET', ))
