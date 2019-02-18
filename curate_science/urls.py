@@ -5,9 +5,11 @@ from django.conf.urls.static import static
 from django.template import RequestContext
 from rest_framework.documentation import include_docs_urls
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import curate.views as views
 import curate.views_api as api
 
 urlpatterns = [
+    path('', views.index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
 ] + static("/dist/", document_root="dist") + static("/sitestatic/", document_root="sitestatic")
