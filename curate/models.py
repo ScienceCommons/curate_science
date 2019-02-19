@@ -36,6 +36,7 @@ class Author(models.Model):
 class Article(models.Model):
     """A written work with one or more Authors, reporting the results of a scientific Study."""
     ORIGINAL = 'ORIGINAL'
+    CONCEPTUAL = 'CONCEPTUAL'
     REPLICATION = 'REPLICATION'
     REPRODUCIBILITY = 'REPRODUCIBILITY'
     META_ANALYSIS = 'META_ANALYSIS'
@@ -90,6 +91,7 @@ class Article(models.Model):
     keywords = models.CharField(max_length=255, null=True, blank=True)
     article_type = models.CharField(max_length=255, choices=(
         (ORIGINAL, 'original'),
+        (CONCEPTUAL, 'conceptual'),
         (REPLICATION, 'replication'),
         (REPRODUCIBILITY, 'reanalysis - reproducibility'),
         (META_ANALYSIS, 'reanalysis - meta-analysis'),
@@ -137,15 +139,9 @@ class Article(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    @property
-    def publication_year(self):
-        if self.year:
-            return str(self.year)
-        else:
-            return "In Press"
-
     def __str__(self):
-        return f"{self.authors} ({self.year}) {self.title}"
+        year = self.year or "In Press"
+        return f"{self.author_list} ({year}) {self.title}"
 
     def get_absolute_url(self):
         return reverse('view-article', args=[str(self.id)])
