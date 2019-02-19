@@ -12,10 +12,12 @@ urlpatterns = [
     path('', views.index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('invitations/', include('invitations.urls', namespace='invitations')),
 ] + static("/dist/", document_root="dist") + static("/sitestatic/", document_root="sitestatic")
 
 
 urlpatterns += [
+    path('accounts/create/', api.create_account, name='api-create-account'),
     path('api/', api.index, name='api-index'),
     path('api/docs/', include_docs_urls(title="Curate Science API")),
     path('api/schema/', api.schema, name='api-schema'),

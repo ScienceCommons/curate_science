@@ -81,8 +81,8 @@ def seed_data(apps, schema_editor):
         article_type="REPLICATION",
     )
 
-    brief_guide.authors.add(lebel)
-    brief_guide.authors.add(campbell)
+    reg_rep.authors.add(lebel)
+    reg_rep.authors.add(campbell)
 
     kf1 = KeyFigure.objects.create(
         article=reg_rep,
@@ -131,6 +131,10 @@ def seed_data(apps, schema_editor):
     )
 
 def delete_data(apps, schema_editor):
+    Article = apps.get_model('curate', 'Article')
+    Author = apps.get_model('curate', 'Author')
+    Commentary = apps.get_model('curate', 'Commentary')
+    KeyFigure = apps.get_model('curate', 'KeyFigure')
     KeyFigure.objects.all().delete()
     Commentary.objects.all().delete()
     Article.objects.all().delete()

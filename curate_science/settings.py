@@ -57,9 +57,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.postgres',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    'invitations',
     'curate.apps.CurateConfig',
 ]
 
@@ -176,6 +178,10 @@ LOGGING = {
     },
 }
 
+#Invitation system settings
+INVITATIONS_INVITATION_ONLY = True
+INVITATIONS_INVITATION_EXPIRY = 30
+INVITATIONS_SIGNUP_REDIRECT = '/accounts/create/'
 
 if DEBUG:
     # make all loggers use the console.

@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.contrib.postgres.search import SearchVector, SearchRank
 import logging
+from django.contrib.auth.forms import UserCreationForm
 from dal import autocomplete
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
@@ -45,6 +46,25 @@ def index(request, format=None):
         'commentaries': reverse('api-list-commentaries', request=request, format=format),
         'key_figures': reverse('api-list-key-figures', request=request, format=format),
     })
+
+# Account creation / signup
+@api_view(['GET', 'POST'])
+def create_account(request):
+    if request.method == 'POST':
+        user = UserSerializer(data=request.DATA)
+        if user.is_valid():
+            User.objects.create_user(
+                user.init_data['email'],
+                user.init_data['username'],
+                user.init_data['password']
+            )
+            return Response(user.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(user._errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        serializer=UserSerializer()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 # Author views
 @api_view(('GET', ))

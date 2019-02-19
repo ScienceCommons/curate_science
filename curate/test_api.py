@@ -18,6 +18,10 @@ class TestAPIViews(TestCase):
         user.set_password('password1')
         user.save()
 
+    # Account Creation
+    def test_user_can_create_account(self):
+        pass
+
     # Article tests
     # List Articles
     def test_anon_can_list_articles_api(self):
@@ -114,6 +118,30 @@ class TestAPIViews(TestCase):
         r = self.client.get(url)
         assert r.status_code == 200
 
+    def test_admin_can_create_article_nested(self):
+        self.client.login(username='admin', password='password')
+        url = reverse('api-create-article')
+        r = self.client.post(url, {
+            "key_figures": [],
+            "commentaries": [
+                {
+                    "authors_year": "Tester (2016)",
+                    "commentary_url": "https://curatescience.org/"
+                }
+            ],
+            "authors": [1],
+            "doi": "doi test nested create",
+            "journal": "",
+            "author_list": "Beavis and Butthead",
+            "year": 2019,
+            "in_press": False,
+            "title": "title test nested create",
+            "article_type": "ORIGINAL",
+            "number_of_reps": 0,
+            "research_area": "SOCIAL_SCIENCE"
+        })
+        assert r.status_code == 201
+
     # Update Articles
     def test_authenticated_user_can_edit_article_with_api(self):
         self.client.login(username='new_user', password='password1')
@@ -143,6 +171,25 @@ class TestAPIViews(TestCase):
         url = reverse('api-update-article', kwargs={'pk': 99999})
         r = self.client.put(url, {"title": "_"})
         assert r.status_code == 404
+
+    def test_admin_can_edit_article_nested(self):
+        self.client.login(username='admin', password='password')
+        article=models.Article.objects.first()
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        r = self.client.patch(
+            url,
+            {
+                "id": article.id,
+                "commentaries": [
+                    {
+                        "authors_year": "Test",
+                        "commentary_url": "https://www.curatescience.org/",
+                    }
+                ]
+            },
+            content_type="application/json")
+        assert r.status_code == 200
+        assert article.commentaries.first().authors_year == "Test"
 
     # Delete Articles
     def test_anon_cannot_delete_article_api(self):

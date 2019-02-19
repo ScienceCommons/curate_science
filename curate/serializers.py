@@ -29,6 +29,39 @@ class ArticleListSerializer(serializers.ModelSerializer):
     class Meta:
         model=Article
         fields='__all__'
+        extra_kwargs = {
+            'number_of_reps': {
+                'allow_null': True,
+                'required': False,
+            },
+            'pdf_citations': {
+                'allow_null': True,
+                'required': False,
+            },
+            'pdf_downloads': {
+                'allow_null': True,
+                'required': False,
+            },
+            'pdf_views': {
+                'allow_null': True,
+                'required': False,
+            },
+            'html_views': {
+                'allow_null': True,
+                'required': False,
+            },
+            'preprint_downloads': {
+                'allow_null': True,
+                'required': False,
+            },
+            'preprint_views': {
+                'allow_null': True,
+                'required': False,
+            },
+            'preprint_views': {
+                'required': False,
+            },
+        }
 
 class ArticleSerializerNested(WritableNestedModelSerializer):
     key_figures = KeyFigureSerializer(many=True)
