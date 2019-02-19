@@ -4,11 +4,10 @@ from django.shortcuts import reverse
 from django.contrib import auth
 import json
 from curate import models
-from curate.test_setup import create_model_instances, destroy_model_instances
 
 class TestAPIViews(TestCase):
     def setUp(self):
-        create_model_instances()
+        #create_model_instances()
         self.client = Client()
         admin_user = models.User.objects.create(username='admin')
         admin_user.set_password('password')
@@ -18,9 +17,6 @@ class TestAPIViews(TestCase):
         user = models.User.objects.create(username='new_user')
         user.set_password('password1')
         user.save()
-
-    def tearDown(self):
-        destroy_model_instances()
 
     # Article tests
     # List Articles

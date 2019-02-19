@@ -1,12 +1,7 @@
 from django.test import TestCase
-from curate.test_setup import create_model_instances
 from curate import models
 
 class TestModelRelationships(TestCase):
-    def setUp(self):
-        pass
-        #create_model_instances()
-
     def test_author_str(self):
         a = models.Author.objects.create(first_name='Katie', last_name='Liljenquist')
         assert str(a) == 'Katie Liljenquist'
