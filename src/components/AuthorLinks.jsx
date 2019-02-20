@@ -14,9 +14,10 @@ class AuthorLinks extends React.Component {
 
 	render_link(url, link_type) {
 		let st = {
-			marginLeft: 5
+			marginLeft: 5,
+			opacity: 0.5
 		}
-		return <IconButton href={url} key={url} style={st} target="_blank"><img width={50} src={`/sitestatic/icons/${link_type}.svg`} /></IconButton>
+		return <IconButton href={url} key={link_type} style={st} target="_blank"><img width={30} src={`/sitestatic/icons/${link_type}.svg`} /></IconButton>
 	}
 
 	render() {
@@ -27,7 +28,11 @@ class AuthorLinks extends React.Component {
 				links_rendered.push(this.render_link(links[al], al))
 			}
 		})
-		return links_rendered
+		return (
+			<div className="authorLinks center-block" style={{textAlign: 'center'}}>
+			 { links_rendered }
+			</div>
+		)
 	}
 }
 

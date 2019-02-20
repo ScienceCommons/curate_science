@@ -67,7 +67,7 @@ class App extends React.Component {
 
     render() {
         const { classes, user_session } = this.props;
-        const { anchorEl, search_term } = this.state;
+        const { anchorEl } = this.state;
         const open = Boolean(anchorEl);
         return (
         	<Router forceRefresh={true} basename="/app">

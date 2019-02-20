@@ -75,6 +75,8 @@ python manage.py test
 
 ### Starting Local Server for Development
 
+Ensure Postgres is running.
+
 ```bash
 
 python manage.py runserver_plus

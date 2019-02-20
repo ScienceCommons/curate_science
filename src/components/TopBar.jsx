@@ -20,13 +20,20 @@ import C from '../constants/constants';
 
 
 const styles = theme => ({
+    root: {
+        flexGrow: 1,
+    },
     sitename: {
         color: 'white',
         fontSize: 10
     },
     sitelogo: {
         height: 20,
-        verticalAlign: 'middle'
+        verticalAlign: 'middle',
+        marginRight: 10
+    },
+    drawer: {
+        width: 300
     },
     topButton: {
         color: 'white',
@@ -41,6 +48,9 @@ const styles = theme => ({
     },
     grow: {
         flexGrow: 1,
+    },
+    rightSide: {
+        position: 'relative'
     },
     inputRoot: {
         color: 'inherit',
@@ -120,8 +130,10 @@ class TopBar extends React.Component {
         const { classes } = this.props;
         let {user_session} = this.props
         const { anchors, menuOpen, search_term, drawerOpen } = this.state;
-        const menu = (
-            <div>
+        let admin = user_session.admin
+        let has_author_page = user_session.has_page;
+        const drawer_menu = (
+            <div className={classes.drawer}>
                 <List>
                     <Link to="/about">
                         <ListItem key="about">
@@ -133,12 +145,27 @@ class TopBar extends React.Component {
                             <ListItemText primary={"FAQ"} />
                         </ListItem>
                     </Link>
+                    <Link to="/replications">
+                        <ListItem key="replications">
+                            <ListItemText primary={"Replications"} />
+                        </ListItem>
+                    </Link>
                 </List>
                 <Divider />
             </div>
         )
-        return (
+        const user_dropdown_menu = [
             <div>
+                <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
+                <Link to={`/author/${user_session.username}`}><MenuItem>{ has_author_page ? "My author page" : "Create author page" }</MenuItem></Link>
+                <Link to="/article/new"><MenuItem onClick={this.logout}>Add new article</MenuItem></Link>
+                <Link to="/invite"><MenuItem>Invite new users</MenuItem></Link>
+                <Divider />
+                <MenuItem onClick={this.logout}>Logout</MenuItem>
+            </div>
+        ]
+        return (
+            <div className={classes.root}>
                 <AppBar position="static" className={classes.topBar}>
                     <Toolbar>
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
@@ -146,27 +173,29 @@ class TopBar extends React.Component {
                         </IconButton>
                         <a href="/new" className={classes.sitename}>
                             <Typography variant="h6" color="inherit">
-                              <img src="/sitestatic/cssnail.png" className={classes.sitelogo} /> {C.SITENAME}
+                              <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME}
                             </Typography>
                         </a>
 
-                        <Typography>
-                            <Link to="/about" className={classes.topLink} style={{marginRight: 20}}>About</Link>
-                        </Typography>
+                        <div className={classes.grow} />
 
-                        {user_session.authenticated ? (
-                        <div>
-                            <Button
-                                className={classes.topButton}
-                                    aria-owns={this.menuOpen('curate') ? 'menu-curate' : undefined}
+                        <div className={classes.rightSide}>
+
+                            <Link to="/about"><Button variant="flat" className={classes.topLink}>About</Button></Link>
+
+                            {user_session.authenticated ? (
+                            <span>
+                                <IconButton
+                                    aria-owns={this.menuOpen('account') ? 'menu-account' : undefined}
                                     aria-haspopup="true"
-                                    onClick={this.handleMenu('curate')}
+                                    onClick={this.handleMenu('account')}
                                     color="inherit"
-                                    variant="outlined"
-                                  >Curate</Button>
-                            <Menu
-                                id="menu-curate"
-                                anchorEl={anchors.curate}
+                                  >
+                                    <AccountCircle />
+                              </IconButton>
+                              <Menu
+                                id="menu-account"
+                                anchorEl={anchors.account}
                                 anchorOrigin={{
                                   vertical: 'top',
                                   horizontal: 'right',
@@ -175,40 +204,14 @@ class TopBar extends React.Component {
                                   vertical: 'top',
                                   horizontal: 'right',
                                 }}
-                                open={this.menuOpen('curate')}
-                                onClose={this.handleClose('curate')}
-                                disableRestoreFocus
+                                open={this.menuOpen('account')}
+                                onClose={this.handleClose('account')}
                               >
-                                <Link to="/articles/curate"><MenuItem>Curate Article Transparency</MenuItem></Link>
-                                <Link to="/articles/curate?r=1"><MenuItem>Add Replication</MenuItem></Link>
-                            </Menu>
-                            <IconButton
-                                aria-owns={this.menuOpen('account') ? 'menu-account' : undefined}
-                                aria-haspopup="true"
-                                onClick={this.handleMenu('account')}
-                                color="inherit"
-                              >
-                                <AccountCircle />
-                          </IconButton>
-                          <Menu
-                            id="menu-account"
-                            anchorEl={anchors.account}
-                            anchorOrigin={{
-                              vertical: 'top',
-                              horizontal: 'right',
-                            }}
-                            transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'right',
-                            }}
-                            open={this.menuOpen('account')}
-                            onClose={this.handleClose('account')}
-                          >
-                            <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
-                            <MenuItem onClick={this.logout}>Logout</MenuItem>
-                          </Menu>
+                                { user_dropdown_menu }
+                              </Menu>
+                            </span>
+                          ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login to Curate</Button></a>}
                         </div>
-                      ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login to Curate</Button></a>}
                     </Toolbar>
                 </AppBar>
                 <Drawer open={drawerOpen} onClose={this.toggleDrawer(false)}>
@@ -218,7 +221,7 @@ class TopBar extends React.Component {
                     onClick={this.toggleDrawer(false)}
                     onKeyDown={this.toggleDrawer(false)}
                   >
-                    {menu}
+                    {drawer_menu}
                   </div>
                 </Drawer>
             </div>

@@ -153,8 +153,8 @@ STATIC_ROOT = os.path.join(ROOT_PATH, 'sitestatic')
 
 # STATICFILE_DIRS = [os.path.join(ROOT_PATH, 'sitestatic')]
 
-LOGIN_REDIRECT_URL = '/new'
-LOGOUT_REDIRECT_URL = '/new'
+LOGIN_REDIRECT_URL = '/app'
+LOGOUT_REDIRECT_URL = '/app'
 
 LOGGING = {
     'version': 1,

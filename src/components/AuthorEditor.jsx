@@ -52,4 +52,6 @@ class AuthorEditor extends React.Component {
 	}
 }
 
+
+
 export default withRouter(withStyles(styles)(AuthorEditor));
