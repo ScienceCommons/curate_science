@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.contrib.postgres.search import SearchVector, SearchRank
 import logging
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from dal import autocomplete
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
@@ -26,6 +27,7 @@ from curate.serializers import (
     CommentarySerializer,
     KeyFigureSerializer,
     UserProfileSerializer,
+    UserSerializer,
 )
 
 logger = logging.getLogger()
@@ -47,20 +49,23 @@ def index(request, format=None):
         'key_figures': reverse('api-list-key-figures', request=request, format=format),
     })
 
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, IsAdminUser,))
+def list_accounts(request):
+    queryset=User.objects.all().select_related('userprofile')
+    serializer=UserSerializer(instance=queryset, many=True)
+    return Response(serializer.data)
+
 # Account creation / signup
 @api_view(['GET', 'POST'])
 def create_account(request):
     if request.method == 'POST':
-        user = UserSerializer(data=request.DATA)
+        user = UserSerializer(data=request.data)
         if user.is_valid():
-            User.objects.create_user(
-                user.init_data['email'],
-                user.init_data['username'],
-                user.init_data['password']
-            )
+            user.save()
             return Response(user.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(user._errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         serializer=UserSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)

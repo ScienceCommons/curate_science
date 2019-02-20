@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.utils import model_meta
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 from drf_writable_nested import WritableNestedModelSerializer, UniqueFieldsMixin
 from curate.models import (
     Author,
@@ -76,3 +77,25 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=UserProfile
         fields='__all__'
+
+class UserSerializer(WritableNestedModelSerializer):
+    userprofile = UserProfileSerializer(required=False, allow_null=True)
+    extra_kwargs = {
+            'password': {
+                'write_only': True,
+                'required': False,
+            },
+    }
+    class Meta:
+        model=User
+        fields=('email', 'username', 'first_name',
+                'last_name', 'password', 'userprofile')
+
+    def create(self, validated_data):
+        user = User(
+            email = validated_data["email"],
+            username = validated_data["username"]
+        )
+        user.set_password(validated_data["password"])
+        user.save()
+        return user

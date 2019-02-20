@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     'curate.apps.CurateConfig',
 ]
 
+SITE_ID = 1
+
 # REST_FRAMEWORK = {
 #     'DEFAULT_FILTER_BACKENDS': (
 #         'django_filters.rest_framework.DjangoFilterBackend',
@@ -181,7 +183,8 @@ LOGGING = {
 #Invitation system settings
 INVITATIONS_INVITATION_ONLY = True
 INVITATIONS_INVITATION_EXPIRY = 30
-INVITATIONS_SIGNUP_REDIRECT = '/accounts/create/'
+INVITATIONS_SIGNUP_REDIRECT = '/app/signup/'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 if DEBUG:
     # make all loggers use the console.

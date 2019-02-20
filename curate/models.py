@@ -7,15 +7,13 @@ import datetime
 # Create your models here.
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
-    email = models.EmailField(unique=True)
+    user = models.OneToOneField(User, on_delete=models.PROTECT, null=True)
     curation_contributions = JSONField(null=True, blank=True)
     browsing_history = JSONField(null=True, blank=True)
     tracked_content = JSONField(null=True, blank=True)
     recommended_content = JSONField(null=True, blank=True)
     account_settings = JSONField(null=True, blank=True)
     research_interests = JSONField(null=True, blank=True)
-    platform_invites = models.PositiveIntegerField(default=0)
 
 class Author(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.PROTECT, null=True, blank=True)
