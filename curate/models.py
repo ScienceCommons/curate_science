@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     research_interests = JSONField(null=True, blank=True)
 
 class Author(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.PROTECT, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.PROTECT, null=True, blank=True)
     orcid = models.CharField(max_length=255, null=True, blank=True)
     first_name = models.CharField(max_length=255)
     middle_name = models.CharField(max_length=255, null=True, blank=True)

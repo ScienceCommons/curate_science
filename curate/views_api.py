@@ -90,7 +90,12 @@ def create_author(request):
     if request.method == 'POST':
         serializer=AuthorSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            author = serializer.save()
+            if not request.user.is_superuser and not request.user.is_staff:
+                if hasattr(request.user, 'author'):
+                    return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
+                author.user = request.user
+                author.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -102,6 +107,8 @@ def create_author(request):
 @permission_classes((IsAuthenticated,))
 def update_author(request, pk):
     author=get_object_or_404(Author, id=pk)
+    if request.user != author.user and not (request.user.is_superuser or request.user.is_staff):
+        return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
     if request.method=="PATCH":
         is_partial=True
     else:

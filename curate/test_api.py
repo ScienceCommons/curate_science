@@ -18,6 +18,10 @@ class TestAPIViews(TestCase):
         user.set_password('password1')
         user.save()
 
+        user = models.User.objects.create(username='new_user_2')
+        user.set_password('password2')
+        user.save()
+
     # Account Creation
     def test_user_can_create_account(self):
         pass
@@ -280,6 +284,62 @@ class TestAPIViews(TestCase):
         })
         a = models.Author.objects.get(last_name="Tester")
         assert a.first_name == "John"
+        assert a.user.username == "new_user"
+
+    def test_user_with_author_cannot_create_another(self):
+        self.client.login(username='new_user_2', password='password2')
+        url = reverse('api-create-author')
+        r = self.client.post(url, {
+            "first_name": "John",
+            "last_name": "Doe"
+        })
+        a = models.Author.objects.get(last_name="Doe")
+        assert a.first_name == "John"
+        assert a.user.username == "new_user_2"
+        r2 = self.client.post(url, {
+            "first_name": "Jane",
+            "last_name": "Doe"
+        })
+        assert r2.status_code == 403
+
+    def test_associated_user_can_update_author_api(self):
+        self.client=Client()
+        self.client.login(username='new_user', password='password1')
+        url = reverse('api-create-author')
+        r = self.client.post(url, {
+            "first_name": "FirstNameTest",
+            "last_name": "LastNameTest"
+        })
+        author=models.Author.objects.get(last_name="LastNameTest")
+        url = reverse('api-update-author', kwargs={'pk': author.id})
+        r = self.client.patch(
+            url, {
+                "first_name": 'Jimmy'
+            },
+            content_type="application/json")
+        assert r.status_code == 200
+
+    def test_other_user_cannot_update_author_api(self):
+        self.client=Client()
+        self.client.login(username='new_user_2', password='password2')
+        author=models.Author.objects.first()
+        url = reverse('api-update-author', kwargs={'pk': author.id})
+        r = self.client.patch(url, {
+            "id": author.id,
+            "last_name": "test"
+        })
+        assert r.status_code == 401
+
+    def test_superuser_create_author(self):
+        self.client.login(username='admin', password='password')
+        url = reverse('api-create-author')
+        r = self.client.post(url, {
+            "first_name": "Jill",
+            "last_name": "Tester"
+        })
+        a = models.Author.objects.get(last_name="Tester")
+        assert a.first_name == "Jill"
+        assert a.user is None
 
     def test_author_create_invalid_400(self):
         self.client.login(username='new_user', password='password1')
@@ -307,7 +367,7 @@ class TestAPIViews(TestCase):
         assert r.status_code == 403
 
     def test_authorized_user_can_patch_author(self):
-        self.client.login(username='new_user', password='password1')
+        self.client.login(username='admin', password='password')
         author=models.Author.objects.first()
         url = reverse('api-update-author', kwargs={'pk': author.id})
         r = self.client.patch(
@@ -318,7 +378,7 @@ class TestAPIViews(TestCase):
         assert r.status_code == 200
 
     def test_authorized_user_can_put_author(self):
-        self.client.login(username='new_user', password='password1')
+        self.client.login(username='admin', password='password')
         author=models.Author.objects.first()
         url = reverse('api-update-author', kwargs={'pk': author.id})
         r = self.client.put(
