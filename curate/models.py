@@ -155,7 +155,8 @@ class KeyFigure(models.Model):
                                 blank=True)
     figure_number = models.PositiveIntegerField()
     image_url = models.URLField(null=True, blank=True, max_length=1000)
-    file_name = models.CharField(max_length=255,null=True, blank=True)
+    file_name = models.CharField(max_length=255, null=True, blank=True)
+    image = models.ImageField(upload_to='key_figures/', null=True)
     is_figure = models.BooleanField()
     is_table = models.BooleanField()
 

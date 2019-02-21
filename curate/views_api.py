@@ -245,7 +245,7 @@ def view_key_figure(request, pk):
     serializer=KeyFigureSerializer(instance=queryset)
     return Response(serializer.data)
 
-@api_view(('POST', ))
+@api_view(('GET', 'POST', ))
 @permission_classes((IsAuthenticated,))
 def create_key_figure(request):
     serializer=KeyFigureSerializer(data=request.data)

@@ -186,6 +186,9 @@ INVITATIONS_INVITATION_EXPIRY = 30
 INVITATIONS_SIGNUP_REDIRECT = '/app/signup/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 if DEBUG:
     # make all loggers use the console.
     for logger in LOGGING['loggers']:
