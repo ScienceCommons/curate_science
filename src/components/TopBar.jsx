@@ -135,17 +135,17 @@ class TopBar extends React.Component {
         const drawer_menu = (
             <div className={classes.drawer}>
                 <List>
-                    <Link to="/about">
-                        <ListItem key="about">
+                    <Link to="/about" key="about">
+                        <ListItem>
                             <ListItemText primary="About" />
                         </ListItem>
                     </Link>
-                    <Link to="/faq">
+                    <Link to="/faq" key="faq">
                         <ListItem key="faq">
                             <ListItemText primary={"FAQ"} />
                         </ListItem>
                     </Link>
-                    <Link to="/replications">
+                    <Link to="/replications" key="replications">
                         <ListItem key="replications">
                             <ListItemText primary={"Replications"} />
                         </ListItem>
@@ -157,9 +157,9 @@ class TopBar extends React.Component {
         const user_dropdown_menu = [
             <div>
                 <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
-                <Link to={`/author/${user_session.username}`}><MenuItem>{ has_author_page ? "My author page" : "Create author page" }</MenuItem></Link>
-                <Link to="/article/new"><MenuItem onClick={this.logout}>Add new article</MenuItem></Link>
-                <Link to="/invite"><MenuItem>Invite new users</MenuItem></Link>
+                <Link to={`/author/${user_session.username}`} key="author_page"><MenuItem>{ has_author_page ? "My author page" : "Create author page" }</MenuItem></Link>
+                <Link to="/article/new" key="new_article"><MenuItem onClick={this.logout}>Add new article</MenuItem></Link>
+                <Link to="/invite" key="invite"><MenuItem>Invite new users</MenuItem></Link>
                 <Divider />
                 <MenuItem onClick={this.logout}>Logout</MenuItem>
             </div>
@@ -171,7 +171,7 @@ class TopBar extends React.Component {
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                             <MenuIcon />
                         </IconButton>
-                        <a href="/new" className={classes.sitename}>
+                        <a href="/app" className={classes.sitename}>
                             <Typography variant="h6" color="inherit">
                               <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME}
                             </Typography>
@@ -181,7 +181,7 @@ class TopBar extends React.Component {
 
                         <div className={classes.rightSide}>
 
-                            <Link to="/about"><Button variant="flat" className={classes.topLink}>About</Button></Link>
+                            <Link to="/about"><Button variant="text" className={classes.topLink}>About</Button></Link>
 
                             {user_session.authenticated ? (
                             <span>

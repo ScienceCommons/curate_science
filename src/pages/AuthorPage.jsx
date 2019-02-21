@@ -113,6 +113,8 @@ class AuthorPage extends React.Component {
         this.close_article_editor = this.toggle_article_editor.bind(this, false)
         this.handle_edit = this.handle_edit.bind(this)
         this.handle_unlink = this.handle_unlink.bind(this)
+        this.add_article = this.add_article.bind(this)
+        this.add_existing_article = this.add_existing_article.bind(this)
     }
 
     componentDidMount() {
@@ -120,6 +122,17 @@ class AuthorPage extends React.Component {
     }
 
     componentWillUnmount() {
+    }
+
+    add_article() {
+        let new_article = {
+            id: 'NEW'
+        }
+        this.handle_edit(new_article)
+    }
+
+    add_existing_article() {
+
     }
 
     handle_edit(a) {
@@ -175,11 +188,11 @@ class AuthorPage extends React.Component {
                     </Grid>
                     <Grid item xs={10}>
                         <div id="actions" className={classes.box}>
-                            <Button variant="contained" color="secondary">
+                            <Button variant="contained" color="secondary" onClick={this.add_article}>
                                 Add Article
                                 <Icon>add</Icon>
                             </Button>
-                            <Button variant="contained" color="secondary">
+                            <Button variant="contained" color="secondary" onClick={this.add_existing_article}>
                                 Add Preexisting Article
                                 <Icon>add</Icon>
                             </Button>
