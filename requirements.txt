@@ -5,6 +5,7 @@ coreschema==0.0.4
 coverage==4.5.1
 Django==2.1.7
 django-autocomplete-light==3.3.2
+django-autoslug==1.9.4
 django-extensions==2.1.2
 django-invitations==1.9.2
 djangorestframework==3.8.2

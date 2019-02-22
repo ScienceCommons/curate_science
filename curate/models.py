@@ -2,6 +2,7 @@ from django.db import models
 from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
 from django.contrib.postgres.fields import JSONField
+from autoslug import AutoSlugField
 import datetime
 
 # Create your models here.
@@ -27,6 +28,14 @@ class Author(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     articles = models.ManyToManyField('Article', related_name='authors', blank=True)
+    slug = AutoSlugField(
+        populate_from = lambda a: ' '.join(
+            [x for x in [a.first_name, a.middle_name, a.last_name] if x is not None]
+        ),
+        unique=True,
+        editable=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
