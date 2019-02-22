@@ -26,9 +26,9 @@ urlpatterns += [
     path('api/authors/', api.list_authors, name='api-list-authors'),
     path('api/authors/autocomplete/', api.AuthorAutocomplete.as_view(), name='author-autocomplete'),
     path('api/authors/create/', api.create_author, name='api-create-author'),
-    path('api/authors/<int:pk>/', api.view_author, name='api-view-author'),
-    path('api/authors/<int:pk>/update/', api.update_author, name='api-update-author'),
-    path('api/authors/<int:pk>/delete/', api.delete_author, name='api-delete-author'),
+    path('api/authors/<slug>/', api.view_author, name='api-view-author'),
+    path('api/authors/<slug>/update/', api.update_author, name='api-update-author'),
+    path('api/authors/<slug>/delete/', api.delete_author, name='api-delete-author'),
     # Article paths
     path('api/articles/', api.list_articles, name='api-list-articles'),
     path('api/articles/autocomplete/', api.ArticleAutocomplete.as_view(), name='article-autocomplete'),

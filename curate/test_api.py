@@ -249,14 +249,14 @@ class TestAPIViews(TestCase):
     def test_anon_can_view_author_api(self):
         self.client=Client()
         author = models.Author.objects.filter(last_name='LeBel').first()
-        url = reverse('api-view-author', kwargs={'pk': author.id})
+        url = reverse('api-view-author', kwargs={'slug': author.slug})
         r = self.client.get(url)
         assert r.status_code == 200
         assert "LeBel" in r.content.decode('utf-8')
 
     def test_invalid_author_id_404(self):
         self.client = Client()
-        url = reverse('api-view-author', kwargs={'pk': 99999})
+        url = reverse('api-view-author', kwargs={'slug': 'foo'})
         r = self.client.get(url)
         assert r.status_code == 404
 
@@ -311,7 +311,7 @@ class TestAPIViews(TestCase):
             "last_name": "LastNameTest"
         })
         author=models.Author.objects.get(last_name="LastNameTest")
-        url = reverse('api-update-author', kwargs={'pk': author.id})
+        url = reverse('api-update-author', kwargs={'slug': author.slug})
         r = self.client.patch(
             url, {
                 "first_name": 'Jimmy'
@@ -323,7 +323,7 @@ class TestAPIViews(TestCase):
         self.client=Client()
         self.client.login(username='new_user_2', password='password2')
         author=models.Author.objects.first()
-        url = reverse('api-update-author', kwargs={'pk': author.id})
+        url = reverse('api-update-author', kwargs={'slug': author.slug})
         r = self.client.patch(url, {
             "id": author.id,
             "last_name": "test"
@@ -359,7 +359,7 @@ class TestAPIViews(TestCase):
     def test_anon_cannot_edit_author_api(self):
         self.client=Client()
         author=models.Author.objects.first()
-        url = reverse('api-update-author', kwargs={'pk': author.id})
+        url = reverse('api-update-author', kwargs={'slug': author.slug})
         r = self.client.patch(url, {
             "id": author.id,
             "last_name": "test"
@@ -369,7 +369,7 @@ class TestAPIViews(TestCase):
     def test_authorized_user_can_patch_author(self):
         self.client.login(username='admin', password='password')
         author=models.Author.objects.first()
-        url = reverse('api-update-author', kwargs={'pk': author.id})
+        url = reverse('api-update-author', kwargs={'slug': author.slug})
         r = self.client.patch(
             url, {
                 "first_name": 'Jimmy'
@@ -380,7 +380,7 @@ class TestAPIViews(TestCase):
     def test_authorized_user_can_put_author(self):
         self.client.login(username='admin', password='password')
         author=models.Author.objects.first()
-        url = reverse('api-update-author', kwargs={'pk': author.id})
+        url = reverse('api-update-author', kwargs={'slug': author.slug})
         r = self.client.put(
             url, {
                 "first_name": 'Chen-Bo',
@@ -395,14 +395,14 @@ class TestAPIViews(TestCase):
     def test_anon_cannot_delete_author_api(self):
         self.client=Client()
         author=models.Author.objects.first()
-        url = reverse('api-delete-author', kwargs={'pk': author.id})
+        url = reverse('api-delete-author', kwargs={'slug': author.slug})
         r = self.client.delete(url)
         assert r.status_code == 403
 
     def test_user_cannot_delete_author_api(self):
         self.client.login(username='new_user', password='password1')
         author=models.Author.objects.first()
-        url = reverse('api-delete-author', kwargs={'pk': author.id})
+        url = reverse('api-delete-author', kwargs={'slug': author.slug})
         r = self.client.delete(url)
         assert r.status_code == 403
 
@@ -414,7 +414,7 @@ class TestAPIViews(TestCase):
             "last_name": "Tester"
         })
         author = models.Author.objects.get(last_name="Tester")
-        url = reverse('api-delete-author', kwargs={'pk': author.id})
+        url = reverse('api-delete-author', kwargs={'slug': author.slug})
         r = self.client.delete(url)
         assert auth.get_user(self.client).is_authenticated
         assert auth.get_user(self.client).is_staff

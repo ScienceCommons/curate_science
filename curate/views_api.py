@@ -79,8 +79,8 @@ def list_authors(request):
     return Response(serializer.data)
 
 @api_view(('GET', ))
-def view_author(request, pk):
-    queryset=get_object_or_404(Author, id=pk)
+def view_author(request, slug):
+    queryset=get_object_or_404(Author, slug=slug)
     serializer=AuthorSerializer(instance=queryset)
     return Response(serializer.data)
 
@@ -105,8 +105,8 @@ def create_author(request):
 
 @api_view(('PUT', 'PATCH', ))
 @permission_classes((IsAuthenticated,))
-def update_author(request, pk):
-    author=get_object_or_404(Author, id=pk)
+def update_author(request, slug):
+    author=get_object_or_404(Author, slug=slug)
     if request.user != author.user and not (request.user.is_superuser or request.user.is_staff):
         return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
     if request.method=="PATCH":
@@ -123,11 +123,11 @@ def update_author(request, pk):
 
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
-def delete_author(request, pk):
+def delete_author(request, slug):
     '''
     Delete one specific author.
     '''
-    author=get_object_or_404(Author, id=pk)
+    author=get_object_or_404(Author, slug=slug)
     author.delete()
     return Response(status=status.HTTP_200_OK)
 
