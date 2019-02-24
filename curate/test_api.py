@@ -23,6 +23,18 @@ class TestAPIViews(TestCase):
         user.set_password('password2')
         user.save()
 
+    def tearDown(self):
+        import os, shutil
+        folder = 'media/key_figures/'
+        for the_file in os.listdir(folder):
+            file_path = os.path.join(folder, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                    #elif os.path.isdir(file_path): shutil.rmtree(file_path)
+            except Exception as e:
+                print(e)
+
     # Account Creation
     def test_user_can_create_account(self):
         pass
