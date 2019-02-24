@@ -57,11 +57,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.postgres',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    'invitations',
     'curate.apps.CurateConfig',
 ]
+
+SITE_ID = 1
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_FILTER_BACKENDS': (
@@ -176,6 +180,15 @@ LOGGING = {
     },
 }
 
+#Invitation system settings
+INVITATIONS_INVITATION_ONLY = True
+INVITATIONS_INVITATION_EXPIRY = 30
+INVITATIONS_SIGNUP_REDIRECT = '/app/signup/'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+THUMB_SIZE = (75,75)
 
 if DEBUG:
     # make all loggers use the console.

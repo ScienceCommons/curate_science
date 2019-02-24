@@ -14,14 +14,12 @@
    <button>Search</button>
 </div>
 
-<a href="{% url "create-article" %}">Curate an Article</a>
-
 <h2>Recently Curated</h2>
 
 <table>
   {% for a in articles %}
   <tr>
-    <td><a href="{{a.get_absolute_url}}">{{ a.title }}</a><td>
+    <td>{{ a.title }}</a><td>
   </tr>
 {% endfor %}
 </table>
