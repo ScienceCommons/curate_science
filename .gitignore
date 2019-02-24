@@ -156,3 +156,6 @@ secrets.tar
 
 # JS
 node_modules/
+
+# images
+# media/key_figures/*.jpg
