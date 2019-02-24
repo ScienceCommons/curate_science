@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.utils import model_meta
+from rest_framework.fields import ImageField
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from drf_writable_nested import WritableNestedModelSerializer, UniqueFieldsMixin
@@ -17,6 +18,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class KeyFigureSerializer(serializers.ModelSerializer):
+    image = ImageField(max_length=None, allow_empty_file=False, use_url=True)
     class Meta:
         model=KeyFigure
         exclude=('article',)

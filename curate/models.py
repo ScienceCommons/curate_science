@@ -16,6 +16,12 @@ class UserProfile(models.Model):
     account_settings = JSONField(null=True, blank=True)
     research_interests = JSONField(null=True, blank=True)
 
+def populate_slug(instance):
+    return ' '.join(
+        [x for x in [instance.first_name, instance.middle_name, instance.last_name]
+         if x is not None]
+    )
+
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=True, blank=True)
     orcid = models.CharField(max_length=255, null=True, blank=True)
@@ -29,9 +35,7 @@ class Author(models.Model):
     updated = models.DateTimeField(auto_now=True)
     articles = models.ManyToManyField('Article', related_name='authors', blank=True)
     slug = AutoSlugField(
-        populate_from = lambda a: ' '.join(
-            [x for x in [a.first_name, a.middle_name, a.last_name] if x is not None]
-        ),
+        populate_from = populate_slug,
         unique=True,
         editable=True,
         null=True
@@ -162,15 +166,22 @@ class KeyFigure(models.Model):
                                 related_name='key_figures',
                                 null=True,
                                 blank=True)
-    figure_number = models.PositiveIntegerField()
-    image_url = models.URLField(null=True, blank=True, max_length=1000)
-    file_name = models.CharField(max_length=255, null=True, blank=True)
-    image = models.ImageField(upload_to='key_figures/', null=True)
-    is_figure = models.BooleanField()
-    is_table = models.BooleanField()
-
-    class Meta:
-        unique_together=('article', 'figure_number',)
+    height = models.PositiveIntegerField(default=0)
+    width = models.PositiveIntegerField(default=0)
+    thumb_height = models.PositiveIntegerField(default=0)
+    thumb_width = models.PositiveIntegerField(default=0)
+    image = models.ImageField(
+        upload_to='key_figures/',
+        null=True,
+        height_field='height',
+        width_field='width',
+    )
+    thumbnail = models.ImageField(
+        upload_to='key_figure_thumbnails/',
+        null=True,
+        height_field='thumb_height',
+        width_field='thumb_width',
+    )
 
 class Commentary(models.Model):
     article = models.ForeignKey(Article,

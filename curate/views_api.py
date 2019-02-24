@@ -12,7 +12,10 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser
 from rest_framework import status, schemas, renderers
+
 from curate.models import (
     Author,
     Article,
@@ -29,6 +32,7 @@ from curate.serializers import (
     UserProfileSerializer,
     UserSerializer,
 )
+from PIL import Image
 
 logger = logging.getLogger()
 
@@ -46,7 +50,6 @@ def index(request, format=None):
         'authors': reverse('api-list-authors', request=request, format=format),
         'articles': reverse('api-list-articles', request=request, format=format),
         'commentaries': reverse('api-list-commentaries', request=request, format=format),
-        'key_figures': reverse('api-list-key-figures', request=request, format=format),
     })
 
 @api_view(['GET'])
@@ -239,49 +242,17 @@ def delete_commentary(request, pk):
     commentary.delete()
     return Response(status=status.HTTP_200_OK)
 
-# KeyFigure views
-@api_view(('GET', ))
-def list_key_figures(request):
-    queryset=KeyFigure.objects.all()
-    serializer=KeyFigureSerializer(instance=queryset, many=True)
-    return Response(serializer.data)
-
 @api_view(('GET', ))
 def view_key_figure(request, pk):
     queryset=get_object_or_404(KeyFigure, id=pk)
     serializer=KeyFigureSerializer(instance=queryset)
     return Response(serializer.data)
 
-@api_view(('GET', 'POST', ))
-@permission_classes((IsAuthenticated,))
-def create_key_figure(request):
-    serializer=KeyFigureSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(('PUT', 'PATCH', ))
-@permission_classes((IsAuthenticated,))
-def update_key_figure(request, pk):
-    key_figure=get_object_or_404(Key_Figure, id=pk)
-    if request.method=="PATCH":
-        is_partial=True
-    else:
-        is_partial=False
-    serializer = KeyFigureSerializer(key_figure, data=request.data, partial=is_partial)
-    if serializer.is_valid():
-        serializer.save()
-        result_status=status.HTTP_200_OK
-    else:
-        result_status=status.HTTP_400_BAD_REQUEST
-    return Response(serializer.errors, status=result_status)
-
 @api_view(('DELETE', ))
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_key_figure(request, pk):
     key_figure=get_object_or_404(KeyFigure, id=pk)
+    kf.image.delete(save=True)
     key_figure.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -304,6 +275,25 @@ def search_articles(request):
     result_page = paginator.paginate_queryset(queryset, request)
     serializer=ArticleListSerializer(instance=result_page, many=True)
     return Response(serializer.data)
+
+class ImageUploadView(APIView):
+    parser_classes = (MultiPartParser,)
+
+    def put(self, request, **kwargs):
+        if 'file' not in request.data:
+            raise ParseError("Empty content")
+        f = request.data['file']
+        article = get_object_or_404(Article, id=self.kwargs['article_pk'])
+
+        try:
+            img = Image.open(f)
+            img.verify()
+        except:
+            raise ParseError("File is not in a supported image format")
+        kf = KeyFigure()
+        kf.article = article
+        kf.image.save(f.name, f, save=True)
+        return Response(status=status.HTTP_201_CREATED)
 
 # Autocomplete views
 

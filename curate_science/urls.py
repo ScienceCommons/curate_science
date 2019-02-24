@@ -15,6 +15,8 @@ urlpatterns = [
     path('invitations/', include('invitations.urls', namespace='invitations')),
 ] + static("/dist/", document_root="dist") + static("/sitestatic/", document_root="sitestatic")
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 urlpatterns += [
     path('api/accounts/', api.list_accounts, name='api-list-accounts'),
@@ -39,10 +41,9 @@ urlpatterns += [
     path('api/articles/<int:pk>/delete/', api.delete_article, name='api-delete-article'),
 
     # Key figure paths
-    path('api/key_figures/', api.list_key_figures, name='api-list-key-figures'),
-    path('api/key_figures/create/', api.create_key_figure, name='api-create-key-figure'),
+    path('api/articles/<int:article_pk>/key_figures/upload/',
+         api.ImageUploadView.as_view()),
     path('api/key_figures/<int:pk>/', api.view_key_figure, name='api-view-key-figure'),
-    path('api/key_figures/<int:pk>/update/', api.update_key_figure, name='api-update-key-figure'),
     path('api/key_figures/<int:pk>/delete/', api.delete_key_figure, name='api-delete-key-figure'),
 
     # Commentary paths
