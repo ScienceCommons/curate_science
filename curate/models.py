@@ -3,6 +3,15 @@ from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
 from django.contrib.postgres.fields import JSONField
 from autoslug import AutoSlugField
+import os
+from io import BytesIO
+from django.db import models
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage as storage
+
+from PIL import Image
+from django.conf import settings
+
 import datetime
 
 # Create your models here.
@@ -177,11 +186,57 @@ class KeyFigure(models.Model):
         width_field='width',
     )
     thumbnail = models.ImageField(
-        upload_to='key_figure_thumbnails/',
+        upload_to='key_figures/',
         null=True,
         height_field='thumb_height',
         width_field='thumb_width',
     )
+
+    def save(self, *args, **kwargs):
+        """
+        Make and save the thumbnail for the photo here.
+        """
+        super(KeyFigure, self).save(*args, **kwargs)
+        self.make_thumbnail()
+        #if not self.make_thumbnail():
+        #    raise Exception('File not one of supported image file types: JPEG, GIF, PNG')
+
+    def make_thumbnail(self):
+        fh = storage.open(self.image.name, 'rb')
+        try:
+            image = Image.open(fh)
+        except:
+            return False
+
+        image.thumbnail(settings.THUMB_SIZE, Image.ANTIALIAS)
+        fh.close()
+
+        # Path to save to, name, and extension
+        thumb_name, thumb_extension = os.path.splitext(self.image.name)
+        _, thumb_fname = os.path.split(thumb_name)
+        thumb_extension = thumb_extension.lower()
+
+        thumb_filename = thumb_fname + '_thumb' + thumb_extension
+
+        if thumb_extension in ['.jpg', '.jpeg']:
+            FTYPE = 'JPEG'
+        elif thumb_extension == '.gif':
+            FTYPE = 'GIF'
+        elif thumb_extension == '.png':
+            FTYPE = 'PNG'
+        else:
+            return False    # Unrecognized file type
+
+        # Save thumbnail to in-memory file as StringIO
+        temp_thumb = BytesIO()
+        image.save(temp_thumb, FTYPE)
+        temp_thumb.seek(0)
+
+        # Load a ContentFile into the thumbnail field so it gets saved
+        self.thumbnail.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+        temp_thumb.close()
+
+        return True
 
 class Commentary(models.Model):
     article = models.ForeignKey(Article,

@@ -252,7 +252,7 @@ def view_key_figure(request, pk):
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_key_figure(request, pk):
     key_figure=get_object_or_404(KeyFigure, id=pk)
-    kf.image.delete(save=True)
+    key_figure.image.delete(save=True)
     key_figure.delete()
     return Response(status=status.HTTP_200_OK)
 

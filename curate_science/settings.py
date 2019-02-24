@@ -188,6 +188,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+THUMB_SIZE = (75,75)
 
 if DEBUG:
     # make all loggers use the console.
