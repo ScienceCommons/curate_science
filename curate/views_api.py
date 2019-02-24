@@ -158,9 +158,17 @@ def view_article(request, pk):
 @permission_classes((IsAuthenticated,))
 def create_article(request):
     if request.method=='POST':
+        user = request.user
+        if not user.is_staff and  not user.author:
+            # Only admins and authors can add articles
+            return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
         serializer=ArticleSerializerNested(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            article = serializer.save()
+            if hasattr(request.user, 'author'):
+                # If the user is an author, link the article to the author
+                # TODO: write a test for this!
+                user.author.articles.add(article)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -252,7 +260,6 @@ def view_key_figure(request, pk):
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_key_figure(request, pk):
     key_figure=get_object_or_404(KeyFigure, id=pk)
-    key_figure.image.delete(save=True)
     key_figure.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -277,6 +284,7 @@ def search_articles(request):
     return Response(serializer.data)
 
 class ImageUploadView(APIView):
+    permission_classes = (IsAuthenticated,)
     parser_classes = (MultiPartParser,)
 
     def put(self, request, **kwargs):

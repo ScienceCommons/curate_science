@@ -42,7 +42,7 @@ urlpatterns += [
 
     # Key figure paths
     path('api/articles/<int:article_pk>/key_figures/upload/',
-         api.ImageUploadView.as_view()),
+         api.ImageUploadView.as_view(), name='api-create-key-figure'),
     path('api/key_figures/<int:pk>/', api.view_key_figure, name='api-view-key-figure'),
     path('api/key_figures/<int:pk>/delete/', api.delete_key_figure, name='api-delete-key-figure'),
 

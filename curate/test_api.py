@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.test import Client
+from rest_framework.test import APIClient
 from django.shortcuts import reverse
 from django.contrib import auth
 import json
@@ -420,6 +421,56 @@ class TestAPIViews(TestCase):
         assert auth.get_user(self.client).is_staff
         assert r.status_code == 200
         assert len(models.Author.objects.filter(id=author.id)) == 0
+
+    def test_authorized_user_can_create_key_figure(self):
+        client = APIClient()
+        client.login(username='new_user', password='password1')
+        article = models.Article.objects.first()
+        url = reverse('api-create-key-figure', kwargs={'article_pk': article.id})
+        f = open('curate/fixtures/image.jpg', mode='rb')
+        res = client.put(url, {'file': f})
+
+        assert len(article.key_figures.all()) == 1
+        kf = article.key_figures.first()
+        assert kf.image is not None
+        assert kf.thumbnail is not None
+        assert kf.width == 319
+        assert kf.height == 400
+
+    def test_unauthorized_cannot_create_key_figure(self):
+        client = APIClient()
+        article = models.Article.objects.first()
+        url = reverse('api-create-key-figure', kwargs={'article_pk': article.id})
+        f = open('curate/fixtures/image.jpg', mode='rb')
+        res = client.put(url, {'file': f})
+        assert res.status_code == 403
+
+    def test_admin_can_delete_key_figure(self):
+        client = APIClient()
+        client.login(username='admin', password='password')
+        article = models.Article.objects.first()
+        url = reverse('api-create-key-figure', kwargs={'article_pk': article.id})
+        f = open('curate/fixtures/image.jpg', mode='rb')
+        res = client.put(url, {'file': f})
+        kf = article.key_figures.first()
+
+        url = reverse('api-delete-key-figure', kwargs={'pk': kf.id})
+        r = client.delete(url)
+        assert r.status_code == 200
+        assert len(article.key_figures.all()) == 0
+
+    def test_non_admin_cannot_delete_key_figure(self):
+        client = APIClient()
+        client.login(username='new_user', password='password1')
+        article = models.Article.objects.first()
+        url = reverse('api-create-key-figure', kwargs={'article_pk': article.id})
+        f = open('curate/fixtures/image.jpg', mode='rb')
+        res = client.put(url, {'file': f})
+        kf = article.key_figures.first()
+
+        url = reverse('api-delete-key-figure', kwargs={'pk': kf.id})
+        r = client.delete(url)
+        assert r.status_code == 403
 
     # def test_article_search(self):
     #     self.client.login(username='new_user', password='password1')
