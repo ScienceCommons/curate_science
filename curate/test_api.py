@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.test import Client
+from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from django.shortcuts import reverse
 from django.contrib import auth
@@ -80,6 +81,34 @@ class TestAPIViews(TestCase):
         })
         a = models.Article.objects.get(doi="001")
         assert a.title == "api test article"
+
+    def test_non_admin_user_create_article_linked_to_author(self):
+        self.client.login(username='new_user', password='password1')
+        u = User.objects.get(username='new_user')
+        author = models.Author.objects.create(user=u, first_name='New', last_name='User')
+        url = reverse('api-create-article')
+        r = self.client.post(url, {
+            "doi": "004",
+            "year": 2019,
+            "journal": "Science",
+            "title": "api test article",
+            "article_type": "ORIGINAL",
+            "research_area": "SOCIAL_SCIENCE",
+            "author_list": "LeBel et al",
+        })
+        article = models.Article.objects.get(doi="004")
+        assert article.authors.first().first_name == 'New'
+
+    def test_non_admin_author_can_only_update_own_articles(self):
+        self.client.login(username='new_user', password='password1')
+        u = User.objects.get(username='new_user')
+        author = models.Author.objects.create(user=u, first_name='New', last_name='User')
+        article = models.Article.objects.first()
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        r = self.client.patch(url, {
+            "title": "api test article updated",
+        }, content_type="application/json")
+        assert r.status_code == 403
 
     def test_create_invalid_article_400(self):
         self.client.login(username='admin', password='password')
@@ -163,6 +192,9 @@ class TestAPIViews(TestCase):
     def test_authenticated_user_can_edit_article_with_api(self):
         self.client.login(username='new_user', password='password1')
         article=models.Article.objects.first()
+        user = User.objects.get(username='new_user')
+        author = models.Author.objects.create(user=user, first_name='New', last_name='User')
+        article.authors.add(author)
         url = reverse('api-update-article', kwargs={'pk': article.id})
         r = self.client.patch(
             url, {

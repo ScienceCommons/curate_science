@@ -175,10 +175,10 @@ class KeyFigure(models.Model):
                                 related_name='key_figures',
                                 null=True,
                                 blank=True)
-    height = models.PositiveIntegerField(default=0)
-    width = models.PositiveIntegerField(default=0)
-    thumb_height = models.PositiveIntegerField(default=0)
-    thumb_width = models.PositiveIntegerField(default=0)
+    height = models.PositiveIntegerField(null=True)
+    width = models.PositiveIntegerField(null=True)
+    thumb_height = models.PositiveIntegerField(null=True)
+    thumb_width = models.PositiveIntegerField(null=True)
     image = models.ImageField(
         upload_to='key_figures/',
         null=True,
