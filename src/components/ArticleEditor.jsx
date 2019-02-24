@@ -31,7 +31,7 @@ const INPUT_SPECS = {
     },
     'title': {
         label: 'Article title',
-        placeholder: "e.g. RJ Balzarini, L Campbell, & K Dobson",
+        placeholder: "e.g., Does exposure to erotica reduce attraction and love for romantic partners in men?",
         required: true,
         type: 'text'
     },
@@ -53,7 +53,7 @@ const INPUT_SPECS = {
     'abstract': {
         label: 'Abstract',
         placeholder: "e.g., In this article, we propose a unified theory of consciousness...",
-        type: 'number'
+        type: 'text'
     },
     'keywords': {
         label: 'Keywords',
