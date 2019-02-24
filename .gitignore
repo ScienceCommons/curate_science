@@ -158,4 +158,4 @@ secrets.tar
 node_modules/
 
 # images
-# media/key_figures/*.jpg
+/media/key_figures/*.jpg
