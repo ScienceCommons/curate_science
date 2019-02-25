@@ -4,37 +4,43 @@ import Button from '@material-ui/core/Button';
 
 const LINK_TYPES = ['pdf', 'html', 'preprint']
 
-
 class ArticleContentLinks extends React.Component {
 	constructor(props) {
         super(props);
-        this.state = {
-        };
 
         this.render_link = this.render_link.bind(this)
     }
 
-	render_link(url, link_type) {
-		let st = {
+	render_link(lt) {
+		const st = {
 			marginLeft: 5
 		}
-		return <Button href={url} key={url} style={st} target="_blank" variant="outlined">{link_type}</Button>
+		let url = this.props[`${lt}_url`]
+		let views = this.props[`${lt}_views`]
+		let cites = this.props[`${lt}_citations`]
+		let dls = this.props[`${lt}_downloads`]
+		if (url == null || url.length == 0) return null
+		return (
+			<span key={lt}>
+				{ views > 0 ? <span key="views">{views}</span> : null }
+				{ dls > 0 ? <span key="dls">{dls}</span> : null }
+				{ cites > 0 ? <span key="cites">{cites}</span> : null }
+				<Button href={url} key={url} style={st} target="_blank" variant="outlined">{lt}</Button>
+			</span>
+		)
 	}
 
 	render() {
 		let links = []
 		LINK_TYPES.forEach((lt) => {
-			let url = this.props[lt]
-			if (url != null && url.length > 0) links.push(this.render_link(url, lt))
+			let link = this.render_link(lt)
+			if (link != null) links.push(link)
 		})
 		return links
 	}
 }
 
 ArticleContentLinks.defaultProps = {
-	pdf: null,
-	html: null,
-	preprint: null
 };
 
 export default ArticleContentLinks;

@@ -302,6 +302,118 @@ class ArticleEditor extends React.Component {
 
 	render() {
         let {classes, article, open} = this.props
+        let content
+        if (article != null) content = (
+            <div className={classes.content}>
+                <Grid container>
+                    <Grid item xs={9}>
+                        { this.render_field('title') }
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    <Grid item xs={9}>
+                        { this.render_field('authors') }
+                    </Grid>
+                    <Grid item xs={3}>
+                        { this.render_field('year') }
+                        { this.render_field('in_press') }
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    <Grid item xs={9}>
+                        { this.render_field('journal') }
+                    </Grid>
+                    <Grid item xs={3}>
+                        { this.render_field('doi') }
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    <Grid item xs={9}>
+                        { this.render_field('abstract') }
+                        { this.render_field('keywords') }
+                    </Grid>
+                    <Grid item xs={3}>
+                        <FigureSelector />
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    { this.render_field('article_type') }
+                </Grid>
+                <Grid container>
+                    <Grid item xs={6}>
+                        <TransparencyIcon tt={{icon: 'prereg'}} /> { this.render_field('transp_prereg') }
+                        <TransparencyIcon tt={{icon: 'materials'}} /> { this.render_field('transp_mat') }
+                        <TransparencyIcon tt={{icon: 'data'}} /> { this.render_field('transp_data') }
+                        <TransparencyIcon tt={{icon: 'code'}} /> { this.render_field('transp_code') }
+                        <TransparencyIcon tt={{icon: 'repstd'}} /> { this.render_field('transp_rep_std') }
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Grid container>
+                            <Grid item xs={3}>
+                                { this.render_field('pdf_url') }
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('pdf_citations') }
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('pdf_downloads') }
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('pdf_views') }
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={3}>
+                                { this.render_field('html_url') }
+                            </Grid>
+                            <Grid item xs={3}>
+                            </Grid>
+                            <Grid item xs={3}>
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('html_views') }
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={3}>
+                                { this.render_field('preprint_url') }
+                            </Grid>
+                            <Grid item xs={3}>
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('preprint_downloads') }
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('preprint_views') }
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    { this.render_field('author_contributions') }
+                    { this.render_field('competing_interests') }
+                    { this.render_field('funding_sources') }
+                    <label>Peer-review information</label>
+                </Grid>
+                <Grid container>
+                    <Grid item xs={4}>
+                        { this.render_field('peer_review_editor') }
+                    </Grid>
+                    <Grid item xs={4}>
+                        { this.render_field('peer_reviewers') }
+                    </Grid>
+                    <Grid item xs={4}>
+                        { this.render_field('peer_review_url') }
+                    </Grid>
+                </Grid>
+
+                <div>
+                    <label>Commentaries</label>
+                    { this.render_commentaries() }
+                </div>
+
+            </div>
+        )
 		return (
             <div>
                 <Dialog open={open} onClose={this.handle_close} fullScreen aria-labelledby="edit-article">
@@ -319,115 +431,7 @@ class ArticleEditor extends React.Component {
                         </Toolbar>
                     </AppBar>
 
-                    <div className={classes.content}>
-                        <Grid container>
-                            <Grid item xs={9}>
-                                { this.render_field('title') }
-                            </Grid>
-                        </Grid>
-                        <Grid container>
-                            <Grid item xs={9}>
-                                { this.render_field('authors') }
-                            </Grid>
-                            <Grid item xs={3}>
-                                { this.render_field('year') }
-                                { this.render_field('in_press') }
-                            </Grid>
-                        </Grid>
-                        <Grid container>
-                            <Grid item xs={9}>
-                                { this.render_field('journal') }
-                            </Grid>
-                            <Grid item xs={3}>
-                                { this.render_field('doi') }
-                            </Grid>
-                        </Grid>
-                        <Grid container>
-                            <Grid item xs={9}>
-                                { this.render_field('abstract') }
-                                { this.render_field('keywords') }
-                            </Grid>
-                            <Grid item xs={3}>
-                                <FigureSelector />
-                            </Grid>
-                        </Grid>
-                        <Grid container>
-                            { this.render_field('article_type') }
-                        </Grid>
-                        <Grid container>
-                            <Grid item xs={6}>
-                                <TransparencyIcon tt={{icon: 'prereg'}} /> { this.render_field('transp_prereg') }
-                                <TransparencyIcon tt={{icon: 'materials'}} /> { this.render_field('transp_mat') }
-                                <TransparencyIcon tt={{icon: 'data'}} /> { this.render_field('transp_data') }
-                                <TransparencyIcon tt={{icon: 'code'}} /> { this.render_field('transp_code') }
-                                <TransparencyIcon tt={{icon: 'repstd'}} /> { this.render_field('transp_rep_std') }
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Grid container>
-                                    <Grid item xs={3}>
-                                        { this.render_field('pdf_url') }
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        { this.render_field('pdf_citations') }
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        { this.render_field('pdf_downloads') }
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        { this.render_field('pdf_views') }
-                                    </Grid>
-                                </Grid>
-                                <Grid container>
-                                    <Grid item xs={3}>
-                                        { this.render_field('html_url') }
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        { this.render_field('html_views') }
-                                    </Grid>
-                                </Grid>
-                                <Grid container>
-                                    <Grid item xs={3}>
-                                        { this.render_field('preprint_url') }
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        { this.render_field('preprint_downloads') }
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        { this.render_field('preprint_views') }
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid container>
-                            { this.render_field('author_contributions') }
-                            { this.render_field('competing_interests') }
-                            { this.render_field('funding_sources') }
-                            <label>Peer-review information</label>
-                        </Grid>
-                        <Grid container>
-                            <Grid item xs={4}>
-                                { this.render_field('peer_review_editor') }
-                            </Grid>
-                            <Grid item xs={4}>
-                                { this.render_field('peer_reviewers') }
-                            </Grid>
-                            <Grid item xs={4}>
-                                { this.render_field('peer_review_url') }
-                            </Grid>
-                        </Grid>
-
-                        <div>
-                            <label>Commentaries</label>
-                            { this.render_commentaries() }
-                        </div>
-
-                    </div>
+                    { content }
 
                     <DialogActions>
                         <Button variant="contained" color="primary" onClick={this.save}>save</Button>

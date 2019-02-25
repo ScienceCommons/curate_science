@@ -42,7 +42,7 @@ class AuthorPage extends React.Component {
         super(props);
         this.state = {
             author: null,
-            searched: false,
+            articles: [],
             edit_author_modal_open: false,
             edit_article_modal_open: false,
             editing_article_id: null
@@ -63,6 +63,11 @@ class AuthorPage extends React.Component {
     }
 
     componentWillUnmount() {
+    }
+
+    slug() {
+        let {match} = this.props
+        return match.params.slug || null
     }
 
     add_article() {
@@ -86,9 +91,8 @@ class AuthorPage extends React.Component {
     }
 
     fetch_author_then_articles() {
-        let {match} = this.props
-        if (match.params.slug) {
-            let slug = match.params.slug
+        let slug = this.slug()
+        if (slug != null) {
             fetch(`/api/authors/${slug}`).then(res => res.json()).then((res) => {
                 console.log(res)
                 this.setState({author: res}, this.fetch_articles)
@@ -97,14 +101,23 @@ class AuthorPage extends React.Component {
     }
 
     fetch_articles() {
+        const ALL = true
         let {match} = this.props
         let {author} = this.state
-        if (author.articles) {
-            // Format query with IDs
+        if (ALL) {
+            // Testing only
             fetch(`/api/articles/`).then(res => res.json()).then((res) => {
                 console.log(res)
-                this.setState({articles: res, searched: false})
+                this.setState({articles: res})
             })
+        } else {
+            let slug = this.slug()
+            if (slug != null) {
+                fetch(`/api/author/${slug}/articles/`).then(res => res.json()).then((res) => {
+                    console.log(res)
+                    this.setState({articles: res})
+                })
+            }
         }
     }
 
@@ -118,7 +131,7 @@ class AuthorPage extends React.Component {
 
 	render() {
         let {classes} = this.props
-		let {articles, searched, author, edit_author_modal_open, edit_article_modal_open,
+		let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id} = this.state
         if (author == null) return <Loader />
 		return (
@@ -151,7 +164,7 @@ class AuthorPage extends React.Component {
                         </div>
                     </Grid>
                     <Grid item xs={10}>
-                        { author.articles.map(a => <ArticleWithActions key={a.id} article={a} onEdit={this.handle_edit} onUnlink={this.handle_unlink} />) }
+                        { articles.map(a => <ArticleWithActions key={a.id} article={a} onEdit={this.handle_edit} onUnlink={this.handle_unlink} />) }
                     </Grid>
     			</Grid>
 
@@ -184,7 +197,7 @@ class ArticleWithActions extends React.Component {
         let {article} = this.props
         return (
             <div key={article.id} className="ArticleWithActions">
-                <ArticleLI {...article} admin={false} />
+                <ArticleLI article={article} admin={false} />
                 <div className="ArticleActions">
                     <Button variant="outlined" color="secondary" onClick={this.edit}>
                         Edit

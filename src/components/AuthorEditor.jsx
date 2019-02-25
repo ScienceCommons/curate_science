@@ -158,7 +158,7 @@ class AuthorEditor extends React.Component {
                       variant="outlined"
                     />
             return (
-                <Grid item xs={12}>
+                <Grid item xs={12} key={id}>
                     <span className={classes.icon}>{ io.icon }</span>
                     <span className={classes.formEl}>{ input_el }</span>
                 </Grid>

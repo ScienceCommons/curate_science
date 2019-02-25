@@ -3,15 +3,14 @@ import React from 'react';
 
 class AuthorList extends React.Component {
 	render() {
-		let {authors, year} = this.props
-		// let name_list = authors.map(author => `${author.last_name}, ${author.first_name}`)
+		let {author_list, year} = this.props
 		let year_text = year || "In Press"
-		return authors.join(', ') + ` (${year_text})`
+		return author_list + ` (${year_text})`
 	}
 }
 
 AuthorList.defaultProps = {
-	authors: [],
+	author_list: [],
 	year: null
 };
 
