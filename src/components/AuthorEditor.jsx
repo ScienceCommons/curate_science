@@ -134,6 +134,7 @@ class AuthorEditor extends React.Component {
 
     save() {
         // Save via API
+        // TODO: Reformat profile URLs into JSON object
         // fetch()
     }
 
