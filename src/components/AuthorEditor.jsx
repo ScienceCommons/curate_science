@@ -20,7 +20,12 @@ const styles = theme => ({
 
     },
     icon: {
-        opacity: 0.5
+        display: 'inline-block',
+        opacity: 0.5,
+        padding: '15px'
+    },
+    formEl: {
+        marginLeft: "60px"
     }
 })
 
@@ -152,13 +157,9 @@ class AuthorEditor extends React.Component {
                       variant="outlined"
                     />
             return (
-                <Grid container key={id}>
-                    <Grid item xs={2}>
-                        <span className={classes.icon}>{ io.icon }</span>
-                    </Grid>
-                    <Grid item xs={10}>
-                        { input_el }
-                    </Grid>
+                <Grid item xs={12}>
+                    <span className={classes.icon}>{ io.icon }</span>
+                    <span className={classes.formEl}>{ input_el }</span>
                 </Grid>
             )
         })
@@ -181,7 +182,9 @@ class AuthorEditor extends React.Component {
                         <DialogContentText>
                         </DialogContentText>
 
-                        { this.render_inputs() }
+                        <Grid container>
+                            { this.render_inputs() }
+                        </Grid>
                     </DialogContent>
 
                     <DialogActions>

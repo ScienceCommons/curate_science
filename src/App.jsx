@@ -79,7 +79,7 @@ class App extends React.Component {
                                 <Route exact path="/" component={Splash} />
                                 <Route exact path="/recent" component={Recent} />
                                 <Route path="/about" component={About} />
-                                <Route path="/author/:id(.+)" component={AuthorPage} />
+                                <Route path="/author/:slug(.+)" component={AuthorPage} />
                             </Switch>
                         </div>
                         <Footer />

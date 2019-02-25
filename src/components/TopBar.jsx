@@ -177,9 +177,9 @@ class TopBar extends React.Component {
                             </Typography>
                         </a>
 
-                        <div className={classes.grow} />
+                        <div className={classes.grow} key="grow" />
 
-                        <div className={classes.rightSide}>
+                        <div className={classes.rightSide} key="right">
 
                             <Link to="/about"><Button variant="text" className={classes.topLink}>About</Button></Link>
 
