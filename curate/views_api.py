@@ -144,6 +144,17 @@ def list_articles(request):
     serializer=ArticleListSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
+# Article views
+@api_view(('GET', ))
+def list_articles_for_author(request, slug):
+    '''
+    Return a list of all articles for an author
+    '''
+    author=get_object_or_404(Author, slug=slug)
+    queryset=author.articles.all()
+    serializer=ArticleListSerializer(instance=queryset, many=True)
+    return Response(serializer.data)
+
 @api_view(('GET', ))
 def view_article(request, pk):
     '''

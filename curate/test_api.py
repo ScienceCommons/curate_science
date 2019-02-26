@@ -56,6 +56,16 @@ class TestAPIViews(TestCase):
         assert(len(d) == article_count)
         assert r.status_code == 200
 
+    def list_articles_for_author(self):
+        self.client = Client()
+        a = Author.objects.first()
+        article_count = len(a.articles.all())
+        url = reverse('api-list-articles-for-author', kwargs={'slug': a.slug})
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert(len(d) == article_count)
+        assert r.status_code == 200
+
     # View Articles
     def test_anonymous_user_can_view_article_api(self):
         self.client=Client()
