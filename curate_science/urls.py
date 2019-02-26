@@ -34,6 +34,7 @@ urlpatterns += [
     path('api/authors/<slug>/delete/', api.delete_author, name='api-delete-author'),
     # Article paths
     path('api/articles/', api.list_articles, name='api-list-articles'),
+    path('api/authors/<slug>/articles/', api.list_articles_for_author, name='api-list-articles-for-author'),
     path('api/articles/autocomplete/', api.ArticleAutocomplete.as_view(), name='article-autocomplete'),
     path('api/articles/create/', api.create_article, name='api-create-article'),
     path('api/articles/search/', api.search_articles, name='api-search-articles'),
@@ -43,7 +44,7 @@ urlpatterns += [
 
     # Key figure paths
     path('api/articles/<int:article_pk>/key_figures/upload/',
-         api.ImageUploadView.as_view()),
+         api.ImageUploadView.as_view(), name='api-create-key-figure'),
     path('api/key_figures/<int:pk>/', api.view_key_figure, name='api-view-key-figure'),
     path('api/key_figures/<int:pk>/delete/', api.delete_key_figure, name='api-delete-key-figure'),
 

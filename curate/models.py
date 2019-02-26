@@ -34,9 +34,7 @@ def populate_slug(instance):
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=True, blank=True)
     orcid = models.CharField(max_length=255, null=True, blank=True)
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, null=True, blank=True)
-    last_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True, blank=True)
     position_title = models.CharField(max_length=255, null=True, blank=True)
     affiliations = models.CharField(max_length=255, null=True, blank=True)
     profile_urls = JSONField(null=True, blank=True)
@@ -44,17 +42,14 @@ class Author(models.Model):
     updated = models.DateTimeField(auto_now=True)
     articles = models.ManyToManyField('Article', related_name='authors', blank=True)
     slug = AutoSlugField(
-        populate_from = populate_slug,
+        populate_from = 'name',
         unique=True,
         editable=True,
         null=True
     )
 
     def __str__(self):
-        s = "%s %s" % (self.first_name, self.last_name)
-        if self.orcid:
-            s += ' (%s)' % self.orcid
-        return s
+        return self.name
 
 class Article(models.Model):
     """A written work with one or more Authors, reporting the results of a scientific Study."""
@@ -178,10 +173,10 @@ class KeyFigure(models.Model):
                                 related_name='key_figures',
                                 null=True,
                                 blank=True)
-    height = models.PositiveIntegerField(default=0)
-    width = models.PositiveIntegerField(default=0)
-    thumb_height = models.PositiveIntegerField(default=0)
-    thumb_width = models.PositiveIntegerField(default=0)
+    height = models.PositiveIntegerField(null=True)
+    width = models.PositiveIntegerField(null=True)
+    thumb_height = models.PositiveIntegerField(null=True)
+    thumb_width = models.PositiveIntegerField(null=True)
     image = models.ImageField(
         upload_to='key_figures/',
         null=True,

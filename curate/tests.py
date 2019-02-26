@@ -3,7 +3,7 @@ from curate import models
 
 class TestModelRelationships(TestCase):
     def test_author_str(self):
-        a = models.Author.objects.create(first_name='Katie', last_name='Liljenquist')
+        a = models.Author.objects.create(name='Katie Liljenquist')
         assert str(a) == 'Katie Liljenquist'
 
     def test_article_str(self):

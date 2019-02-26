@@ -144,6 +144,17 @@ def list_articles(request):
     serializer=ArticleListSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
+# Article views
+@api_view(('GET', ))
+def list_articles_for_author(request, slug):
+    '''
+    Return a list of all articles for an author
+    '''
+    author=get_object_or_404(Author, slug=slug)
+    queryset=author.articles.all()
+    serializer=ArticleListSerializer(instance=queryset, many=True)
+    return Response(serializer.data)
+
 @api_view(('GET', ))
 def view_article(request, pk):
     '''
@@ -158,9 +169,18 @@ def view_article(request, pk):
 @permission_classes((IsAuthenticated,))
 def create_article(request):
     if request.method=='POST':
+        user = request.user
+        if not user.is_staff and  not hasattr(request.user, 'author'):
+            # Only admins and authors can add articles.
+            # If the non-admin user has not created an author profile, they must do so
+            # before curating articles.
+            return Response("Forbidden", status=status.HTTP_403_FORBIDDEN)
         serializer=ArticleSerializerNested(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            article = serializer.save()
+            if hasattr(request.user, 'author'):
+                # If the user is an author, link the article to the author
+                user.author.articles.add(article)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -174,6 +194,10 @@ def update_article(request, pk):
     queryset=get_object_or_404(Article, id=pk)
     logging.warning(request.data)
     if request.method in ('PUT', 'PATCH'):
+        user = request.user
+        if (not user.is_staff and not hasattr(request.user, 'author')): #or (hasattr(request.user, 'author') and request.user.author not in queryset.authors.all()):
+            # Only admins and authors can update articles.
+            return Response("Forbidden", status=status.HTTP_403_FORBIDDEN)
         if request.method=="PATCH":
             is_partial=True
         else:
@@ -252,7 +276,8 @@ def view_key_figure(request, pk):
 @permission_classes((IsAuthenticated, IsAdminUser,))
 def delete_key_figure(request, pk):
     key_figure=get_object_or_404(KeyFigure, id=pk)
-    key_figure.image.delete(save=True)
+#    key_figure.image.delete(save=True)
+#    key_figure.thumbnail.delete(save=True)
     key_figure.delete()
     return Response(status=status.HTTP_200_OK)
 
@@ -277,6 +302,7 @@ def search_articles(request):
     return Response(serializer.data)
 
 class ImageUploadView(APIView):
+    permission_classes = (IsAuthenticated,)
     parser_classes = (MultiPartParser,)
 
     def put(self, request, **kwargs):
