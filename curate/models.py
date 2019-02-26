@@ -34,9 +34,7 @@ def populate_slug(instance):
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=True, blank=True)
     orcid = models.CharField(max_length=255, null=True, blank=True)
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, null=True, blank=True)
-    last_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True, blank=True)
     position_title = models.CharField(max_length=255, null=True, blank=True)
     affiliations = models.CharField(max_length=255, null=True, blank=True)
     profile_urls = JSONField(null=True, blank=True)
@@ -44,14 +42,14 @@ class Author(models.Model):
     updated = models.DateTimeField(auto_now=True)
     articles = models.ManyToManyField('Article', related_name='authors', blank=True)
     slug = AutoSlugField(
-        populate_from = populate_slug,
+        populate_from = name,
         unique=True,
         editable=True,
         null=True
     )
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return self.name
 
 class Article(models.Model):
     """A written work with one or more Authors, reporting the results of a scientific Study."""
