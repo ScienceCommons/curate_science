@@ -195,10 +195,8 @@ def update_article(request, pk):
     logging.warning(request.data)
     if request.method in ('PUT', 'PATCH'):
         user = request.user
-        if (not user.is_staff and  not hasattr(request.user, 'author')) or (hasattr(request.user, 'author') and request.user.author not in queryset.authors.all()):
+        if (not user.is_staff and not hasattr(request.user, 'author')): #or (hasattr(request.user, 'author') and request.user.author not in queryset.authors.all()):
             # Only admins and authors can update articles.
-            # Authors can only update their own articles. ??
-            # Or should updating an article you don't own just cause it to become linked?
             return Response("Forbidden", status=status.HTTP_403_FORBIDDEN)
         if request.method=="PATCH":
             is_partial=True

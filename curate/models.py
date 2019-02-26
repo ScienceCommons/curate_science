@@ -42,7 +42,7 @@ class Author(models.Model):
     updated = models.DateTimeField(auto_now=True)
     articles = models.ManyToManyField('Article', related_name='authors', blank=True)
     slug = AutoSlugField(
-        populate_from = name,
+        populate_from = 'name',
         unique=True,
         editable=True,
         null=True
