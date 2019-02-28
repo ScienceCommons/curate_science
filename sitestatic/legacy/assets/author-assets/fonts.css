@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+
+body, input {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar .brand {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+}
+.skill.right{
+   float: right;
+}
+    .skill.right p, .skill.right h2{
+        text-align:right;
+    }

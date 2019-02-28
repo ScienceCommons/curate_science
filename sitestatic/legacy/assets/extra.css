@@ -1,0 +1,359 @@
+	td.center { text-align:center;}
+	td.right { text-align:right;}
+	td { line-height: 1em;
+		 padding: 0em;
+		 border: 0px dashed black; }
+	#some-element {
+		border: 0px solid #ccc;
+		display: none;
+		font-size: 16px;
+		margin-bottom: 10px;
+		padding: 2px;
+		line-height: 1.25em;}	
+	#some-div:hover #some-element {
+		display: block;}
+	ul li { line-height:1.2em; }
+	ol li { line-height:1.2em; }
+	i { font-style: italic;}
+	a.anchor{
+		padding-top:80px;
+		display:block;
+		margin-top:-30px; /* if you want to cancel out the padding-top */}
+	u.dotted{
+	  border-bottom: 1px dashed #999;
+	  text-decoration: none; 
+	}	
+	span.displaynone { display:none; }
+	h1 { font-size: 24px; }
+		.navbar .nav { font-size: 12px;}
+		.navbar-nav>li>a { line-height: 15px;}
+	iframe { border: none; overflow: hidden;}
+	img.open-logos {
+		opacity: 0.06;
+		filter: alpha(opacity=6); /* For IE8 and earlier */
+		-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+		filter: grayscale(100%);}
+	img.open-logos.active {
+			opacity: 0.75;
+			filter: alpha(opacity=75); /* For IE8 and earlier */
+			-webkit-filter: none; /* Safari 6.0 - 9.0 */
+			filter: none;}
+	img.pdf-icon {padding-right:4px;}
+	table.all-replications {
+		font-size:14px;
+		margin-top:15px;
+		table-layout: fixed;
+		width: 1600px;}
+	table.all-replications th {line-height:16px;}
+	tr.area {color:CornflowerBlue;font-weight:bold;font-size:18px;}
+	tr.effect {color:black;font-weight:bold;font-size:17px;}
+		.effect td {line-height:1.4em;}
+	tr.original {color:darkgrey;font-weight:bold;}
+	td.original.primary {text-align:center;font-family:courier;}
+	tr.replication {color:black;}
+	.replication td:nth-child(1) {
+		padding-left:25px;}
+	td.primary {text-align:center;font-family:courier;}
+	td.secondary {color:lightgrey;font-weight:normal;font-size:12px;}
+	.table-all-replications { 
+		overflow-x: scroll;
+		overflow-y: hidden;
+		min-width:1000px;}
+	.table-all-replications-RPP { 
+	overflow-x: hidden;
+	overflow-y: hidden;
+	min-width:1000px;}
+	table.all-replications-RPP {
+		font-size:14px;
+		margin-top:15px;
+		table-layout: fixed;
+		}
+	img.about {padding:5px;}
+	p span.displaynone { display:none; }
+	a.black:link, a.black:visited, a.black:hover, a.black:active {
+		color: black;
+		text-decoration: none;
+	}
+	.label-info-teal {
+	  background-color: #00A388;
+	  color: black;
+	  font-size:90%;
+	}
+	.label-info-purple {
+	  background-color: #9b59b6;
+	  opacity: 0.70;
+	  filter: alpha(opacity=70); /* For IE8 and earlier */
+	  color: black;
+	  font-size:90%;
+	}
+	.label-info-red {
+	  background-color: #e74c3c;
+	  opacity: 0.70;
+	  filter: alpha(opacity=70); /* For IE8 and earlier */
+	  color: black;
+	  font-size:90%;	  
+	}
+	.label-default {
+	  opacity: 0.70;
+	  filter: alpha(opacity=70); /* For IE8 and earlier */
+	  color: black;
+	  font-size:90%;
+	}
+	
+	.center-pills { display: inline-block; }
+	
+	a.kinda-link:hover { cursor: pointer; }
+	
+		
+	.popUpStyle {
+		font-size:13px;
+		line-height:normal;
+		}
+	
+	.popUpOnHover { position:relative; }
+	.popUpOnHover:hover span.toDisplay1 { display:block; }
+	.popUpOnHover:hover span.toDisplay2 { display:block; }
+	.popUpOnHover:hover span.toDisplay3 { display:block; }
+	.popUpOnHover:hover span.toDisplay4 { display:block; }
+	.popUpOnHover:hover span.toDisplayBasic4Submission { display:block; }
+	.popUpOnHover:hover span.toDisplayBasic7Retroactive { display:block; }
+	.popUpOnHover:hover span.toDisplayFullPagePopUp { display:block; }
+	.toDisplay1 {
+		display:none;
+		position:absolute; 
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-54px; 
+		left:-10px; }
+	.toDisplay2 {
+		display:none;
+		position:absolute; 
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-38px; 
+		left:-10px; }
+	.toDisplay3 {
+		display:none;
+		position:absolute; 
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-22px; 
+		left:-10px; }
+	.toDisplay4 {
+		display:none;
+		position:absolute; 
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-35px; 
+		left:-10px; }	
+	.toDisplayBasic4Submission {
+		display:none;
+		position:absolute; 
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-95px; 
+		left:-10px; }
+	.toDisplayBasic7Retroactive {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-305px; 
+		left:-10px; }
+	.toDisplayFullPagePopUp {
+		display:none;
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		position:fixed;
+		top: 55px;
+		bottom: 55px;
+		left: 250px; 
+		min-width: 80%; }
+	
+	
+	
+	
+.sprite {
+    background-image: url(../logos/spritesheet.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
+.sprite-code-ocean-icon {
+    width: 13px;
+    height: 13px;
+    background-position: -5px -5px;
+}
+
+.sprite-code-ocean-icon-medium {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -28px;
+}
+
+.sprite-data {
+    width: 13px;
+    height: 13px;
+    background-position: -5px -56px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-data-medium {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -79px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-data-medium-unavailable {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -107px;
+}
+
+.sprite-disclosure-medium-available {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -135px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-disclosure-medium-unavailable {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -163px;
+}
+
+.sprite-ec-icon {
+    width: 13px;
+    height: 13px;
+    background-position: -5px -191px;
+}
+
+.sprite-ec-icon-medium {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -214px;
+}
+
+.sprite-materials {
+    width: 13px;
+    height: 13px;
+    background-position: -5px -240px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-materials-medium {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -263px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-materials-medium-unavailable {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -291px;
+}
+
+.sprite-osf-icon {
+    width: 13px;
+    height: 13px;
+    background-position: -5px -319px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-osf-icon-medium {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -342px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-pdf-icon {
+    width: 13px;
+    height: 13px;
+    background-position: -5px -368px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-pdf-icon-medium {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -391px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+	margin-bottom:-5px;
+}
+
+.sprite-preregisteredplus {
+    width: 13px;
+    height: 13px;
+    background-position: -5px -419px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-preregisteredplus-medium {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -442px;
+	opacity: 0.70;
+	filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.sprite-preregisteredplus-medium-unavailable {
+    width: 18px;
+    height: 18px;
+    background-position: -5px -470px;
+}
+
+.sprite-reproducible-icon-medium {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -498px;
+}
+
+	

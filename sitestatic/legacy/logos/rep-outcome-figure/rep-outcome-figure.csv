@@ -1,0 +1,8 @@
+study,study.type,study.symbol,N,r,study.info
+Original Study,original,1,27,0.5,original1
+     Replication #1,replication,15,36,0.35,replication1
+     Replication #2,replication,15,100,0.65,replication1
+     Replication #3,replication,15,150,0.25,replication1
+     Replication #4,replication,15,350,-0.15,replication1
+     Replication #5,replication,15,45,0.25,replication1
+     Replication #6,replication,15,50,0.07,replication1

@@ -9,6 +9,7 @@ import TopBar from './components/TopBar.jsx';
 import Splash from './pages/Splash.jsx';
 import About from './pages/About.jsx';
 import Recent from './pages/Recent.jsx';
+import Replications from './pages/Replications.jsx';
 import AuthorPage from './pages/AuthorPage.jsx';
 import Footer from './components/Footer.jsx';
 
@@ -76,8 +77,9 @@ class App extends React.Component {
                         <TopBar user_session={user_session} />
                         <div className="AppContent">
                             <Switch>
-                                <Route exact path="/" component={Splash} />
+                                <Route exact path="/" component={Recent} />
                                 <Route exact path="/recent" component={Recent} />
+                                <Route exact path="/replications" component={Replications} />
                                 <Route path="/about" component={About} />
                                 <Route path="/author/:slug(.+)" component={AuthorPage} />
                             </Switch>

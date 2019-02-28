@@ -14,4 +14,3 @@ def router_index(request, *args, **kwargs):
         'username': request.user
     }
     return render(request, 'router_index.html', session_data)
-

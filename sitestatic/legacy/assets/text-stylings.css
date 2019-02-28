@@ -1,0 +1,410 @@
+	.hidden-edit { display:none;}
+	.hover-edit:hover span.hidden-edit { display:inline; }
+	
+	
+	.article-styling {
+		padding-top:5px; 
+		padding-bottom:30px; 
+		border-top: 1px solid darkgrey; } /*these added within "datatables class="init" because were being overridden*/	
+	.PDF-column {
+		vertical-align:top; 
+		text-align:right; }
+	.article-title { 
+		font-size:15px;
+		font-weight: 600; 
+		line-height:18px;}
+	.author-text {
+		color:#009933;}
+	.journal-text {
+		color:#999999;
+		font-style:italic;}
+	.target-effects {
+		color:#663300;
+		font-style:italic; }
+	.added-by {
+		color:grey;
+		/*margin-top:3px;*/
+		font-style:italic}
+	
+	
+	.doi-dimmed {
+		opacity: 0.40;
+		filter: alpha(opacity=40); /* For IE8 and earlier */
+		}
+	
+	.popUpStyle {
+		font-size:12px;
+		line-height:normal;
+		}
+	.popUpOnHover { position:relative; }
+	.popUpOnHover:hover span.toDisplayBasic4Submission { display:block; }
+	.popUpOnHover:hover span.toDisplayBasic7Retroactive { display:block; }
+	.popUpOnHover:hover span.toDisplayMARS { display:block; }
+	.popUpOnHover:hover span.toDisplayFullPagePopUp { display:block; }
+	.popUpOnHover:hover span.toDisplayCommentaries { display:block; }
+	.popUpOnHover:hover span.toDisplayAuthorPopUp { display:block; }
+	.popUpOnHover:hover span.toDisplayKeyFigures { display:block; }
+	.popUpOnHover:hover span.toDisplayBadgePopup1StudyArticleLevel { display:block; }
+	.popUpOnHover:hover span.toDisplayBadgePopupOneLink { display:block; }
+	.popUpOnHover:hover span.toDisplayBadgePopupTwoLinks { display:block; }
+	.popUpOnHover:hover span.toDisplayBadgePopup3StudiesArticleLevel { display:block; }
+	.popUpOnHover:hover span.toDisplayBadgePopup3StudiesRSArticleLevel { display:block; }
+	.popUpOnHover:hover span.toDisplayBadgePopup1StudyRSArticleLevel { display:block; }
+	.popUpOnHover:hover span.toDisplayBasic4ArticlePage { display:block; }
+	.popUpOnHover:hover span.toDisplayBasic4ArticlePage3Studies{ display:block; }
+	.popUpOnHover:hover span.toDisplayRepDiagram { display:block; }
+	.toDisplayBasic4Submission {
+		display:none;
+		position:absolute; 
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-25px; 
+		left:-10px; }
+	.toDisplayBasic7Retroactive {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-305px; 
+		left:-10px; }
+	.toDisplayMARS {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:5px; 
+		left:13px; }
+	.toDisplayFullPagePopUp {
+		display:none;
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		position:absolute;
+		top: -250px;
+		left: -30px; }
+	.toDisplayCommentaries {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:10px; 
+		left:13px; }
+	.toDisplayAuthorPopUp {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:12px; 
+		left:1px; }
+	.toDisplayKeyFigures {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-190px; 
+		left:6px; }
+	.toDisplayBadgePopup1StudyArticleLevel {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-53px; 
+		left:0px; }
+	.toDisplayBadgePopupOneLink {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-37px; 
+		left:0px; }
+	.toDisplayBadgePopupTwoLinks {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-56px; 
+		left:0px; }
+	.toDisplayBadgePopup3StudiesArticleLevel {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-117px; 
+		left:0px; }
+	.toDisplayBadgePopup3StudiesRSArticleLevel {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-56px; 
+		left:0px; }
+	.toDisplayBadgePopup1StudyRSArticleLevel {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-38px; 
+		left:0px; }
+	.toDisplayBasic4ArticlePage {
+		display:none;
+		position:absolute; 
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-112px; 
+		left:0px; }
+	.toDisplayBasic4ArticlePage3Studies {
+		display:none;
+		position:absolute; 
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-75px; 
+		left:0px; }		
+	.toDisplayRepDiagram {
+		display:none;
+		position:absolute; 		
+		z-index:9998;
+		border:1px;
+		background-color:white;
+		border-style:solid;
+		border-width:1px;
+		border-color:darkgrey;
+		padding:3px;
+		top:-110px; 
+		left:-50px; }
+	
+	a.black:link, a.black:visited, a.black:hover, a.black:active {
+		color: white;
+		text-decoration: none;
+	}
+	a.grey:link, a.grey:visited, a.grey:hover, a.grey:active {
+		color: black;
+	}
+		
+	.label-info-teal {
+	  background-color: #66b2b2;
+	}
+	.label-info-teal-darker {
+	  background-color: #008080;
+	}
+	.label-info-teal-darkest {
+	  background-color: #006666;
+	}
+	
+	.label-info-brown {
+	  background-color: #996633;
+	}
+	.label-info-pecan {
+	  background-color: #492311;
+	}
+	.label-info-purple {
+	  background-color: #9b59b6;
+	  font-size:95% !important;
+	}
+	.label-info-commentary {
+	  background-color:#b4b4b4;
+	  opacity:.75 !important;
+	  filter: alpha(opacity=75) !important;
+	}
+	.label-info-red {
+	  background-color: #e74c3c;
+	}
+	.label-info-black {
+	  background-color: black;
+	}
+	.label-info-golden {
+	  background-color: #eec134;
+	}
+	.label-default {
+		font-size:95% !important;
+		background-color:#4424D6;}
+	.badge-repnum{
+		padding-left:2px;
+		padding-right:2px;
+		padding-top:1px;
+		padding-bottom:1px;
+		border-radius:3px;
+	}
+	.label, .badge {
+		/*margin-top:2px;*/
+		font-size:80%;}
+	.badge {
+		color:black;
+		font-size:10px;
+		line-height:10px;
+		background-color:white;}
+	.label {
+		opacity:.55;
+		filter: alpha(opacity=55); /* For IE8 and earlier */
+		color:white;
+		padding: .0em .3em .15em; } /*added this to avoid overlapping labels on different rows*/
+	
+	.label-empirical {
+		  opacity: 0.55;
+		  filter: alpha(opacity=55); /* For IE8 and earlier */
+		  font-size:80%;
+		  background-color: black;
+		}
+	
+	.navbar-nav > li > a, .navbar-brand {
+		padding-top:8px !important; padding-bottom:0 !important;
+		height: 35px;
+		}
+	.navbar {min-height:35px !important;
+		margin-bottom:0px;}
+
+	.navbar-toggle {
+		 padding: 2px 2px;
+		 margin-top: 7px;
+		 margin-bottom: 0;
+	}
+	
+	h3 {
+		margin-top:20px;
+		margin-bottom:20px;}
+	.center {text-align:center;}
+	.center-pills { display: inline-block; }
+	
+	.hidden-edit { display:none;}
+	.hover-edit:hover span.hidden-edit { display:inline; }
+	.grey-text { color:grey;
+			opacity:.50;}
+	.center {text-align:center;}
+	.right {text-align:right;}
+	h1.collection {margin-top:50px;
+					margin-bottom:15px;}
+	h3.collection {margin-bottom:10px;}
+	.collection-description { color:grey;}
+	h4.collection {margin-top:40px;
+		font-weight:600;
+		/*border-top: 1px solid darkgrey;*/
+		padding-top:5px;}
+	.transp-text-description {
+		margin-top:15px;
+		color:grey;
+		font-size:12px;
+		line-height:14px;
+		display:block;
+	}
+	h4.about-section {
+		text-align:center;
+		margin-top:50px;
+		margin-bottom:40px;
+		font-weight:600;
+	}
+	h5.about-section { 
+		font-weight:bold;
+		font-size:14px;
+		margin-top:60px;
+		margin-bottom:20px;
+	}
+	.team {margin-top:10px;}
+	p.question {
+		font-weight:600;
+		line-height:19px;}
+	p.answer {color:grey;
+			padding-left: 22px;
+			line-height:19px;}
+	.FAQ-headings {
+		font-weight:600;
+		color:CornflowerBlue;	}
+	
+	a.offset {padding-top:55px;
+			text-decoration: none;
+			color:black;}
+	a.offset:hover {color:black;}
+	
+	.article-page-title {
+		padding-top:25px; 
+		padding-bottom:20px;
+		font-size:20px;
+		font-weight: 600; 
+		line-height:22px;	
+	}
+	.article-page-top-section {margin-top:55px;}
+
+	.big-icon { font-size: 2.5rem; }
+	
+	.transp-popup-main-heading {
+		font-weight:bold;
+		font-size:12px;
+		color:grey;
+	}
+	.transp-popup-heading {
+		font-weight:600;
+		font-size:12px;
+		color:grey;
+	}
+	
