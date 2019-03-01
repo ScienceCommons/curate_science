@@ -22,6 +22,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += [
     path('api/accounts/', api.list_accounts, name='api-list-accounts'),
     path('api/accounts/create/', api.create_account, name='api-create-account'),
+    path('api/accounts/<username>/', api.view_user, name='api-view-user'),
     path('api/', api.index, name='api-index'),
     path('api/docs/', include_docs_urls(title="Curate Science API")),
     path('api/schema/', api.schema, name='api-schema'),

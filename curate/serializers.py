@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.utils import model_meta
-from rest_framework.fields import ImageField
+from rest_framework.fields import ImageField, CharField, EmailField
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from drf_writable_nested import WritableNestedModelSerializer, UniqueFieldsMixin
@@ -13,9 +13,17 @@ from curate.models import (
 )
 
 class AuthorSerializer(serializers.ModelSerializer):
+    account = serializers.SlugRelatedField(
+        slug_field='username',
+        source='user',
+        queryset=User.objects.all(),
+    )
     class Meta:
         model=Author
-        fields='__all__'
+        fields=(
+            'account', 'orcid', 'name', 'position_title', 'affiliations',
+            'profile_urls', 'created', 'slug', 'articles',
+        )
 
 class KeyFigureSerializer(serializers.ModelSerializer):
     image = ImageField(max_length=None, allow_empty_file=False, use_url=True)
@@ -83,16 +91,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(WritableNestedModelSerializer):
     userprofile = UserProfileSerializer(required=False, allow_null=True)
-    extra_kwargs = {
-            'password': {
-                'write_only': True,
-                'required': False,
-            },
-    }
+    author = AuthorSerializer(required=False, allow_null=True)
+    password = CharField(write_only=True, required=False)
+    email = EmailField(write_only=True, required=False)
     class Meta:
         model=User
         fields=('email', 'username', 'first_name',
-                'last_name', 'password', 'userprofile')
+                'last_name', 'password', 'userprofile', 'author')
 
     def create(self, validated_data):
         user = User(
