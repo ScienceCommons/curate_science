@@ -73,6 +73,11 @@ def create_account(request):
         serializer=UserSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET', 'POST'])
+def view_user(request, username):
+    queryset=get_object_or_404(User, username=username)
+    serializer=UserSerializer(instance=queryset)
+    return Response(serializer.data)
 
 # Author views
 @api_view(('GET', ))
