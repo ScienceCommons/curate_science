@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import AutocompleteReactSelect from '../shared/AutocompleteReactSelect.jsx';
-import QuickArticleCreator from '../../components/shared/QuickArticleCreator.jsx';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -12,30 +11,18 @@ class ArticleSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            creatorShowing: false
         };
         this.handleChange = this.handleChange.bind(this)
-        this.articleCreated = this.articleCreated.bind(this)
-        this.showCreator = this.showCreator.bind(this)
     }
 
     handleChange(value) {
         if (this.props.onChange != null) this.props.onChange(value)
     }
 
-    showCreator(input) {
-        this.setState({creatorShowing: true})
-    }
-
-    articleCreated(a) {
-        console.log(a)
-    }
-
     render() {
-        let {classes, name, withCreator, csrftoken} = this.props
+        let {classes, name} = this.props
         let {creatorShowing} = this.state
         let creator
-        if (withCreator && creatorShowing) creator = <QuickArticleCreator csrftoken={csrftoken} onCreate={this.articleCreated} />
         return (
             <div>
                 <AutocompleteReactSelect
@@ -43,21 +30,17 @@ class ArticleSelector extends React.Component {
                      labelProp="text"
                      listUrl="/api/articles/autocomplete/"
                      placeholder="Search articles by title, DOI, etc *"
-                     onCreate={this.showCreator}
                      onChange={this.handleChange} />
-                { creator }
             </div>
         )
     }
 }
 
 ArticleSelector.propTypes = {
-    withCreator: PropTypes.bool,
-    csrftoken: PropTypes.string
+
 }
 
 ArticleSelector.defaultProps = {
-    withCreator: false
 };
 
 export default withStyles(styles)(ArticleSelector);

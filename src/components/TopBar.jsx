@@ -129,11 +129,11 @@ class TopBar extends React.Component {
     render() {
         const { classes } = this.props;
         let {user_session} = this.props
-        const { anchors, menuOpen, search_term, drawerOpen } = this.state;
+        let { anchors, menuOpen, search_term, drawerOpen } = this.state;
         let admin = user_session.admin
         let has_author_page = user_session.has_page;
-        const drawer_menu = (
-            <div className={classes.drawer}>
+        let drawer_menu = (
+            <div className={classes.drawer} key="drawer">
                 <List>
                     <Link to="/about" key="about">
                         <ListItem>
@@ -155,7 +155,7 @@ class TopBar extends React.Component {
             </div>
         )
         const user_dropdown_menu = [
-            <div>
+            <div key="ddmenu">
                 <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
                 <Link to={`/author/${user_session.username}`} key="author_page"><MenuItem>{ has_author_page ? "My author page" : "Create author page" }</MenuItem></Link>
                 <Link to="/article/new" key="new_article"><MenuItem onClick={this.logout}>Add new article</MenuItem></Link>

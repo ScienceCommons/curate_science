@@ -6,7 +6,8 @@ import qs from 'query-string';
 import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
-import {List, Grid, Button, Icon} from '@material-ui/core';
+import {List, Grid, Button, Icon,
+        Popover} from '@material-ui/core';
 
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
@@ -14,6 +15,8 @@ import ArticleLI from '../components/ArticleLI.jsx';
 import Loader from '../components/shared/Loader.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
+
+import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -45,7 +48,8 @@ class AuthorPage extends React.Component {
             articles: [],
             edit_author_modal_open: false,
             edit_article_modal_open: false,
-            editing_article_id: null
+            editing_article_id: null,
+            popperAnchorEl: null
         }
 
         this.open_author_editor = this.toggle_author_editor.bind(this, true)
@@ -56,6 +60,8 @@ class AuthorPage extends React.Component {
         this.handle_unlink = this.handle_unlink.bind(this)
         this.add_article = this.add_article.bind(this)
         this.add_existing_article = this.add_existing_article.bind(this)
+        this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
+        this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
     }
 
     componentDidMount() {
@@ -77,8 +83,8 @@ class AuthorPage extends React.Component {
         this.handle_edit(new_article)
     }
 
-    add_existing_article() {
-
+    add_existing_article(a) {
+        console.log(a)
     }
 
     handle_edit(a) {
@@ -129,11 +135,24 @@ class AuthorPage extends React.Component {
         this.setState({edit_article_modal_open: open})
     }
 
+    open_preexisting_popper = event => {
+        this.setState({
+          popperAnchorEl: event.currentTarget,
+        });
+    };
+
+    close_preexisting_popper = () => {
+        this.setState({
+          popperAnchorEl: null,
+        });
+    };
+
 	render() {
         let {classes} = this.props
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
-            editing_article_id} = this.state
+            editing_article_id, popperAnchorEl} = this.state
         if (author == null) return <Loader />
+        const add_preexisting_open = Boolean(popperAnchorEl)
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" spacing={24}>
@@ -143,7 +162,7 @@ class AuthorPage extends React.Component {
                                 Edit
                                 <Icon>edit</Icon>
                             </Button>
-                            <Typography variant="h2" className={classes.name}>{ author.first_name } { author.last_name }</Typography>
+                            <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
                             <Typography variant="h4" className={classes.subtitle}>
                                 <span className={classes.title}>{ author.position_title },</span>
                                 <span className={classes.affiliation}>{ author.affiliations }</span>
@@ -157,10 +176,32 @@ class AuthorPage extends React.Component {
                                 Add Article
                                 <Icon>add</Icon>
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={this.add_existing_article}>
+                            <Button variant="contained"
+                                    color="secondary"
+                                    aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
+                                    onClick={this.open_preexisting_popper}
+                                    style={{marginLeft: 10}}>
                                 Add Preexisting Article
                                 <Icon>add</Icon>
                             </Button>
+                            <Popover
+                              id="add_preexisting_popper"
+                              open={add_preexisting_open}
+                              anchorEl={popperAnchorEl}
+                              onClose={this.close_preexisting_popper}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                              }}
+                            >
+                                <div style={{width: "400px", height: "250px", padding: 14 }}>
+                                  <ArticleSelector onChange={this.add_existing_article} />
+                                </div>
+                            </Popover>
                         </div>
                     </Grid>
                     <Grid item xs={10}>
@@ -195,15 +236,18 @@ class ArticleWithActions extends React.Component {
 
     render() {
         let {article} = this.props
+        const ST = {
+            marginRight: 10
+        }
         return (
             <div key={article.id} className="ArticleWithActions">
                 <ArticleLI article={article} admin={false} />
                 <div className="ArticleActions">
-                    <Button variant="outlined" color="secondary" onClick={this.edit}>
+                    <Button variant="outlined" color="secondary" onClick={this.edit} style={ST}>
                         Edit
                         <Icon>edit</Icon>
                     </Button>
-                    <Button variant="outlined" color="secondary" onClick={this.unlink}>
+                    <Button variant="outlined" color="secondary" onClick={this.unlink} style={ST}>
                         Unlink
                         <Icon>link_off</Icon>
                     </Button>

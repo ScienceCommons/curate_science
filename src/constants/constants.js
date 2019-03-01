@@ -4,12 +4,20 @@ var C = {
         {
 			id: "ORIGINAL",
 			label: "Original research",
+			relevant_sections: ['studies'],
+			color: '#000000'
+		},
+        {
+			id: "CONCEPTUAL",
+			label: "Conceptual",
+			color: '#008080',
 			relevant_sections: ['studies']
 		},
 	    {
 			id: "REPLICATION",
 			label: "Replication",
-			relevant_sections: ['replication', 'studies']
+			relevant_sections: ['replication', 'studies'],
+			color: '#996633'
 		},
         {
 			id: "REPRODUCIBILITY",
@@ -29,7 +37,8 @@ var C = {
         {
 			id: "COMMENTARY",
 			label: "Commentary",
-			relevant_sections: ['commentary']
+			relevant_sections: ['commentary'],
+			color: '#a7a7a7'
 		}
 	],
 	RESEARCH_AREAS: [
@@ -142,28 +151,32 @@ var C = {
 			label: "Preregistration",
 			icon: "prereg",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
-			color: '#C60018'
+			color: '#C60018',
+			url_prop: 'prereg_protocol_url'
 		},
 		{
 			id: "MATERIALS",
 			label: "Public Materials",
 			icon: "materials",
 			article_types: ['ORIGINAL', 'REPLICATION'],
-			color: '#F5A623'
+			color: '#F5A623',
+			url_prop: 'public_study_materials_url'
 		},
 		{
 			id: "DATA",
 			label: "Public Data",
 			icon: "data",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
-			color: '#2D96E8'
+			color: '#2D96E8',
+			url_prop: 'public_data_url'
 		},
 		{
 			id: "CODE",
 			label: "Public Code",
 			icon: "code",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
-			color: '#50E3C2'
+			color: '#50E3C2',
+			url_prop: 'public_code_url'
 		},
 		{
 			id: "REPSTD",
@@ -235,23 +248,62 @@ var C = {
 			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
 		}
     ],
-    AUTHOR_LINKS: {
-    	orcid: {
-    		name: "ORCID"
-    	},
-    	gscholar: {
-    		name: "Google Scholar"
-    	},
-    	email: {
-    		name: "Email"
-    	},
-    	internet: {
-    		name: "Internet"
-    	},
-    	twitter: {
-    		name: "Twitter"
-    	}
-    }
+    AUTHOR_LINKS: [
+	    {
+	        id: 'gscholar',
+	        type: 'url',
+	        label: "Google Scholar profile URL",
+	        icon: <img width={30} src={`/sitestatic/icons/gscholar.svg`} />
+	    },
+	    {
+	        id: 'orcid',
+	        type: 'url',
+	        label: "ORC ID profile URL",
+	        icon: <img width={30} src={`/sitestatic/icons/orcid.svg`} />
+	    },
+	    {
+	        id: 'twitter',
+	        type: 'url',
+	        label: "Twitter profile URL",
+	        icon: <img width={30} src={`/sitestatic/icons/twitter.svg`} />
+	    },
+	    {
+	        id: 'researchgate',
+	        type: 'url',
+	        label: "ResearchGate profile URL",
+	        icon: <img width={30} src={`/sitestatic/icons/researchgate.svg`} />
+	    },
+	    {
+	        id: 'academia',
+	        type: 'url',
+	        label: "Academia.edu profile URL",
+	        icon: <img width={30} src={`/sitestatic/icons/academia.svg`} />
+	    },
+	    {
+	        id: 'blog',
+	        type: 'url',
+	        label: "Blog URL",
+	        icon: <img width={30} src={`/sitestatic/icons/blog.svg`} />
+	    },
+	    {
+	        id: 'email',
+	        type: 'email',
+	        label: "Email address",
+	        icon: <img width={30} src={`/sitestatic/icons/email.svg`} />
+	    },
+	    {
+	        id: 'website',
+	        type: 'url',
+	        label: "Website URL",
+	        icon: <img width={30} src={`/sitestatic/icons/internet.svg`} />
+	    },
+	    {
+	        id: 'osf',
+	        type: 'url',
+	        label: "OSF profile URL",
+	        icon: <img width={30} src={`/sitestatic/icons/osf.svg`} />
+	    }
+    ]
 }
 
 export default C;

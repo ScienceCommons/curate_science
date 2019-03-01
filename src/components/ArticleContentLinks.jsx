@@ -1,8 +1,12 @@
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
+import {Button, Icon, Typography} from '@material-ui/core';
 
 const LINK_TYPES = ['pdf', 'html', 'preprint']
+const COLORS = {
+	'preprint': '#9b59b6',
+	'html': '#000000'
+}
 
 class ArticleContentLinks extends React.Component {
 	constructor(props) {
@@ -13,7 +17,13 @@ class ArticleContentLinks extends React.Component {
 
 	render_link(lt) {
 		const st = {
-			marginLeft: 5
+			marginLeft: 5,
+			backgroundColor: COLORS[lt] || '#444444',
+			color: '#FFFFFF'
+		}
+		const countsSt = {
+			fontSize: 10,
+			color: 'gray'
 		}
 		let url = this.props[`${lt}_url`]
 		let views = this.props[`${lt}_views`]
@@ -21,12 +31,12 @@ class ArticleContentLinks extends React.Component {
 		let dls = this.props[`${lt}_downloads`]
 		if (url == null || url.length == 0) return null
 		return (
-			<span key={lt}>
-				{ views > 0 ? <span key="views">{views}</span> : null }
-				{ dls > 0 ? <span key="dls">{dls}</span> : null }
-				{ cites > 0 ? <span key="cites">{cites}</span> : null }
+			<div key={lt}>
+				{ views > 0 ? <Typography key="views" style={countsSt}><Icon fontSize="inherit">remove_red_eye</Icon> {views}</Typography> : null }
+				{ dls > 0 ? <Typography key="dls" style={countsSt}><Icon fontSize="inherit">cloud_download</Icon> {dls}</Typography> : null }
+				{ cites > 0 ? <Typography key="cites" style={countsSt}><Icon fontSize="inherit">format_quote</Icon> {cites}</Typography> : null }
 				<Button href={url} key={url} style={st} target="_blank" variant="outlined">{lt}</Button>
-			</span>
+			</div>
 		)
 	}
 
@@ -36,7 +46,7 @@ class ArticleContentLinks extends React.Component {
 			let link = this.render_link(lt)
 			if (link != null) links.push(link)
 		})
-		return links
+		return <div style={{float: 'right'}}>{ links }</div>
 	}
 }
 

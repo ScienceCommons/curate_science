@@ -1,8 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import qs from 'query-string';
-
 import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
@@ -10,11 +8,13 @@ import {List, Grid, Button, Icon, Dialog, DialogTitle, DialogContent,
     DialogContentText, DialogActions,
     TextField} from '@material-ui/core';
 
+import C from '../constants/constants';
+
+import {pick} from 'lodash'
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
     dialog: {
-
     },
     field: {
 
@@ -22,7 +22,7 @@ const styles = theme => ({
     icon: {
         display: 'inline-block',
         opacity: 0.5,
-        padding: '15px'
+        margin: '15px'
     },
     formEl: {
         marginLeft: "60px"
@@ -47,62 +47,8 @@ const INPUTS = [
         type: 'text',
         label: "Affiliation",
         icon: <Icon>account_balance</Icon>
-    },
-    {
-        id: 'gscholar',
-        type: 'url',
-        label: "Google Scholar profile URL",
-        icon: <img width={30} src={`/sitestatic/icons/gscholar.svg`} />
-    },
-    {
-        id: 'orcid',
-        type: 'url',
-        label: "ORC ID profile URL",
-        icon: <img width={30} src={`/sitestatic/icons/orcid.svg`} />
-    },
-    {
-        id: 'twitter',
-        type: 'url',
-        label: "Twitter profile URL",
-        icon: <img width={30} src={`/sitestatic/icons/twitter.svg`} />
-    },
-    {
-        id: 'researchgate',
-        type: 'url',
-        label: "ResearchGate profile URL",
-        icon: <img width={30} src={`/sitestatic/icons/researchgate.svg`} />
-    },
-    {
-        id: 'academia',
-        type: 'url',
-        label: "Academia.edu profile URL",
-        icon: <img width={30} src={`/sitestatic/icons/academia.svg`} />
-    },
-    {
-        id: 'blog',
-        type: 'url',
-        label: "Blog URL",
-        icon: <img width={30} src={`/sitestatic/icons/blog.svg`} />
-    },
-    {
-        id: 'email',
-        type: 'email',
-        label: "Email address",
-        icon: <img width={30} src={`/sitestatic/icons/email.svg`} />
-    },
-    {
-        id: 'website',
-        type: 'url',
-        label: "Website URL",
-        icon: <img width={30} src={`/sitestatic/icons/internet.svg`} />
-    },
-    {
-        id: 'osf',
-        type: 'url',
-        label: "OSF profile URL",
-        icon: <img width={30} src={`/sitestatic/icons/osf.svg`} />
     }
-]
+].concat(C.AUTHOR_LINKS)
 
 class AuthorEditor extends React.Component {
 	constructor(props) {
@@ -133,9 +79,19 @@ class AuthorEditor extends React.Component {
     }
 
     save() {
+        let {author} = this.props
+        let {form} = this.state
         // Save via API
         // TODO: Reformat profile URLs into JSON object
-        // fetch()
+        let data = clone(form)
+        let author_link_ids = C.AUTHOR_LINKS.map((al) => al.id)
+        data.profile_urls = JSON.stringify(pick(form, [author_link_ids]))
+        fetch(`api/authors/${author.slug}/update/`, {
+            method: 'POST',
+            data: data
+        }).then(res => res.json()).then((res) => {
+            console.log(res)
+        })
     }
 
     render_inputs() {
@@ -158,9 +114,13 @@ class AuthorEditor extends React.Component {
                       variant="outlined"
                     />
             return (
-                <Grid item xs={12} key={id}>
-                    <span className={classes.icon}>{ io.icon }</span>
-                    <span className={classes.formEl}>{ input_el }</span>
+                <Grid container key={id}>
+                    <Grid item xs={1} style={{justifyContent: 'center'}}>
+                        <span className={classes.icon}>{ io.icon }</span>
+                    </Grid>
+                    <Grid item xs={11}>
+                        <span className={classes.formEl}>{ input_el }</span>
+                    </Grid>
                 </Grid>
             )
         })
@@ -169,7 +129,7 @@ class AuthorEditor extends React.Component {
 	render() {
         let {classes, author, open} = this.props
         let title = "Edit Author"
-        if (author.name != null && author.name.length > 0) title += ` (${author.name}`
+        if (author.name != null && author.name.length > 0) title += ` (${author.name})`
 		return (
             <div>
                 <Dialog open={open}
@@ -183,9 +143,8 @@ class AuthorEditor extends React.Component {
                         <DialogContentText>
                         </DialogContentText>
 
-                        <Grid container>
-                            { this.render_inputs() }
-                        </Grid>
+                        { this.render_inputs() }
+
                     </DialogContent>
 
                     <DialogActions>
@@ -199,6 +158,8 @@ class AuthorEditor extends React.Component {
 	}
 }
 
-
+AuthorEditor.defaultProps = {
+    author: {}
+}
 
 export default withRouter(withStyles(styles)(AuthorEditor));

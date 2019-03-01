@@ -31,19 +31,27 @@ const styles = {
     marginBottom: '5px'
   },
   title: {
-    fontSize: 24,
+    fontSize: 17,
+    fontWeight: 400
   },
   title_a: {
   },
   authors: {
-  	color: "#0CC343",
-    marginBottom: 12,
+  	color: "#009933",
+    marginBottom: 14,
+  },
+  journal: {
+  	fontStyle: 'italic'
   },
   boldProp: {
-  	fontStyle: 'bold'
+  	fontWeight: 'bold'
   },
   reviewers: {
   	color: "#0CC343"
+  },
+  moreIcon: {
+  	justifyContent: 'center',
+  	textAlign: 'center'
   }
 };
 
@@ -69,6 +77,14 @@ class ArticleLI extends React.Component {
 			       						   'html_url', 'html_views',
 			 	    					   'preprint_url', 'preprint_views', 'preprint_downloads'
 			 	    					   ])
+ 	    let transparency_data = pick(article, ['article_type',
+    										   'prereg_protocol_url',
+											   'prereg_protocol_type',
+											   'public_study_materials_url',
+											   'public_data_url',
+											   'public_code_url',
+											   'reporting_standards_type'
+											   ])
 		return (
 			<Card className={classes.card}>
 				<CardContent>
@@ -81,14 +97,16 @@ class ArticleLI extends React.Component {
 					<Typography className={classes.authors} color="textSecondary" gutterBottom>
 						<AuthorList author_list={article.author_list} year={article.year} />
 					</Typography>
-					<TransparencyBadge article_type={article.article_type} />
+					<TransparencyBadge {...transparency_data} />
 		  			<Typography className={classes.journal} color="textSecondary" gutterBottom>
 		  				<JournalDOIBadge journal={article.journal} doi={article.doi} />
 		  			</Typography>
 
-		  			<IconButton onClick={this.toggle_show_more}>
-		  				<Icon>{show_more ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
-	  				</IconButton>
+		  			<div className={classes.moreIcon}>
+			  			<IconButton onClick={this.toggle_show_more} >
+			  				<Icon>{show_more ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
+		  				</IconButton>
+	  				</div>
 
 	  				<div id="details" hidden={!show_more}>
 	  					<ArticleAbstract text={article.abstract} />
@@ -110,7 +128,7 @@ class ArticleLI extends React.Component {
 		  					<Typography className={classes.boldProp}>Reviewers:</Typography>
 	  						<Typography className={classes.reviewers}>{ article.peer_reviewers || '--' }</Typography>
 	  					</div>
-	  					<Typography hidden={article.peer_review_url == null}><a href={article.peer_review_url} target="_blank">Open peer review <Icon>open_in_new</Icon></a></Typography>
+	  					<span hidden={article.peer_review_url == null || article.peer_review_url.length == 0}><Typography><a href={article.peer_review_url} target="_blank">Open peer review <Icon fontSize="inherit">open_in_new</Icon></a></Typography></span>
 	  				</div>
 	  			</CardContent>
 			</Card>

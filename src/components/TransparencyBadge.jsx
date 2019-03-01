@@ -31,31 +31,20 @@ class TransparencyBadge extends React.Component {
     }
 
 	render_feature(f, i) {
-		let {icon_size, study_level, studies, transparencies, classes} = this.props
-		let sole_study = studies.length == 1
-		let transparencies_by_study = {}
+		let {icon_size, reporting_standards_type, classes} = this.props
 		let repstd = f.id == 'REPSTD'
+		let url
+		let enabled = false
+		if (f.url_prop != null) url = this.props[f.url_prop]
 		let reporting_standards = []
 		// Collect this feature's transparencies across all studies
 		let n = 0
-		studies.forEach((study) => {
-			let study_transparencies = []
-			if (repstd) {
-				if (study.reporting_standards_type != null && study.reporting_standards_type.length > 0) {
-					reporting_standards.push(study.reporting_standards_type)
-					let rs_label = find(C.REPORTING_STANDARDS_TYPES, {value: study.reporting_standards_type}).label
-					study_transparencies.push({reporting_standards_type: study.reporting_standards_type, label: rs_label})
-				}
-			} else {
-				let transparencies = study.transparencies || []
-				study_transparencies = transparencies.filter(t => t.transparency_type.toUpperCase() == f.id.toUpperCase())
-			}
-			n = n + study_transparencies.length
-			transparencies_by_study[study.study_number] = study_transparencies
-		})
-		let enabled = n > 0
+		if (repstd) {
+			enabled = reporting_standards_type != null
+		} else {
+			enabled = url != null
+		}
 		let label = ''
-		let url = ''
 		let icon = f.icon
 		if (!enabled) {
 			label = `${f.label} not available`
@@ -73,32 +62,20 @@ class TransparencyBadge extends React.Component {
 		if (!enabled) {
 			return badge_icon
 		} else {
-			// Collect transparencies of this type across all studies
-			let popover_content = (
-				<div style={{padding: 10}}>
-					<Typography variant="h5">{ f.label }</Typography>
-					{ Object.keys(transparencies_by_study).map((study_num, j) => {
-						let study_transparencies = transparencies_by_study[study_num]
-						if (study_transparencies.length == 0) return null
-						return (
-							<div key={j}>
-								{ !sole_study ? <Typography variant="overline" gutterBottom>Study {study_num || '?'}</Typography> : null }
-								{ study_transparencies.map((t, idx) => {
-									if (repstd) {
-										return <Typography key={idx}>{ t.label }</Typography>
-									} else {
-										if (t.url == null || t.url.length == 0) return null
-										return <Typography key={idx}><a href={t.url} key={idx} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(t.url) }</a></Typography>
-									}
-								}) }
-							</div>
-						)
-					}) }
-				</div>
-			)
+			let popover_content
+			if (repstd) {
+				let rep_std_label = find(C.REPORTING_STANDARDS_TYPES, {value: reporting_standards_type}).label
+				popover_content = <Typography>{ rep_std_label }</Typography>
+			} else {
+				let no_url = url == null || url.length == 0
+				if (!no_url) popover_content = <Typography><a href={url} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(url) }</a></Typography>
+			}
 			return (
 				<MouseOverPopover target={badge_icon} key={i}>
-					{ popover_content }
+					<div style={{padding: 10}}>
+						<Typography variant="h5">{ f.label }</Typography>
+						{ popover_content }
+					</div>
 				</MouseOverPopover>
 			)
 		}
@@ -119,19 +96,27 @@ class TransparencyBadge extends React.Component {
 TransparencyBadge.propTypes = {
 	transparencies: PropTypes.array,
 	article_type: PropTypes.string,
-	study_level: PropTypes.bool,
 	reporting_standards_type: PropTypes.string,
-	// If article-level
-	studies: PropTypes.array
+    original_article_url: PropTypes.string,
+    prereg_protocol_url: PropTypes.string,
+    prereg_protocol_type: PropTypes.string,
+    public_study_materials_url: PropTypes.string,
+    public_data_url: PropTypes.string,
+    public_code_url: PropTypes.string,
 }
 
+
+
 TransparencyBadge.defaultProps = {
-	transparencies: [], // List of objects (see Transparency serializer)
 	reporting_standards_type: null,
 	article_type: "ORIGINAL",
 	icon_size: 30,
-	study_level: false,
-	studies: []
+    original_article_url: null,
+    prereg_protocol_url: null,
+    prereg_protocol_type: null,
+    public_study_materials_url: null,
+    public_data_url: null,
+    public_code_url: null,
 };
 
 export default withStyles(styles)(TransparencyBadge);

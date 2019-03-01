@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {Typography} from '@material-ui/core';
+import {Chip} from '@material-ui/core';
 
 class ArticleKeywords extends React.Component {
 	constructor(props) {
@@ -10,7 +10,13 @@ class ArticleKeywords extends React.Component {
 
 	render() {
         let {keywords} = this.props
-		return <Typography>{ keywords }</Typography>
+        let keywords_arr = keywords != null ? keywords.replace(', ',',').split(',') : []
+        const st = {
+
+        }
+		return keywords_arr.map((kw, i) => {
+			return <Chip key={i} style={st} label={ keywords } />
+		})
 	}
 }
 
