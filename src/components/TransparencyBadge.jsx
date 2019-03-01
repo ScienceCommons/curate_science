@@ -60,7 +60,8 @@ class TransparencyBadge extends React.Component {
 			   type="image/svg+xml" />
 		)
 		if (!enabled) {
-			return badge_icon
+			// If article type calls for transparencies to be bonuses, dont render disabled badges
+			return f.transparencies_bonus ? null : badge_icon
 		} else {
 			let popover_content
 			if (repstd) {

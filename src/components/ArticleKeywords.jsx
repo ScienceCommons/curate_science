@@ -10,7 +10,7 @@ class ArticleKeywords extends React.Component {
 
 	render() {
         let {keywords} = this.props
-        let keywords_arr = keywords != null ? keywords.replace(', ',',').split(',') : []
+        let keywords_arr = keywords != null ? keywords.replace('; ',';').split(';') : []
         const st = {
 
         }

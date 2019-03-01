@@ -7,12 +7,6 @@ var C = {
 			relevant_sections: ['studies'],
 			color: '#000000'
 		},
-        {
-			id: "CONCEPTUAL",
-			label: "Conceptual",
-			color: '#008080',
-			relevant_sections: ['studies']
-		},
 	    {
 			id: "REPLICATION",
 			label: "Replication",
@@ -38,7 +32,15 @@ var C = {
 			id: "COMMENTARY",
 			label: "Commentary",
 			relevant_sections: ['commentary'],
-			color: '#a7a7a7'
+			color: '#a7a7a7',
+			transparencies_bonus: true
+		},
+        {
+			id: "CONCEPTUAL",
+			label: "Conceptual",
+			color: '#008080',
+			relevant_sections: ['studies'],
+			transparencies_bonus: true
 		}
 	],
 	RESEARCH_AREAS: [
@@ -253,55 +255,55 @@ var C = {
 	        id: 'gscholar',
 	        type: 'url',
 	        label: "Google Scholar profile URL",
-	        icon: <img width={30} src={`/sitestatic/icons/gscholar.svg`} />
+	        icon: "/sitestatic/icons/gscholar.svg"
 	    },
 	    {
 	        id: 'orcid',
 	        type: 'url',
 	        label: "ORC ID profile URL",
-	        icon: <img width={30} src={`/sitestatic/icons/orcid.svg`} />
+	        icon: "/sitestatic/icons/orcid.svg"
 	    },
 	    {
 	        id: 'twitter',
 	        type: 'url',
 	        label: "Twitter profile URL",
-	        icon: <img width={30} src={`/sitestatic/icons/twitter.svg`} />
+	        icon: "/sitestatic/icons/twitter.svg"
 	    },
 	    {
 	        id: 'researchgate',
 	        type: 'url',
 	        label: "ResearchGate profile URL",
-	        icon: <img width={30} src={`/sitestatic/icons/researchgate.svg`} />
+	        icon: "/sitestatic/icons/researchgate.svg"
 	    },
 	    {
 	        id: 'academia',
 	        type: 'url',
 	        label: "Academia.edu profile URL",
-	        icon: <img width={30} src={`/sitestatic/icons/academia.svg`} />
+	        icon: "/sitestatic/icons/academia.svg"
 	    },
 	    {
 	        id: 'blog',
 	        type: 'url',
 	        label: "Blog URL",
-	        icon: <img width={30} src={`/sitestatic/icons/blog.svg`} />
+	        icon: "/sitestatic/icons/blog.svg"
 	    },
 	    {
 	        id: 'email',
 	        type: 'email',
 	        label: "Email address",
-	        icon: <img width={30} src={`/sitestatic/icons/email.svg`} />
+	        icon: "/sitestatic/icons/email.svg"
 	    },
 	    {
 	        id: 'website',
 	        type: 'url',
 	        label: "Website URL",
-	        icon: <img width={30} src={`/sitestatic/icons/internet.svg`} />
+	        icon: "/sitestatic/icons/internet.svg"
 	    },
 	    {
 	        id: 'osf',
 	        type: 'url',
 	        label: "OSF profile URL",
-	        icon: <img width={30} src={`/sitestatic/icons/osf.svg`} />
+	        icon: "/sitestatic/icons/osf.svg"
 	    }
     ]
 }

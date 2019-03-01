@@ -8,6 +8,7 @@ def index(request):
 # Endpoint for redesigned pages
 def router_index(request, *args, **kwargs):
     # Get logged in user
+    print(request.user)
     auth_js = 'true' if request.user.is_authenticated else 'false'
     session_data = {
         'authenticated': auth_js,

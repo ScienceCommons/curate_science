@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
 
 import qs from 'query-string';
 
@@ -13,10 +14,13 @@ import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
 import Loader from '../components/shared/Loader.jsx';
+import AuthorPageCreator from '../components/AuthorPageCreator.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
+
+import {json_api_req} from '../util/util.jsx'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -49,7 +53,8 @@ class AuthorPage extends React.Component {
             edit_author_modal_open: false,
             edit_article_modal_open: false,
             editing_article_id: null,
-            popperAnchorEl: null
+            popperAnchorEl: null,
+            author_creator_showing: false
         }
 
         this.open_author_editor = this.toggle_author_editor.bind(this, true)
@@ -62,6 +67,8 @@ class AuthorPage extends React.Component {
         this.add_existing_article = this.add_existing_article.bind(this)
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
+        this.show_author_creator = this.toggle_author_creator.bind(this, true)
+        this.hide_author_creator = this.toggle_author_creator.bind(this, false)
     }
 
     componentDidMount() {
@@ -96,34 +103,31 @@ class AuthorPage extends React.Component {
         console.log(a)
     }
 
+    toggle_author_creator(show) {
+        this.setState({author_creator_showing: show})
+    }
+
     fetch_author_then_articles() {
+        let {cookies} = this.props
         let slug = this.slug()
         if (slug != null) {
-            fetch(`/api/authors/${slug}`).then(res => res.json()).then((res) => {
-                console.log(res)
+            json_api_req('GET', `/api/authors/${slug}`, {}, cookies.get('csrf_token'), (res) => {
                 this.setState({author: res}, this.fetch_articles)
+            }, (e) => {
+                this.show_author_creator()
             })
         }
     }
 
     fetch_articles() {
-        const ALL = true
-        let {match} = this.props
+        let {match, cookies} = this.props
         let {author} = this.state
-        if (ALL) {
-            // Testing only
-            fetch(`/api/articles/`).then(res => res.json()).then((res) => {
+        let slug = this.slug()
+        if (slug != null) {
+            json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrf_token'), (res) => {
                 console.log(res)
                 this.setState({articles: res})
             })
-        } else {
-            let slug = this.slug()
-            if (slug != null) {
-                fetch(`/api/author/${slug}/articles/`).then(res => res.json()).then((res) => {
-                    console.log(res)
-                    this.setState({articles: res})
-                })
-            }
         }
     }
 
@@ -150,7 +154,8 @@ class AuthorPage extends React.Component {
 	render() {
         let {classes} = this.props
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
-            editing_article_id, popperAnchorEl} = this.state
+            editing_article_id, popperAnchorEl, author_creator_showing} = this.state
+        if (author_creator_showing) return <AuthorPageCreator />
         if (author == null) return <Loader />
         const add_preexisting_open = Boolean(popperAnchorEl)
 		return (
@@ -167,7 +172,7 @@ class AuthorPage extends React.Component {
                                 <span className={classes.title}>{ author.position_title },</span>
                                 <span className={classes.affiliation}>{ author.affiliations }</span>
                             </Typography>
-                            <AuthorLinks links={author.links} />
+                            <AuthorLinks links={author.profile_urls} />
                         </LabeledBox>
                     </Grid>
                     <Grid item xs={10}>
@@ -257,4 +262,4 @@ class ArticleWithActions extends React.Component {
     }
 }
 
-export default withRouter(withStyles(styles)(AuthorPage));
+export default withRouter(withCookies(withStyles(styles)(AuthorPage)));

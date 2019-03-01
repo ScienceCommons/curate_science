@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
 
 import { Link } from "react-router-dom";
 
@@ -10,7 +11,8 @@ import {List, Grid, Button, Icon, Dialog, DialogTitle, DialogContent,
 
 import C from '../constants/constants';
 
-import {pick} from 'lodash'
+import {pick, merge, clone} from 'lodash'
+import {json_api_req} from '../util/util.jsx'
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -20,16 +22,13 @@ const styles = theme => ({
 
     },
     icon: {
-        display: 'inline-block',
         opacity: 0.5,
-        margin: '15px'
     },
     formEl: {
         marginLeft: "60px"
     }
 })
 
-// TODO: Merge with constants.AUTHOR_LINKS (DRY)
 const INPUTS = [
     {
         id: 'name',
@@ -38,12 +37,12 @@ const INPUTS = [
         required: true
     },
     {
-        id: 'title',
+        id: 'position_title',
         type: 'text',
         label: "Position/Title"
     },
     {
-        id: 'affiliation',
+        id: 'affiliations',
         type: 'text',
         label: "Affiliation",
         icon: <Icon>account_balance</Icon>
@@ -60,6 +59,19 @@ class AuthorEditor extends React.Component {
         this.handle_close = this.handle_close.bind(this)
         this.handle_change = this.handle_change.bind(this)
         this.save = this.save.bind(this)
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        let was_open = prevProps.open
+        let now_open = this.props.open && this.props.author != null
+        let opened = !was_open && now_open
+        if (opened) {
+            console.log(`Opened author editor`)
+            console.log(this.props.author)
+            let form = pick(this.props.author, ['name', 'position_title', 'affiliations'])
+            merge(form, this.props.author.profile_urls)
+            this.setState({form})
+        }
     }
 
     componentDidMount() {
@@ -79,18 +91,19 @@ class AuthorEditor extends React.Component {
     }
 
     save() {
-        let {author} = this.props
+        let {author, cookies} = this.props
         let {form} = this.state
-        // Save via API
-        // TODO: Reformat profile URLs into JSON object
         let data = clone(form)
         let author_link_ids = C.AUTHOR_LINKS.map((al) => al.id)
-        data.profile_urls = JSON.stringify(pick(form, [author_link_ids]))
-        fetch(`api/authors/${author.slug}/update/`, {
-            method: 'POST',
-            data: data
-        }).then(res => res.json()).then((res) => {
+        console.log(author_link_ids)
+        let csrf_token = cookies.get('csrftoken')
+        data.profile_urls = pick(data, author_link_ids)
+        console.log(data)
+        json_api_req('PATCH', `/api/authors/${author.slug}/update/`, data, csrf_token, (res) => {
             console.log(res)
+            this.handle_close()
+        }, (error) => {
+            console.error(error)
         })
     }
 
@@ -103,6 +116,7 @@ class AuthorEditor extends React.Component {
             let input_el = <TextField
                       id={id}
                       key={id}
+                      name={id}
                       label={io.label}
                       className={classes.field}
                       value={value}
@@ -115,10 +129,10 @@ class AuthorEditor extends React.Component {
                     />
             return (
                 <Grid container key={id}>
-                    <Grid item xs={1} style={{justifyContent: 'center'}}>
-                        <span className={classes.icon}>{ io.icon }</span>
+                    <Grid item xs={1}>
+                        <span className={classes.icon}><img width="30" src={ io.icon } /></span>
                     </Grid>
-                    <Grid item xs={11}>
+                    <Grid item xs={9}>
                         <span className={classes.formEl}>{ input_el }</span>
                     </Grid>
                 </Grid>
@@ -159,7 +173,8 @@ class AuthorEditor extends React.Component {
 }
 
 AuthorEditor.defaultProps = {
-    author: {}
+    author: {},
+    open: false
 }
 
-export default withRouter(withStyles(styles)(AuthorEditor));
+export default withRouter(withCookies(withStyles(styles)(AuthorEditor)));

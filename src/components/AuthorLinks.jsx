@@ -23,9 +23,9 @@ class AuthorLinks extends React.Component {
 	render() {
 		let {links} = this.props
 		let links_rendered = []
-		Object.keys(C.AUTHOR_LINKS).forEach((al) => {
-			if (links[al] != null) {
-				links_rendered.push(this.render_link(links[al], al))
+		C.AUTHOR_LINKS.forEach((al) => {
+			if (links[al.id] != null) {
+				links_rendered.push(this.render_link(links[al.id], al.id))
 			}
 		})
 		return (
