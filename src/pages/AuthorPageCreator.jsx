@@ -61,12 +61,14 @@ class AuthorPageCreator extends React.Component {
 							fullWidth
 							onChange={this.handle_change} /><br/>
 
-						<TextField label="username (admin only)"
-							placeholder="username (admin only)"
-							name="username"
-							value={form.username || ''}
-							fullWidth
-							onChange={this.handle_change} hidden={!admin} /><br/>
+						<div hidden={!admin}>
+							<TextField label="username (admin only)"
+								placeholder="username (admin only)"
+								name="account"
+								value={form.account || ''}
+								fullWidth
+								onChange={this.handle_change} /><br/>
+						</div>
 
 						<Button variant="contained" color="primary" style={{marginTop: 10}} onClick={this.create}>Create</Button>
 					</Paper>

@@ -3,7 +3,7 @@ var C = {
 	ARTICLE_TYPES: [
         {
 			id: "ORIGINAL",
-			label: "Original research",
+			label: "Original",
 			relevant_sections: ['studies'],
 			color: '#000000'
 		},

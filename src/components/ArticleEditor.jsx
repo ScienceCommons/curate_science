@@ -99,12 +99,12 @@ const INPUT_SPECS = {
         type: 'url'
     },
     'html_url': {
-        label: 'PDF URL',
+        label: 'HTML URL',
         placeholder: "http://",
         type: 'url'
     },
     'preprint_url': {
-        label: 'PDF URL',
+        label: 'Preprint URL',
         placeholder: "http://",
         type: 'url'
     },
@@ -115,23 +115,28 @@ const INPUT_SPECS = {
     },
     'pdf_downloads': {
         label: 'Downloads',
-        type: 'number'
+        type: 'number',
+        adornment: 'cloud_download'
     },
     'preprint_downloads': {
         label: 'Downloads',
-        type: 'number'
+        type: 'number',
+        adornment: 'cloud_download'
     },
     'pdf_views': {
         label: 'Views',
-        type: 'number'
+        type: 'number',
+        adornment: 'remove_red_eye'
     },
     'html_views': {
         label: 'Views',
-        type: 'number'
+        type: 'number',
+        adornment: 'remove_red_eye'
     },
     'preprint_views': {
         label: 'Views',
-        type: 'number'
+        type: 'number',
+        adornment: 'remove_red_eye'
     },
     'author_contributions': {
         label: "Author contributions",
@@ -177,6 +182,7 @@ class ArticleEditor extends React.Component {
         this.save = this.save.bind(this)
         this.handle_change = this.handle_change.bind(this)
         this.handle_check_change = this.handle_check_change.bind(this)
+        this.add_commentary = this.add_commentary.bind(this)
     }
 
     componentDidMount() {
@@ -195,6 +201,11 @@ class ArticleEditor extends React.Component {
     }
 
     componentWillUnmount() {
+    }
+
+    add_commentary() {
+        let {commentaries} = this.state
+        this.setState({commentaries: commentaries.concat({authors: '', url: ''})})
     }
 
     handle_close() {
@@ -249,6 +260,7 @@ class ArticleEditor extends React.Component {
                   placeholder={specs.placeholder}
                   margin="dense"
                   fullWidth
+                  autoComplete="off"
                   InputLabelProps={{
                     classes: {
                         root: classes.cssLabel
@@ -279,15 +291,19 @@ class ArticleEditor extends React.Component {
         let {commentaries} = this.state
         let commentary_rows = commentaries.map((comm) => {
             let id = ''
-            let value = ''
-            let spec = {}
+            let spec_pubyear = {
+                label: "Authors/publication year"
+            }
+            let spec_url = {
+                label: "Commentary URL"
+            }
             return (
-                <Grid container>
+                <Grid container spacing={8}>
                     <Grid item xs={4}>
-                        { this.render_text_field(id, value, spec) }
+                        { this.render_text_field(id, comm.authors, spec_pubyear) }
                     </Grid>
                     <Grid item xs={4}>
-                        { this.render_text_field(id, value, spec) }
+                        { this.render_text_field(id, comm.url, spec_url) }
                     </Grid>
                 </Grid>
                 )
@@ -295,22 +311,22 @@ class ArticleEditor extends React.Component {
         return (
             <div>
                 { commentary_rows }
-                <a href="#">Add additional commentary</a>
+                <Button onClick={this.add_commentary}><Icon fontSize="inherit">add</Icon> Add additional commentary</Button>
             </div>
         )
     }
 
 	render() {
-        let {classes, article, open} = this.props
+        let {classes, article_id, open} = this.props
         let content
-        if (article != null) content = (
+        if (article_id != null) content = (
             <div className={classes.content}>
-                <Grid container>
+                <Grid container spacing={8}>
                     <Grid item xs={9}>
                         { this.render_field('title') }
                     </Grid>
                 </Grid>
-                <Grid container>
+                <Grid container spacing={8}>
                     <Grid item xs={9}>
                         { this.render_field('authors') }
                     </Grid>
@@ -319,7 +335,7 @@ class ArticleEditor extends React.Component {
                         { this.render_field('in_press') }
                     </Grid>
                 </Grid>
-                <Grid container>
+                <Grid container spacing={8}>
                     <Grid item xs={9}>
                         { this.render_field('journal') }
                     </Grid>
@@ -327,7 +343,7 @@ class ArticleEditor extends React.Component {
                         { this.render_field('doi') }
                     </Grid>
                 </Grid>
-                <Grid container>
+                <Grid container spacing={8}>
                     <Grid item xs={9}>
                         { this.render_field('abstract') }
                         { this.render_field('keywords') }
@@ -336,10 +352,10 @@ class ArticleEditor extends React.Component {
                         <FigureSelector />
                     </Grid>
                 </Grid>
-                <Grid container>
+                <Grid container spacing={8}>
                     { this.render_field('article_type') }
                 </Grid>
-                <Grid container>
+                <Grid container spacing={8}>
                     <Grid item xs={6}>
                         <TransparencyIcon tt={{icon: 'prereg'}} /> { this.render_field('transp_prereg') }
                         <TransparencyIcon tt={{icon: 'materials'}} /> { this.render_field('transp_mat') }
@@ -348,7 +364,7 @@ class ArticleEditor extends React.Component {
                         <TransparencyIcon tt={{icon: 'repstd'}} /> { this.render_field('transp_rep_std') }
                     </Grid>
                     <Grid item xs={6}>
-                        <Grid container>
+                        <Grid container spacing={8}>
                             <Grid item xs={3}>
                                 { this.render_field('pdf_url') }
                             </Grid>
@@ -362,7 +378,7 @@ class ArticleEditor extends React.Component {
                                 { this.render_field('pdf_views') }
                             </Grid>
                         </Grid>
-                        <Grid container>
+                        <Grid container spacing={8}>
                             <Grid item xs={3}>
                                 { this.render_field('html_url') }
                             </Grid>
@@ -374,7 +390,7 @@ class ArticleEditor extends React.Component {
                                 { this.render_field('html_views') }
                             </Grid>
                         </Grid>
-                        <Grid container>
+                        <Grid container spacing={8}>
                             <Grid item xs={3}>
                                 { this.render_field('preprint_url') }
                             </Grid>
@@ -389,13 +405,13 @@ class ArticleEditor extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid container>
+                <Grid container spacing={8}>
                     { this.render_field('author_contributions') }
                     { this.render_field('competing_interests') }
                     { this.render_field('funding_sources') }
-                    <label>Peer-review information</label>
+                    <Typography variant="overline">Peer-review information</Typography>
                 </Grid>
-                <Grid container>
+                <Grid container spacing={8}>
                     <Grid item xs={4}>
                         { this.render_field('peer_review_editor') }
                     </Grid>
@@ -408,7 +424,7 @@ class ArticleEditor extends React.Component {
                 </Grid>
 
                 <div>
-                    <label>Commentaries</label>
+                    <Typography variant="overline">Commentaries</Typography>
                     { this.render_commentaries() }
                 </div>
 

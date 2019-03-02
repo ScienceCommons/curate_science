@@ -91,7 +91,21 @@ class AuthorPage extends React.Component {
     }
 
     add_existing_article(a) {
-        console.log(a)
+        let {cookies} = this.props
+        let {author, articles} = this.state
+        if (author != null) {
+            // Update author to add article_id to articles member
+            let data = {
+                articles: author.articles.concat(a.id)
+            }
+            json_api_req('PATCH', `/api/authors/${this.slug()}/update/`, data, cookies.get('csrftoken'), (res) => {
+                // Get full article object to add to list
+                json_api_req('GET', `/api/articles/${a.id}/`, {}, null, (res) => {
+                    articles.unshift(res) // Add object to array
+                    this.setState({articles: articles, popperAnchorEl: null})
+                })
+            })
+        }
     }
 
     handle_edit(a) {
@@ -161,18 +175,20 @@ class AuthorPage extends React.Component {
             editing_article_id, popperAnchorEl, author_creator_showing} = this.state
         if (author == null) return <Loader />
         const add_preexisting_open = Boolean(popperAnchorEl)
+        let position = author.position_title
+        if (author.affiliations != null) position += ', '
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" spacing={24}>
                     <Grid item xs={10}>
                         <LabeledBox label="Author Information">
-                            <Button variant="contained" color="secondary" onClick={this.open_author_editor}>
+                            <Button variant="contained" color="secondary" style={{float: "right"}} onClick={this.open_author_editor}>
                                 Edit
                                 <Icon>edit</Icon>
                             </Button>
                             <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
                             <Typography variant="h4" className={classes.subtitle}>
-                                <span className={classes.title}>{ author.position_title },</span>
+                                <span className={classes.title}>{ position }</span>
                                 <span className={classes.affiliation}>{ author.affiliations }</span>
                             </Typography>
                             <AuthorLinks links={author.profile_urls} />

@@ -75,19 +75,22 @@ class AdminManage extends React.Component {
             editing_article_id} = this.state
 		return (
             <div className={classes.root}>
-                <Typography variant="h1">Manage articles (admin only)</Typography>
+                <Grid container justify="center">
 
-                <Button color="primary" variant="contained">Create</Button>
+                    <Typography variant="h2">Manage articles (admin only)</Typography>
 
-                <Paper>
-        			<List>
-                        { articles.map((a) => {
-                            return <ListItem button key={a.id}><ListItemText primary={a.title} /></ListItem>
-                        })}
-                    </List>
-                </Paper>
+                    <Button color="primary" variant="contained" onClick={this.add_article}>Create</Button>
 
-                <ArticleEditor article_id={editing_article_id} open={edit_article_modal_open} onClose={this.close_article_editor} />
+                    <Paper style={{marginTop: 15}}>
+            			<List>
+                            { articles.map((a) => {
+                                return <ListItem button key={a.id}><ListItemText primary={a.title} /></ListItem>
+                            })}
+                        </List>
+                    </Paper>
+
+                    <ArticleEditor article_id={editing_article_id} open={edit_article_modal_open} onClose={this.close_article_editor} />
+                </Grid>
             </div>
 		)
 	}
