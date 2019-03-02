@@ -1,12 +1,8 @@
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
+import {Typography, Button} from '@material-ui/core';
 import {find} from 'lodash'
 import C from '../constants/constants';
-
-const STYLE = {
-	opacity: 0.4
-}
 
 class ArticleType extends React.Component {
 	constructor(props) {
@@ -19,11 +15,10 @@ class ArticleType extends React.Component {
 		let label = at != null ? at.label : "Unknown"
 		let color = at != null ? at.color : "#000000"
 		const st = {
-			opacity: 0.4,
-			backgroundColor: color,
-			color: '#FFFFFF'
+			color: color,
+			border: `1px solid ${color}`
 		}
-		return <Button variant="outlined" style={st} disabled>{ label }</Button>
+		return <span className="ArticleType" style={st}><Typography color="inherit">{ label }</Typography></span>
 	}
 }
 

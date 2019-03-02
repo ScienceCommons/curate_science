@@ -14,10 +14,10 @@ class AuthorLinks extends React.Component {
 
 	render_link(url, link_type) {
 		let st = {
-			marginLeft: 5,
+			marginLeft: 3,
 			opacity: 0.5
 		}
-		return <IconButton href={url} key={link_type} style={st} target="_blank"><img width={30} src={`/sitestatic/icons/${link_type}.svg`} /></IconButton>
+		return <IconButton href={url} key={link_type} style={st} target="_blank"><img width={25} src={`/sitestatic/icons/${link_type}.svg`} /></IconButton>
 	}
 
 	render() {

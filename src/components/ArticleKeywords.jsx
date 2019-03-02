@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import {Chip} from '@material-ui/core';
 
+const SPLIT_CHAR = ','
+
 class ArticleKeywords extends React.Component {
 	constructor(props) {
         super(props);
@@ -10,7 +12,7 @@ class ArticleKeywords extends React.Component {
 
 	render() {
         let {keywords} = this.props
-        let keywords_arr = keywords != null ? keywords.replace('; ',';').split(';') : []
+        let keywords_arr = keywords != null ? keywords.replace(SPLIT_CHAR + ' ',SPLIT_CHAR).split(SPLIT_CHAR) : []
         const st = {
 
         }

@@ -64,9 +64,9 @@ class AuthorPage extends React.Component {
         this.close_article_editor = this.toggle_article_editor.bind(this, false)
         this.author_updated = this.author_updated.bind(this)
         this.handle_edit = this.handle_edit.bind(this)
-        this.handle_unlink = this.handle_unlink.bind(this)
+        this.unlink = this.unlink.bind(this)
         this.add_article = this.add_article.bind(this)
-        this.add_existing_article = this.add_existing_article.bind(this)
+        this.link_existing_article = this.link_existing_article.bind(this)
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
     }
@@ -90,31 +90,45 @@ class AuthorPage extends React.Component {
         this.handle_edit(new_article)
     }
 
-    add_existing_article(a) {
-        let {cookies} = this.props
-        let {author, articles} = this.state
-        if (author != null) {
-            // Update author to add article_id to articles member
-            let data = {
-                articles: author.articles.concat(a.id)
-            }
-            json_api_req('PATCH', `/api/authors/${this.slug()}/update/`, data, cookies.get('csrftoken'), (res) => {
-                // Get full article object to add to list
-                json_api_req('GET', `/api/articles/${a.id}/`, {}, null, (res) => {
-                    articles.unshift(res) // Add object to array
-                    this.setState({articles: articles, popperAnchorEl: null})
-                })
-            })
-        }
-    }
-
     handle_edit(a) {
         this.setState({editing_article_id: a.id, edit_article_modal_open: true})
     }
 
-    handle_unlink(a) {
-        console.log('unlink')
-        console.log(a)
+    unlink(a) {
+        let {cookies} = this.props
+        let {author, articles} = this.state
+        if (author != null) {
+            // Update author to remove article_id from articles member
+            let article_ids = author.articles.filter(id => id != a.id)
+            let data = {
+                articles: article_ids
+            }
+            json_api_req('PATCH', `/api/authors/${this.slug()}/update/`, data, cookies.get('csrftoken'), (res) => {
+                articles = articles.filter(article => article.id != a.id)
+                this.setState({articles: articles})
+            })
+        }
+    }
+
+    link_existing_article(a) {
+        let {cookies} = this.props
+        let {author, articles} = this.state
+        if (author != null) {
+            // Update author to add article_id to articles member
+            let already_linked = author.articles.indexOf(a.id) > -1
+            if (!already_linked) {
+                let data = {
+                    articles: author.articles.concat(a.id)
+                }
+                json_api_req('PATCH', `/api/authors/${this.slug()}/update/`, data, cookies.get('csrftoken'), (res) => {
+                    // Get full article object to add to list
+                    json_api_req('GET', `/api/articles/${a.id}/`, {}, null, (res) => {
+                        articles.unshift(res) // Add object to array
+                        this.setState({articles: articles, popperAnchorEl: null})
+                    })
+                })
+            }
+        }
     }
 
     fetch_author_then_articles() {
@@ -135,7 +149,6 @@ class AuthorPage extends React.Component {
         let slug = this.slug()
         if (slug != null) {
             json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrftoken'), (res) => {
-                console.log(res)
                 this.setState({articles: res})
             })
         }
@@ -223,13 +236,13 @@ class AuthorPage extends React.Component {
                               }}
                             >
                                 <div style={{width: "400px", height: "250px", padding: 14 }}>
-                                  <ArticleSelector onChange={this.add_existing_article} />
+                                  <ArticleSelector onChange={this.link_existing_article} />
                                 </div>
                             </Popover>
                         </div>
                     </Grid>
                     <Grid item xs={10}>
-                        { articles.map(a => <ArticleWithActions key={a.id} article={a} onEdit={this.handle_edit} onUnlink={this.handle_unlink} />) }
+                        { articles.map(a => <ArticleWithActions key={a.id} article={a} onEdit={this.handle_edit} onUnlink={this.unlink} />) }
                     </Grid>
     			</Grid>
 
@@ -274,7 +287,7 @@ class ArticleWithActions extends React.Component {
                         Edit
                         <Icon>edit</Icon>
                     </Button>
-                    <Button variant="outlined" color="secondary" onClick={this.unlink} style={ST}>
+                    <Button variant="outlined" color="secondary" onClick={this.unlink}>
                         Unlink
                         <Icon>link_off</Icon>
                     </Button>

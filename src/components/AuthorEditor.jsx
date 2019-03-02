@@ -22,10 +22,12 @@ const styles = theme => ({
 
     },
     icon: {
+        display: 'inline-block',
         opacity: 0.5,
+        margin: '22px'
     },
     formEl: {
-        marginLeft: "60px"
+
     }
 })
 
@@ -45,7 +47,7 @@ const INPUTS = [
         id: 'affiliations',
         type: 'text',
         label: "Affiliation",
-        icon: <Icon>account_balance</Icon>
+        icon: "/sitestatic/icons/affiliation.svg"
     }
 ].concat(C.AUTHOR_LINKS)
 
@@ -119,6 +121,7 @@ class AuthorEditor extends React.Component {
                       className={classes.field}
                       value={value}
                       type={io.type}
+                      autoComplete="off"
                       onChange={this.handle_change}
                       margin="normal"
                       fullWidth
@@ -127,7 +130,7 @@ class AuthorEditor extends React.Component {
                     />
             return (
                 <Grid container key={id}>
-                    <Grid item xs={1}>
+                    <Grid item xs={2}>
                         <span className={classes.icon}><img width="30" src={ io.icon } /></span>
                     </Grid>
                     <Grid item xs={9}>

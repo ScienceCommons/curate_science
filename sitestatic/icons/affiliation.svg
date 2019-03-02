@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="333px" height="373px" viewBox="0 0 333 373" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.1 (72631) - https://sketchapp.com -->
+    <title>Affiliation</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Affiliation" transform="translate(0.000000, 0.000000)" fill="#000000">
+            <rect id="Rectangle" x="0" y="319" width="333" height="54" rx="8"></rect>
+            <path d="M4.10477896,92.3542413 L169.779361,0 L329.012934,92.3305501 C331.480851,93.7615557 333,96.3984829 333,99.2512697 L333,120 C333,124.418278 329.418278,128 325,128 L8,128 C3.581722,128 -2.78806264e-14,124.418278 -2.84217094e-14,120 L-3.37507799e-14,99.3418914 C-2.8952495e-14,96.4406835 1.57070079,93.7668471 4.10477896,92.3542413 Z" id="Rectangle"></path>
+            <rect id="Rectangle" x="27" y="144" width="51" height="156" rx="8"></rect>
+            <rect id="Rectangle" x="103" y="144" width="51" height="156" rx="8"></rect>
+            <rect id="Rectangle" x="179" y="144" width="51" height="156" rx="8"></rect>
+            <rect id="Rectangle" x="255" y="144" width="51" height="156" rx="8"></rect>
+        </g>
+    </g>
+</svg>

@@ -8,6 +8,26 @@ const COLORS = {
 	'html': '#000000'
 }
 
+const ICON_ST = {
+	paddingTop: 2,
+	marginRight: 4
+}
+
+const ICONS = [
+	{
+		strings: ["osf", "psyarxiv", "openscienceframework"],
+		icon: 'preprint_osf.png'
+	},
+	{
+		strings: ["figshare"],
+		icon: "preprint_figshare.svg"
+	},
+	{
+		strings: ["ssrn"],
+		icon: "preprint_ssrn.png"
+	}
+]
+
 class ArticleContentLinks extends React.Component {
 	constructor(props) {
         super(props);
@@ -15,27 +35,48 @@ class ArticleContentLinks extends React.Component {
         this.render_link = this.render_link.bind(this)
     }
 
+    get_icon(url, color) {
+    	let icon
+    	ICONS.forEach((icon_spec) => {
+    		let match = false
+    		icon_spec.strings.forEach((str) => {
+    			if (url.indexOf(str) > -1) {
+    				icon = icon_spec.icon
+    			}
+    		})
+    	})
+    	if (icon == null) return null
+    	else return <img src={`/sitestatic/icons/${icon}`} width="12" style={ICON_ST} />
+    }
+
 	render_link(lt) {
+		let color = COLORS[lt] || '#444444'
+		let label = lt.toUpperCase()
 		const st = {
 			marginLeft: 5,
-			backgroundColor: COLORS[lt] || '#444444',
-			color: '#FFFFFF'
+			color: color,
+			border: `1px solid ${color}`,
+			display: 'inline'
 		}
 		const countsSt = {
 			fontSize: 10,
-			color: 'gray'
+			color: 'gray',
+			display: 'inline'
 		}
 		let url = this.props[`${lt}_url`]
 		let views = this.props[`${lt}_views`]
 		let cites = this.props[`${lt}_citations`]
 		let dls = this.props[`${lt}_downloads`]
 		if (url == null || url.length == 0) return null
+		let icon = this.get_icon(url, color)
 		return (
 			<div key={lt}>
-				{ views > 0 ? <Typography key="views" style={countsSt}><Icon fontSize="inherit">remove_red_eye</Icon> {views}</Typography> : null }
-				{ dls > 0 ? <Typography key="dls" style={countsSt}><Icon fontSize="inherit">cloud_download</Icon> {dls}</Typography> : null }
-				{ cites > 0 ? <Typography key="cites" style={countsSt}><Icon fontSize="inherit">format_quote</Icon> {cites}</Typography> : null }
-				<Button href={url} key={url} style={st} target="_blank" variant="outlined">{lt}</Button>
+				<Typography>
+					{ views > 0 ? <span key="views" style={countsSt}><Icon fontSize="inherit">remove_red_eye</Icon> {views}</span> : null }
+					{ dls > 0 ? <span key="dls" style={countsSt}><Icon fontSize="inherit">cloud_download</Icon> {dls}</span> : null }
+					{ cites > 0 ? <span key="cites" style={countsSt}><Icon fontSize="inherit">format_quote</Icon> {cites}</span> : null }
+					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank">{icon}{label}</a>
+				</Typography>
 			</div>
 		)
 	}
@@ -46,7 +87,7 @@ class ArticleContentLinks extends React.Component {
 			let link = this.render_link(lt)
 			if (link != null) links.push(link)
 		})
-		return <div style={{float: 'right'}}>{ links }</div>
+		return <div className="ArticleContentLinks">{ links }</div>
 	}
 }
 

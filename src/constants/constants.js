@@ -32,7 +32,7 @@ var C = {
 			id: "COMMENTARY",
 			label: "Commentary",
 			relevant_sections: ['commentary'],
-			color: '#a7a7a7',
+			color: '#5F5F5F',
 			transparencies_bonus: true
 		},
         {

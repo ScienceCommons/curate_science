@@ -6,9 +6,8 @@ import qs from 'query-string';
 
 import { Link } from "react-router-dom";
 
-import Typography from '@material-ui/core/Typography';
-import {Paper, List, ListItem, ListItemText, Grid, Button, Icon,
-        Popover} from '@material-ui/core';
+import {Paper, List, ListItem, ListItemText, Grid, Button, Icon, Fab,
+        Popover, Typography} from '@material-ui/core';
 
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import Loader from '../components/shared/Loader.jsx';
@@ -18,7 +17,9 @@ import {json_api_req} from '../util/util.jsx'
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
-
+    fab: {
+        margin: 10,
+    }
 })
 
 class AdminManage extends React.Component {
@@ -77,20 +78,35 @@ class AdminManage extends React.Component {
             <div className={classes.root}>
                 <Grid container justify="center">
 
-                    <Typography variant="h2">Manage articles (admin only)</Typography>
+                    <Grid item xs={8}>
+                        <Typography variant="h2">Manage articles (admin only)</Typography>
 
-                    <Button color="primary" variant="contained" onClick={this.add_article}>Create</Button>
+                        <Typography variant="subtitle1">
+                            Admins can manage all articles below, or create new ones.
+                        </Typography>
 
-                    <Paper style={{marginTop: 15}}>
-            			<List>
-                            { articles.map((a) => {
-                                return <ListItem button key={a.id}><ListItemText primary={a.title} /></ListItem>
-                            })}
-                        </List>
-                    </Paper>
+                        <br/>
 
-                    <ArticleEditor article_id={editing_article_id} open={edit_article_modal_open} onClose={this.close_article_editor} />
+                        <Paper style={{marginTop: 15}}>
+                			<List>
+                                { articles.map((a) => {
+                                    return (
+                                        <ListItem button key={a.id}>
+                                            <ListItemText primary={a.title} secondary={a.author_list} />
+                                        </ListItem>
+                                    )
+                                })}
+                            </List>
+                        </Paper>
+
+
+                    </Grid>
+                    <Grid item xs={8} justifyContent="center">
+                        <Fab color="primary" variant="contained" className={classes.fab} onClick={this.add_article}><Icon>add</Icon></Fab>
+                    </Grid>
                 </Grid>
+
+                <ArticleEditor article_id={editing_article_id} open={edit_article_modal_open} onClose={this.close_article_editor} />
             </div>
 		)
 	}
