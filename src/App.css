@@ -37,6 +37,14 @@ a:link, a:visited, a:hover, a:active {
 	opacity: 1.0;
 }
 
+.ArticleCard .ContentLinkCounts {
+	display: none;
+}
+
+.ArticleCard:hover .ContentLinkCounts {
+	display: inline;
+}
+
 .ArticleType {
 	float: left;
 	display: inline-block;
@@ -56,4 +64,13 @@ a:link, a:visited, a:hover, a:active {
 	display: inline-block;
 	border-radius: 3px;
 	padding: 2px 7px;
+}
+
+.ArticleKeyword {
+	background: #EFEFEF;
+	border-radius: 15px;
+	color: black;
+	padding: 2px 7px;
+	font-size: 11px;
+	margin-right: 5px;
 }

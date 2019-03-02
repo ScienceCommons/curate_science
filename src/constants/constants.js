@@ -303,7 +303,7 @@ var C = {
 	        id: 'website',
 	        type: 'url',
 	        label: "Website URL",
-	        icon: "/sitestatic/icons/internet.svg"
+	        icon: "/sitestatic/icons/website.svg"
 	    },
 	    {
 	        id: 'osf',

@@ -15,6 +15,7 @@ import C from '../constants/constants';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './curateform/FigureSelector.jsx';
 import { withStyles } from '@material-ui/core/styles';
+import {clone} from 'lodash'
 import {json_api_req} from '../util/util.jsx'
 
 function Transition(props) {
@@ -97,7 +98,7 @@ const INPUT_SPECS = {
         label: 'Article type',
         required: true,
         type: 'select',
-        options: C.ARTICLE_TYPES,
+        options: C.ARTICLE_TYPES.map((op) => ({value: op.id, label: op.label})),
         fullWidth: true
     },
     'doi': {
@@ -256,14 +257,14 @@ class ArticleEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         let article_change = nextProps.article_id != this.props.article_id
         let open = nextProps.open
-        // TODO
-        // if (open && article_change) {
-        //     // Fetch article from server to ensure up to date
-        //     // Populate form
-        //     let pk = nextProps.article_id
-        //     fetch(`api/articles/${pk}`).then(res => res.json()).then((res) => {
-        //     })
-        // }
+        if (open && article_change) {
+            // Fetch article from server to ensure up to date
+            // Populate form
+            let pk = nextProps.article_id
+            fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
+                this.setState({form: clone(res)})
+            })
+        }
     }
 
     componentWillUnmount() {
@@ -292,10 +293,12 @@ class ArticleEditor extends React.Component {
 
     save() {
         let {cookies} = this.props
+        let {form} = this.state
         let pk = this.props.article_id
         let data = clone(form)
         json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
             console.log(res)
+            this.props.onUpdate(data)
         }, (err) => {
             console.error(err)
         })
@@ -366,6 +369,7 @@ class ArticleEditor extends React.Component {
             <TextField
                   id={id}
                   key={id}
+                  name={id}
                   label={specs.label}
                   value={value}
                   type={specs.type}
@@ -475,6 +479,7 @@ class ArticleEditor extends React.Component {
                         { this.render_field('keywords') }
                     </Grid>
                 </Grid>
+                <Typography variant="overline">Key Figures</Typography>
                 <Grid container spacing={8}>
                     <Grid item xs={12}>
                         <FigureSelector />
@@ -595,7 +600,7 @@ class ArticleEditor extends React.Component {
                             <Typography variant="h6" color="inherit" className={classes.flex}>
                                 Edit Article
                             </Typography>
-                            <Button color="inherit" onClick={this.handle_close}>
+                            <Button color="inherit" onClick={this.save}>
                                 save
                             </Button>
                         </Toolbar>

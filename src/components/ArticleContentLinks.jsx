@@ -5,12 +5,23 @@ import {Button, Icon, Typography} from '@material-ui/core';
 const LINK_TYPES = ['pdf', 'html', 'preprint']
 const COLORS = {
 	'preprint': '#9b59b6',
-	'html': '#000000'
+	'html': '#000000',
+	'pdf': '#920007'
 }
 
-const ICON_ST = {
+const SOURCE_ICON_ST = {
 	paddingTop: 2,
 	marginRight: 4
+}
+
+const COUNT_ST = {
+	fontSize: 12,
+	color: '#BCBCBC',
+	display: 'inline',
+	marginRight: 7
+}
+const COUNT_ICON_ST = {
+	fontSize: '13px'
 }
 
 const ICONS = [
@@ -46,7 +57,7 @@ class ArticleContentLinks extends React.Component {
     		})
     	})
     	if (icon == null) return null
-    	else return <img src={`/sitestatic/icons/${icon}`} width="12" style={ICON_ST} />
+    	else return <img src={`/sitestatic/icons/${icon}`} width="12" style={SOURCE_ICON_ST} />
     }
 
 	render_link(lt) {
@@ -58,23 +69,21 @@ class ArticleContentLinks extends React.Component {
 			border: `1px solid ${color}`,
 			display: 'inline'
 		}
-		const countsSt = {
-			fontSize: 10,
-			color: 'gray',
-			display: 'inline'
-		}
 		let url = this.props[`${lt}_url`]
 		let views = this.props[`${lt}_views`]
 		let cites = this.props[`${lt}_citations`]
 		let dls = this.props[`${lt}_downloads`]
 		if (url == null || url.length == 0) return null
-		let icon = this.get_icon(url, color)
+		let icon
+		if (lt == 'preprint') icon = this.get_icon(url, color)
 		return (
 			<div key={lt}>
-				<Typography>
-					{ views > 0 ? <span key="views" style={countsSt}><Icon fontSize="inherit">remove_red_eye</Icon> {views}</span> : null }
-					{ dls > 0 ? <span key="dls" style={countsSt}><Icon fontSize="inherit">cloud_download</Icon> {dls}</span> : null }
-					{ cites > 0 ? <span key="cites" style={countsSt}><Icon fontSize="inherit">format_quote</Icon> {cites}</span> : null }
+				<Typography className="ContentLink" style={{marginBottom: 4}}>
+					<span className="ContentLinkCounts">
+						{ views > 0 ? <span key="views" style={COUNT_ST}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {views}</span> : null }
+						{ dls > 0 ? <span key="dls" style={COUNT_ST}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {dls}</span> : null }
+						{ cites > 0 ? <span key="cites" style={COUNT_ST}><Icon fontSize="inherit" style={COUNT_ICON_ST}>format_quote</Icon> {cites}</span> : null }
+					</span>
 					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank">{icon}{label}</a>
 				</Typography>
 			</div>

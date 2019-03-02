@@ -68,8 +68,6 @@ class AuthorEditor extends React.Component {
         let now_open = this.props.open && this.props.author != null
         let opened = !was_open && now_open
         if (opened) {
-            console.log(`Opened author editor`)
-            console.log(this.props.author)
             let form = pick(this.props.author, ['name', 'position_title', 'affiliations'])
             merge(form, this.props.author.profile_urls)
             this.setState({form})

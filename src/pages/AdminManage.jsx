@@ -102,7 +102,7 @@ class AdminManage extends React.Component {
 
                     </Grid>
                     <Grid item xs={8} justifyContent="center">
-                        <Fab color="primary" variant="contained" className={classes.fab} onClick={this.add_article}><Icon>add</Icon></Fab>
+                        <Fab color="primary" variant="round" className={classes.fab} onClick={this.add_article}><Icon>add</Icon></Fab>
                     </Grid>
                 </Grid>
 

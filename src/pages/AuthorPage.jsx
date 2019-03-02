@@ -70,6 +70,7 @@ class AuthorPage extends React.Component {
         this.link_existing_article = this.link_existing_article.bind(this)
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
+        this.article_updated = this.article_updated.bind(this)
     }
 
     componentDidMount() {
@@ -151,6 +152,8 @@ class AuthorPage extends React.Component {
                     json_api_req('GET', `/api/articles/${a.id}/`, {}, null, (res) => {
                         articles.unshift(res) // Add object to array
                         this.setState({articles: articles, popperAnchorEl: null})
+                    }, (err) => {
+                        console.error(err)
                     })
                 })
             }
@@ -186,6 +189,17 @@ class AuthorPage extends React.Component {
         this.setState({author}, () => {
             this.close_author_editor()
         })
+    }
+
+    article_updated(article) {
+        let {articles} = this.state
+        for (let i=0; i<articles.length; i++) {
+            if (articles[i].id == article.id) {
+                // Replace with updated object
+                articles[i] = article
+            }
+        }
+        this.setState({articles, edit_article_modal_open: false, editing_article_id: null})
     }
 
     toggle_author_editor(open) {
@@ -281,7 +295,10 @@ class AuthorPage extends React.Component {
                               open={edit_author_modal_open}
                               onClose={this.close_author_editor}
                               onAuthorUpdate={this.author_updated} />
-                <ArticleEditor article_id={editing_article_id} open={edit_article_modal_open} onClose={this.close_article_editor} />
+                <ArticleEditor article_id={editing_article_id}
+                        open={edit_article_modal_open}
+                        onUpdate={this.article_updated}
+                        onClose={this.close_article_editor} />
             </div>
 		)
 	}

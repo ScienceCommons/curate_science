@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {Chip} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 
 const SPLIT_CHAR = ','
 
@@ -16,9 +16,13 @@ class ArticleKeywords extends React.Component {
         const st = {
 
         }
-		return keywords_arr.map((kw, i) => {
-			return <Chip key={i} style={st} label={ keywords } />
-		})
+		return (
+			<Typography>
+			{ keywords_arr.map((kw, i) => {
+				return <span className="ArticleKeyword" key={i} style={st}>{ kw }</span>
+			}) }
+			</Typography>
+		)
 	}
 }
 
