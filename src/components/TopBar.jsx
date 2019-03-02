@@ -131,7 +131,7 @@ class TopBar extends React.Component {
         let {user_session} = this.props
         let { anchors, menuOpen, search_term, drawerOpen } = this.state;
         let admin = user_session.admin
-        let has_author_page = user_session.has_page;
+        let has_author_page = user_session.author != null;
         let drawer_menu = (
             <div className={classes.drawer} key="drawer">
                 <List>
@@ -154,12 +154,13 @@ class TopBar extends React.Component {
                 <Divider />
             </div>
         )
+        let author_page_link = has_author_page ? `/author/${user_session.author.slug}` : '/create_author'
         const user_dropdown_menu = [
             <div key="ddmenu">
                 <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
-                <Link to={`/author/${user_session.username}`} key="author_page"><MenuItem>{ has_author_page ? "My author page" : "Create author page" }</MenuItem></Link>
-                <Link to="/article/new" key="new_article"><MenuItem onClick={this.logout}>Add new article</MenuItem></Link>
-                <Link to="/invite" key="invite"><MenuItem>Invite new users</MenuItem></Link>
+                <Link to={author_page_link} key="author_page"><MenuItem>{ has_author_page ? "My author page" : "Create author page" }</MenuItem></Link>
+                <Link to="/admin/manage" key="new_article" hidden={!admin}><MenuItem>Add new article</MenuItem></Link>
+                <Link to="/admin/invite" key="invite" hidden={!admin}><MenuItem>Invite new users</MenuItem></Link>
                 <Divider />
                 <MenuItem onClick={this.logout}>Logout</MenuItem>
             </div>

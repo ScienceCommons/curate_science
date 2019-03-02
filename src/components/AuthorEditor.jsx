@@ -95,13 +95,11 @@ class AuthorEditor extends React.Component {
         let {form} = this.state
         let data = clone(form)
         let author_link_ids = C.AUTHOR_LINKS.map((al) => al.id)
-        console.log(author_link_ids)
         let csrf_token = cookies.get('csrftoken')
         data.profile_urls = pick(data, author_link_ids)
-        console.log(data)
         json_api_req('PATCH', `/api/authors/${author.slug}/update/`, data, csrf_token, (res) => {
             console.log(res)
-            this.handle_close()
+            if (this.props.onAuthorUpdate != null) this.props.onAuthorUpdate(data)
         }, (error) => {
             console.error(error)
         })
@@ -174,7 +172,8 @@ class AuthorEditor extends React.Component {
 
 AuthorEditor.defaultProps = {
     author: {},
-    open: false
+    open: false,
+    onAuthorUpdate: null
 }
 
 export default withRouter(withCookies(withStyles(styles)(AuthorEditor)));

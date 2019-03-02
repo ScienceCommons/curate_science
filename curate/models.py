@@ -49,7 +49,7 @@ class Author(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.name if self.name else "Unnamed Author"
 
 class Article(models.Model):
     """A written work with one or more Authors, reporting the results of a scientific Study."""

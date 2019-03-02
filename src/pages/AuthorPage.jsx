@@ -14,11 +14,12 @@ import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
 import Loader from '../components/shared/Loader.jsx';
-import AuthorPageCreator from '../components/AuthorPageCreator.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
+
+import {merge} from 'lodash'
 
 import {json_api_req} from '../util/util.jsx'
 
@@ -61,14 +62,13 @@ class AuthorPage extends React.Component {
         this.close_author_editor = this.toggle_author_editor.bind(this, false)
         this.open_article_editor = this.toggle_article_editor.bind(this, true)
         this.close_article_editor = this.toggle_article_editor.bind(this, false)
+        this.author_updated = this.author_updated.bind(this)
         this.handle_edit = this.handle_edit.bind(this)
         this.handle_unlink = this.handle_unlink.bind(this)
         this.add_article = this.add_article.bind(this)
         this.add_existing_article = this.add_existing_article.bind(this)
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
-        this.show_author_creator = this.toggle_author_creator.bind(this, true)
-        this.hide_author_creator = this.toggle_author_creator.bind(this, false)
     }
 
     componentDidMount() {
@@ -103,18 +103,14 @@ class AuthorPage extends React.Component {
         console.log(a)
     }
 
-    toggle_author_creator(show) {
-        this.setState({author_creator_showing: show})
-    }
-
     fetch_author_then_articles() {
         let {cookies} = this.props
         let slug = this.slug()
         if (slug != null) {
-            json_api_req('GET', `/api/authors/${slug}`, {}, cookies.get('csrf_token'), (res) => {
+            json_api_req('GET', `/api/authors/${slug}`, {}, cookies.get('csrftoken'), (res) => {
                 this.setState({author: res}, this.fetch_articles)
             }, (e) => {
-                this.show_author_creator()
+                window.location.replace('/app/author/create')
             })
         }
     }
@@ -124,11 +120,19 @@ class AuthorPage extends React.Component {
         let {author} = this.state
         let slug = this.slug()
         if (slug != null) {
-            json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrf_token'), (res) => {
+            json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrftoken'), (res) => {
                 console.log(res)
                 this.setState({articles: res})
             })
         }
+    }
+
+    author_updated(author_updates) {
+        let {author} = this.state
+        merge(author, author_updates)
+        this.setState({author}, () => {
+            this.close_author_editor()
+        })
     }
 
     toggle_author_editor(open) {
@@ -155,7 +159,6 @@ class AuthorPage extends React.Component {
         let {classes} = this.props
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing} = this.state
-        if (author_creator_showing) return <AuthorPageCreator />
         if (author == null) return <Loader />
         const add_preexisting_open = Boolean(popperAnchorEl)
 		return (
@@ -214,7 +217,10 @@ class AuthorPage extends React.Component {
                     </Grid>
     			</Grid>
 
-                <AuthorEditor author={author} open={edit_author_modal_open} onClose={this.close_author_editor} />
+                <AuthorEditor author={author}
+                              open={edit_author_modal_open}
+                              onClose={this.close_author_editor}
+                              onAuthorUpdate={this.author_updated} />
                 <ArticleEditor article_id={editing_article_id} open={edit_article_modal_open} onClose={this.close_article_editor} />
             </div>
 		)

@@ -8,9 +8,13 @@ import TopBar from './components/TopBar.jsx';
 
 import Splash from './pages/Splash.jsx';
 import About from './pages/About.jsx';
+import Privacy from './pages/Privacy.jsx';
 import Recent from './pages/Recent.jsx';
 import Replications from './pages/Replications.jsx';
 import AuthorPage from './pages/AuthorPage.jsx';
+import AuthorPageCreator from './pages/AuthorPageCreator.jsx';
+import AdminManage from './pages/AdminManage.jsx';
+import AdminInvite from './pages/AdminInvite.jsx';
 import Footer from './components/Footer.jsx';
 
 // UI components
@@ -81,7 +85,11 @@ class App extends React.Component {
                                 <Route exact path="/recent" component={Recent} />
                                 <Route exact path="/replications" component={Replications} />
                                 <Route path="/about" component={About} />
+                                <Route path="/privacy" component={Privacy} />
                                 <Route path="/author/:slug(.+)" component={AuthorPage} />
+                                <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
+                                <Route path="/admin/manage" component={AdminManage} />
+                                <Route path="/admin/invite" component={AdminInvite} />
                             </Switch>
                         </div>
                         <Footer />

@@ -6,12 +6,7 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 	<script type="text/javascript">
-		var user_session = {
-			'authenticated': {{ authenticated }},
-			'username': '{{ username }}',
-			'admin': false,
-			'has_page': true
-		}
+		var user_session = {{ user_session_json|safe }};
 	</script>
 </head>
 
