@@ -20,7 +20,7 @@ a:link, a:visited, a:hover, a:active {
 	display: none;
 	text-align: right;
 	position: absolute;
-	width: 300px;
+	width: 500px;
 	bottom: 10px;
 	right: 10px;
 }

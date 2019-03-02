@@ -21,7 +21,7 @@ import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
 import {merge} from 'lodash'
 
-import {json_api_req} from '../util/util.jsx'
+import {json_api_req, simple_api_req} from '../util/util.jsx'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -64,8 +64,9 @@ class AuthorPage extends React.Component {
         this.close_article_editor = this.toggle_article_editor.bind(this, false)
         this.author_updated = this.author_updated.bind(this)
         this.handle_edit = this.handle_edit.bind(this)
+        this.handle_delete = this.handle_delete.bind(this)
         this.unlink = this.unlink.bind(this)
-        this.add_article = this.add_article.bind(this)
+        this.create_new_article = this.create_new_article.bind(this)
         this.link_existing_article = this.link_existing_article.bind(this)
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
@@ -83,11 +84,36 @@ class AuthorPage extends React.Component {
         return match.params.slug || null
     }
 
-    add_article() {
-        let new_article = {
-            id: 'NEW'
+    create_new_article() {
+        // Create new placeholder article (user will then click to edit)
+        let {cookies} = this.props
+        let {articles} = this.state
+        let data = {
+            title: "New untitled article",
+            authors: [],
+            article_type: 'ORIGINAL',
+            year: new Date().getFullYear(),
+            key_figures: [],
+            commentaries: []
         }
-        this.handle_edit(new_article)
+        json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
+            articles.unshift(res) // Add object to array
+            this.setState({articles: articles})
+        }, (err) => {
+            console.error(err)
+        })
+    }
+
+    handle_delete(a) {
+        let pk = a.id
+        let {cookies} = this.props
+        let {articles} = this.state
+        simple_api_req('DELETE', `/api/articles/${pk}/delete/`, {}, cookies.get('csrftoken'), () => {
+            articles = articles.filter(article => article.id != a.id)
+            this.setState({articles: articles})
+        }, (err) => {
+            console.error(err)
+        })
     }
 
     handle_edit(a) {
@@ -183,7 +209,7 @@ class AuthorPage extends React.Component {
     };
 
 	render() {
-        let {classes} = this.props
+        let {classes, user_session} = this.props
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing} = this.state
         if (author == null) return <Loader />
@@ -209,7 +235,7 @@ class AuthorPage extends React.Component {
                     </Grid>
                     <Grid item xs={10}>
                         <div id="actions" className={classes.box}>
-                            <Button variant="contained" color="secondary" onClick={this.add_article}>
+                            <Button variant="contained" color="secondary" onClick={this.create_new_article}>
                                 Add Article
                                 <Icon>add</Icon>
                             </Button>
@@ -242,7 +268,12 @@ class AuthorPage extends React.Component {
                         </div>
                     </Grid>
                     <Grid item xs={10}>
-                        { articles.map(a => <ArticleWithActions key={a.id} article={a} onEdit={this.handle_edit} onUnlink={this.unlink} />) }
+                        { articles.map(a => <ArticleWithActions key={a.id}
+                                                article={a}
+                                                onEdit={this.handle_edit}
+                                                onDelete={this.handle_delete}
+                                                onUnlink={this.unlink}
+                                                admin={user_session.admin} />) }
                     </Grid>
     			</Grid>
 
@@ -262,11 +293,17 @@ class ArticleWithActions extends React.Component {
 
         this.edit = this.edit.bind(this)
         this.unlink = this.unlink.bind(this)
+        this.delete = this.delete.bind(this)
     }
 
     edit() {
         let {article} = this.props
         this.props.onEdit(article)
+    }
+
+    delete() {
+        let {article} = this.props
+        this.props.onDelete(article)
     }
 
     unlink() {
@@ -275,22 +312,32 @@ class ArticleWithActions extends React.Component {
     }
 
     render() {
-        let {article} = this.props
+        let {article, admin} = this.props
         const ST = {
             marginRight: 10
+        }
+        const DELETE_ST = {
+            borderColor: 'red',
+            color: 'red'
         }
         return (
             <div key={article.id} className="ArticleWithActions">
                 <ArticleLI article={article} admin={false} />
                 <div className="ArticleActions">
-                    <Button variant="outlined" color="secondary" onClick={this.edit} style={ST}>
+                    <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
                         Edit
                         <Icon>edit</Icon>
                     </Button>
-                    <Button variant="outlined" color="secondary" onClick={this.unlink}>
+                    <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
                         Unlink
                         <Icon>link_off</Icon>
                     </Button>
+                    <span hidden={!admin}>
+                        <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
+                            Delete
+                            <Icon color="inherit">delete</Icon>
+                        </Button>
+                    </span>
                 </div>
             </div>
         )

@@ -53,3 +53,22 @@ export const json_api_req = (method, url, data, csrf_token, success, fail) => {
         }
     }))
 }
+
+export const simple_api_req = (method, url, data, csrf_token, success, fail) => {
+    let body = method != 'GET' ? JSON.stringify(data) : null
+    let fetch_opts = {
+        credentials: 'include',
+        method: method,
+        body: body,
+        headers: {
+            'X-CSRFToken': csrf_token
+        }
+    }
+    fetch(url, fetch_opts).then(res => {
+        if (res.ok) {
+            success()
+        } else {
+            fail()
+        }
+    })
+}

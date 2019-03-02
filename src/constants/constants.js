@@ -250,6 +250,12 @@ var C = {
 			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
 		}
     ],
+    // Sync with fields in Article()
+    PREREG_PROTOCOL_TYPES: [
+    	{ value: "PREREG_STUDY_DESIGN_ANALYSIS", label: "Preregistered study design + analysis"},
+    	{ value: "PREREG_STUDY_DESIGN", label: "Preregistered study design"},
+    	{ value: "REGISTERED_REPORT", label: "Registered report"}
+	],
     AUTHOR_LINKS: [
 	    {
 	        id: 'gscholar',

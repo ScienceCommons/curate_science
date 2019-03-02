@@ -1,19 +1,21 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-
-
+import { withCookies, Cookies } from 'react-cookie';
 import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 import {List, Grid, Button, Icon, TextField,
         Dialog, DialogTitle, FormControlLabel, Checkbox,
         DialogContent, DialogContentText, DialogActions,
-        Toolbar, IconButton, AppBar,
-        Slide, InputAdornment} from '@material-ui/core';
+        Toolbar, IconButton, AppBar, MenuItem,
+        Slide, InputAdornment, InputLabel, Select,
+        FormControl, Radio, RadioGroup,
+        FormLabel} from '@material-ui/core';
 import C from '../constants/constants';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './curateform/FigureSelector.jsx';
 import { withStyles } from '@material-ui/core/styles';
+import {json_api_req} from '../util/util.jsx'
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -36,6 +38,9 @@ const styles = theme => ({
     content: {
         padding: 8
     },
+    formControl: {
+        minWidth: 200
+    }
     // cssInput: {
     //     padding: '2px'
     // },
@@ -49,13 +54,15 @@ const INPUT_SPECS = {
         label: 'Authors',
         placeholder: "e.g. RJ Balzarini, L Campbell, & K Dobson",
         required: true,
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'title': {
         label: 'Article title',
         placeholder: "e.g., Does exposure to erotica reduce attraction and love for romantic partners in men?",
         required: true,
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'year': {
         label: 'Year',
@@ -70,43 +77,53 @@ const INPUT_SPECS = {
     'journal': {
         label: 'Journal name',
         placeholder: "e.g., Social Psychology (leave blank for unpublished articles or preprints)",
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'abstract': {
         label: 'Abstract',
         placeholder: "e.g., In this article, we propose a unified theory of consciousness...",
-        type: 'text'
+        type: 'text',
+        fullWidth: true,
+        multiline: true
     },
     'keywords': {
         label: 'Keywords',
         placeholder: "e.g., attractiveness, replication (separate keywords using ',')",
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'article_type': {
         label: 'Article type',
         required: true,
         type: 'select',
-        options: C.ARTICLE_TYPES
+        options: C.ARTICLE_TYPES,
+        fullWidth: true
     },
     'doi': {
         label: 'DOI',
         placeholder: "leave blank for unpublished",
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'pdf_url': {
         label: 'PDF URL',
         placeholder: "http://",
-        type: 'url'
+        type: 'url',
+        adornment: 'link'
     },
     'html_url': {
         label: 'HTML URL',
         placeholder: "http://",
-        type: 'url'
+        type: 'url',
+        adornment: 'link'
     },
     'preprint_url': {
         label: 'Preprint URL',
         placeholder: "http://",
-        type: 'url'
+        type: 'url',
+        adornment: 'link'
+
     },
     'pdf_citations': {
         label: 'Citations',
@@ -141,32 +158,80 @@ const INPUT_SPECS = {
     'author_contributions': {
         label: "Author contributions",
         placeholder: "e.g., E. P. LeBel conceived the general idea, drafted and revised the manuscript, created the figures, and executed the analytic...",
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'competing_interests': {
         label: "Competing interests",
         placeholder: "e.g., None to declare.",
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'funding_sources': {
         label: "Funding sources",
         placeholder: "e.g., European Commission (Marie-Curie grant, Project ID: 793669: EP LeBel, W Vanpaemel)",
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'peer_review_editor': {
         label: "Action editor",
         placeholder: "DJ Simons",
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'peer_reviewers': {
         label: "Peer reviewers",
         placeholder: "MB Nuijten, Anonymous reviewer 3 (separate using ';')",
-        type: 'text'
+        type: 'text',
+        fullWidth: true
     },
     'peer_review_url': {
         label: "Open peer-review URL",
         placeholder: "https://osf.io/dsn72/",
-        type: 'url'
+        type: 'url',
+        adornment: 'link',
+        fullWidth: true
+    },
+    'prereg_protocol_url': {
+        label: "Prereg. protocol URL",
+        type: 'url',
+        placeholder: 'http://...',
+        adornment: 'link'
+    },
+    'prereg_protocol_type': {
+        type: 'radio',
+        label: 'Protocol Type',
+        options: C.PREREG_PROTOCOL_TYPES
+    },
+    'public_study_materials_url': {
+        label: "Public study materials URL",
+        type: 'url',
+        placeholder: 'http://...',
+        adornment: 'link'
+    },
+    'public_data_url': {
+        label: "Public data URL",
+        type: 'url',
+        placeholder: 'http://...',
+        adornment: 'link'
+    },
+    'public_code_url': {
+        label: "Public code URL",
+        type: 'url',
+        placeholder: 'http://...',
+        adornment: 'link'
+
+    },
+    'reporting_standards_type': {
+        label: "Reporting standards",
+        type: 'select',
+        options: C.REPORTING_STANDARDS_TYPES
+    }
+}
+
+function initialFormState() {
+    return {
+        article_type: 'ORIGINAL',
     }
 }
 
@@ -174,7 +239,7 @@ class ArticleEditor extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-            form: {},
+            form: initialFormState(),
             commentaries: []
         }
 
@@ -191,13 +256,14 @@ class ArticleEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         let article_change = nextProps.article_id != this.props.article_id
         let open = nextProps.open
-        if (open && article_change) {
-            // Fetch article from server to ensure up to date
-            // Populate form
-            let pk = nextProps.article_id
-            fetch(`api/articles/${pk}`).then(res => res.json()).then((res) => {
-            })
-        }
+        // TODO
+        // if (open && article_change) {
+        //     // Fetch article from server to ensure up to date
+        //     // Populate form
+        //     let pk = nextProps.article_id
+        //     fetch(`api/articles/${pk}`).then(res => res.json()).then((res) => {
+        //     })
+        // }
     }
 
     componentWillUnmount() {
@@ -225,7 +291,14 @@ class ArticleEditor extends React.Component {
     }
 
     save() {
-
+        let {cookies} = this.props
+        let pk = this.props.article_id
+        let data = clone(form)
+        json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
+            console.log(res)
+        }, (err) => {
+            console.error(err)
+        })
     }
 
     render_checkbox(id, value, specs) {
@@ -233,10 +306,50 @@ class ArticleEditor extends React.Component {
         return (
             <FormControlLabel
                   control={
-                    <Checkbox key={id} id={id} checked={value} onChange={this.handle_check_change} />
+                    <Checkbox key={id} id={id} name={id} checked={value} onChange={this.handle_check_change} />
                     }
                   label={specs.label}
                   />
+        )
+    }
+
+    render_radio_group(id, value, specs) {
+        let {classes} = this.props
+        return (
+            <FormControl component="fieldset" className={classes.formControl}>
+                <FormLabel component="legend">{specs.label}</FormLabel>
+                <RadioGroup
+                    aria-label={id}
+                    name={id}
+                    className={classes.group}
+                    value={value}
+                    onChange={this.handle_change}
+                    >
+                    { specs.options.map((op) => {
+                        return <FormControlLabel key={op.value} value={op.value} control={<Radio />} label={op.label} />
+                    })}
+
+                </RadioGroup>
+            </FormControl>
+        )
+    }
+
+    render_select(id, value, specs) {
+        let {classes} = this.props
+        return (
+            <FormControl className={classes.formControl}>
+                <InputLabel htmlFor={id}>{ specs.label }</InputLabel>
+                <Select
+                    value={value}
+                    onChange={this.handle_change}
+                    inputProps={{
+                      name: id,
+                      id: id
+                    }}
+                  >
+                    { specs.options.map((op) => <MenuItem value={op.value} key={op.value}>{op.label}</MenuItem>) }
+                </Select>
+            </FormControl>
         )
     }
 
@@ -259,21 +372,26 @@ class ArticleEditor extends React.Component {
                   onChange={this.handle_change}
                   placeholder={specs.placeholder}
                   margin="dense"
-                  fullWidth
+                  fullWidth={specs.fullWidth}
                   autoComplete="off"
                   InputLabelProps={{
                     classes: {
                         root: classes.cssLabel
                     }
                   }}
-                  FormControlProps={{
+                  InputProps={{
                     classes: {
                         root: classes.cssLabel
                     }
                   }}
+                  SelectProps={{
+                    classes: {
+                        root: classes.cssSelect
+                    }
+                  }}
                   InputProps={inputProps}
-                  select={specs.type == 'select'}
                   required={specs.required}
+                  multiline={specs.multiline}
                   variant="outlined"
                 />
             )
@@ -284,6 +402,8 @@ class ArticleEditor extends React.Component {
         let specs = INPUT_SPECS[id] || {}
         let value = form[id] || ''
         if (specs.type == 'checkbox') return this.render_checkbox(id, value, specs)
+        else if (specs.type == 'radio') return this.render_radio_group(id, value, specs)
+        else if (specs.type == 'select') return this.render_select(id, value, specs)
         else return this.render_text_field(id, value, specs)
     }
 
@@ -292,17 +412,23 @@ class ArticleEditor extends React.Component {
         let commentary_rows = commentaries.map((comm) => {
             let id = ''
             let spec_pubyear = {
-                label: "Authors/publication year"
+                label: "Authors/publication year",
+                placeholder: "Smith & Smith (2019)",
+                fullWidth: true
             }
             let spec_url = {
-                label: "Commentary URL"
+                label: "Commentary URL",
+                type: 'url',
+                placeholder: 'https://osf.io/dsn72/',
+                adornment: 'link',
+                fullWidth: true
             }
             return (
                 <Grid container spacing={8}>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                         { this.render_text_field(id, comm.authors, spec_pubyear) }
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                         { this.render_text_field(id, comm.url, spec_url) }
                     </Grid>
                 </Grid>
@@ -344,24 +470,46 @@ class ArticleEditor extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
-                    <Grid item xs={9}>
+                    <Grid item xs={12}>
                         { this.render_field('abstract') }
                         { this.render_field('keywords') }
                     </Grid>
-                    <Grid item xs={3}>
+                </Grid>
+                <Grid container spacing={8}>
+                    <Grid item xs={12}>
                         <FigureSelector />
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
-                    { this.render_field('article_type') }
+                    <Grid item xs={6}>
+                        { this.render_field('article_type') }
+                    </Grid>
                 </Grid>
                 <Grid container spacing={8}>
                     <Grid item xs={6}>
-                        <TransparencyIcon tt={{icon: 'prereg'}} /> { this.render_field('transp_prereg') }
-                        <TransparencyIcon tt={{icon: 'materials'}} /> { this.render_field('transp_mat') }
-                        <TransparencyIcon tt={{icon: 'data'}} /> { this.render_field('transp_data') }
-                        <TransparencyIcon tt={{icon: 'code'}} /> { this.render_field('transp_code') }
-                        <TransparencyIcon tt={{icon: 'repstd'}} /> { this.render_field('transp_rep_std') }
+                        <Grid container spacing={8}>
+                            <Grid item xs={1}>
+                                <TransparencyIcon tt={{icon: 'prereg'}} style={{paddingTop: 15}} />
+                            </Grid>
+                            <Grid item xs={5}>
+                                { this.render_field('prereg_protocol_url') }
+                            </Grid>
+                            <Grid item xs={6}>
+                                { this.render_field('prereg_protocol_type') }
+                            </Grid>
+                        </Grid>
+                        <div>
+                            <TransparencyIcon tt={{icon: 'materials'}} style={{paddingTop: 15}} /> { this.render_field('public_study_materials_url') }
+                        </div>
+                        <div>
+                            <TransparencyIcon tt={{icon: 'data'}} style={{paddingTop: 15}} /> { this.render_field('public_data_url') }
+                        </div>
+                        <div>
+                            <TransparencyIcon tt={{icon: 'code'}} style={{paddingTop: 15}} /> { this.render_field('public_code_url') }
+                        </div>
+                        <div>
+                            <TransparencyIcon tt={{icon: 'repstd'}} style={{paddingTop: 15}} /> { this.render_field('reporting_standards_type') }
+                        </div>
                     </Grid>
                     <Grid item xs={6}>
                         <Grid container spacing={8}>
@@ -406,11 +554,17 @@ class ArticleEditor extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
-                    { this.render_field('author_contributions') }
-                    { this.render_field('competing_interests') }
-                    { this.render_field('funding_sources') }
-                    <Typography variant="overline">Peer-review information</Typography>
+                    <Grid item xs={4}>
+                        { this.render_field('author_contributions') }
+                    </Grid>
+                    <Grid item xs={4}>
+                        { this.render_field('competing_interests') }
+                    </Grid>
+                    <Grid item xs={4}>
+                        { this.render_field('funding_sources') }
+                    </Grid>
                 </Grid>
+                <Typography variant="overline">Peer-review information</Typography>
                 <Grid container spacing={8}>
                     <Grid item xs={4}>
                         { this.render_field('peer_review_editor') }
@@ -464,4 +618,4 @@ ArticleEditor.defaultProps = {
 }
 
 
-export default withRouter(withStyles(styles)(ArticleEditor));
+export default withRouter(withCookies(withStyles(styles)(ArticleEditor)));

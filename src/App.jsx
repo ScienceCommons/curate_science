@@ -88,7 +88,7 @@ class App extends React.Component {
                                 <Route path="/about" component={About} />
                                 <Route path="/faq" component={FAQ} />
                                 <Route path="/privacy" component={Privacy} />
-                                <Route path="/author/:slug(.+)" component={AuthorPage} />
+                                <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
                                 <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
                                 <Route path="/admin/manage" component={AdminManage} />
                                 <Route path="/admin/invite" component={AdminInvite} />

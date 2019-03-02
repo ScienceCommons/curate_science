@@ -31,17 +31,6 @@ class FigureSelector extends React.Component {
         this.handleTypeChange = this.handleTypeChange.bind(this)
         this.showCreator = this.showCreator.bind(this)
         this.hideCreator = this.hideCreator.bind(this)
-
-        this.TYPES = [
-            {
-                value: 'figure',
-                label: "Figure"
-            },
-            {
-                value: 'table',
-                label: "Table"
-            },
-        ]
     }
 
     showCreator() {
@@ -94,7 +83,6 @@ class FigureSelector extends React.Component {
 	render() {
 		let {classes, figures} = this.props
         let {form, creator_showing} = this.state
-        let type_label = find(this.TYPES, {value: form.type}).label
 		return (
 			<div>
 				<FigureList
@@ -106,41 +94,20 @@ class FigureSelector extends React.Component {
                     onAdd={this.showCreator} />
 
                 <div hidden={!creator_showing}>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <TextField
-                              id='tfFigure'
-                              label={`Enter figure or table image URL`}
-                              placeholder="http..."
-                              value={form.url || ''}
-                              onChange={this.handleChange('url')}
-                              inputProps={{'data-lpignore': "true"}}
-                              margin="normal"
-                              fullWidth
-                              variant="outlined"
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <RadioGroup row
-                                aria-label="Type"
-                                name="type"
-                                value={form.type}
-                                onChange={this.handleTypeChange}
-                                className={classes.radioGroup}
-                              >
-                                { this.TYPES.map((type, i) => {
-                                    return <FormControlLabel key={i} value={type.value} control={<Radio />} label={type.label} />
-                                }) }
-
-                            </RadioGroup>
-                        </Grid>
-                        <Grid item xs={3} style={{padding: 23}}>
-            				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add {type_label}</Button>
-                            <Button onClick={this.hideCreator}>Cancel</Button>
-                        </Grid>
-                    </Grid>
+                    <TextField
+                      id='tfFigure'
+                      label={`Enter figure or table image URL`}
+                      placeholder="http..."
+                      value={form.url || ''}
+                      onChange={this.handleChange('url')}
+                      inputProps={{'data-lpignore': "true"}}
+                      margin="normal"
+                      fullWidth
+                      variant="outlined"
+                    />
+    				<Button disabled={!this.validUrl()} onClick={this.addFigure}>Add Figure</Button>
+                    <Button onClick={this.hideCreator}>Cancel</Button>
                 </div>
-
             </div>
         )
 	}
