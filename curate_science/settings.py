@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+DEFAULT_FROM_DOMAIN = 'curatescience.org'
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_FILTER_BACKENDS': (
@@ -184,13 +185,17 @@ LOGGING = {
 INVITATIONS_INVITATION_ONLY = True
 INVITATIONS_INVITATION_EXPIRY = 30
 INVITATIONS_SIGNUP_REDIRECT = '/app/signup/'
+
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.getenv('EMAIL')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 EMAIL_PORT = 587
+# EMAL_PORT = 465
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
