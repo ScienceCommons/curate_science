@@ -1,0 +1,16 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}
+
+Hello {{ email }},
+
+You have been invited to join Curate Science, an exciting new platform to label and link the transparency of your research.
+
+To join, please go to: {{ invite_url }}
+
+Regards,
+Curate Science team
+
+
+{% endblocktrans %}
+{% endautoescape %}
