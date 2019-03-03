@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import {Typography} from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
-
+import {clone} from 'lodash'
 import {truncate} from '../../util/util.jsx'
 
-const MAX_LEN = 400
+const MAX_LEN = 500
 
 class TruncatedText extends React.Component {
 	constructor(props) {
@@ -30,22 +30,24 @@ class TruncatedText extends React.Component {
         if (!expanded && long) text = truncate(text, MAX_LEN)
         let st = {fontSize: fontSize}
 		return (
-			<Typography style={st}>
+			<span style={st}>
 				{ text }&nbsp;
                 <span hidden={!long}><a href="javascript:void(0)" onClick={this.toggle_expand}>{ expanded ? "Less" : "More" }</a></span>
-            </Typography>
+            </span>
         )
 	}
 }
 
 TruncatedText.propTypes = {
     text: PropTypes.string,
-    fontSize: PropTypes.number
+    fontSize: PropTypes.number,
+    style: PropTypes.object
 }
 
 TruncatedText.defaultProps = {
 	text: "",
-    fontSize: 11
+    fontSize: 11,
+    style: {}
 }
 
 export default TruncatedText

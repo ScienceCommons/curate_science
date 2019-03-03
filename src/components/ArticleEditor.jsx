@@ -479,15 +479,15 @@ class ArticleEditor extends React.Component {
                         { this.render_field('keywords') }
                     </Grid>
                 </Grid>
+                <Grid container spacing={8}>
+                    <Grid item xs={6}>
+                        { this.render_field('article_type') }
+                    </Grid>
+                </Grid>
                 <Typography variant="overline">Key Figures</Typography>
                 <Grid container spacing={8}>
                     <Grid item xs={12}>
                         <FigureSelector />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={8}>
-                    <Grid item xs={6}>
-                        { this.render_field('article_type') }
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
