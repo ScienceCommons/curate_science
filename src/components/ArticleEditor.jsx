@@ -51,7 +51,7 @@ const styles = theme => ({
 })
 
 const INPUT_SPECS = {
-    'authors': {
+    'author_list': {
         label: 'Authors',
         placeholder: "e.g. RJ Balzarini, L Campbell, & K Dobson",
         required: true,
@@ -458,7 +458,7 @@ class ArticleEditor extends React.Component {
                 </Grid>
                 <Grid container spacing={8}>
                     <Grid item xs={9}>
-                        { this.render_field('authors') }
+                        { this.render_field('author_list') }
                     </Grid>
                     <Grid item xs={3}>
                         { this.render_field('year') }
@@ -479,15 +479,15 @@ class ArticleEditor extends React.Component {
                         { this.render_field('keywords') }
                     </Grid>
                 </Grid>
+                <Grid container spacing={8}>
+                    <Grid item xs={6}>
+                        { this.render_field('article_type') }
+                    </Grid>
+                </Grid>
                 <Typography variant="overline">Key Figures</Typography>
                 <Grid container spacing={8}>
                     <Grid item xs={12}>
                         <FigureSelector />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={8}>
-                    <Grid item xs={6}>
-                        { this.render_field('article_type') }
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>

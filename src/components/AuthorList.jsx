@@ -5,7 +5,8 @@ class AuthorList extends React.Component {
 	render() {
 		let {author_list, year} = this.props
 		let year_text = year || "In Press"
-		return author_list + ` (${year_text})`
+		let authors = author_list || '--'
+		return authors + ` (${year_text})`
 	}
 }
 

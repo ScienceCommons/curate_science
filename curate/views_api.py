@@ -175,7 +175,7 @@ def view_article(request, pk):
 def create_article(request):
     if request.method=='POST':
         user = request.user
-        if not user.is_staff and  not hasattr(request.user, 'author'):
+        if not user.is_staff and not hasattr(request.user, 'author'):
             # Only admins and authors can add articles.
             # If the non-admin user has not created an author profile, they must do so
             # before curating articles.

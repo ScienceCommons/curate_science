@@ -32,7 +32,8 @@ class AdminManage extends React.Component {
 
         this.open_article_editor = this.toggle_article_editor.bind(this, true)
         this.close_article_editor = this.toggle_article_editor.bind(this, false)
-        this.add_article = this.add_article.bind(this)
+        this.create_new_article = this.create_new_article.bind(this)
+        this.article_updated = this.article_updated.bind(this)
     }
 
     componentDidMount() {
@@ -42,16 +43,41 @@ class AdminManage extends React.Component {
     componentWillUnmount() {
     }
 
+    article_updated(article) {
+        let {articles} = this.state
+        for (let i=0; i<articles.length; i++) {
+            if (articles[i].id == article.id) {
+                // Replace with updated object
+                articles[i] = article
+            }
+        }
+        this.setState({articles, edit_article_modal_open: false, editing_article_id: null})
+    }
+
+    create_new_article() {
+        let {cookies, author} = this.props
+        let {articles} = this.state
+        let now = new Date()
+        let date_str = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
+        let data = {
+            title: `New untitled article created at ${date_str}`,
+            authors: [],
+            article_type: 'ORIGINAL',
+            year: now.getFullYear(),
+            key_figures: [],
+            commentaries: []
+        }
+        json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
+            articles.unshift(res) // Add object to array
+            this.setState({articles: articles})
+        }, (err) => {
+            console.error(err)
+        })
+    }
+
     slug() {
         let {match} = this.props
         return match.params.slug || null
-    }
-
-    add_article() {
-        let new_article = {
-            id: 'NEW'
-        }
-        this.handle_edit(new_article)
     }
 
     handle_edit(a) {
@@ -91,7 +117,7 @@ class AdminManage extends React.Component {
                 			<List>
                                 { articles.map((a) => {
                                     return (
-                                        <ListItem button key={a.id}>
+                                        <ListItem button key={a.id} onClick={this.handle_edit.bind(this, a)}>
                                             <ListItemText primary={a.title} secondary={a.author_list} />
                                         </ListItem>
                                     )
@@ -102,11 +128,15 @@ class AdminManage extends React.Component {
 
                     </Grid>
                     <Grid item xs={8} justifyContent="center">
-                        <Fab color="primary" variant="round" className={classes.fab} onClick={this.add_article}><Icon>add</Icon></Fab>
+                        <Fab color="primary" variant="round" className={classes.fab} onClick={this.create_new_article}><Icon>add</Icon></Fab>
                     </Grid>
                 </Grid>
 
-                <ArticleEditor article_id={editing_article_id} open={edit_article_modal_open} onClose={this.close_article_editor} />
+                <ArticleEditor
+                    article_id={editing_article_id}
+                    open={edit_article_modal_open}
+                    onUpdate={this.article_updated}
+                    onClose={this.close_article_editor} />
             </div>
 		)
 	}

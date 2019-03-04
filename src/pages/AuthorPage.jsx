@@ -33,6 +33,11 @@ const styles = theme => ({
     box: {
         padding: theme.spacing.unit * 2,
     },
+    authorEditButton: {
+        position: 'absolute',
+        top: 8,
+        right: 8
+    },
     subtitle: {
         textAlign: 'center'
     },
@@ -80,6 +85,14 @@ class AuthorPage extends React.Component {
     componentWillUnmount() {
     }
 
+    editable() {
+        // Show edit functions if admin or user-owned author page
+        let {user_session, author} = this.props
+        let admin = user_session.admin
+        let me = author != null && user_session.author != null && user_session.author.id == author.id
+        return admin || me
+    }
+
     slug() {
         let {match} = this.props
         return match.params.slug || null
@@ -88,12 +101,14 @@ class AuthorPage extends React.Component {
     create_new_article() {
         // Create new placeholder article (user will then click to edit)
         let {cookies} = this.props
-        let {articles} = this.state
+        let {articles, author} = this.state
+        let now = new Date()
+        let date_str = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
         let data = {
-            title: "New untitled article",
-            authors: [],
+            title: `New untitled article created at ${date_str}`,
+            authors: [author.id],
             article_type: 'ORIGINAL',
-            year: new Date().getFullYear(),
+            year: now.getFullYear(),
             key_figures: [],
             commentaries: []
         }
@@ -165,6 +180,7 @@ class AuthorPage extends React.Component {
         let slug = this.slug()
         if (slug != null) {
             json_api_req('GET', `/api/authors/${slug}`, {}, cookies.get('csrftoken'), (res) => {
+                console.log(res)
                 this.setState({author: res}, this.fetch_articles)
             }, (e) => {
                 window.location.replace('/app/author/create')
@@ -229,13 +245,14 @@ class AuthorPage extends React.Component {
         if (author == null) return <Loader />
         const add_preexisting_open = Boolean(popperAnchorEl)
         let position = author.position_title
+        let editable = this.editable()
         if (author.affiliations != null) position += ', '
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" spacing={24}>
                     <Grid item xs={10}>
                         <LabeledBox label="Author Information">
-                            <Button variant="contained" color="secondary" style={{float: "right"}} onClick={this.open_author_editor}>
+                            <Button variant="contained" color="secondary" className={classes.authorEditButton} onClick={this.open_author_editor}>
                                 Edit
                                 <Icon>edit</Icon>
                             </Button>
@@ -248,7 +265,7 @@ class AuthorPage extends React.Component {
                         </LabeledBox>
                     </Grid>
                     <Grid item xs={10}>
-                        <div id="actions" className={classes.box}>
+                        <div id="actions" className={classes.box} hidden={!editable}>
                             <Button variant="contained" color="secondary" onClick={this.create_new_article}>
                                 Add Article
                                 <Icon>add</Icon>
@@ -284,6 +301,7 @@ class AuthorPage extends React.Component {
                     <Grid item xs={10}>
                         { articles.map(a => <ArticleWithActions key={a.id}
                                                 article={a}
+                                                editable={editable}
                                                 onEdit={this.handle_edit}
                                                 onDelete={this.handle_delete}
                                                 onUnlink={this.unlink}
@@ -329,7 +347,7 @@ class ArticleWithActions extends React.Component {
     }
 
     render() {
-        let {article, admin} = this.props
+        let {article, admin, editable} = this.props
         const ST = {
             marginRight: 10
         }
@@ -341,14 +359,18 @@ class ArticleWithActions extends React.Component {
             <div key={article.id} className="ArticleWithActions">
                 <ArticleLI article={article} admin={false} />
                 <div className="ArticleActions">
-                    <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
-                        Edit
-                        <Icon>edit</Icon>
-                    </Button>
-                    <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
-                        Unlink
-                        <Icon>link_off</Icon>
-                    </Button>
+                    <span hidden={!editable}>
+                        <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
+                            Edit
+                            <Icon>edit</Icon>
+                        </Button>
+                    </span>
+                    <span hidden={!editable}>
+                        <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
+                            Unlink
+                            <Icon>link_off</Icon>
+                        </Button>
+                    </span>
                     <span hidden={!admin}>
                         <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
                             Delete
@@ -359,6 +381,10 @@ class ArticleWithActions extends React.Component {
             </div>
         )
     }
+}
+
+ArticleWithActions.defaultProps = {
+    editable: false
 }
 
 export default withRouter(withCookies(withStyles(styles)(AuthorPage)));
