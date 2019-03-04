@@ -17,8 +17,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         slug_field='username',
         required=False,
         source='user',
-        queryset=User.objects.all(),
-        required=False,
+        queryset=User.objects.all()
     )
     class Meta:
         model=Author
