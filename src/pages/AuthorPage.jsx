@@ -33,6 +33,11 @@ const styles = theme => ({
     box: {
         padding: theme.spacing.unit * 2,
     },
+    authorEditButton: {
+        position: 'absolute',
+        top: 8,
+        right: 8
+    },
     subtitle: {
         textAlign: 'center'
     },
@@ -95,13 +100,15 @@ class AuthorPage extends React.Component {
 
     create_new_article() {
         // Create new placeholder article (user will then click to edit)
-        let {cookies, author} = this.props
-        let {articles} = this.state
+        let {cookies} = this.props
+        let {articles, author} = this.state
+        let now = new Date()
+        let date_str = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
         let data = {
-            title: "New untitled article",
+            title: `New untitled article created at ${date_str}`,
             authors: [author.id],
             article_type: 'ORIGINAL',
-            year: new Date().getFullYear(),
+            year: now.getFullYear(),
             key_figures: [],
             commentaries: []
         }
@@ -173,6 +180,7 @@ class AuthorPage extends React.Component {
         let slug = this.slug()
         if (slug != null) {
             json_api_req('GET', `/api/authors/${slug}`, {}, cookies.get('csrftoken'), (res) => {
+                console.log(res)
                 this.setState({author: res}, this.fetch_articles)
             }, (e) => {
                 window.location.replace('/app/author/create')
@@ -244,7 +252,7 @@ class AuthorPage extends React.Component {
     			<Grid container justify="center" spacing={24}>
                     <Grid item xs={10}>
                         <LabeledBox label="Author Information">
-                            <Button variant="contained" color="secondary" style={{float: "right"}} onClick={this.open_author_editor}>
+                            <Button variant="contained" color="secondary" className={classes.authorEditButton} onClick={this.open_author_editor}>
                                 Edit
                                 <Icon>edit</Icon>
                             </Button>

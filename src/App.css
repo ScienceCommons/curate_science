@@ -3,13 +3,16 @@ html, body {
     padding: 0;
 }
 
+#loader {
+	margin: 30px auto;
+}
+
 a:link, a:visited, a:hover, a:active {
 	text-decoration: none;
 }
 
 .AppContent {
 	min-height: 600px;
-	padding-top: 10px;
 }
 
 .ArticleWithActions {

@@ -22,7 +22,7 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model=Author
         fields=(
-            'account', 'orcid', 'name', 'position_title', 'affiliations',
+            'id', 'account', 'orcid', 'name', 'position_title', 'affiliations',
             'profile_urls', 'created', 'slug', 'articles',
         )
 
