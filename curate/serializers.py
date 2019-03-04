@@ -15,7 +15,6 @@ from curate.models import (
 class AuthorSerializer(serializers.ModelSerializer):
     account = serializers.SlugRelatedField(
         slug_field='username',
-        required=False,
         source='user',
         queryset=User.objects.all()
     )

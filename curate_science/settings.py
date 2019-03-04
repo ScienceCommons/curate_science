@@ -156,7 +156,7 @@ ROOT_PATH = os.path.dirname(__file__)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_PATH, 'sitestatic')
 
-# STATICFILE_DIRS = [os.path.join(ROOT_PATH, 'sitestatic')]
+# STATICFILES_DIRS = [os.path.join(ROOT_PATH, 'sitestatic')]
 
 LOGIN_REDIRECT_URL = '/app'
 LOGOUT_REDIRECT_URL = '/app'
