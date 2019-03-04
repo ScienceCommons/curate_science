@@ -18,6 +18,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         required=False,
         source='user',
         queryset=User.objects.all(),
+        required=False,
     )
     class Meta:
         model=Author
