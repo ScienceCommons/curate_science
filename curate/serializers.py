@@ -16,7 +16,8 @@ class AuthorSerializer(serializers.ModelSerializer):
     account = serializers.SlugRelatedField(
         slug_field='username',
         source='user',
-        queryset=User.objects.all()
+        queryset=User.objects.all(),
+        required=False
     )
     class Meta:
         model=Author
