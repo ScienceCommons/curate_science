@@ -17,6 +17,7 @@ class AuthorLinks extends React.Component {
 			marginLeft: 3,
 			opacity: 0.5
 		}
+		if (link_type == 'email') url = 'mailto:' + url
 		return <IconButton href={url} key={link_type} style={st} target="_blank"><img width={25} src={`/sitestatic/icons/${link_type}.svg`} /></IconButton>
 	}
 
