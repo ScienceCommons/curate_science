@@ -272,6 +272,13 @@ def delete_commentary(request, pk):
     return Response(status=status.HTTP_200_OK)
 
 @api_view(('GET', ))
+def list_key_figures_for_article(request, article_pk):
+    article=get_object_or_404(Article, id=article_pk)
+    kfs = article.key_figures.all()
+    serializer = KeyFigureSerializer(kfs, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(('GET', ))
 def view_key_figure(request, pk):
     queryset=get_object_or_404(KeyFigure, id=pk)
     serializer=KeyFigureSerializer(instance=queryset)
@@ -324,7 +331,8 @@ class ImageUploadView(APIView):
         kf = KeyFigure()
         kf.article = article
         kf.image.save(f.name, f, save=True)
-        return Response(status=status.HTTP_201_CREATED)
+        serializer=KeyFigureSerializer(instance=kf)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 # Autocomplete views
 

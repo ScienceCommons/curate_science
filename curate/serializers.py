@@ -39,6 +39,7 @@ class CommentarySerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class ArticleListSerializer(serializers.ModelSerializer):
+    commentaries = CommentarySerializer(many=True, required=False, allow_null=True)
     class Meta:
         model=Article
         fields='__all__'
@@ -77,7 +78,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
         }
 
 class ArticleSerializerNested(WritableNestedModelSerializer):
-    key_figures = KeyFigureSerializer(many=True)
+    key_figures = KeyFigureSerializer(many=True, required=False, allow_null=True)
     commentaries = CommentarySerializer(many=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
 
