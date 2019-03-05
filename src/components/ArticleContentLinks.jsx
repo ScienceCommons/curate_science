@@ -10,10 +10,8 @@ const COLORS = {
 }
 
 const SOURCE_ICON_ST = {
-	paddingTop: 2,
 	marginRight: 4
 }
-
 const COUNT_ST = {
 	fontSize: 12,
 	color: '#BCBCBC',
@@ -57,7 +55,7 @@ class ArticleContentLinks extends React.Component {
     		})
     	})
     	if (icon == null) return null
-    	else return <img src={`/sitestatic/icons/${icon}`} width="12" style={SOURCE_ICON_ST} />
+    	else return <img src={`/sitestatic/icons/${icon}`} width="10" style={SOURCE_ICON_ST} />
     }
 
 	render_link(lt) {

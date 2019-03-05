@@ -25,6 +25,8 @@ import FigureList from './shared/FigureList.jsx';
 import TruncatedText from './shared/TruncatedText.jsx';
 import ArticleKeywords from './ArticleKeywords.jsx';
 
+import {json_api_req} from '../util/util.jsx'
+
 const styles = {
   card: {
     minWidth: 275,
@@ -34,7 +36,9 @@ const styles = {
     fontSize: 19,
     fontWeight: 400,
     clear: 'both',
-    paddingTop: 10
+    paddingTop: 10,
+    marginTop: 3,
+    marginBottom: 3
   },
   title_a: {
   },
@@ -70,15 +74,38 @@ class ArticleLI extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-        	show_more: false
+        	show_more: false,
+        	// Below from article detail endpoint
+        	// Arrays after fetch
+        	figures: null,
+        	commentaries: null
         };
 
         this.toggle_show_more = this.toggle_show_more.bind(this)
     }
 
     toggle_show_more() {
-    	let {show_more} = this.state
-    	this.setState({show_more: !show_more})
+    	let {show_more, figures} = this.state
+    	let details_fetched = figures != null
+    	this.setState({show_more: !show_more}, () => {
+    		if (!details_fetched) {
+    			this.fetch_article_details()
+    		}
+    	})
+    }
+
+    fetch_article_details() {
+    	let {article} = this.props
+    	let {figures, commentaries} = this.state
+    	console.log("Fetching article details...")
+    	json_api_req('GET', `/api/articles/${article.id}/`, {}, null, (res) => {
+    		if (res.key_figures != null) figures = res.key_figures
+    		if (res.commentaries != null) commentaries = res.commentaries
+    		console.log(res)
+    		this.setState({figures: figures, commentaries: commentaries})
+    	}, (err) => {
+
+    	})
     }
 
     empty(text) {
@@ -86,7 +113,7 @@ class ArticleLI extends React.Component {
     }
 
 	render() {
-		let {show_more} = this.state
+		let {show_more, figures, commentaries} = this.state
  	    let { article, classes } = this.props;
  	    let content_links = pick(article, ['pdf_url', 'pdf_downloads', 'pdf_citations', 'pdf_views',
 			       						   'html_url', 'html_views',
@@ -125,7 +152,7 @@ class ArticleLI extends React.Component {
 		  				<div id="details" hidden={!show_more}>
 		  					<Typography style={{lineHeight: 1.2, marginBottom: 10}}><TruncatedText text={article.abstract} /></Typography>
 		  					<ArticleKeywords keywords={article.keywords} />
-		  					<FigureList figures={article.figures} />
+		  					<FigureList figures={figures} />
 		  					<div hidden={this.empty(article.author_contributions)}>
 			  					<Typography component="span">
 			  						<span className={classes.grayedTitle}>Author contributions:</span>

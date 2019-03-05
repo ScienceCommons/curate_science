@@ -21,7 +21,6 @@ const styles = {
         backgroundSize: 'cover',
         backgroundPosition: '50% 50%',
         borderRadius: 3,
-        cursor: 'pointer',
         textAlign: 'center'
     },
     add: {
@@ -37,47 +36,43 @@ class FigureList extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {}
-        this.deleteFigure = this.deleteFigure.bind(this)
-        this.renderThumbnail = this.renderThumbnail.bind(this)
-        this.handleAdd = this.handleAdd.bind(this)
+        this.delete_figure = this.delete_figure.bind(this)
+        this.render_thumbnail = this.render_thumbnail.bind(this)
+        this.handle_add = this.handle_add.bind(this)
     }
 
-    deleteFigure = idx => event => {
+    delete_figure = idx => event => {
         if (this.props.onDelete != null) this.props.onDelete(idx)
     }
 
-    handleAdd() {
+    handle_add() {
         this.props.onAdd()
     }
 
-    renderThumbnail(kf, i) {
-        let {classes, showDelete, renderHiddenInputs} = this.props
+    render_thumbnail(kf, i) {
+        let {classes, showDelete} = this.props
         let kind = kf.is_table ? 'Table' : 'Figure'
-        let tt = `${kind} ${kf.figure_number}`
-        if (showDelete) tt = tt + ' (click to delete)'
-        let hiddenInput
-        if (renderHiddenInputs) hiddenInput = <input type="hidden" name={`keyfigure-${i}-image_url`} value={kf.image_url} />
-    	return (
-            <Tooltip title={tt} key={i}>
-                <div>
-                    <span className={classes.thumbnail} style={{backgroundImage: `url(${kf.image_url})`}} onClick={this.deleteFigure(i)} />
-                    { hiddenInput }
-                </div>
-            </Tooltip>
+        let img = (
+            <span key={i}
+                  className={classes.thumbnail}
+                  style={{backgroundImage: `url(${kf.image})`}} />
         )
+        if (showDelete) return <a key={i} href="javascript:void(0)" onClick={this.delete_figure(i)}>{ img }</a>
+        else return img
     }
 
 	render() {
 		let {classes, figures, showAdd} = this.props
         let addButton
-        if (showAdd) addButton = <a href="javascript:void(0)" onClick={this.handleAdd} className={classes.thumbnail}>
+        if (figures == null) figures = []
+        if (showAdd) addButton = <a href="javascript:void(0)" onClick={this.handle_add} className={classes.thumbnail}>
             <span className={classes.add}>
                 <Icon fontSize='large'>add</Icon> <Typography>Add</Typography>
             </span>
         </a>
 		return (
 			<div className={classes.container}>
-				{ figures.map(this.renderThumbnail) }
+				{ figures.map(this.render_thumbnail) }
                 { addButton }
             </div>
         )
@@ -93,7 +88,6 @@ FigureList.propTypes = {
 FigureList.defaultProps = {
 	figures: [],
     showDelete: false,
-    renderHiddenInputs: false,
     showAdd: false
 };
 

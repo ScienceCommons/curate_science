@@ -13,7 +13,7 @@ import {List, Grid, Button, Icon, TextField,
         FormLabel} from '@material-ui/core';
 import C from '../constants/constants';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
-import FigureSelector from './curateform/FigureSelector.jsx';
+import FigureSelector from './FigureSelector.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {clone} from 'lodash'
 import {json_api_req} from '../util/util.jsx'
@@ -241,7 +241,8 @@ class ArticleEditor extends React.Component {
         super(props);
         this.state = {
             form: initialFormState(),
-            commentaries: []
+            commentaries: [],
+            figures: []
         }
 
         this.handle_close = this.handle_close.bind(this)
@@ -249,6 +250,7 @@ class ArticleEditor extends React.Component {
         this.handle_change = this.handle_change.bind(this)
         this.handle_check_change = this.handle_check_change.bind(this)
         this.add_commentary = this.add_commentary.bind(this)
+        this.update_figures = this.update_figures.bind(this)
     }
 
     componentDidMount() {
@@ -262,12 +264,19 @@ class ArticleEditor extends React.Component {
             // Populate form
             let pk = nextProps.article_id
             fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
-                this.setState({form: clone(res)})
+                let form = clone(res)
+                delete form.key_figures
+                delete form.commentaries
+                this.setState({form: form, figures: res.key_figures, commentaries: res.commentaries})
             })
         }
     }
 
     componentWillUnmount() {
+    }
+
+    update_figures(figures) {
+        this.setState({figures: figures})
     }
 
     add_commentary() {
@@ -448,6 +457,7 @@ class ArticleEditor extends React.Component {
 
 	render() {
         let {classes, article_id, open} = this.props
+        let {figures} = this.state
         let content
         if (article_id != null) content = (
             <div className={classes.content}>
@@ -487,7 +497,9 @@ class ArticleEditor extends React.Component {
                 <Typography variant="overline">Key Figures</Typography>
                 <Grid container spacing={8}>
                     <Grid item xs={12}>
-                        <FigureSelector />
+                        <FigureSelector article_id={article_id}
+                            onChange={this.update_figures}
+                            figures={figures} />
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
@@ -591,7 +603,11 @@ class ArticleEditor extends React.Component {
         )
 		return (
             <div>
-                <Dialog open={open} onClose={this.handle_close} fullScreen aria-labelledby="edit-article">
+                <Dialog open={open}
+                        onClose={this.handle_close}
+                        TransitionComponent={Transition}
+                        fullScreen
+                        aria-labelledby="edit-article">
                     <AppBar className={classes.appBar}>
                         <Toolbar>
                             <IconButton color="inherit" onClick={this.handle_close} aria-label="Close">

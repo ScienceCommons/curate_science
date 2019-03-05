@@ -44,6 +44,10 @@ const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
     fontSize: 12,
+    h2: {
+        marginTop: 10,
+        marginBottom: 10
+    },
     h4: {
         textTransform: 'uppercase',
         fontSize: 18,
