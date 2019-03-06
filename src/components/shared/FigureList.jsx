@@ -57,7 +57,7 @@ class FigureList extends React.Component {
                   className={classes.thumbnail}
                   style={{backgroundImage: `url(${kf.image})`}} />
         )
-        if (showDelete) return <a key={i} href="javascript:void(0)" onClick={this.delete_figure(i)}>{ img }</a>
+        if (showDelete) return <Tooltip title="Delete figure"><a key={i} href="javascript:void(0)" onClick={this.delete_figure(i)}>{ img }</a></Tooltip>
         else return img
     }
 

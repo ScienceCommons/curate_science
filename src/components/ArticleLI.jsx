@@ -114,19 +114,20 @@ class ArticleLI extends React.Component {
 
 	render() {
 		let {show_more, figures, commentaries} = this.state
- 	    let { article, classes } = this.props;
- 	    let content_links = pick(article, ['pdf_url', 'pdf_downloads', 'pdf_citations', 'pdf_views',
-			       						   'html_url', 'html_views',
-			 	    					   'preprint_url', 'preprint_views', 'preprint_downloads'
-			 	    					   ])
- 	    let transparency_data = pick(article, ['article_type',
-    										   'prereg_protocol_url',
-											   'prereg_protocol_type',
-											   'public_study_materials_url',
-											   'public_data_url',
-											   'public_code_url',
-											   'reporting_standards_type'
-											   ])
+    let { article, classes } = this.props;
+    let content_links = pick(article, ['pdf_url', 'pdf_downloads', 'pdf_citations', 'pdf_views',
+	       						   'html_url', 'html_views',
+	 	    					   'preprint_url', 'preprint_views', 'preprint_downloads'
+	 	    					   ])
+    let transparency_data = pick(article, ['article_type',
+										   'prereg_protocol_url',
+									   'prereg_protocol_type',
+									   'public_study_materials_url',
+									   'public_data_url',
+									   'public_code_url',
+									   'reporting_standards_type'
+									   ])
+    let show_figures = article.key_figures || figures || []
 		return (
 			<div className="ArticleCard">
 				<Card className={classes.card} raised>
@@ -152,7 +153,7 @@ class ArticleLI extends React.Component {
 		  				<div id="details" hidden={!show_more}>
 		  					<Typography style={{lineHeight: 1.2, marginBottom: 10}}><TruncatedText text={article.abstract} /></Typography>
 		  					<ArticleKeywords keywords={article.keywords} />
-		  					<FigureList figures={figures} />
+		  					<FigureList figures={show_figures} />
 		  					<div hidden={this.empty(article.author_contributions)}>
 			  					<Typography component="span">
 			  						<span className={classes.grayedTitle}>Author contributions:</span>
