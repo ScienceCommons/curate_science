@@ -14,18 +14,23 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+GOOGLE_APPLICATION_CREDENTIALS = 'curate_science/google_application_credentials.json'
+
 # Google App Engine sets environment variable GOOGLE_CLOUD_PROJECT
 # If this env var exists, then the app is running on GAE. Else it's local dev environment.
 if os.getenv('GOOGLE_CLOUD_PROJECT'):
     #DB_HOST='/cloudsql/curate-science-216207:europe-west1:curatedb'
     #DEBUG = False
     DB_HOST='35.205.158.247' #curatevm
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
     if os.getenv('GOOGLE_CLOUD_PROJECT') == 'curatescience-staging':
         DB_NAME = 'curate_staging'
+        GS_BUCKET_NAME = 'curatescience-staging.appspot.com'
         DEBUG = True
     else:
         DB_NAME = 'curate'
+        GS_BUCKET_NAME = 'curate-science-216207.appspot.com'
         DEBUG = False
 
 else:
