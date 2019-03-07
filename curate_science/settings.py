@@ -15,6 +15,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GOOGLE_APPLICATION_CREDENTIALS = 'curate_science/google_application_credentials.json'
+GS_DEFAULT_ACL = 'publicRead'
+GS_AUTO_CREATE_ACL = 'publicRead'
+GS_AUTO_CREATE_BUCKET = True
+
 
 # Google App Engine sets environment variable GOOGLE_CLOUD_PROJECT
 # If this env var exists, then the app is running on GAE. Else it's local dev environment.
