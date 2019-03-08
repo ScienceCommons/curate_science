@@ -21,7 +21,6 @@ const styles = {
 
 function initialForm() {
     return {
-        url: '',
         file: null
     }
 }
@@ -34,11 +33,12 @@ class FigureSelector extends React.Component {
             creator_showing: false
         };
 
-        this.create_figure = this.create_figure.bind(this)
+        this.do_upload = this.do_upload.bind(this)
         this.handle_delete = this.handle_delete.bind(this)
         this.show_creator = this.show_creator.bind(this)
         this.hide_creator = this.hide_creator.bind(this)
         this.file_selected = this.file_selected.bind(this)
+        this.fileInput = null
     }
 
     show_creator() {
@@ -51,19 +51,21 @@ class FigureSelector extends React.Component {
 
     figure_valid() {
         let {form} = this.state
-        let url_ok = form.url.length > 5 && form.url.startsWith('http')
         let file_ok = form.file != null
-        return url_ok || file_ok
+        return file_ok
     }
 
     file_selected(event) {
         let {form} = this.state
+        // TODO: Handle multiple
         form.file = event.target.files[0]
-        this.setState({form})
+        this.setState({form}, () => {
+            this.do_upload()
+        })
     }
 
-    create_figure() {
-        // Upload figure or create via URL
+    do_upload() {
+        // Upload figure
         let {form} = this.state
         let {figures, article_id, cookies} = this.props
         let formData  = new FormData();
@@ -79,6 +81,7 @@ class FigureSelector extends React.Component {
                 r.json().then(data => {
                     figures.push(data)
                     if (this.props.onChange != null) this.props.onChange(figures)
+                    this.fileInput.value = ""
                     this.setState({form: initialForm(), creator_showing: false})
                 })
             } else {
@@ -121,28 +124,21 @@ class FigureSelector extends React.Component {
                     <Paper style={{padding: 10, margin: 10}} elevation={3}>
                         <Typography variant="overline">Add a figure...</Typography>
                         <Grid container spacing={8}>
-                            <Grid item xs={6}>
-                                <TextField
-                                  id='tfFigure'
-                                  label="Enter figure or table image URL"
-                                  placeholder="http://..."
-                                  value={form.url || ''}
-                                  onChange={this.handleChange('url')}
-                                  inputProps={{'data-lpignore': "true"}}
-                                  margin="normal"
-                                  fullWidth
-                                  variant="outlined"
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Typography variant="body1">Or...</Typography>
-                                <input type="file" name="file" onChange={this.file_selected} style={{paddingTop: 10}}/>
+                            <Grid item xs={12} justifyContent="center">
+                                <Typography variant="body1">Choose a figure from your computer (you can also drag an image to the input below)</Typography>
+                                <input ref={ref => this.fileInput = ref}
+                                       type="file"
+                                       name="file"
+                                       accept=".png,.jpg"
+                                       onChange={this.file_selected}
+                                       style={{paddingTop: 10}}/>
                             </Grid>
                         </Grid>
 
         				<Button variant="contained"
+                                style={{marginTop: 15}}
                                 disabled={!this.figure_valid()}
-                                onClick={this.create_figure}>Add Figure</Button>
+                                onClick={this.do_upload}>Add Figure</Button>
                         <Button onClick={this.hide_creator}>Cancel</Button>
                     </Paper>
                 </div>
