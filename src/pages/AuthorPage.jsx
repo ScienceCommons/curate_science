@@ -21,7 +21,9 @@ import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
 import {merge} from 'lodash'
 
-import {json_api_req, simple_api_req} from '../util/util.jsx'
+import {json_api_req, simple_api_req, randomId} from '../util/util.jsx'
+
+import C from '../constants/constants';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -105,7 +107,7 @@ class AuthorPage extends React.Component {
         let now = new Date()
         let date_str = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
         let data = {
-            title: "",
+            title: `${C.PLACEHOLDER_TITLE_PREFIX}${randomId(15)}`,
             authors: [author.id],
             article_type: 'ORIGINAL',
             year: now.getFullYear(),
@@ -301,7 +303,7 @@ class AuthorPage extends React.Component {
                         </div>
                     </Grid>
                     <Grid item xs={10}>
-                        { articles.map(a => <ArticleWithActions key={a.id}
+                        { articles.filter(a => a.is_live).map(a => <ArticleWithActions key={a.id}
                                                 article={a}
                                                 editable={editable}
                                                 onEdit={this.handle_edit}

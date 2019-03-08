@@ -26,6 +26,14 @@ export const printDate = (date, tz, opts) => {
     }
 }
 
+export const randomId = (length = 8) => {
+    let text = "";
+    let possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+    for( let i=0; i < length; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+}
+
 export const truncate = (s, _chars) => {
     if (s == null) s = ''
     let chars = _chars || 30;

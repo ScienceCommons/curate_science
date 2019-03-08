@@ -7,12 +7,12 @@ import qs from 'query-string';
 import { Link } from "react-router-dom";
 
 import {Paper, List, ListItem, ListItemText, Grid, Button, Icon, Fab,
-        Popover, Typography} from '@material-ui/core';
+        Popover, Typography, IconButton, ListItemSecondaryAction} from '@material-ui/core';
 
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import Loader from '../components/shared/Loader.jsx';
 
-import {json_api_req} from '../util/util.jsx'
+import {json_api_req, simple_api_req} from '../util/util.jsx'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -84,6 +84,18 @@ class AdminManage extends React.Component {
         this.setState({editing_article_id: a.id, edit_article_modal_open: true})
     }
 
+    handle_delete(a) {
+        let pk = a.id
+        let {cookies} = this.props
+        let {articles} = this.state
+        simple_api_req('DELETE', `/api/articles/${pk}/delete/`, {}, cookies.get('csrftoken'), () => {
+            articles = articles.filter(article => article.id != a.id)
+            this.setState({articles: articles})
+        }, (err) => {
+            console.error(err)
+        })
+    }
+
     fetch_articles() {
         let {match, cookies} = this.props
         json_api_req('GET', `/api/articles/`, {}, cookies.get('csrf_token'), (res) => {
@@ -116,9 +128,16 @@ class AdminManage extends React.Component {
                         <Paper style={{marginTop: 15}}>
                 			<List>
                                 { articles.map((a) => {
+                                    let title = a.title
+                                    if (!a.is_live) title = `[NOT LIVE] ${title}`
                                     return (
                                         <ListItem button key={a.id} onClick={this.handle_edit.bind(this, a)}>
-                                            <ListItemText primary={a.title} secondary={a.author_list} />
+                                            <ListItemText primary={title} secondary={a.author_list} />
+                                            <ListItemSecondaryAction>
+                                                <IconButton aria-label="Delete" onClick={this.handle_delete.bind(this, a)}>
+                                                    <Icon>delete</Icon>
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
                                         </ListItem>
                                     )
                                 })}

@@ -16,7 +16,7 @@ import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './FigureSelector.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {clone, set} from 'lodash'
-import {json_api_req} from '../util/util.jsx'
+import {json_api_req, simple_api_req} from '../util/util.jsx'
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -266,8 +266,8 @@ class ArticleEditor extends React.Component {
             let pk = nextProps.article_id
             fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
                 let form = clone(res)
-                console.log(res)
                 delete form.key_figures
+                if (form.title.startsWith(C.PLACEHOLDER_TITLE_PREFIX)) form.title = ""
                 this.setState({form: form, figures: res.key_figures})
             })
         }
@@ -294,15 +294,35 @@ class ArticleEditor extends React.Component {
     }
 
     handle_close() {
-        this.props.onClose()
-        // TODO: Delete if not yet live
+        let {form} = this.state
+        if (!form.is_live) {
+            // Not yet live, delete article
+            this.handle_delete()
+        } else {
+            // Live, just close without saving
+            this.props.onClose()
+        }
+    }
+
+    handle_delete(a) {
+        let {cookies} = this.props
+        let pk = this.props.article_id
+        console.log(`Deleting ${pk}`)
+        simple_api_req('DELETE', `/api/articles/${pk}/delete/`, {}, cookies.get('csrftoken'), () => {
+            this.setState({form: initialFormState()}, () => {
+                this.props.onClose()
+            })
+        }, (err) => {
+            console.error(err)
+        })
     }
 
     handle_change = event => {
         let {form} = this.state
+        event.persist()
         let key = event.target.name
         let val = event.target.value
-        console.log('hand_change: ' + key)
+        console.log('handle_change: ' + key)
         if (key.indexOf('.') > -1) {
             // Key as path
             set(form, key, val)
@@ -383,51 +403,6 @@ class ArticleEditor extends React.Component {
         )
     }
 
-    render_text_field(id, value, specs) {
-        let {classes} = this.props
-        let adornment = null
-        let inputProps = {
-            classes: {
-                root: classes.cssInput
-            }
-        }
-        if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
-        return (
-            <TextField
-                  id={id}
-                  key={id}
-                  name={id}
-                  label={specs.label}
-                  value={value || ''}
-                  type={specs.type}
-                  onChange={this.handle_change}
-                  placeholder={specs.placeholder}
-                  margin="dense"
-                  fullWidth={specs.fullWidth}
-                  autoComplete="off"
-                  InputLabelProps={{
-                    classes: {
-                        root: classes.cssLabel
-                    }
-                  }}
-                  InputProps={{
-                    classes: {
-                        root: classes.cssLabel
-                    }
-                  }}
-                  SelectProps={{
-                    classes: {
-                        root: classes.cssSelect
-                    }
-                  }}
-                  InputProps={inputProps}
-                  required={specs.required}
-                  multiline={specs.multiline}
-                  variant="outlined"
-                />
-            )
-    }
-
     render_field(id) {
         let {form} = this.state
         let specs = INPUT_SPECS[id] || {}
@@ -435,7 +410,7 @@ class ArticleEditor extends React.Component {
         if (specs.type == 'checkbox') return this.render_checkbox(id, value, specs)
         else if (specs.type == 'radio') return this.render_radio_group(id, value, specs)
         else if (specs.type == 'select') return this.render_select(id, value, specs)
-        else return this.render_text_field(id, value, specs)
+        else return <StyledCSTextField id={id} value={value} specs={specs} onChange={this.handle_change} />
     }
 
     render_commentaries() {
@@ -458,10 +433,10 @@ class ArticleEditor extends React.Component {
             return (
                 <Grid container spacing={8} key={idx}>
                     <Grid item xs={5}>
-                        { this.render_text_field(id_author, comm.authors, spec_pubyear) }
+                        <StyledCSTextField id={id_author} value={comm.authors} specs={spec_pubyear} onChange={this.handle_change} />
                     </Grid>
                     <Grid item xs={5}>
-                        { this.render_text_field(id_url, comm.url, spec_url) }
+                        <StyledCSTextField id={id_url} value={comm.url} specs={spec_url} onChange={this.handle_change} />
                     </Grid>
                     <Grid item xs={2}>
                         <IconButton style={{margin: 8}} onClick={this.delete_commentary.bind(this, idx)}><Icon>delete</Icon></IconButton>
@@ -659,6 +634,69 @@ class ArticleEditor extends React.Component {
 ArticleEditor.defaultProps = {
     article_id: null
 }
+
+class CSTextField extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handle_change = this.handle_change.bind(this)
+    }
+
+    handle_change(e) {
+        this.props.onChange(e)
+    }
+
+    render() {
+        let {id, value, specs, classes} = this.props
+        let adornment = null
+        let inputProps = {
+            classes: {
+                root: classes.cssInput
+            }
+        }
+        if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
+        return (
+            <TextField
+                  id={id}
+                  key={id}
+                  name={id}
+                  label={specs.label}
+                  value={value || ''}
+                  type={specs.type}
+                  onChange={this.handle_change}
+                  placeholder={specs.placeholder}
+                  margin="dense"
+                  fullWidth={specs.fullWidth}
+                  autoComplete="off"
+                  InputLabelProps={{
+                    classes: {
+                        root: classes.cssLabel
+                    }
+                  }}
+                  InputProps={{
+                    classes: {
+                        root: classes.cssLabel
+                    }
+                  }}
+                  SelectProps={{
+                    classes: {
+                        root: classes.cssSelect
+                    }
+                  }}
+                  InputProps={inputProps}
+                  required={specs.required}
+                  multiline={specs.multiline}
+                  variant="outlined"
+                />
+            )
+    }}
+
+CSTextField.defaultProps = {
+    id: '',
+    value: '',
+    specs: {}
+}
+
+const StyledCSTextField = withStyles(styles)(CSTextField)
 
 
 export default withRouter(withCookies(withStyles(styles)(ArticleEditor)));
