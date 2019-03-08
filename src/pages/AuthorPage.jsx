@@ -116,9 +116,10 @@ class AuthorPage extends React.Component {
             is_live: false
         }
         json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
-            // articles.unshift(res) // Add object to array
-            // this.setState({articles: articles})
-            this.handle_edit(res)
+            articles.unshift(res) // Add object to array, though will initially not render since is_live=false
+            this.setState({articles: articles}, () => {
+                this.handle_edit(res)
+            })
         }, (err) => {
             console.error(err)
         })

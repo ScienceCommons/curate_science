@@ -282,7 +282,8 @@ class ArticleEditor extends React.Component {
 
     add_commentary() {
         let {form} = this.state
-        let new_commentary = {authors: '', url: ''}
+        let {article_id} = this.props
+        let new_commentary = {authors_year: '', commentary_url: '', article: article_id}
         form.commentaries.push(new_commentary)
         this.setState({form})
     }
@@ -322,7 +323,6 @@ class ArticleEditor extends React.Component {
         event.persist()
         let key = event.target.name
         let val = event.target.value
-        console.log('handle_change: ' + key)
         if (key.indexOf('.') > -1) {
             // Key as path
             set(form, key, val)
@@ -343,6 +343,7 @@ class ArticleEditor extends React.Component {
         let {form} = this.state
         let pk = this.props.article_id
         let data = clone(form)
+        data.is_live = true  // Always set to live if saving
         json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
             console.log(res)
             this.props.onUpdate(data)
@@ -416,8 +417,8 @@ class ArticleEditor extends React.Component {
     render_commentaries() {
         let {form} = this.state
         let commentary_rows = form.commentaries.map((comm, idx) => {
-            let id_author = `commentaries.${idx}.authors`
-            let id_url = `commentaries.${idx}.url`
+            let id_author = `commentaries.${idx}.authors_year`
+            let id_url = `commentaries.${idx}.commentary_url`
             let spec_pubyear = {
                 label: "Authors/publication year",
                 placeholder: "Smith & Smith (2019)",
@@ -433,10 +434,10 @@ class ArticleEditor extends React.Component {
             return (
                 <Grid container spacing={8} key={idx}>
                     <Grid item xs={5}>
-                        <StyledCSTextField id={id_author} value={comm.authors} specs={spec_pubyear} onChange={this.handle_change} />
+                        <StyledCSTextField id={id_author} value={comm.authors_year} specs={spec_pubyear} onChange={this.handle_change} />
                     </Grid>
                     <Grid item xs={5}>
-                        <StyledCSTextField id={id_url} value={comm.url} specs={spec_url} onChange={this.handle_change} />
+                        <StyledCSTextField id={id_url} value={comm.commentary_url} specs={spec_url} onChange={this.handle_change} />
                     </Grid>
                     <Grid item xs={2}>
                         <IconButton style={{margin: 8}} onClick={this.delete_commentary.bind(this, idx)}><Icon>delete</Icon></IconButton>
