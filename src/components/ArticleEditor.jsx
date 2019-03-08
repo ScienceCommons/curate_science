@@ -15,7 +15,7 @@ import C from '../constants/constants';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './FigureSelector.jsx';
 import { withStyles } from '@material-ui/core/styles';
-import {clone} from 'lodash'
+import {clone, set} from 'lodash'
 import {json_api_req} from '../util/util.jsx'
 
 function Transition(props) {
@@ -233,6 +233,7 @@ const INPUT_SPECS = {
 function initialFormState() {
     return {
         article_type: 'ORIGINAL',
+        commentaries: []
     }
 }
 
@@ -241,7 +242,6 @@ class ArticleEditor extends React.Component {
         super(props);
         this.state = {
             form: initialFormState(),
-            commentaries: [],
             figures: []
         }
 
@@ -250,6 +250,7 @@ class ArticleEditor extends React.Component {
         this.handle_change = this.handle_change.bind(this)
         this.handle_check_change = this.handle_check_change.bind(this)
         this.add_commentary = this.add_commentary.bind(this)
+        this.delete_commentary = this.delete_commentary.bind(this)
         this.update_figures = this.update_figures.bind(this)
     }
 
@@ -265,9 +266,9 @@ class ArticleEditor extends React.Component {
             let pk = nextProps.article_id
             fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
                 let form = clone(res)
+                console.log(res)
                 delete form.key_figures
-                delete form.commentaries
-                this.setState({form: form, figures: res.key_figures, commentaries: res.commentaries})
+                this.setState({form: form, figures: res.key_figures})
             })
         }
     }
@@ -280,17 +281,34 @@ class ArticleEditor extends React.Component {
     }
 
     add_commentary() {
-        let {commentaries} = this.state
-        this.setState({commentaries: commentaries.concat({authors: '', url: ''})})
+        let {form} = this.state
+        let new_commentary = {authors: '', url: ''}
+        form.commentaries.push(new_commentary)
+        this.setState({form})
+    }
+
+    delete_commentary = (idx) => {
+        let {form} = this.state
+        form.commentaries.splice(idx, 1)
+        this.setState({form})
     }
 
     handle_close() {
         this.props.onClose()
+        // TODO: Delete if not yet live
     }
 
     handle_change = event => {
         let {form} = this.state
-        form[event.target.name] = event.target.value
+        let key = event.target.name
+        let val = event.target.value
+        console.log('hand_change: ' + key)
+        if (key.indexOf('.') > -1) {
+            // Key as path
+            set(form, key, val)
+        } else {
+            form[event.target.name] = val
+        }
         this.setState({form})
     }
 
@@ -380,7 +398,7 @@ class ArticleEditor extends React.Component {
                   key={id}
                   name={id}
                   label={specs.label}
-                  value={value}
+                  value={value || ''}
                   type={specs.type}
                   onChange={this.handle_change}
                   placeholder={specs.placeholder}
@@ -421,9 +439,10 @@ class ArticleEditor extends React.Component {
     }
 
     render_commentaries() {
-        let {commentaries} = this.state
-        let commentary_rows = commentaries.map((comm) => {
-            let id = ''
+        let {form} = this.state
+        let commentary_rows = form.commentaries.map((comm, idx) => {
+            let id_author = `commentaries.${idx}.authors`
+            let id_url = `commentaries.${idx}.url`
             let spec_pubyear = {
                 label: "Authors/publication year",
                 placeholder: "Smith & Smith (2019)",
@@ -437,12 +456,15 @@ class ArticleEditor extends React.Component {
                 fullWidth: true
             }
             return (
-                <Grid container spacing={8}>
-                    <Grid item xs={6}>
-                        { this.render_text_field(id, comm.authors, spec_pubyear) }
+                <Grid container spacing={8} key={idx}>
+                    <Grid item xs={5}>
+                        { this.render_text_field(id_author, comm.authors, spec_pubyear) }
                     </Grid>
-                    <Grid item xs={6}>
-                        { this.render_text_field(id, comm.url, spec_url) }
+                    <Grid item xs={5}>
+                        { this.render_text_field(id_url, comm.url, spec_url) }
+                    </Grid>
+                    <Grid item xs={2}>
+                        <IconButton style={{margin: 8}} onClick={this.delete_commentary.bind(this, idx)}><Icon>delete</Icon></IconButton>
                     </Grid>
                 </Grid>
                 )

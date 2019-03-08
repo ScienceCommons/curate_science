@@ -99,22 +99,24 @@ class AuthorPage extends React.Component {
     }
 
     create_new_article() {
-        // Create new placeholder article (user will then click to edit)
+        // Create new placeholder article, then open editor
         let {cookies} = this.props
         let {articles, author} = this.state
         let now = new Date()
         let date_str = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
         let data = {
-            title: `New untitled article created at ${date_str}`,
+            title: "",
             authors: [author.id],
             article_type: 'ORIGINAL',
             year: now.getFullYear(),
             key_figures: [],
-            commentaries: []
+            commentaries: [],
+            is_live: false
         }
         json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
-            articles.unshift(res) // Add object to array
-            this.setState({articles: articles})
+            // articles.unshift(res) // Add object to array
+            // this.setState({articles: articles})
+            this.handle_edit(res)
         }, (err) => {
             console.error(err)
         })
