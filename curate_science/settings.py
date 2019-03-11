@@ -70,12 +70,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'invitations',
     'curate.apps.CurateConfig',
 ]
 
 SITE_ID = 1
 DEFAULT_FROM_DOMAIN = 'curatescience.org'
+ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter'
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_FILTER_BACKENDS': (
@@ -126,6 +130,14 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -192,8 +204,8 @@ LOGGING = {
 
 #Invitation system settings
 INVITATIONS_INVITATION_ONLY = True
-INVITATIONS_INVITATION_EXPIRY = 30
-INVITATIONS_SIGNUP_REDIRECT = '/app/signup/'
+INVITATIONS_INVITATION_EXPIRY = 30 #invites expire after 30 days
+#INVITATIONS_ACCEPT_INVITE_AFTER_SIGNUP = True
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -15,7 +15,7 @@ from rest_framework.decorators import api_view, permission_classes, renderer_cla
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework import status, schemas, renderers
-
+from invitations.models import Invitation
 from curate.models import (
     Author,
     Article,
@@ -28,6 +28,7 @@ from curate.serializers import (
     ArticleSerializerNested,
     ArticleListSerializer,
     CommentarySerializer,
+    InvitationSerializer,
     KeyFigureSerializer,
     UserProfileSerializer,
     UserSerializer,
@@ -71,6 +72,25 @@ def create_account(request):
             return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         serializer=UserSerializer()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# Invitation creation
+@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated, IsAdminUser,))
+def create_invitation(request):
+    if request.method == 'POST':
+        serializer = InvitationSerializer(data=request.data)
+        if serializer.is_valid():
+            invite = Invitation.create(
+                email=serializer.validated_data.get('email'),
+                inviter=request.user
+            )
+            invite.send_invitation(request)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        serializer = InvitationSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST'])

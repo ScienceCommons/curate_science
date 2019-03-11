@@ -14,7 +14,8 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/app', permanent=False), name='index'),
     re_path(r'^app/(.*)$', views.router_index),
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
+    #path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('allauth.urls')),
     path('invitations/', include('invitations.urls', namespace='invitations')),
 ] + static("/dist/", document_root="dist") + static("/sitestatic/", document_root="sitestatic")
 
@@ -28,6 +29,7 @@ urlpatterns += [
     path('api/', api.index, name='api-index'),
     path('api/docs/', include_docs_urls(title="Curate Science API")),
     path('api/schema/', api.schema, name='api-schema'),
+    path('api/invitations/create/', api.create_invitation, name='api-create-invitation'),
     # Author paths
     path('api/authors/', api.list_authors, name='api-list-authors'),
     path('api/authors/autocomplete/', api.AuthorAutocomplete.as_view(), name='author-autocomplete'),
