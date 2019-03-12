@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="google-site-verification" content="7CrO9Y_velY8TjF6s8CWKB1s2S8TGRdQ8NoZ-gHPDE0" />
+  <meta http-equiv="Cache-control" content="public">
+  <title itemprop='name'>Curate Science - Crowdsourcing the Transparency of Empirical Research.</title>
+  <meta name="description" content="Curate Science is a platform to crowdsource the credibility of scientific research by curating its transparency, analytic reproducibility, analytic robustness, and replicability." />
+  <meta name="keywords" content="replication, replications, direct replication, conceptual replication, replicability, generalizability, analytic reproducibility, analytic robustness, research credibility, credibility of findings, sufficient transparency, open science, sufficient falsifiability, falsification, cumulative knowledge" />
+  
+  <!--links to CSS files-->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.3/css/fixedColumns.dataTables.min.css">
+	<!--main bootstrap CSS file-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="../assets/fonts-collections.css" media="screen" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  
+  <!--links to JS files-->
+  <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.3/js/dataTables.fixedColumns.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/dataRender/ellipsis.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/natural.js"></script>
+	<!-- main bootstrap JS file-->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	<!--others-->
+	<link rel="shortcut icon" type="image/x-icon" href="../logos/sprite-icons/CS-icon-dark-blue.png"/>
+	<link rel="stylesheet" href="../assets/sprite-CSS.css">
+	<link rel="stylesheet" href="../assets/text-stylings.css">
+	
+	<script type="text/javascript" class="init">
+		$(document).ready(function() {
+			var table = $('#example').DataTable( {
+				scrollY:        "500px",
+				scrollX:        true,
+				scrollCollapse: false,
+				"order": [[ 1, "asc" ]],
+				paging: true,
+				fixedColumns:   {
+					leftColumns: 0
+				},
+				"lengthMenu": [[ 250, 500, -1], [250, 500, "All"]],
+				"columnDefs": [ 
+					{ className: "bold-class", "targets": [ 3, 5 ] },
+					{ targets: [0,8,9,12,13,14],
+					render: $.fn.dataTable.render.ellipsis(40,true) },
+					{ targets: [2,4],
+					render: $.fn.dataTable.render.ellipsis(4) },
+					{ "targets": [ 15 ],
+					"visible": false },
+					{ type: 'natural-ci', targets: [ 11 ] }
+					],
+				"initComplete": function() { 
+				$('#loader-div').remove();
+				$("table").removeClass("hidden");
+				},
+				"dom": '<"top"fi<"clear">>rt<"bottom"pl<"clear">>'
+			} );
+		} );
+	</script>
+  
+  
+  
+  <style type="text/css" class="init"> <!--for DataTables table-->
+	/* Ensure that the demo table scrolls; */
+	th, td { white-space: normal; }
+	div.dataTables_wrapper {
+		width: auto; /*used to be: 1400px*/
+		margin: 0 auto;
+	}
+	td.details-control {
+	  background: url('../logos/meta-analyze-button.png') no-repeat center center;
+	  cursor: pointer;
+	  min-width: 75px;
+	}
+	tr.shown td.details-control {
+	  background: url('../logos/close-chevron-icon.png') no-repeat center center;
+	}
+	.dataTables_wrapper .dataTables_length {
+		float: left;
+		}
+	.dataTables_wrapper .dataTables_filter {
+		float: left;
+		text-align: left;
+		margin: 0 auto;
+		}
+	.dataTables_wrapper .dataTables_info {
+		float: right;
+		clear: none;
+		padding-top:.5em;
+		}
+	.dataTables_filter input { width: 300px; }
+	.dataTables_length input { }
+	<!--body { font-size: 13px;}-->
+	.bold-class { font-weight: bold; }
+	
+	<!--styling stuff for loading spinner-->
+	hidden { display:none; }
+	.loader {
+	  border: 16px solid #f3f3f3;
+	  border-radius: 50%;
+	  border-top: 16px solid #3498db;
+	  width: 30px;
+	  height: 30px;
+	  -webkit-animation: spin 1s linear infinite;
+	  animation: spin 1s linear infinite;
+	}
+	#loader-div { 
+		margin: 0 auto; 
+		top-margin:20px;}
+	@-webkit-keyframes spin {
+	  0% { -webkit-transform: rotate(0deg); }
+	  100% { -webkit-transform: rotate(360deg); }
+	}
+	@keyframes spin {
+	  0% { transform: rotate(0deg); }
+	  100% { transform: rotate(360deg); }
+	}
+	
+	
+	
+	</style>
+  <style>
+	<!--temp place for troubleshooting style issues-->
+	
+	
+	
+	
+	
+  </style>
+</head>
+
+<body>
+
+<header >
+  
+  <nav class="navbar navbar-default navbar-fixed-top">
+	  <div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top:2px;margin-bottom:2px;padding-top:2px;padding-bottom:2px;">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="/" style="padding-top:7px !important;">
+			<span style="margin-bottom:3px;font-weight:700;"><img src="../logos/sprite-icons/CS-snail.png" style="margin-left:1px;margin-right:2px;margin-top:-7px;width:36px;">Curate Science</span>
+		  </a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav">
+			<li style="font-weight:bold"><a href="../replications.html">Replications</a></li>
+			<li style="font-weight:bold"><a href="../#about">About</a></li>
+			<li style="font-weight:bold"><a href="../#people">People</a></li>
+			<li style="font-weight:bold"><a href="../#FAQ">FAQ</a></li>
+			<li style="font-weight:bold"><a href="../#newsletter">Newsletter</a></li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+  
+</header>
+
+<div class="main-container">
+	<div class="container">
+	
+		
+		<h1 class="collection">Positive Mood Boosts Helping <img src="../logos/sprite-icons/collection.png" class="shrunk-16 transparent"> <button type=button class="btn btn-default btn-xs" style="float:right;margin-top:10px;" title="Coming soon (Fall 2018)"><span class="glyphicon glyphicon-star" aria-hidden=true></span> Track Collection</button></h1>
+		<p style="margin:5px 5px 0 0;">
+		Collection type: <span class="label label-info-teal-darkest">Single effect</span> <span class="label label-info-teal-darker">Multi-method</span> <span class="label label-info-teal">Multi-lab</span> <span class="label label-info-brown" title="This collection contains 3 replications of the positive-mood-boosts-helping effect across 2 methods.">Replications <span class="badge badge-repnum">3</span></span>
+		</p>
+		<p style="margin:5px 5px 0 0;">
+			<span class="collection-description">Collection contains 3 replications of the positive-mood-boosts-helping effect across 2 methods.</span> 
+		</p>
+		<p style="margin:0px 5px 0 0;">
+			<div class="added-by hover-edit">Last updated by: chiefeditor 2 days ago 
+				<span style="color:grey;" title="Coming soon (Fall 2018)" class="hidden-edit"><i class="fas fa-pencil-alt" style="padding-left:30px;"></i> Edit Collection</span>
+			</div>  
+		</p>
+				
+		
+			<ul class="nav nav-pills">
+			  <li ><a href="#forest-plot">Forest Plots/Key Figures</a></li>
+			  <li ><a href="#replication-details">Replication Details</a></li>
+			</ul>
+		<p style="border-bottom: 1px solid darkgrey;">
+		</p>
+			
+		
+		<p style="margin-top:30px;">
+			<h3 class="collection"><a class="offset" id="forest-plot">Forest plots</a></h3>
+			<span class="label label-info-brown" >Replications <span class="badge badge-repnum">3</span></span>
+		</p>
+		
+		<table style="font-size:13px;margin-top:15px;">
+			<tbody>
+				<tr>
+					<td style="min-width:275px;"><strong>Original Studies & Replications</strong></td>
+					<td class="center"><strong>Effect size (Risk Difference) [95% CI]</strong></td>
+				</tr>
+				<tr>
+					<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:13px;"><strong>Effect #1 Method #1</strong>: Positive mood (finding dime in telephone booth) boosts helping (picking up dropped papers)</td>
+				</tr>
+				<tr>
+					<td ><a href='https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/isen%20%26%20levin%20(1972%2C%20jpsp%2C%20studies%201%20%26%202)%20effect%20of%20feeling%20good%20on%20helping%20-%20cookies%20%26%20kindness.pdf' target="_blank">Isen & Levin (1972) Study 2</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" title=".84 [+/- .18]" src='../logos/mood-on-helping_03.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/blevins%20%26%20murphy%20(1974)%20failed%20replication%20of%20i%26l1972%20study%202.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:4px;"></a><a href="https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/blevins%20%26%20murphy%20(1974)%20failed%20replication%20of%20i%26l1972%20study%202.pdf" target="_blank">Blevins & Murphy (1974)</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" title="-.03 [+/- .30]" src='../logos/mood-on-helping_06.jpg'></td>
+				</tr>
+				<tr>
+					<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:13px;"><strong>Effect #1 Method #2</strong>: Positive mood (finding dime in telephone booth) boosts helping (mailing "forgotten letter")</td>
+				</tr>
+				<tr>
+					<td ><a href='https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/levin%20%26%20isen%20(1975%2C%20studies%201%20%26%202)%20further%20studies%20on%20effect%20of%20feeling%20good%20on%20helping.pdf' target="_blank">Levin & Isen (1975) Study 1</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" title=".60 [+/- .30]" src='../logos/mood-on-helping_10.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/weyant%20%26%20clark%20(1977%2C%20pspb)%20dimes%20and%20helping%20-%20the%20other%20side%20of%20the%20coin%20%5B2%20failed%20reps%20of%20l%26i1975%20study%201%5D.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:4px;"></a><a href="https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/weyant%20%26%20clark%20(1977%2C%20pspb)%20dimes%20and%20helping%20-%20the%20other%20side%20of%20the%20coin%20%5B2%20failed%20reps%20of%20l%26i1975%20study%201%5D.pdf" target="_blank">Weyant & Clark (1977) Study 2</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" title="-.07 [+/- .16]" src='../logos/mood-on-helping_14.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/weyant%20%26%20clark%20(1977%2C%20pspb)%20dimes%20and%20helping%20-%20the%20other%20side%20of%20the%20coin%20%5B2%20failed%20reps%20of%20l%26i1975%20study%201%5D.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:4px;"></a><a href="https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/weyant%20%26%20clark%20(1977%2C%20pspb)%20dimes%20and%20helping%20-%20the%20other%20side%20of%20the%20coin%20%5B2%20failed%20reps%20of%20l%26i1975%20study%201%5D.pdf" target="_blank">Weyant & Clark (1977) Study 1</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" title=".25 [+/- .29]" src='../logos/mood-on-helping_12.jpg'></td>
+				</tr>
+				<tr>
+					<td class="right" style="color:#999999;font-style:italic;font-size:12px;">Current meta-analytic estimate of Effect #1 Method #2 replications:</td><td><img  data-toggle="tooltip" data-placement="right" title="-.03 [+/- .19]" src='../logos/mood-on-helping_16.jpg'></td>
+				</tr>			
+				<tr>
+					<td class="right" style="color:#999999;vertical-align:top;font-style:italic;font-size:12px;padding-top:7px"></td>
+					<td><img data-toggle="tooltip" data-placement="right" title=".03 [+/- .19]" src='../logos/mood-on-helping_20.jpg'></td>
+				</tr>
+				</tbody>
+			</table>
+			 <p></p>
+			 
+
+			 <div class="wrapper" style="max-width:900px;">
+				<p style="margin-bottom:0px;line-height:1.2em;font-size:13px;"><strong>Summary</strong>: The claim that positive mood boosts helping appears to have replicability problems. Across three replications, individuals presumably in a positive mood (induced via finding a dime in a telephone booth) helped at about the same rate (29.6%) as those not finding a dime (29.8%; meta-analytic risk difference estimate = .03 [+/-.19]; in original studies, 88.8% of dime-finding Ps helped compared to 13.9% of Ps in the control condition). This was the case whether helping was measured via picking up dropped papers (Blevins & Murphy, 1974 as in Isen & Levin, 1972, Study 2) or via mailing a "forgotten letter" (Weyant & Clark, 1977 Study 1 & 2 as in Levin & Isen, 1975, Study 1). These negative replication results are insufficient to declare the mood-helping link as unreplicable, however, they do warrant concern that perhaps additional unmodeled factors should be considered. For instance, it seems plausible that mood may influence helping in different ways for different individuals (e.g., negative, rather than positive, mood may boost helping in some individuals), and may also influence the same person differently on different occasions. Using highly-repeated within-person (HRWP) designs (e.g., <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3925438/" target="_blank">Whitsett & Shoda, 2014</a>) would be a fruitful avenue to empirically investigate these more plausible links between mood and helping behavior.</p>
+				</div>				
+
+	
+		
+		 <br><br>
+		 <h3 class="collection"><a class="offset" id="replication-details">Replication Details </a></h3>
+		 <span class="label label-info-brown" >Replications <span class="badge badge-repnum">3</span></span>
+		 <br><br>
+			
+			<div id="loader-div" class="loader"></div>
+			<table id="example" class="stripe row-border order-column compact hidden" cellspacing="0" width="100%">
+						<thead>
+						
+						<tr>
+							<th title="target effect/hypothesis tested in replication attempt">target.effect</th>
+							<th title="original authors & study number (unnumbered for sole study papers)">orig.study.number</th>
+							<th title="original study sample size (N; total sample size)">o.N</th>
+							<th title="original study effect size ± 95% CIs; NR means not reported and/or not calculatable">orig.effect.size</th>
+							<th title="replication study sample size (N; total sample size)">r.N</th>
+							<th title="replication study effect size ± 95% CIs; NR means not reported and/or not calculatable">rep.effect.size</th>
+							<th title="replication authors & study number (unnumbered for sole study papers)">rep.study.number</th>
+							<th title="replication outcome & consistency relative to original (see About section for details)">rep.outcome</th>
+							<th title="independent variable constructs (operationalizations & conditions)">IVs</th>
+							<th title="dependent variable constructs (operationalizations)">DVs</th>
+							<th title="type of direct replication (see replication taxonomy in About section for details)">rep.type</th>
+							<th title="name of large-scale multi-lab effort or individual effort">rep.effort.type</th>
+							<th title="known replication methodological differences relative to original (if any)">rep.differences</th>
+							<th title="active sample evidence in replication to detect a positive effect (see About section for details)">rep.active.evidence</th>
+							<th title="additional DVs assessed & verbal description of results">other.outcomes</th>
+						</tr>
+						</thead>
+						<tbody>
+
+					<tr>
+  <td>positive mood boosts helping effect</td>
+  <td>
+    Isen &amp; Levin (1972) Study 2
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/isen%20%26%20levin%20(1972%2C%20jpsp%2C%20studies%201%20%26%202)%20effect%20of%20feeling%20good%20on%20helping%20-%20cookies%20%26%20kindness.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>41</td>
+  <td title=' PD = percentage difference in Ps helping (positive mood compared to control condition) '> PD = 84% ± 18% </td>
+  <td>50</td>
+  <td title=' PD = percentage difference in Ps helping (positive mood compared to control condition) '> PD = 3% ± 30% </td>
+  <td>
+    Blevins &amp; Murphy (1974)
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/blevins%20%26%20murphy%20(1974)%20failed%20replication%20of%20i%26l1972%20study%202.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' mood-on-helping.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>positive mood (finding dime) vs. control (not finding dime)</td>
+  <td>helping (picking up dropped papers)</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>Positive mood increases percentage of Ps who help</td>
+</tr><tr>
+  <td>positive mood boosts helping effect</td>
+  <td>
+    Levin &amp; Isen (1975) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/levin%20%26%20isen%20(1975%2C%20studies%201%20%26%202)%20further%20studies%20on%20effect%20of%20feeling%20good%20on%20helping.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>24</td>
+  <td title=' PD = percentage difference in Ps helping (positive mood compared to control condition) '> PD = 60% ± 30% </td>
+  <td>106</td>
+  <td title=' PD = percentage difference in Ps helping (positive mood compared to control condition) '> PD = 25% ± 29% </td>
+  <td>
+    Weyant &amp; Clark (1977) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/weyant%20%26%20clark%20(1977%2C%20pspb)%20dimes%20and%20helping%20-%20the%20other%20side%20of%20the%20coin%20%5B2%20failed%20reps%20of%20l%26i1975%20study%201%5D.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' mood-on-helping.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>positive mood (finding dime) vs. control (not finding dime)</td>
+  <td>helping (mailing 'forgotten' letter)</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>Positive mood increases percentage of Ps who help</td>
+</tr><tr>
+  <td>positive mood boosts helping effect</td>
+  <td>
+    Levin &amp; Isen (1975) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/levin%20%26%20isen%20(1975%2C%20studies%201%20%26%202)%20further%20studies%20on%20effect%20of%20feeling%20good%20on%20helping.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>24</td>
+  <td title=' PD = percentage difference in Ps helping (positive mood compared to control condition) '> PD = 60% ± 30% </td>
+  <td>32</td>
+  <td title=' PD = percentage difference in Ps helping (positive mood compared to control condition) '> PD = -7% ± 16% </td>
+  <td>
+    Weyant &amp; Clark (1977) Study 2
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/mood-on-helping/weyant%20%26%20clark%20(1977%2C%20pspb)%20dimes%20and%20helping%20-%20the%20other%20side%20of%20the%20coin%20%5B2%20failed%20reps%20of%20l%26i1975%20study%201%5D.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' mood-on-helping.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>positive mood (finding dime) vs. control (not finding dime)</td>
+  <td>helping (mailing 'forgotten' letter)</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>Positive mood increases percentage of Ps who help</td>
+</tr>
+						
+					</tbody>
+				</table>		
+			
+
+		<h3 class="collection">Related Collections </h3>
+		
+		<p>
+			<ul>
+				
+			</ul>
+		</p>
+		<p style="margin-top:50px;">
+		</p>
+		
+	
+	
+	</div> <!--secondary container div-->
+	
+	
+		<div class="footer-bottom" style="background-color:whitesmoke;padding-top:10px;">
+			
+			<div class="row">
+				<div class="col-sm-4 center" style="margin-top:30px;">
+						<span style="font-weight:bold;">Previous Funders</span>
+						<br>
+						<a  href="https://cos.io/"><img src="../logos/COS-logo.png" style="margin-top:15px;"></a> <a  href="http://www.bitss.org/"><img src="../logos/BITSS-logo.png" style="margin-left:30px;margin-top:15px;"></a>
+				</div>			
+				<div class="col-sm-4 center" style="margin-top:30px;">
+					<span style="font-weight:bold;">Current Funders</span>
+						<br>
+						<a  href="https://cordis.europa.eu/project/rcn/215183_en.html"><img src="../logos/european-commission-icon.png" style="margin-top:15px;width:128px;"></a>
+				</div>
+				<div class="col-sm-4 center" style="margin-top:30px;">
+					<span style="font-weight:bold;margin-bottom:15px;">Contact Details</span>
+						<p style="line-height:1.2em;margin-top:15px;">
+						University of Western Ontario<br>
+						1151 Richmond St<br>
+						London, Ontario, CANADA, N6A 3K7<br>
+						email: curatescience@<span class="displaynone"></span>gmail.com<br>
+						<a href="https://twitter.com/curatescience"><i class="fab fa-twitter fa-2" aria-hidden="true"></i></a>
+						<a href="https://github.com/eplebel/science-commons"><i class="fab fa-github fa-2" aria-hidden="true"></i></a>
+						</p>
+				</div>		
+			</div>
+			
+			<div class="container" style="margin-top:50px;">
+				<div class="row">
+						<center>
+							<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License"/></a>
+							<br>
+							<i>*Thanks to <a href="http://www.nicebread.de/">Felix Schonbrodt</a> for hosting CurateScience.org</i>
+						</center>
+				</div>
+			</div>
+		</div> <!--footer-bottom div-->
+
+	
+	
+</div> <!--main-container push div -->
+
+
+	
+	
+
+  
+  <script type="text/javascript">
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-48865749-1', 'auto');
+	  ga('send', 'pageview');
+  </script>
+  
+</body>
+</html>

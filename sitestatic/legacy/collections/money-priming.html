@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="google-site-verification" content="7CrO9Y_velY8TjF6s8CWKB1s2S8TGRdQ8NoZ-gHPDE0" />
+  <meta http-equiv="Cache-control" content="public">
+  <title itemprop='name'>Curate Science - Crowdsourcing the Transparency of Empirical Research.</title>
+  <meta name="description" content="Curate Science is a platform to crowdsource the credibility of scientific research by curating its transparency, analytic reproducibility, analytic robustness, and replicability." />
+  <meta name="keywords" content="replication, replications, direct replication, conceptual replication, replicability, generalizability, analytic reproducibility, analytic robustness, research credibility, credibility of findings, sufficient transparency, open science, sufficient falsifiability, falsification, cumulative knowledge" />
+  
+  <!--links to CSS files-->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.3/css/fixedColumns.dataTables.min.css">
+	<!--main bootstrap CSS file-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="../assets/fonts-collections.css" media="screen" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  
+  <!--links to JS files-->
+  <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.3/js/dataTables.fixedColumns.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/dataRender/ellipsis.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/natural.js"></script>
+	<!-- main bootstrap JS file-->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	<!--others-->
+	<link rel="shortcut icon" type="image/x-icon" href="../logos/sprite-icons/CS-icon-dark-blue.png"/>
+	<link rel="stylesheet" href="../assets/sprite-CSS.css">
+	<link rel="stylesheet" href="../assets/text-stylings.css">
+	
+	
+	<script type="text/javascript" class="init">
+		$(document).ready(function() {
+			var table = $('#example').DataTable( {
+				scrollY:        "500px",
+				scrollX:        true,
+				scrollCollapse: false,
+				"order": [[ 4, "asc" ]],
+				paging: true,
+				fixedColumns:   {
+					leftColumns: 0
+				},
+				"lengthMenu": [[ 250, 500, -1], [250, 500, "All"]],
+				"columnDefs": [ 
+					{ targets: [3, 10, 11],
+					render: $.fn.dataTable.render.ellipsis(40,true) },
+					{ targets: [5,7],
+					render: $.fn.dataTable.render.ellipsis(4) },
+					{ type: 'natural-ci', targets: [ 4 ] },
+					{ className: "center", "targets": [ 2 ] }
+					],
+				"initComplete": function() { 
+				$('#loader-div').remove();
+				$("table").removeClass("hidden");
+				},
+				"dom": '<"top"fi<"clear">>rt<"bottom"pl<"clear">>'
+			} );
+		} );
+	</script>
+  
+  
+  <style type="text/css" class="init"> <!--for DataTables table-->
+	/* Ensure that the demo table scrolls; */
+	th, td { white-space: normal; }
+	div.dataTables_wrapper {
+		width: auto; /*used to be: 1400px*/
+		margin: 0 auto;
+	}
+	td.details-control {
+	  background: url('../logos/meta-analyze-button.png') no-repeat center center;
+	  cursor: pointer;
+	  min-width: 75px;
+	}
+	tr.shown td.details-control {
+	  background: url('../logos/close-chevron-icon.png') no-repeat center center;
+	}
+	.dataTables_wrapper .dataTables_length {
+		float: left;
+		}
+	.dataTables_wrapper .dataTables_filter {
+		float: left;
+		text-align: left;
+		margin: 0 auto;
+		}
+	.dataTables_wrapper .dataTables_info {
+		float: right;
+		clear: none;
+		padding-top:.5em;
+		}
+	.dataTables_filter input { width: 300px; }
+	.dataTables_length input { }
+	<!--body { font-size: 13px;}-->
+	.bold-class { font-weight: bold; }
+	
+	<!--styling stuff for loading spinner-->
+	hidden { display:none; }
+	.loader {
+	  border: 16px solid #f3f3f3;
+	  border-radius: 50%;
+	  border-top: 16px solid #3498db;
+	  width: 30px;
+	  height: 30px;
+	  -webkit-animation: spin 1s linear infinite;
+	  animation: spin 1s linear infinite;
+	}
+	#loader-div { 
+		margin: 0 auto; 
+		top-margin:20px;}
+	@-webkit-keyframes spin {
+	  0% { -webkit-transform: rotate(0deg); }
+	  100% { -webkit-transform: rotate(360deg); }
+	}
+	@keyframes spin {
+	  0% { transform: rotate(0deg); }
+	  100% { transform: rotate(360deg); }
+	}
+	
+	
+	
+	</style>
+  <style>
+	<!--temp place for troubleshooting style issues-->
+	
+	
+	
+  </style>
+</head>
+
+<body>
+
+<header >
+  
+  <nav class="navbar navbar-default navbar-fixed-top">
+	  <div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top:2px;margin-bottom:2px;padding-top:2px;padding-bottom:2px;">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="/" style="padding-top:7px !important;">
+			<span style="margin-bottom:3px;font-weight:700;"><img src="../logos/sprite-icons/CS-snail.png" style="margin-left:1px;margin-right:2px;margin-top:-7px;width:36px;">Curate Science</span>
+		  </a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav">
+			<li style="font-weight:bold"><a href="../replications.html">Replications</a></li>
+			<li style="font-weight:bold"><a href="../#about">About</a></li>
+			<li style="font-weight:bold"><a href="../#people">People</a></li>
+			<li style="font-weight:bold"><a href="../#FAQ">FAQ</a></li>
+			<li style="font-weight:bold"><a href="../#newsletter">Newsletter</a></li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+  
+</header>
+
+<div class="main-container">
+	<div class="container">
+	
+		
+		<h1 class="collection">Money priming effects <img src="../logos/sprite-icons/collection.png" class="shrunk-16 transparent">  <button type=button class="btn btn-default btn-xs" style="float:right;margin-top:10px;" title="Coming soon (Fall 2018)"><span class="glyphicon glyphicon-star" aria-hidden=true></span> Track Collection</button></h1>
+		<p style="margin:5px 5px 0 0;">
+		Collection type: <span class="label label-info-teal-darkest">Multi-effect</span> <span class="label label-info-teal-darker">Multi-method</span> <span class="label label-info-teal">Multi-lab</span> <span class="label label-info-brown" title="This collection contains 42 replications of 2 money priming effectc across 5 methods.">Replications <span class="badge badge-repnum">42</span></span>
+		</p>
+		<p style="margin:5px 5px 0 0;">
+			<span class="collection-description">The collection contains 42 replications of 2 money priming effects across 5 methods.</span> 
+		</p>
+		<p style="margin:0px 5px 0 0;">
+			<div class="added-by hover-edit">Last updated by: chiefeditor 9 days ago 
+				<span style="color:grey;" title="Coming soon (Fall 2018)" class="hidden-edit"><i class="fas fa-pencil-alt" style="padding-left:30px;"></i> Edit Collection</span>
+			</div>  
+		</p>
+				
+		
+			<ul class="nav nav-pills">
+			  <li ><a href="#forest-plot">Forest Plots</a></li>
+			  <li ><a href="#replication-details">Replication Details</a></li>
+			</ul>
+		<p style="border-bottom: 1px solid darkgrey;">
+		</p>
+			
+		
+		<p style="margin-top:30px;">
+			<h3 class="collection"><a class="offset" id="forest-plot">Forest plots</a></h3>
+			<span class="label label-info-brown" >Replications <span class="badge badge-repnum">42</span></span>
+		</p>
+		
+		<table style="font-size:13px;margin-top:15px;"><tbody>
+				<tr>
+					<td width="310px"><strong>Original Studies & Replications</strong></td>
+					<td class="center"><strong>Effect size (d) [95% CI]</strong></td>
+				</tr>
+				<tr>
+					<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;"><strong>Effect #1 Method #1</strong>: Exposure to money (scrambled sentence) reduces helping (coding sheets for RA)</td>
+				</tr>
+				<tr>
+					<td ><a href='https://github.com/eplebel/science-commons/blob/master/curated/money-priming/vohs%20et%20al%20(2006%2C%20science)The%20Psychological%20Consequences%20of%20Money.pdf' target="_blank">Vohs et al. (2006) Study 3</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".65 [+/- .65]" src='../logos/money-priming_01.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="http://www.psychfiledrawer.org/replication.php?attempt=MTQ2" target="_blank"><img src="../logos/PFD.png" style="padding-right:4px;"></a><a href="http://www.psychfiledrawer.org/files/8661358527290Vohs%20-%20Final%20report_Grenier%2012.pdf" target="_blank">Grenier et al. (2012)</a> <a href='http://www.psychfiledrawer.org/files/8661358527290Vohs%20-%20Final%20report_Grenier%2012.pdf' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".07 [+/- .62]" src='../logos/money-priming_02.jpg'></td>
+				</tr>
+				<tr>
+					<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:15px;font-size:12px;"><strong>Effect #2 Method #1</strong>: Exposure to money (scrambled sentence) strengthen social inequality beliefs (just world beliefs)</td>
+				</tr>
+				<tr>
+					<td ><a href='https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf' target="_blank">Caruso et al. (2013) Study 2</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".43 [+/- .30]" src='../logos/money-priming_04.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://github.com/eplebel/science-commons/blob/master/curated/money-priming/Schuler%20%26%20Wanke%20(in%20press%2C%20SPPS)%20replication%20%26%20extension.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://spp.sagepub.com/content/early/2016/01/27/1948550616628608.abstract" target="_blank">Schuler & Wänke (in press) Study 2</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.09 [+/- .39]" src='../logos/money-priming_06.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf" target="_blank">Rohrer et al. (2015) Study 2</a> <a href='http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".06 [+/- .19]" src='../logos/money-priming_05.jpg'></td>
+				</tr>
+				<tr>
+					<td class="right" style="color:#999999;font-style:italic;font-size:12px;">Current meta-analytic estimate of Effect #2 Method #1 replications:</td><td><img  data-toggle="tooltip" data-placement="right" style="height:80%;" title=".03 [+/- .17]" src='../logos/money-priming_07.jpg'></td>
+				</tr>
+				<tr>
+					<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;"><strong>Effect #2 Method #2</strong>: Exposure to money (scrambled sentence) strengthen social inequality beliefs (social dominance orientation)</td>
+				</tr>
+				<tr>
+					<td ><a href='https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf' target="_blank">Caruso et al. (2013) Study 3</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".49 [+/- .44]" src='../logos/money-priming_09.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf" target="_blank">Rohrer et al. (2015) Study 3</a> <a href='http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.06 [+/- .31]" src='../logos/money-priming_10.jpg'></td>
+				</tr>
+				<tr>
+					<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;"><strong>Effect #2 Method #3</strong>: Exposure to money (instruction background) strengthen social inequality beliefs (fair market ideology)</td>
+				</tr>
+				<tr>
+					<td ><a href='https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf' target="_blank">Caruso et al. (2013) Study 4</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".69 [+/- .58]" src='../logos/money-priming_12.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf" target="_blank">Rohrer et al. (2015) Study 4</a> <a href='http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".13 [+/- .37]" src='../logos/money-priming_13.jpg'></td>
+				</tr>		
+				<tr>
+					<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;"><strong>Effect #2 Method #4</strong>: Exposure to money (instruction background) strengthen social inequality beliefs (system justification scale)</td>
+				</tr>
+				<tr>
+					<td ><a href='https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf' target="_blank">Caruso et al. (2013) Study 1</a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".77 [+/- .74]" src='../logos/money-priming_15.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Hunt & Krueger (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.26 [+/- .42]" src='../logos/money-priming_88.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Cheong (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.24 [+/- .39]" src='../logos/money-priming_86.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Devos (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.21 [+/- .40]" src='../logos/money-priming_84.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Swol (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.20 [+/- .40]" src='../logos/money-priming_82.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">John & Skorinko (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.19 [+/- .42]" src='../logos/money-priming_80.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Davis & Hicks (2014) Study 1</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.16 [+/- .39]" src='../logos/money-priming_76.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Kappes (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.16 [+/- .24]" src='../logos/money-priming_78.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Klein et al. (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.15 [+/- .35]" src='../logos/money-priming_74.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Packard (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.14 [+/- .37]" src='../logos/money-priming_70.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Vranka (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.14 [+/- .43]" src='../logos/money-priming_72.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Cemalcilar (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.13 [+/- .36]" src='../logos/money-priming_68.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;white-space:nowrap;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Bocian & Frankowska (2014) Study 2</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.12 [+/- .30]" src='../logos/money-priming_66.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Huntsinger & Mallett (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.07 [+/- .33]" src='../logos/money-priming_64.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf" target="_blank">Rohrer et al. (2015) Study 1</a> <img src='../logos/_trans-square.png'><a href='http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><img src='../logos/_trans-square.png'></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.07 [+/- .34]" src='../logos/money-priming_16.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Schmidt & Nosek (2014, MTURK)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.06 [+/- .12]" src='../logos/money-priming_62.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Hovermale & Joy-Gaba (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.05 [+/- .40]" src='../logos/money-priming_60.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Vianello & Galliani (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.04 [+/- .34]" src='../logos/money-priming_58.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Schmidt & Nosek (2014, PI)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.03 [+/- .11]" src='../logos/money-priming_56.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Bernstein (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".00 [+/- .43]" src='../logos/money-priming_54.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Adams & Nelson (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".01 [+/- .40]" src='../logos/money-priming_48.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Rutchick (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".01 [+/- .40]" src='../logos/money-priming_50.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Vaughn (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".01 [+/- .42]" src='../logos/money-priming_52.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Levitan (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".03 [+/- .36]" src='../logos/money-priming_44.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;white-space:nowrap;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Brumbaugh & Storbeck (2014) Study 1</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".03 [+/- .39]" src='../logos/money-priming_46.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Smith (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".10 [+/- .38]" src='../logos/money-priming_42.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Kurtz (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".11 [+/- .30]" src='../logos/money-priming_40.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;white-space:nowrap;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Brumbaugh & Storbeck (2014) Study 2</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".13 [+/- .43]" src='../logos/money-priming_38.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Wichman (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".18 [+/- .40]" src='../logos/money-priming_36.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Pilati (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".18 [+/- .36]" src='../logos/money-priming_32.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Davis & Hicks (2014) Study 2</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".18 [+/- .26]" src='../logos/money-priming_34.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Furrow & Thompson (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".19 [+/- .43]" src='../logos/money-priming_30.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Bocian & Frankowska (2014) Study 1</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".21 [+/- .45]" src='../logos/money-priming_26.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Brandt et al. (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".21 [+/- .44]" src='../logos/money-priming_28.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Nier (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".23 [+/- .40]" src='../logos/money-priming_24.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Woodzicka (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".24 [+/- .41]" src='../logos/money-priming_22.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Schmidt & Nosek (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".30 [+/- .44]" src='../logos/money-priming_20.jpg'></td>
+				</tr>
+				<tr>
+					<td style="padding-left:35px;"><a href="https://osf.io/ebmf8/" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://osf.io/ebmf8/" target="_blank">Morris (2014)</a> <a href='https://osf.io/nqg97/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/xvpu3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/2gztr/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+					<td ><img data-toggle="tooltip" data-placement="right" style="height:80%;" title=".40 [+/- .40]" src='../logos/money-priming_18.jpg'></td>
+				</tr>
+				<tr>
+					<td  class="right" style="color:#999999;font-style:italic;font-size:12px;">Current meta-analytic estimate of Effect #2 Method #4 replications:</td><td><img  data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.02 [+/- .05]" src='../logos/money-priming_90.jpg'></td>
+				</tr>			
+				<tr>
+					<td  class="right" style="color:#999999;vertical-align:top;font-style:italic;padding-top:7px;font-size:12px;"></td>
+					<td><img data-toggle="tooltip" data-placement="right" style="height:80%;" title="-.01 [+/- .05]" src='../logos/money-priming_94.jpg'></td>
+				</tr>
+				
+				</tbody>
+			</table>
+			 <br><br>
+			 
+			 <div class="wrapper" style="max-width:900px;">
+				 <p style="margin-bottom:0px;line-height:1.2em;font-size:13px;"><strong>Summary</strong>: The claim that incidental exposure to money influences social behavior/beliefs currently exhibits replication difficulties (overall meta-analytic effect: d = -.01 [+/-.05]). This appears to be the case whether money exposure is manipulated via instruction background images (Caruso et al., 2013, Study 1 & 4) or descrambling sentence task (Vohs et al., 2006, Study 3) and whether outcome variable is helping others (Vohs et al., 2006, Study 3), system justification beliefs (Caruso et al., 2013, Study 1), just world beliefs (Caruso et al., 2013, Study 2),  social dominance beliefs (Caruso et al., 2013, Study 3), or fair market beliefs (Caruso et al., 2013, Study 4). Of course, it's possible money exposure reliably influences behavior under other (currently unknown) conditions, via other operationalizations, and/or using other experimental designs (e.g., within-subjects).</p>
+				</p>
+			</div>
+		 
+		 <br><br>
+		 <h3 class="collection"><a class="offset" id="replication-details">Replication Details </a></h3>
+		 <span class="label label-info-brown" >Replications <span class="badge badge-repnum">42</span></span>
+		 <br><br>
+			
+			<div id="loader-div" class="loader"></div>
+			<table id="example" class="stripe row-border order-column compact hidden" cellspacing="0" >
+						<thead>
+						
+						<tr>
+							<th title="replication authors & study number (unnumbered for sole study papers)">replication.study.number</th>
+							<th title="original authors & study number (unnumbered for sole study papers)">original.study.number</th>
+							<th title="direct replication similarity (see replication taxonomy in white paper for details)">rep.method.similarity</th>
+							<th title="target effect/hypothesis tested in replication attempt">target.effect</th>
+							<th title="name of large-scale multi-lab effort or individual effort">rep.effort.type</th>
+							<th title="original study sample size (N; total sample size)">o.N</th>
+							<th title="original study effect size ± 95% CIs; NR means not reported and/or not calculatable">orig.effect.size</th>
+							<th title="replication study sample size (N; total sample size)">r.N</th>
+							<th title="replication study effect size ± 95% CIs; NR means not reported and/or not calculatable">rep.effect.size</th>
+							<th title="replication outcome & consistency relative to original (see About section for details)">rep.outcome</th>
+							<th title="independent variable constructs (operationalizations & conditions)">IVs</th>
+							<th title="dependent variable constructs (operationalizations)">DVs</th>
+						</tr>
+						</thead>
+						<tbody>
+
+<tr>
+  <td>
+    Hunt &amp; Krueger (2014,TAMUC)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #1</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>87</td>
+  <td> d = -.26 ± .42 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Cheong (2014,Help)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #2</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>102</td>
+  <td> d = -.24 ± .39 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Devos (2014,SDSU)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #3</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>162</td>
+  <td> d = -.21 ± .40 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Swol (2014,Wisc)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #4</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>96</td>
+  <td> d = -.20 ± .40 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    John &amp; Skorinko (2014,WPI)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #5</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>87</td>
+  <td> d = -.19 ± .42 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Kappes (2014,LSE)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #6</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>277</td>
+  <td> d = -.16 ± .39 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Davis &amp; Hicks (2014,TAMU) Study 1
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #7</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>187</td>
+  <td> d = -.16 ± .24 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Klein et al. (2014,UFL)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #8</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>127</td>
+  <td> d = -.15 ± .35 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Vranka (2014,Charles)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #9</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>84</td>
+  <td> d = -.14 ± .43 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Packard (2014,Laurier)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #10</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>112</td>
+  <td> d = -.14 ± .37 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Cemalcilar (2014,KU)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #11</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>113</td>
+  <td> d = -.13 ± .36 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Bocian &amp; Frankowska (2014,SWPSON) Study 2
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #12</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>169</td>
+  <td> d = -.12 ± .30 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Huntsinger &amp; Mallett (2014,Luc)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #13</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>146</td>
+  <td> d = -.07 ± .33 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Schmidt &amp; Nosek (2014, MTURK)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #14</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>1000</td>
+  <td> d = -.06 ± .12 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Hovermale &amp; Joy-Gaba (2014,VCU)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #15</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>108</td>
+  <td> d = -.05 ± .40 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Vianello &amp; Galliani (2014,UNIPD)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #16</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>144</td>
+  <td> d = -.04 ± .34 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Schmidt &amp; Nosek (2014,PI)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #17</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>1329</td>
+  <td> d = -.03 ± .11 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Bernstein (2014,abington)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #18</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>84</td>
+  <td> d = .00 ± .43 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Vaughn (2014,Ithaca)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #19</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>90</td>
+  <td> d = .01 ± .40 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Rutchick (2014,CSUN)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #20</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>96</td>
+  <td> d = .01 ± .40 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Adams &amp; Nelson (2014,PSU)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #21</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>95</td>
+  <td> d = .01 ± .42 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Brumbaugh &amp; Storbeck (2014,QCCUNY) Study 1
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #22</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>103</td>
+  <td> d = .03 ± .36 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Levitan (2014,Oxy)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #23</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>123</td>
+  <td> d = .03 ± .39 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Smith (2014,OSU)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #24</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>107</td>
+  <td> d = .10 ± .38 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Kurtz (2014,JMU)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #25</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>174</td>
+  <td> d = .11 ± .30 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Brumbaugh &amp; Storbeck (2014,QCCUNY2) Study 2
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #26</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>86</td>
+  <td> d = .13 ± .43 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Wichman (2014,WKU)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #27</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>103</td>
+  <td> d = .18 ± .26 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Davis &amp; Hicks (2014,TAMUON) Study 2
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #28</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>225</td>
+  <td> d = .18 ± .36 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Pilati (2014,brasilia)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #29</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>120</td>
+  <td> d = .18 ± .40 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Furrow &amp; Thompson (2014,MSVU)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #30</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>85</td>
+  <td> d = .19 ± .43 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Brandt et al. (2014,Tilburg)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #31</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>80</td>
+  <td> d = .21 ± .44 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Bocian &amp; Frankowska (2014,SWPS) Study 1
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #32</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>79</td>
+  <td> d = .21 ± .45 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Nier (2014,Conncoll)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #33</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>95</td>
+  <td> d = .23 ± .40 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Woodzicka (2014,WL)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #34</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>90</td>
+  <td> d = .24 ± .41 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Schmidt &amp; Nosek (2014,UVA)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #35</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>81</td>
+  <td> d = .30 ± .44 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Morris (2014,McDaniel)
+    <a href=' http://econtent.hogrefe.com/doi/pdf/10.1027/1864-9335/a000178 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/pqf9r/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/xvpu3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/2gztr/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>ML1 #36</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>98</td>
+  <td> d = .40 ± .40 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Rohrer et al. (2015) Study 1
+    <a href=' https://pdfs.semanticscholar.org/f0a7/3c08049f86b20d83b52635ee651d2fffe859.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 1
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>individual effort</td>
+  <td>30</td>
+  <td> d = .77 ± .74 </td>
+  <td>136</td>
+  <td> d = -.07 ± .34 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>system justification scale</td>
+</tr><tr>
+  <td>
+    Rohrer et al. (2015) Study 2
+    <a href=' https://pdfs.semanticscholar.org/f0a7/3c08049f86b20d83b52635ee651d2fffe859.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 2
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (scrambled sentence)</td>
+  <td>individual effort</td>
+  <td>168</td>
+  <td> d = .43 ± .30 </td>
+  <td>420</td>
+  <td> d = .06 ± .19 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (scrambled sentence)</td>
+  <td>belief in a just world scale</td>
+</tr><tr>
+  <td>
+    Schuler &amp; WÃ¤nke (in press) Study 2
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/money-priming/Schuler%20%26%20Wanke%20(in%20press%2C%20SPPS)%20replication%20%26%20extension.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 2
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (scrambled sentence)</td>
+  <td>individual effort</td>
+  <td>168</td>
+  <td> d = .43 ± .30 </td>
+  <td>115</td>
+  <td> d = -.09 ± .39 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent (imprecise) </td>
+  <td>exposure to money vs. control (scrambled sentence)</td>
+  <td>belief in a just world scale</td>
+</tr><tr>
+  <td>
+    Rohrer et al. (2015) Study 3
+    <a href=' https://pdfs.semanticscholar.org/f0a7/3c08049f86b20d83b52635ee651d2fffe859.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 3
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (scrambled sentence)</td>
+  <td>individual effort</td>
+  <td>80</td>
+  <td> d = .49 ± .44 </td>
+  <td>156</td>
+  <td> d = -.06 ± .31 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (scrambled sentence)</td>
+  <td>social dominance orientation scale</td>
+</tr><tr>
+  <td>
+    Rohrer et al. (2015) Study 4
+    <a href=' https://pdfs.semanticscholar.org/f0a7/3c08049f86b20d83b52635ee651d2fffe859.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' http://laplab.ucsd.edu/articles/Pashler%20Rohrer%20Harris_JESP2013.pdf ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Caruso et al. (2013) Study 4
+    <a href=' https://carlsonschool.umn.edu/sites/carlsonschool.umn.edu/files/faculty/publications/Caruso%20Vohs%20et%20al%202013%20JEPG.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>very close</td>
+  <td>money priming (instruction background)</td>
+  <td>individual effort</td>
+  <td>48</td>
+  <td> d = .69 ± .58 </td>
+  <td>116</td>
+  <td> d = .13 ± .37 </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>exposure to money vs. control (instruction background)</td>
+  <td>Fair Market Ideology scale</td>
+</tr><tr>
+  <td>
+    Grenier et al. (2012)
+    <a href=' https://web.archive.org/web/20170107095344/http://www.psychfiledrawer.org/files/8661358527290Vohs%20-%20Final%20report_Grenier%2012.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://web.archive.org/web/20170107095344/http://www.psychfiledrawer.org/files/8661358527290Vohs%20-%20Final%20report_Grenier%2012.pdf ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' ../collections/money-priming.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td>
+    Vohs et al. (2006) Study 3
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/money-priming/vohs%20et%20al%20(2006%2C%20science)The%20Psychological%20Consequences%20of%20Money.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>close</td>
+  <td>money priming (scrambled sentence)</td>
+  <td>individual effort</td>
+  <td>39</td>
+  <td> d = .65 ± .65 </td>
+  <td>40</td>
+  <td> d = .07 ± .62 </td>
+  <td title='replication ES 95% CI includes 0 but also includes original ES point estimate'> no signal - consistent </td>
+  <td>exposure to money vs. control (scrambled sentence)</td>
+  <td>helping others (coding sheets for RA)</td>
+</tr>
+						
+					</tbody>
+				</table>		
+			
+
+		<h3 class="collection">Related Collections/Related Articles </h3>
+		
+		<p>
+			<ul>
+				<li>
+					<a href="../collections/cleanliness-priming.html">Cleanliness priming effect collection <img src="../logos/sprite-icons/collection.png" class="shrunk-14 transparent"></a>
+				</li>
+				<li>
+					<a href="../collections/cleanliness-priming.html">Macbeth effect collection <img src="../logos/sprite-icons/collection.png" class="shrunk-14 transparent"></a>
+				</li>
+			</ul>
+		</p>
+		<p style="margin-top:50px;">
+		</p>
+		
+	
+	
+	</div> <!--secondary container div-->
+	
+	
+		<div class="footer-bottom" style="background-color:whitesmoke;padding-top:10px;">
+			
+			<div class="row">
+				<div class="col-sm-4 center" style="margin-top:30px;">
+						<span style="font-weight:bold;">Previous Funders</span>
+						<br>
+						<a  href="https://cos.io/"><img src="../logos/COS-logo.png" style="margin-top:15px;"></a> <a  href="http://www.bitss.org/"><img src="../logos/BITSS-logo.png" style="margin-left:30px;margin-top:15px;"></a>
+				</div>			
+				<div class="col-sm-4 center" style="margin-top:30px;">
+					<span style="font-weight:bold;">Current Funders</span>
+						<br>
+						<a  href="https://cordis.europa.eu/project/rcn/215183_en.html"><img src="../logos/european-commission-icon.png" style="margin-top:15px;width:128px;"></a>
+				</div>
+				<div class="col-sm-4 center" style="margin-top:30px;">
+					<span style="font-weight:bold;margin-bottom:15px;">Contact Details</span>
+						<p style="line-height:1.2em;margin-top:15px;">
+						University of Western Ontario<br>
+						1151 Richmond St<br>
+						London, Ontario, CANADA, N6A 3K7<br>
+						email: curatescience@<span class="displaynone"></span>gmail.com<br>
+						<a href="https://twitter.com/curatescience"><i class="fab fa-twitter fa-2" aria-hidden="true"></i></a>
+						<a href="https://github.com/eplebel/science-commons"><i class="fab fa-github fa-2" aria-hidden="true"></i></a>
+						</p>
+				</div>		
+			</div>
+			
+			<div class="container" style="margin-top:50px;">
+				<div class="row">
+						<center>
+							<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License"/></a>
+							<br>
+							<i>*Thanks to <a href="http://www.nicebread.de/">Felix Schonbrodt</a> for hosting CurateScience.org</i>
+						</center>
+				</div>
+			</div>
+		</div> <!--footer-bottom div-->
+
+
+	
+	
+</div> <!--main-container push div -->
+
+
+	
+
+  
+  <script type="text/javascript">
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-48865749-1', 'auto');
+	  ga('send', 'pageview');
+  </script>
+  
+</body>
+</html>

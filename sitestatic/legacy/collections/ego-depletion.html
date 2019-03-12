@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="google-site-verification" content="7CrO9Y_velY8TjF6s8CWKB1s2S8TGRdQ8NoZ-gHPDE0" />
+  <meta http-equiv="Cache-control" content="public">
+  <title itemprop='name'>Curate Science - Crowdsourcing the Transparency of Empirical Research.</title>
+  <meta name="description" content="Curate Science is a platform to crowdsource the credibility of scientific research by curating its transparency, analytic reproducibility, analytic robustness, and replicability." />
+  <meta name="keywords" content="replication, replications, direct replication, conceptual replication, replicability, generalizability, analytic reproducibility, analytic robustness, research credibility, credibility of findings, sufficient transparency, open science, sufficient falsifiability, falsification, cumulative knowledge" />
+  
+  <!--links to CSS files-->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.3/css/fixedColumns.dataTables.min.css">
+	<!--main bootstrap CSS file-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="../assets/fonts-collections.css" media="screen" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  
+  <!--links to JS files-->
+  <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.3/js/dataTables.fixedColumns.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/dataRender/ellipsis.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/natural.js"></script>
+	<!-- main bootstrap JS file-->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	<!--others-->
+	<link rel="shortcut icon" type="image/x-icon" href="../logos/sprite-icons/CS-icon-dark-blue.png"/>
+	<link rel="stylesheet" href="../assets/sprite-CSS.css">
+	<link rel="stylesheet" href="../assets/text-stylings.css">
+	
+	<script type="text/javascript" class="init">
+		$(document).ready(function() {
+			var table = $('#example').DataTable( {
+				scrollY:        "500px",
+				scrollX:        true,
+				scrollCollapse: false,
+				"order": [[ 1, "asc" ]],
+				paging: true,
+				fixedColumns:   {
+					leftColumns: 0
+				},
+				"lengthMenu": [[ 250, 500, -1], [250, 500, "All"]],
+				"columnDefs": [ 
+					{ className: "bold-class", "targets": [ 3, 5 ] },
+					{ targets: [0,8,9,12,13,14],
+					render: $.fn.dataTable.render.ellipsis(40,true) },
+					{ targets: [2,4],
+					render: $.fn.dataTable.render.ellipsis(4) },
+					{ "targets": [ 15 ],
+					"visible": false },
+					{ type: 'natural-ci', targets: [ 11 ] }
+					],
+				"initComplete": function() { 
+				$('#loader-div').remove();
+				$("table").removeClass("hidden");
+				},
+				"dom": '<"top"fi<"clear">>rt<"bottom"pl<"clear">>'
+			} );
+		} );
+	</script>
+  
+  
+  
+  <style type="text/css" class="init"> <!--for DataTables table-->
+	/* Ensure that the demo table scrolls; */
+	th, td { white-space: normal; }
+	div.dataTables_wrapper {
+		width: auto; /*used to be: 1400px*/
+		margin: 0 auto;
+	}
+	td.details-control {
+	  background: url('../logos/meta-analyze-button.png') no-repeat center center;
+	  cursor: pointer;
+	  min-width: 75px;
+	}
+	tr.shown td.details-control {
+	  background: url('../logos/close-chevron-icon.png') no-repeat center center;
+	}
+	.dataTables_wrapper .dataTables_length {
+		float: left;
+		}
+	.dataTables_wrapper .dataTables_filter {
+		float: left;
+		text-align: left;
+		margin: 0 auto;
+		}
+	.dataTables_wrapper .dataTables_info {
+		float: right;
+		clear: none;
+		padding-top:.5em;
+		}
+	.dataTables_filter input { width: 300px; }
+	.dataTables_length input { }
+	<!--body { font-size: 13px;}-->
+	.bold-class { font-weight: bold; }
+	
+	<!--styling stuff for loading spinner-->
+	hidden { display:none; }
+	.loader {
+	  border: 16px solid #f3f3f3;
+	  border-radius: 50%;
+	  border-top: 16px solid #3498db;
+	  width: 30px;
+	  height: 30px;
+	  -webkit-animation: spin 1s linear infinite;
+	  animation: spin 1s linear infinite;
+	}
+	#loader-div { 
+		margin: 0 auto; 
+		top-margin:20px;}
+	@-webkit-keyframes spin {
+	  0% { -webkit-transform: rotate(0deg); }
+	  100% { -webkit-transform: rotate(360deg); }
+	}
+	@keyframes spin {
+	  0% { transform: rotate(0deg); }
+	  100% { transform: rotate(360deg); }
+	}
+	
+	
+	
+	</style>
+  <style>
+	<!--temp place for troubleshooting style issues-->
+	
+	
+	
+	
+	
+  </style>
+</head>
+
+<body>
+
+<header >
+  
+  <nav class="navbar navbar-default navbar-fixed-top">
+	  <div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top:2px;margin-bottom:2px;padding-top:2px;padding-bottom:2px;">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="/" style="padding-top:7px !important;">
+			<span style="margin-bottom:3px;font-weight:700;"><img src="../logos/sprite-icons/CS-snail.png" style="margin-left:1px;margin-right:2px;margin-top:-7px;width:36px;">Curate Science</span>
+		  </a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav">
+			<li style="font-weight:bold"><a href="../replications.html">Replications</a></li>
+			<li style="font-weight:bold"><a href="../#about">About</a></li>
+			<li style="font-weight:bold"><a href="../#people">People</a></li>
+			<li style="font-weight:bold"><a href="../#FAQ">FAQ</a></li>
+			<li style="font-weight:bold"><a href="../#newsletter">Newsletter</a></li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+  
+</header>
+
+<div class="main-container">
+	<div class="container">
+	
+		
+		<h1 class="collection">Ego depletion theory effects <img src="../logos/sprite-icons/collection.png" class="shrunk-16 transparent"> <button type=button class="btn btn-default btn-xs" style="float:right;margin-top:10px;" title="Coming soon (Fall 2018)"><span class="glyphicon glyphicon-star" aria-hidden=true></span> Track Collection</button></h1>
+		<p style="margin:5px 5px 0 0;">
+		Collection type: <span class="label label-info-teal-darkest">Multi-effect</span> <span class="label label-info-teal-darker">Multi-method</span> <span class="label label-info-teal">Multi-lab</span> <span class="label label-info-brown" title="This collection contains 32 replications of 2 ego depletion effects across 7 methods.">Replications <span class="badge badge-repnum">32</span></span>
+		</p>
+		<p style="margin:5px 5px 0 0;">
+			<span class="collection-description">Collection contains 32 replications of 2 ego depletion effects across 7 methods.</span> 
+		</p>
+		<p style="margin:0px 5px 0 0;">
+			<div class="added-by hover-edit">Last updated by: chiefeditor 2 days ago 
+				<span style="color:grey;" title="Coming soon (Fall 2018)" class="hidden-edit"><i class="fas fa-pencil-alt" style="padding-left:30px;"></i> Edit Collection</span>
+			</div>  
+		</p>
+				
+		
+			<ul class="nav nav-pills">
+			  <li ><a href="#forest-plot">Forest Plots/Key Figures</a></li>
+			  <li ><a href="#replication-details">Replication Details</a></li>
+			</ul>
+		<p style="border-bottom: 1px solid darkgrey;">
+		</p>
+			
+		
+		<p style="margin-top:30px;">
+			<h3 class="collection"><a class="offset" id="forest-plot">Forest plots</a></h3>
+			<span class="label label-info-brown" >Replications <span class="badge badge-repnum">32</span></span>
+		</p>
+		
+		<table style="font-size:13px;margin-top:15px;">
+			<tbody>
+				<tr>
+					<td style="min-width:275px;"><strong>Original Studies & Replications</strong></td>
+					<td class="center"><strong>Effect size (d) [95% CI]</strong></td>
+				</tr>
+				<tr>
+					<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Prediction #1: Glucose consumption counteracts ego depletion</td>
+					</tr>
+					<tr>
+						<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Effect #1 Method #1: Glucose consumption counteracts ego depleting effect of video attention task on Stroop performance</td>
+							
+						</tr>
+						<tr>
+							<td ><a href="https://web.archive.org/web/20171108154936/http://www.laurenebrewer.com/uploads/3/8/6/6/3866345/gailliotetal_selfcontrol_glucose.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://web.archive.org/web/20171108154936/http://www.laurenebrewer.com/uploads/3/8/6/6/3866345/gailliotetal_selfcontrol_glucose.pdf' target="_blank">Gaillot, Baumeister et al. (2007) Study 7</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-1.19 [+/- .52]" src='../logos/ego-depletion_03.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://psychfiledrawer.org/replication.php?attempt=MTIw" target="_blank"><img src="../logos/PFD.png" style="padding-right:4px;"></a><a href="http://psychfiledrawer.org/replication.php?attempt=MTIw" target="_blank">Cesario & Corker (2010)</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".22 [+/- .34]" src='../logos/ego-depletion_06.jpg'></td>
+						</tr>
+						<tr>
+							<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Effect #1 Method #2: Glucose consumption counteracts ego depleting effect of repeated completion of future-discounting task </td>
+						</tr>
+						<tr>
+							<td ><a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Wang%20and%20Dvorak%20(2010).pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Wang%20and%20Dvorak%20(2010).pdf' target="_blank">Wang & Dvorak (2010)</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.99 [+/- .52]" src='../logos/ego-depletion_10.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Lange%20%26%20Eggert%20(2014)%20study%201%20unsuccessful%20direct%20rep%20of%20Wang%20%26%20Dvorak%20(2010).pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Lange%20%26%20Eggert%20(2014)%20study%201%20unsuccessful%20direct%20rep%20of%20Wang%20%26%20Dvorak%20(2010).pdf" target="_blank">Lange & Eggert (2014) Study 1</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".13 [+/- .48]" src='../logos/ego-depletion_12.jpg'></td>
+						</tr>
+						<tr>
+							<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Prediction #2: Self-control impairs further self-control</td>
+						</tr>
+						<tr>
+							<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Effect #2 Method #1: Depleting effect of thought suppression on anagram performance</td>
+						</tr>
+						<tr>
+							<td ><a href="http://www.communicationcache.com/uploads/1/0/8/8/10887248/self-control_as_limited_resource-_regulatory_depletion_patterns.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='http://www.communicationcache.com/uploads/1/0/8/8/10887248/self-control_as_limited_resource-_regulatory_depletion_patterns.pdf' target="_blank">Muraven, Tice et al. (1998) Study 2</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.75 [+/- .71]" src='../logos/ego-depletion_18.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.437.7808&rep=rep1&type=pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://www.jasnh.com/a14.htm" target="_blank">Murtagh & Todd (2004) Study 2</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.01 [+/- .55]" src='../logos/ego-depletion_20.jpg'></td>
+						</tr>
+						<tr>
+							<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Effect #2 Method #2: Depleting effect of video attention task on GRE standardized test</td>
+						</tr>
+						<tr>
+							<td ><a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/schmeichel%20et%20al%20(2003)%20Intellectual%20performance%20and%20ego%20depletion%20Role%20of%20the%20self%20in%20logical%20reasoning%20and%20other%20information%20processing.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.201.5458&rep=rep1&type=pdf" target="_blank">Schmeichel, Vohs et al. (2003) Study 1</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-1.58 [+/- .98]" src='../logos/ego-depletion_22.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Pond%20et%20al%20(2011%2C%20Study%203)%20unpublished%20dataset%20methodological%20details.pdf" target="_blank">Pond et al. (2011) Study 3</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.35 [+/- .52]" src='../logos/ego-depletion_24.jpg'></td>
+						</tr>
+						<tr>
+							<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Effect #2 Method #3: Depleting effect of video attention task on working memory (OSPAN)</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Schmeichel%20(2007%2C%20JEPG).pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Schmeichel%20(2007%2C%20JEPG).pdf" target="_blank">Schmeichel (2007) Study 1</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.37 [+/- .44]" src='../logos/ego-depletion_27.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://www.psych.utoronto.ca/users/hasherlab/PDF/2011%20(Healey,%20Hasher,%20&%20Danilova)%20The%20stability%20of%20working%20memory.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Healey%20et%20al%202011%20-%20potential%20direct%20rep%20of%20Schmeichel%20(2007)%20study%201.pdf" target="_blank">Healy et al. (2011) Study 1</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-1.31 [+/- .71]" src='../logos/ego-depletion_28.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://bmcpsychology.biomedcentral.com/track/pdf/10.1186/2050-7283-1-22?site=bmcpsychology.biomedcentral.com" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://bmcpsychology.biomedcentral.com/articles/10.1186/2050-7283-1-22" target="_blank">Carter & McCullough (2013)</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".05 [+/- .45]" src='../logos/ego-depletion_29.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://journals.plos.org/plosone/article/asset?id=10.1371%2Fjournal.pone.0147770.PDF" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0147770" target="_blank">Lurquin et al. (2016)</a> <a href='http://www.plosone.org/article/fetchSingleRepresentation.action?uri=info:doi/10.1371/journal.pone.0147770.s002' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/r7vmb/?view_only=0c7de573120f4cab9b52e7ec2b2acd2d' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/r7vmb/?view_only=0c7de573120f4cab9b52e7ec2b2acd2d' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".21 [+/- .28]" src='../logos/ego-depletion_31.jpg'></td>
+						</tr>
+						<tr>
+							<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Effect #2 Method #4: Depleting effect of emotion suppression (video) on EEG ERN during Stroop task</td>
+						</tr>
+						<tr>
+							<td><a href="http://www.brandeis.edu/departments/psych/gutsell/docs/Inzlicht-Gutsell-2007.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://www.brandeis.edu/departments/psych/gutsell/docs/Inzlicht-Gutsell-2007.pdf" target="_blank">Inzlicht & Gutsell (2007)</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-1.06 [+/- .71]" src='../logos/ego-depletion_34.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://journals.plos.org/plosone/article/asset?id=10.1371%2Fjournal.pone.0096339.PDF" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0096339" target="_blank">Wang, Yang, & Wang (2014)</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.93 [+/- .73]" src='../logos/ego-depletion_36.jpg'></td>
+						</tr>
+						<tr>
+							<td colspan='2' style="color:#999999;vertical-align:top;font-style:bold;padding-top:5px;font-size:12px;">Effect #2 Method #5: Depleting effect of effortful letter crossing on multi-source interference task (MSIT; RTV)</td>
+						</tr>
+						<tr>
+							<td><a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/" target="_blank">Sripada, Kessler, & Jonides (2014)</a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.69 [+/- .59]" src='../logos/ego-depletion_39.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/6zsrt/' target="_blank">Ringos & Carlucci (2016)</a> <a href='https://osf.io/e9cky/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.50 [+/- .48]" src='../logos/ego-depletion_41.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/sz65p/' target="_blank">Wolff, Muzzi & Brand (2016)</a> <a href='https://osf.io/ztqwb/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.46 [+/- .43]" src='../logos/ego-depletion_42.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/jpnkh/' target="_blank">Calvillo & Mills (2016)</a> <a href='https://osf.io/2bk7y/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.44 [+/- .56]" src='../logos/ego-depletion_44.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/x3y9b/' target="_blank">Crowell, Finley et al. (2016)</a> <a href='https://osf.io/um3h9/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.40 [+/- .46]" src='../logos/ego-depletion_46.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/nqyb3/' target="_blank">Lynch, vanDellen et al. (2016)</a> <a href='https://osf.io/r3cyn/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.36 [+/- .44]" src='../logos/ego-depletion_47.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/2hxzr/' target="_blank">Birt & Muise (2016)</a> <a href='https://osf.io/cp6yt/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.31 [+/- .52]" src='../logos/ego-depletion_49.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/8j6yv/' target="_blank">Yusainy, Wimbarti et al. (2016)</a> <a href='https://osf.io/qpu5j/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.22 [+/- .31]" src='../logos/ego-depletion_51.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/7bneu/' target="_blank">Lau & Brewer (2016)</a> <img src='../logos/_trans-square.png'><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.20 [+/- .40]" src='../logos/ego-depletion_53.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/93nuz/' target="_blank">Ullrich, Primoceri et al. (2016)</a> <a href='https://osf.io/sdb8f/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.09 [+/- .39]" src='../logos/ego-depletion_54.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/t8ycs/' target="_blank">Elson (2016)</a> <a href='https://osf.io/g6wv4/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.04 [+/- .42]" src='../logos/ego-depletion_56.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/daegv/' target="_blank">Cheung, Kroese et al. (2016)</a> <a href='https://osf.io/9yycr/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title="-.04 [+/- .29]" src='../logos/ego-depletion_57.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/ptzmh/' target="_blank">Hagger & Chatzisarantis (2016)</a> <img src='../logos/_trans-square.png'><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".00 [+/- .39]" src='../logos/ego-depletion_58.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/quwx9/' target="_blank">Schlinkert, Schrama et al. (2016)</a> <a href='https://osf.io/uywbt/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".00 [+/- .44]" src='../logos/ego-depletion_60.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href=' https://osf.io/ps2rc/' target="_blank">Philipp & Cannon (2016)</a> <a href='https://osf.io/z623g/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".04 [+/- .45]" src='../logos/ego-depletion_61.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/25weu/' target="_blank">Carruth & Miyake (2016)</a> <a href='https://osf.io/a6qfe/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".09 [+/- .36]" src='../logos/ego-depletion_63.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href=' https://osf.io/dj2pf/' target="_blank">Brandt (2016)</a> <a href='https://osf.io/8cz43/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".11 [+/- .39]" src='../logos/ego-depletion_65.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/yi5fm/' target="_blank">Stamos, Bruyneel et al. (2016)</a> <a href='https://osf.io/ekt68/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".12 [+/- .41]" src='../logos/ego-depletion_66.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/ybqpg/' target="_blank">Rentzsch, Nalis et al. (2016)</a> <a href='https://osf.io/j4mdk/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".18 [+/- .39]" src='../logos/ego-depletion_68.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/6zxc4/' target="_blank">Francis & Inzlicht (2016)</a> <a href='https://osf.io/agwtu/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".18[+/- .56]" src='../logos/ego-depletion_70.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/uh5ax/' target="_blank">Lange, Heise et al. (2016)</a> <a href='https://osf.io/bx3s5/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".23 [+/- .38]" src='../logos/ego-depletion_71.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/qbu3d/' target="_blank">Evans, Fay, & Mosser (2016)</a> <a href='https://osf.io/2jfe3/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".27 [+/- .42]" src='../logos/ego-depletion_73.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/kp4xd/' target="_blank">Tinghög & Koppel (2016)</a> <a href='https://osf.io/py3ue/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".40 [+/- .43]" src='../logos/ego-depletion_75.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/s9uvc/' target="_blank">Otgaar, Martijn et al. (2016)</a> <a href='https://osf.io/b4ynb/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".41 [+/- .50]" src='../logos/ego-depletion_77.jpg'></td>
+						</tr>
+						<tr>
+							<td style="padding-left:40px;"><a href="http://pps.sagepub.com/content/11/4/546.full.pdf+html" target="_blank"><img src="../logos/pdf-icon.gif" style="padding-right:6px;"></a><a href='https://osf.io/sp4ey/' target="_blank">Muller, Zerhouni et al. (2016)</a><a href='https://osf.io/eqabw/' target="_blank"><img class="open-logos active" src='../logos/_data.png' title="This study has open data"></a><a href='https://osf.io/ifdj3/' target="_blank"><img class="open-logos active" src='../logos/_materials.png' title="This study has open materials"></a><a href='https://osf.io/v79xp/' target="_blank"><img class="open-logos active" src='../logos/_preregisteredplus.png' title="Study and analysis plans were pre-registered"></a></td>
+							<td ><img data-toggle="tooltip" data-placement="right" style="height:70%;" title=".51 [+/- .46]" src='../logos/ego-depletion_79.jpg'></td>
+						</tr>
+						<tr>
+							<td class="right" style="color:#999999;font-style:italic;font-size:12px;">Current meta-analytic estimate of Effect #2 Method #5 replications:</td><td><img  data-toggle="tooltip" data-placement="right" style="height:70%;" style="height:70%;" title="-.05 [+/- .11]" src='../logos/ego-depletion_81.jpg'></td>
+						</tr>
+						<tr>
+							<td class="right" style="color:#999999;vertical-align:top;font-style:italic;padding-top:7px;"></td>
+							<td><img data-toggle="tooltip" data-placement="right" style="height:70%;" src='../logos/ego-depletion_83.jpg'></td>
+						</tr>
+				
+				</tbody>
+			</table>
+			 <p></p>
+			 <div class="wrapper" style="max-width:900px;">
+				<p style="margin-bottom:0px;line-height:1.2em;font-size:13px;"><strong>Summary</strong>: Replication difficulties appear to exist for <a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Baumeister%20et%20al%20(2007)%20strength%20model%20of%20self-control.pdf" target="_blank">ego depletion theory's</a> 2 main predicted effects across 7 methods. <u>Predicted effect #1:</u> Independent researchers appear unable to replicate the finding that glucose consumption counteracts ego depletion, whether  self-control is measured via Stroop (Cesario & Corker, 2010, as in Gaillot et al., 2007, Study 7) or future-discounting task (Lange & Eggert, 2014, Study 1, as in Wang & Dvorak, 2010). <u>Predicted effect #2:</u> There also appears to be replication difficulties for the basic ego depletion effect across 5 methods. This is the case whether IV manipulated via thought supppression, video attention task, emotion suppression during video watching, or effortful letter crossing task and also whether DV measured via anagram performance, standardized tests, working memory, or multi-source interference task. Wang et al. (2014) do appear to successfully replicate Inzlicht & Gutsell's (2007) finding that ego depletion led to reduced activity in the anterior cingulate (region previously associated with conflict monitoring), however this finding should be interpretd with caution given potential bias due to analytic flexibility in data exclusions and EEG analyses. Of course, ego depletion may reflect a replicable phenomenon under different conditions, contexts, and/or operationalizations; however, the replication difficulties across these 7 methods suggest ego depletion might be much more nuanced than previously thought. Indeed, alternative models have recently been proposed (e.g., motivation/attention-based accounts, <a href="http://www.viriya.net/jabref/why_self-control_seems_but_may_not_be_limited.pdf" target="_blank">Inzlicht et al., 2014</a>; mental fatigue, <a href="https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Inzlicht%20%26%20Berkman%20(2015%2C%20SPPS)%20theoretical%20review%20of%20Resource%20model%20of%20self-control.pdf" target="_blank">Inzlicht & Berkman, 2015</a>) and novel intra-individual paradigms to measure ego depletion have also emerged (<a href="https://tspace.library.utoronto.ca/bitstream/1807/68584/1/Francis_Zoe_L_201411_MA_thesis.pdf" target="_blank">Francis, 2014</a>; <a href="https://osf.io/n4irh/" target="_blank">Francis et al., 2015</a>) that offer promising avenues for future research.</p>
+				</div>				
+
+	
+		
+		 <br><br>
+		 <h3 class="collection"><a class="offset" id="replication-details">Replication Details </a></h3>
+		 <span class="label label-info-brown" >Replications <span class="badge badge-repnum">32</span></span>
+		 <br><br>
+			
+			<div id="loader-div" class="loader"></div>
+			<table id="example" class="stripe row-border order-column compact hidden" cellspacing="0" width="100%">
+						<thead>
+						
+						<tr>
+							<th title="target effect/hypothesis tested in replication attempt">target.effect</th>
+							<th title="original authors & study number (unnumbered for sole study papers)">orig.study.number</th>
+							<th title="original study sample size (N; total sample size)">o.N</th>
+							<th title="original study effect size ± 95% CIs; NR means not reported and/or not calculatable">orig.effect.size</th>
+							<th title="replication study sample size (N; total sample size)">r.N</th>
+							<th title="replication study effect size ± 95% CIs; NR means not reported and/or not calculatable">rep.effect.size</th>
+							<th title="replication authors & study number (unnumbered for sole study papers)">rep.study.number</th>
+							<th title="replication outcome & consistency relative to original (see About section for details)">rep.outcome</th>
+							<th title="independent variable constructs (operationalizations & conditions)">IVs</th>
+							<th title="dependent variable constructs (operationalizations)">DVs</th>
+							<th title="type of direct replication (see replication taxonomy in About section for details)">rep.type</th>
+							<th title="name of large-scale multi-lab effort or individual effort">rep.effort.type</th>
+							<th title="known replication methodological differences relative to original (if any)">rep.differences</th>
+							<th title="active sample evidence in replication to detect a positive effect (see About section for details)">rep.active.evidence</th>
+							<th title="additional DVs assessed & verbal description of results">other.outcomes</th>
+						</tr>
+						</thead>
+						<tbody>
+
+					<tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>68</td>
+  <td> d = -.50 ± .48 </td>
+  <td>
+    Ringos &amp; Carlucci (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/e9cky/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI excludes 0 and includes original ES point estimate'> signal - consistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #1</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>87</td>
+  <td> d = -.46 ± .43 </td>
+  <td>
+    Wolff, Muzzi &amp; Brand (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/ztqwb/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #2</td>
+  <td>German language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>75</td>
+  <td> d = -.44 ± .56 </td>
+  <td>
+    Calvillo &amp; Mills (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/2bk7y/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #3</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>73</td>
+  <td> d = -.40 ± .46 </td>
+  <td>
+    Crowell, Finley et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/um3h9/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #4</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>79</td>
+  <td> d = -.36 ± .44 </td>
+  <td>
+    Lynch, vanDellen et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/r3cyn/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #5</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>59</td>
+  <td> d = -.31 ± .52 </td>
+  <td>
+    Birt &amp; Muise (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/cp6yt/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #6</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>156</td>
+  <td> d = -.22 ± .31 </td>
+  <td>
+    Yusainy, Wimbarti et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/qpu5j/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #7</td>
+  <td>Indonesian language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>99</td>
+  <td> d = -.20 ± .40 </td>
+  <td>
+    Lau &amp; Brewer (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #8</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>103</td>
+  <td> d = -.09 ± .39 </td>
+  <td>
+    Ullrich, Primoceri et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/sdb8f/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #9</td>
+  <td>German language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>90</td>
+  <td> d = -.04 ± .42 </td>
+  <td>
+    Elson (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/g6wv4/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #10</td>
+  <td>German language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>181</td>
+  <td> d = -.04 ± .29 </td>
+  <td>
+    Cheung, Kroese et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/9yycr/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #11</td>
+  <td>Dutch language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>101</td>
+  <td> d = .00 ± .39 </td>
+  <td>
+    Hagger et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #12</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>79</td>
+  <td> d = .00 ± .44 </td>
+  <td>
+    Schlinkert, Schrama et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/uywbt/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #13</td>
+  <td>Dutch language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>75</td>
+  <td> d = .04 ± .45 </td>
+  <td>
+    Philipp &amp; Cannon (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/z623g/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #14</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>126</td>
+  <td> d = .09 ± .36 </td>
+  <td>
+    Carruth &amp; Miyake (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/a6qfe/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #15</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>102</td>
+  <td> d = .11 ± .39 </td>
+  <td>
+    Brandt (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/8cz43/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #16</td>
+  <td>Dutch language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>93</td>
+  <td> d = .12 ± .41 </td>
+  <td>
+    Stamos, Bruyneel et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/ekt68/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #17</td>
+  <td>Dutch language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>103</td>
+  <td> d = .18 ± .39 </td>
+  <td>
+    Rentzsch, Nalis et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/j4mdk/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #18</td>
+  <td>German language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>50</td>
+  <td> d = .18 ± .56 </td>
+  <td>
+    Francis &amp; Inzlicht (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/agwtu/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #19</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>106</td>
+  <td> d = .23 ± .38 </td>
+  <td>
+    Lange, Heise et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/bx3s5/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #20</td>
+  <td>German language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>89</td>
+  <td> d = .27 ± .42 </td>
+  <td>
+    Evans, Fay, &amp; Mosser (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/2jfe3/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #21</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>82</td>
+  <td> d = .40 ± .43 </td>
+  <td>
+    Tinghög &amp; Koppel (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/py3ue/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #22</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>69</td>
+  <td> d = .41 ± .50 </td>
+  <td>
+    Otgaar, Martijn et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/b4ynb/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #23</td>
+  <td>Dutch language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Sripada, Kessler, &amp; Jonides (2014)
+    <a href=' http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4206661/pdf/nihms-565892.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>47</td>
+  <td> d = -.69 ± .59 </td>
+  <td>78</td>
+  <td> d = .51 ± .46 </td>
+  <td>
+    Muller, Zerhouni et al. (2016)
+    <a href=' http://journals.sagepub.com/doi/pdf/10.1177/1745691616652873 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' https://osf.io/eqabw/ ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/ifdj3/ ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/v79xp/ ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI excludes 0 but also excludes original ES point estimate (opposite direction/pattern)'> signal - inconsistent, opposite </td>
+  <td>effortful letter crossing vs. control</td>
+  <td>multi-source interference task (MSIT; RTV)</td>
+  <td>very close</td>
+  <td>RRR4 #24</td>
+  <td>French language</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Gaillot, Baumeister et al. (2007) Study 7
+    <a href=' https://web.archive.org/web/20171108154936/http://www.laurenebrewer.com/uploads/3/8/6/6/3866345/gailliotetal_selfcontrol_glucose.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>61</td>
+  <td> d = -1.19 ± .52 </td>
+  <td>119</td>
+  <td> d = .22 ± .34 </td>
+  <td>
+    Cesario &amp; Corker (2010)
+    <a href=' https://web.archive.org/web/20170923092139/http://psychfiledrawer.org/replication.php?attempt=MTIw ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>sugar vs. splenda; video attention task vs. control</td>
+  <td>Stroop performance</td>
+  <td>very close</td>
+  <td>individual effort</td>
+  <td>No manipulation check</td>
+  <td>Positive correlation between baseline &amp; post-manipulation error rates, r = .36, p &lt; .001</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Wang &amp; Dvorak (2010)
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Wang%20and%20Dvorak%20(2010).pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>61</td>
+  <td> d = -.99 ± .52 </td>
+  <td>70</td>
+  <td> d = .13 ± .48 </td>
+  <td>
+    Lange &amp; Eggert (2014) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Lange%20%26%20Eggert%20(2014)%20study%201%20unsuccessful%20direct%20rep%20of%20Wang%20%26%20Dvorak%20(2010).pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>sugar vs. splenda; future-discounting t1 vs. t2</td>
+  <td>future-discounting task</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td>Different choices in future-discounting task</td>
+  <td>Test-retest reliability of r = .80 across t1 and t2 scores</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Muraven, Tice et al. (1998) Study 2
+    <a href=' http://www.communicationcache.com/uploads/1/0/8/8/10887248/self-control_as_limited_resource-_regulatory_depletion_patterns.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>34</td>
+  <td> d = -.75 ± .71 </td>
+  <td>51</td>
+  <td> d = -.01 ± .55 </td>
+  <td>
+    Murtagh &amp; Todd (2004) Study 2
+    <a href=' http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.437.7808&rep=rep1&type=pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>thought suppression vs. control</td>
+  <td>anagram performance</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td>Very difficult solvable anagrams used rather than "unsolvable"</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Schmeichel, Vohs et al. (2003) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/schmeichel%20et%20al%20(2003)%20Intellectual%20performance%20and%20ego%20depletion%20Role%20of%20the%20self%20in%20logical%20reasoning%20and%20other%20information%20processing.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>24</td>
+  <td> d = -1.58 ± .98 </td>
+  <td>128</td>
+  <td> d = -.35 ± .52 </td>
+  <td>
+    Pond et al. (2011) Study 3
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Pond%20et%20al%20(2011%2C%20Study%203)%20unpublished%20dataset%20methodological%20details.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>video attention task vs. control</td>
+  <td>GRE standardized test</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td>10 verbal GRE items used (instead of 13 analytic GRE items)</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Schmeichel (2007) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Schmeichel%20(2007%2C%20JEPG).pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>79</td>
+  <td> d = -.37 ± .44 </td>
+  <td>38</td>
+  <td> d = -1.31 ± .71 </td>
+  <td>
+    Healy et al. (2011) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Healey%20et%20al%202011%20-%20potential%20direct%20rep%20of%20Schmeichel%20(2007)%20study%201.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI excludes 0 and includes original ES point estimate'> signal - consistent (imprecise) </td>
+  <td>video attention task vs. control</td>
+  <td>working memory (OSPAN)</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td>% of target words recalled (rather than total)</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Schmeichel (2007) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Schmeichel%20(2007%2C%20JEPG).pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>79</td>
+  <td> d = -.37 ± .44 </td>
+  <td>138</td>
+  <td> d = .05 ± .45 </td>
+  <td>
+    Carter &amp; McCullough (2013)
+    <a href=' https://bmcpsychology.biomedcentral.com/track/pdf/10.1186/2050-7283-1-22?site=bmcpsychology.biomedcentral.com ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent (imprecise) </td>
+  <td>video attention task vs. control</td>
+  <td>working memory (OSPAN)</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td>Effortful essay task vs. control in between IV and DV (perfectly confounded w/ IV)</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Schmeichel (2007) Study 1
+    <a href=' https://github.com/eplebel/science-commons/blob/master/curated/ego-depletion/Schmeichel%20(2007%2C%20JEPG).pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>79</td>
+  <td> d = -.37 ± .44 </td>
+  <td>200</td>
+  <td> d = .21 ± .28 </td>
+  <td>
+    Lurquin et al. (2016)
+    <a href=' http://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0147770&type=printable ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' http://www.plosone.org/article/fetchSingleRepresentation.action?uri=info:doi/10.1371/journal.pone.0147770.s002 ' target='_blank' class='sprite sprite-data'></a>
+    <a href=' https://osf.io/r7vmb/?view_only=0c7de573120f4cab9b52e7ec2b2acd2d ' target='_blank' class='sprite sprite-materials'></a>
+    <a href=' https://osf.io/r7vmb/?view_only=0c7de573120f4cab9b52e7ec2b2acd2d ' target='_blank' class='sprite sprite-preregisteredplus'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI includes 0 but excludes original ES point estimate'> no signal - inconsistent </td>
+  <td>video attention task vs. control</td>
+  <td>working memory (OSPAN)</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td>40 target words in OSPAN (rather than 48)</td>
+  <td>Main effect of OSPAN set sizes on performance, F(1, 199) = 4439.81, p &lt; .001</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>ego depletion effect</td>
+  <td>
+    Inzlicht &amp; Gutsell (2007)
+    <a href=' http://www.brandeis.edu/departments/psych/gutsell/docs/Inzlicht-Gutsell-2007.pdf ' target='_blank' class='sprite sprite-pdf-icon'></a>
+  </td>
+  <td>33</td>
+  <td> d = -1.06 ± .71 </td>
+  <td>31</td>
+  <td> d = -.93 ± .73 </td>
+  <td>
+    Wang, Yang, &amp; Wang (2014)
+    <a href=' http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0096339 ' target='_blank' class='sprite sprite-pdf-icon'></a>
+    <a href=' ego-depletion.html ' class='sprite sprite-ec-icon' title='Go to evidence collection this replication is part of'></a>
+  </td>
+  <td title='replication ES 95% CI excludes 0 and includes original ES point estimate'> signal - consistent (imprecise) </td>
+  <td>emotion suppression (video) vs. control</td>
+  <td>EEG ERN during stroop task</td>
+  <td>close</td>
+  <td>individual effort</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr>
+						
+					</tbody>
+				</table>		
+			
+
+		<h3 class="collection">Related Collections </h3>
+		
+		<p>
+			<ul>
+				
+			</ul>
+		</p>
+		<p style="margin-top:50px;">
+		</p>
+		
+	
+	
+	</div> <!--secondary container div-->
+	
+	
+		<div class="footer-bottom" style="background-color:whitesmoke;padding-top:10px;">
+			
+			<div class="row">
+				<div class="col-sm-4 center" style="margin-top:30px;">
+						<span style="font-weight:bold;">Previous Funders</span>
+						<br>
+						<a  href="https://cos.io/"><img src="../logos/COS-logo.png" style="margin-top:15px;"></a> <a  href="http://www.bitss.org/"><img src="../logos/BITSS-logo.png" style="margin-left:30px;margin-top:15px;"></a>
+				</div>			
+				<div class="col-sm-4 center" style="margin-top:30px;">
+					<span style="font-weight:bold;">Current Funders</span>
+						<br>
+						<a  href="https://cordis.europa.eu/project/rcn/215183_en.html"><img src="../logos/european-commission-icon.png" style="margin-top:15px;width:128px;"></a>
+				</div>
+				<div class="col-sm-4 center" style="margin-top:30px;">
+					<span style="font-weight:bold;margin-bottom:15px;">Contact Details</span>
+						<p style="line-height:1.2em;margin-top:15px;">
+						University of Western Ontario<br>
+						1151 Richmond St<br>
+						London, Ontario, CANADA, N6A 3K7<br>
+						email: curatescience@<span class="displaynone"></span>gmail.com<br>
+						<a href="https://twitter.com/curatescience"><i class="fab fa-twitter fa-2" aria-hidden="true"></i></a>
+						<a href="https://github.com/eplebel/science-commons"><i class="fab fa-github fa-2" aria-hidden="true"></i></a>
+						</p>
+				</div>		
+			</div>
+			
+			<div class="container" style="margin-top:50px;">
+				<div class="row">
+						<center>
+							<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License"/></a>
+							<br>
+							<i>*Thanks to <a href="http://www.nicebread.de/">Felix Schonbrodt</a> for hosting CurateScience.org</i>
+						</center>
+				</div>
+			</div>
+		</div> <!--footer-bottom div-->
+
+	
+	
+</div> <!--main-container push div -->
+
+
+	
+	
+
+  
+  <script type="text/javascript">
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-48865749-1', 'auto');
+	  ga('send', 'pageview');
+  </script>
+  
+</body>
+</html>
