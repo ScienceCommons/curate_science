@@ -44,12 +44,17 @@ class AdminInvite extends React.Component {
     invite() {
     	let {cookies} = this.props
     	let {form} = this.state
-    	let data = clone(form)
-    	simple_api_req('POST', `/api/invitations/create/`, data, cookies.get('csrftoken'), (res) => {
-    		this.show_snack('Invite sent!')
-    	}, (err) => {
-    		this.show_snack('Error inviting!')
-    	})
+    	let email = form.email
+    	if (email != null && email.length > 0) {
+	    	let data = {email: email}
+	    	json_api_req('POST', `/api/invitations/create/`, data, cookies.get('csrftoken'), (res) => {
+	    		this.setState({form: {}}, () => {
+		    		this.show_snack(`Invite sent to ${email}!`)
+	    		})
+	    	}, (err) => {
+	    		this.show_snack('Error inviting!')
+	    	})
+    	}
     }
 
 	render() {
