@@ -24,6 +24,13 @@ class AdminInvite extends React.Component {
         this.close_snack = this.close_snack.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.invite = this.invite.bind(this)
+        this.handle_change = this.handle_change.bind(this)
+    }
+
+    handle_change(event) {
+    	let {form} = this.state
+    	form[event.target.name] = event.target.value
+    	this.setState({form})
     }
 
     show_snack(message) {
@@ -47,7 +54,7 @@ class AdminInvite extends React.Component {
 
 	render() {
 		let {classes} = this.props
-		let {snack_message} = this.state
+		let {snack_message, form} = this.state
 		return (
 			<div style={{textAlign: 'center'}}>
 				<Grid container justify="center">
@@ -55,8 +62,12 @@ class AdminInvite extends React.Component {
 						<Typography variant="h2">Invite Users</Typography>
 
 						<Paper style={{padding: 10}}>
-							<TextField name="email" key="email" label="Email" placeholder="Email" type="email" fullWidth autoComplete="off" />
-							<TextField name="name" key="name" label="Name" placeholder="Name" type="text" fullWidth autoComplete="off" />
+							<Typography variant="body1">Enter the email address of a user to invite below</Typography>
+							<TextField name="email" key="email" label="Email"
+									   placeholder="Email" type="email"
+									   fullWidth autoComplete="off"
+									   onChange={this.handle_change}
+									   value={form.email||''}/>
 
 							<Button variant="contained" color='primary' style={{marginTop: 15}} onClick={this.invite}>Send Invite</Button>
 						</Paper>
