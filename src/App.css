@@ -56,6 +56,25 @@ a:link, a:visited, a:hover, a:active {
 	padding: 2px 7px;
 }
 
+.ArticleCommentaryBadge {
+	background-color: #a7a7a7;
+	display: inline-block;
+	border-radius: 3px;
+	opacity: 0.4;
+	padding: 2px 7px;
+	color: white;
+	font-size: .75rem;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.ArticleCommentaryBadge .Count {
+	border-radius: 3px;
+	background: white;
+	color: black;
+	font-size: .55rem;
+	padding: 1px 2px;
+}
+
 .ArticleContentLinks {
 	width: 20%;
 	min-width: 200px;

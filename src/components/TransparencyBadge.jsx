@@ -90,7 +90,15 @@ class TransparencyBadge extends React.Component {
 	}
 
 	render() {
-		return this.relevant_badges().map(this.render_feature)
+		let {commentaries} = this.props
+		let commentary_el
+		if (commentaries.length > 0) commentary_el = <span className="ArticleCommentaryBadge">Commentaries <span className="Count">{ commentaries.length }</span></span>
+		return (
+			<div>
+				<span style={{marginRight: 10}}>{ this.relevant_badges().map(this.render_feature) }</span>
+				{ commentary_el }
+			</div>
+		)
 	}
 }
 
@@ -104,6 +112,7 @@ TransparencyBadge.propTypes = {
     public_study_materials_url: PropTypes.string,
     public_data_url: PropTypes.string,
     public_code_url: PropTypes.string,
+    commentaries: PropTypes.array
 }
 
 
@@ -118,6 +127,7 @@ TransparencyBadge.defaultProps = {
     public_study_materials_url: null,
     public_data_url: null,
     public_code_url: null,
+    commentaries: []
 };
 
 export default withStyles(styles)(TransparencyBadge);

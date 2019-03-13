@@ -153,7 +153,7 @@ var C = {
 			id: "PREREG",
 			label: "Preregistration",
 			icon: "prereg",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY'],
 			color: '#C60018',
 			url_prop: 'prereg_protocol_url'
 		},
@@ -161,7 +161,7 @@ var C = {
 			id: "MATERIALS",
 			label: "Public Materials",
 			icon: "materials",
-			article_types: ['ORIGINAL', 'REPLICATION'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'COMMENTARY'],
 			color: '#F5A623',
 			url_prop: 'public_study_materials_url'
 		},
@@ -169,7 +169,7 @@ var C = {
 			id: "DATA",
 			label: "Public Data",
 			icon: "data",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY'],
 			color: '#2D96E8',
 			url_prop: 'public_data_url'
 		},
@@ -177,7 +177,7 @@ var C = {
 			id: "CODE",
 			label: "Public Code",
 			icon: "code",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY'],
 			color: '#50E3C2',
 			url_prop: 'public_code_url'
 		},
@@ -185,7 +185,7 @@ var C = {
 			id: "REPSTD",
 			label: "Reporting Standards",
 			icon: "repstd",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'COMMENTARY'],
 			singular: true,
 			color: '#7ED321'
 		}
