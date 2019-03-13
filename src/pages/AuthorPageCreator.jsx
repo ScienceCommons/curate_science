@@ -48,11 +48,12 @@ class AuthorPageCreator extends React.Component {
 		let {user_session} = this.props
 		let {form} = this.state
 		let admin = user_session.admin
+		let title = admin ? "Create Author Page" : "Create Your Author Page"
 		return (
 			<Grid container justify="center">
 				<Grid item xs={8}>
-					<Paper style={{padding: 15}}>
-						<Typography variant="h2">Create Your Author Page</Typography>
+					<Paper style={{padding: 15, marginTop: 15}}>
+						<Typography variant="h2">{title}</Typography>
 
 						<TextField label="Full Name"
 							placeholder="Full Name"
@@ -62,12 +63,13 @@ class AuthorPageCreator extends React.Component {
 							onChange={this.handle_change} /><br/>
 
 						<div hidden={!admin}>
-							<TextField label="username (admin only)"
+							<TextField label="username (admin only, optional)"
 								placeholder="username (admin only)"
 								name="account"
 								value={form.account || ''}
 								fullWidth
 								onChange={this.handle_change} /><br/>
+							<Typography variant="body1">This field is optional. If specified, we will link author page to user with specified username.</Typography>
 						</div>
 
 						<Button variant="contained" color="primary" style={{marginTop: 10}} onClick={this.create}>Create</Button>

@@ -89,7 +89,8 @@ class AuthorPage extends React.Component {
 
     editable() {
         // Show edit functions if admin or user-owned author page
-        let {user_session, author} = this.props
+        let {user_session} = this.props
+        let {author} = this.state
         let admin = user_session.admin
         let me = author != null && user_session.author != null && user_session.author.id == author.id
         return admin || me
@@ -257,10 +258,14 @@ class AuthorPage extends React.Component {
     			<Grid container justify="center" spacing={24}>
                     <Grid item xs={10}>
                         <LabeledBox label="Author Information">
-                            <Button variant="contained" color="secondary" className={classes.authorEditButton} onClick={this.open_author_editor}>
-                                Edit
-                                <Icon>edit</Icon>
-                            </Button>
+                            <span hidden={!editable}>
+                                <Button variant="contained" color="secondary"
+                                        className={classes.authorEditButton}
+                                        onClick={this.open_author_editor}>
+                                    Edit
+                                    <Icon>edit</Icon>
+                                </Button>
+                            </span>
                             <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
                             <Typography variant="h4" className={classes.subtitle}>
                                 <span className={classes.title}>{ position }</span>
