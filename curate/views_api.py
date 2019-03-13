@@ -15,7 +15,7 @@ from rest_framework.decorators import api_view, permission_classes, renderer_cla
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework import status, schemas, renderers
-
+from invitations.models import Invitation
 from curate.models import (
     Author,
     Article,
@@ -28,6 +28,7 @@ from curate.serializers import (
     ArticleSerializerNested,
     ArticleListSerializer,
     CommentarySerializer,
+    InvitationSerializer,
     KeyFigureSerializer,
     UserProfileSerializer,
     UserSerializer,
@@ -73,6 +74,25 @@ def create_account(request):
         serializer=UserSerializer()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+# Invitation creation
+@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated, IsAdminUser,))
+def create_invitation(request):
+    if request.method == 'POST':
+        serializer = InvitationSerializer(data=request.data)
+        if serializer.is_valid():
+            invite = Invitation.create(
+                email=serializer.validated_data.get('email'),
+                inviter=request.user
+            )
+            invite.send_invitation(request)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        serializer = InvitationSerializer()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['GET', 'POST'])
 def view_user(request, username):
     queryset=get_object_or_404(User, username=username)
@@ -82,7 +102,7 @@ def view_user(request, username):
 # Author views
 @api_view(('GET', ))
 def list_authors(request):
-    queryset=Author.objects.all()
+    queryset=Author.objects.all().prefetch_related('articles')
     serializer=AuthorSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
@@ -145,7 +165,7 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
-    queryset=Article.objects.all()
+    queryset=Article.objects.all().prefetch_related('commentaries')
     serializer=ArticleListSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
@@ -156,7 +176,7 @@ def list_articles_for_author(request, slug):
     Return a list of all articles for an author
     '''
     author=get_object_or_404(Author, slug=slug)
-    queryset=author.articles.all()
+    queryset=author.articles.all().prefetch_related('commentaries')
     serializer=ArticleListSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
@@ -166,7 +186,7 @@ def view_article(request, pk):
     View one specific article.
     '''
     queryset=get_object_or_404(Article.objects \
-            .prefetch_related('authors'), id=pk)
+            .prefetch_related('authors', 'commentaries', 'key_figures'), id=pk)
     serializer=ArticleSerializerNested(instance=queryset)
     return Response(serializer.data)
 

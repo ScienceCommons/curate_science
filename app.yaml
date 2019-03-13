@@ -1,6 +1,6 @@
 # [START django_app]
 runtime: python37
-entrypoint: gunicorn --bind :8080 curate_science.wsgi:application --log-level debug
+entrypoint: gunicorn --bind :$PORT curate_science.wsgi:application --log-level debug
 
 handlers:
 - url: /favicon.ico

@@ -4,6 +4,7 @@ from rest_framework.fields import ImageField, CharField, EmailField
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from drf_writable_nested import WritableNestedModelSerializer, UniqueFieldsMixin
+from invitations.models import Invitation
 from curate.models import (
     Author,
     Article,
@@ -11,6 +12,7 @@ from curate.models import (
     KeyFigure,
     UserProfile,
 )
+
 
 class AuthorSerializer(serializers.ModelSerializer):
     account = serializers.SlugRelatedField(
@@ -25,6 +27,11 @@ class AuthorSerializer(serializers.ModelSerializer):
             'id', 'account', 'orcid', 'name', 'position_title', 'affiliations',
             'profile_urls', 'created', 'slug', 'articles',
         )
+
+class InvitationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Invitation
+        fields=('email',)
 
 class KeyFigureSerializer(serializers.ModelSerializer):
     image = ImageField(max_length=None, allow_empty_file=False, use_url=True)

@@ -4,7 +4,9 @@ chardet==3.0.4
 coreapi==2.3.3
 coreschema==0.0.4
 coverage==4.5.1
+defusedxml==0.5.0
 Django==2.1.7
+django-allauth==0.39.1
 django-autocomplete-light==3.3.2
 django-autoslug==1.9.4
 django-extensions==2.1.2
@@ -23,6 +25,7 @@ idna==2.7
 itypes==1.1.0
 Jinja2==2.10
 MarkupSafe==1.0
+oauthlib==3.0.1
 packaging==18.0
 Pillow==5.4.1
 protobuf==3.7.0
@@ -33,8 +36,10 @@ pyasn1-modules==0.2.4
 pydot==1.2.4
 pyparsing==2.2.1
 python-dotenv==0.9.1
+python3-openid==3.1.0
 pytz==2018.5
 requests==2.19.1
+requests-oauthlib==1.2.0
 rsa==4.0
 six==1.11.0
 uritemplate==3.0.0
