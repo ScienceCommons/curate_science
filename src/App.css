@@ -65,6 +65,8 @@ a:link, a:visited, a:hover, a:active {
 	color: white;
 	font-size: .75rem;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	vertical-align: top;
+	margin-top: 5px;
 }
 
 .ArticleCommentaryBadge .Count {
