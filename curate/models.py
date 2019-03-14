@@ -8,10 +8,9 @@ from io import BytesIO
 from django.db import models
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage as storage
-
 from PIL import Image
 from django.conf import settings
-
+from invitations.models import Invitation
 import datetime
 
 # Create your models here.
@@ -24,6 +23,14 @@ class UserProfile(models.Model):
     recommended_content = JSONField(null=True, blank=True)
     account_settings = JSONField(null=True, blank=True)
     research_interests = JSONField(null=True, blank=True)
+    invite = models.OneToOneField(Invitation, on_delete=models.DO_NOTHING, null=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    slug = AutoSlugField(
+        populate_from = 'name',
+        unique=True,
+        editable=True,
+        null=True,
+    )
 
 def populate_slug(instance):
     return ' '.join(

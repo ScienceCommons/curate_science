@@ -28,11 +28,6 @@ class AuthorSerializer(serializers.ModelSerializer):
             'profile_urls', 'created', 'slug', 'articles',
         )
 
-class InvitationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Invitation
-        fields=('email',)
-
 class KeyFigureSerializer(serializers.ModelSerializer):
     image = ImageField(max_length=None, allow_empty_file=False, use_url=True)
     class Meta:
@@ -116,3 +111,9 @@ class UserSerializer(WritableNestedModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+
+class InvitationSerializer(WritableNestedModelSerializer):
+    userprofile = UserProfileSerializer()
+    class Meta:
+        model=Invitation
+        fields=('email','userprofile')

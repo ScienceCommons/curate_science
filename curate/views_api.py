@@ -60,20 +60,6 @@ def list_accounts(request):
     serializer=UserSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
-# Account creation / signup
-@api_view(['GET', 'POST'])
-def create_account(request):
-    if request.method == 'POST':
-        user = UserSerializer(data=request.data)
-        if user.is_valid():
-            user.save()
-            return Response(user.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        serializer=UserSerializer()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
 # Invitation creation
 @api_view(['GET', 'POST'])
 @permission_classes((IsAuthenticated, IsAdminUser,))
@@ -81,11 +67,14 @@ def create_invitation(request):
     if request.method == 'POST':
         serializer = InvitationSerializer(data=request.data)
         if serializer.is_valid():
+            profile = serializer.validated_data.get('userprofile')
             invite = Invitation.create(
                 email=serializer.validated_data.get('email'),
                 inviter=request.user
             )
+            up = UserProfile.objects.create(invite=invite, **profile)
             invite.send_invitation(request)
+            serializer.data['userprofile']['slug'] = up.slug
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

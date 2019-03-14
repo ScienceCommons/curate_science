@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from django.shortcuts import reverse
 from django.contrib import auth
+from invitations.models import Invitation
 import json
 from curate import models
 from django.conf import settings
@@ -514,6 +515,20 @@ class TestAPIViews(TestCase):
         url = reverse('api-delete-key-figure', kwargs={'pk': kf.id})
         r = client.delete(url)
         assert r.status_code == 403
+
+    def test_create_invitation(self):
+        client = APIClient()
+        client.login(username='admin', password='password')
+        url = reverse('api-create-invitation')
+        res = client.post(url, {
+            "email": "test.user@example.com",
+            "userprofile": {
+                "name": "Test User"
+            }
+        }, format="json")
+        assert res.status_code == 201
+        i = Invitation.objects.get(email="test.user@example.com")
+        assert i.userprofile.slug == "test-user"
 
     # def test_article_search(self):
     #     self.client.login(username='new_user', password='password1')
