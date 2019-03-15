@@ -89,14 +89,34 @@ class TransparencyBadge extends React.Component {
 		})
 	}
 
+	render_commentaries() {
+		return (
+			<ul>
+			{ this.props.commentaries.map((comm) => {
+				return <li><Typography><a href={comm.commentary_url} target="_blank">{ comm.authors_year }</a></Typography></li>
+			}) }
+			</ul>
+		)
+	}
+
 	render() {
 		let {commentaries} = this.props
-		let commentary_el
-		if (commentaries.length > 0) commentary_el = <span className="ArticleCommentaryBadge">Commentaries <span className="Count">{ commentaries.length }</span></span>
+		let commentary_el, commentary_popover
+		if (commentaries.length > 0) {
+			commentary_el = <span className="ArticleCommentaryBadge">Commentaries <span className="Count">{ commentaries.length }</span></span>
+			commentary_popover = (
+				<MouseOverPopover target={commentary_el} key='commentary'>
+					<div style={{padding: 10}}>
+						<Typography variant="h5">Commentaries about this article:</Typography>
+						{ this.render_commentaries() }
+					</div>
+				</MouseOverPopover>
+			)
+		}
 		return (
 			<div>
 				<span style={{marginRight: 10}}>{ this.relevant_badges().map(this.render_feature) }</span>
-				{ commentary_el }
+				{ commentary_popover }
 			</div>
 		)
 	}
