@@ -318,12 +318,14 @@ class ArticleEditor extends React.Component {
 
     handle_close() {
         let {form} = this.state
-        if (!form.is_live) {
+        if (!form.is_live && form.id != null) {
             // Not yet live, delete article
             this.handle_delete()
         } else {
             // Live, just close without saving
-            this.props.onClose()
+            this.setState({form: initialFormState()}, () => {
+                this.props.onClose()
+            })
         }
     }
 
