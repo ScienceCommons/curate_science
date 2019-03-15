@@ -8,6 +8,7 @@ const CLOSE_DELAY = 2000
 
 const styles = theme => ({
   popover: {
+    pointerEvents: 'none',
   },
   paper: {
     padding: theme.spacing.unit,
@@ -38,6 +39,7 @@ class MouseOverPopover extends React.Component {
           aria-owns={open ? 'mouse-over-popover' : undefined}
           aria-haspopup="true"
           onMouseEnter={this.handlePopoverOpen}
+          onMouseLeave={this.handlePopoverClose}
         >
           { target }
         </span>
