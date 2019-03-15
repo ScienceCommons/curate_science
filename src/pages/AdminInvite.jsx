@@ -46,7 +46,12 @@ class AdminInvite extends React.Component {
     	let {form} = this.state
     	let email = form.email
     	if (email != null && email.length > 0) {
-	    	let data = {email: email}
+	    	let data = {
+	    		email: email,
+	    		userprofile: {
+					name: form.name || ''
+				}
+	    	}
 	    	json_api_req('POST', `/api/invitations/create/`, data, cookies.get('csrftoken'), (res) => {
 	    		this.setState({form: {}}, () => {
 		    		this.show_snack(`Invite sent to ${email}!`)
@@ -73,6 +78,12 @@ class AdminInvite extends React.Component {
 									   fullWidth autoComplete="off"
 									   onChange={this.handle_change}
 									   value={form.email||''}/>
+
+							<TextField name="name" key="name" label="Full name"
+									   placeholder="Full name" type="text"
+									   fullWidth autoComplete="off"
+									   onChange={this.handle_change}
+									   value={form.name||''}/>
 
 							<Button variant="contained" color='primary' style={{marginTop: 15}} onClick={this.invite}>Send Invite</Button>
 						</Paper>
