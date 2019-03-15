@@ -221,13 +221,35 @@ const INPUT_SPECS = {
         type: 'url',
         placeholder: 'http://...',
         adornment: 'link'
-
     },
     'reporting_standards_type': {
         label: "Reporting standards",
         type: 'select',
         options: C.REPORTING_STANDARDS_TYPES
-    }
+    },
+    // Replication fields
+    'number_of_reps': {
+        label: "Number of reps",
+        type: 'number',
+        placeholder: '2'
+    },
+    'original_study': {
+        label: "Original study",
+        type: 'text',
+        placeholder: 'Kenrick et al (1989) Study 2'
+    },
+    'target_effects': {
+        label: "Target effect(s)",
+        type: 'text',
+        placeholder: 'playboy effect'
+    },
+    'original_article_url': {
+        label: "Original article URL",
+        type: 'url',
+        placeholder: 'http://...',
+        adornment: 'link'
+    },
+
 }
 
 function initialFormState() {
@@ -452,11 +474,11 @@ class ArticleEditor extends React.Component {
             </div>
         )
     }
-
 	render() {
         let {classes, article_id, open} = this.props
-        let {figures} = this.state
+        let {figures, form} = this.state
         let content
+        let replication = form.article_type == 'REPLICATION'
         if (article_id != null) content = (
             <div className={classes.content}>
                 <Grid container spacing={8}>
@@ -488,8 +510,26 @@ class ArticleEditor extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
                         { this.render_field('article_type') }
+                    </Grid>
+                    <Grid item xs={8} hidden={!replication}>
+                        <Typography variant="h6">Replication details</Typography>
+                        <Grid container spacing={8}>
+                            <Grid item xs={3}>
+                                { this.render_field('number_of_reps') }
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('original_study') }
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('target_effects') }
+                            </Grid>
+                            <Grid item xs={3}>
+                                { this.render_field('original_article_url') }
+                            </Grid>
+                        </Grid>
+                        <Typography variant="body2" color="gray">'Close', 'Very close', or 'Exact' replications only. See <a href="/sitestatic/legacy/logos/replication-taxonomy-v4_small.png" target="_blank">replication taxonomy</a> for details.</Typography>
                     </Grid>
                 </Grid>
                 <Typography variant="overline">Key Figures</Typography>

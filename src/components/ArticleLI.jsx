@@ -129,11 +129,12 @@ class ArticleLI extends React.Component {
                      'commentaries'
 									   ])
     let show_figures = article.key_figures || figures || []
+    let rd = pick(article, ['number_of_reps', 'original_study', 'target_effects', 'original_article_url'])
 		return (
 			<div className="ArticleCard">
 				<Card className={classes.card} raised>
 					<CardContent>
-						<ArticleType type={article.article_type} />
+						<ArticleType type={article.article_type} replication_data={rd} />
 						<ArticleContentLinks {...content_links} />
 
 						<Typography className={classes.title} variant="h2" color="textPrimary">{article.title}</Typography>

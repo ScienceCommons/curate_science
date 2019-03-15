@@ -56,6 +56,17 @@ a:link, a:visited, a:hover, a:active {
 	padding: 2px 7px;
 }
 
+.ArticleType .Count {
+	border-radius: 3px;
+	background: white;
+	border: 1px solid #BBB;
+	color: black;
+	font-size: .55rem;
+	padding: 1px 2px;
+	margin-left: 5px;
+}
+
+
 .ArticleCommentaryBadge {
 	background-color: #a7a7a7;
 	display: inline-block;
