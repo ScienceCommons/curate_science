@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { Link } from "react-router-dom";
+import {DebounceInput} from 'react-debounce-input';
 
 import Typography from '@material-ui/core/Typography';
 import {List, Grid, Button, Icon, TextField,
@@ -42,12 +43,6 @@ const styles = theme => ({
     formControl: {
         minWidth: 200
     }
-    // cssInput: {
-    //     padding: '2px'
-    // },
-    // cssLabel: {
-    //     padding: '2px'
-    // }
 })
 
 const INPUT_SPECS = {
@@ -697,40 +692,66 @@ class CSTextField extends React.Component {
             }
         }
         if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
-        return (
-            <TextField
+        // let tf = (
+        //     <TextField
+        //           id={id}
+        //           key={id}
+        //           name={id}
+        //           label={specs.label}
+        //           type={specs.type}
+        //           placeholder={specs.placeholder}
+        //           margin="dense"
+        //           fullWidth={specs.fullWidth}
+        //           autoComplete="off"
+        //           InputLabelProps={{
+        //             classes: {
+        //                 root: classes.cssLabel
+        //             }
+        //           }}
+        //           InputProps={{
+        //             classes: {
+        //                 root: classes.cssLabel
+        //             }
+        //           }}
+        //           SelectProps={{
+        //             classes: {
+        //                 root: classes.cssSelect
+        //             }
+        //           }}
+        //           InputProps={inputProps}
+        //           required={specs.required}
+        //           multiline={specs.multiline}
+        //           variant="outlined"
+        //         />
+        //     )
+        let tf = (
+            <input
                   id={id}
                   key={id}
                   name={id}
                   label={specs.label}
-                  value={value || ''}
                   type={specs.type}
-                  onChange={this.handle_change}
                   placeholder={specs.placeholder}
                   margin="dense"
                   fullWidth={specs.fullWidth}
                   autoComplete="off"
-                  InputLabelProps={{
-                    classes: {
-                        root: classes.cssLabel
-                    }
-                  }}
-                  InputProps={{
-                    classes: {
-                        root: classes.cssLabel
-                    }
-                  }}
-                  SelectProps={{
-                    classes: {
-                        root: classes.cssSelect
-                    }
-                  }}
-                  InputProps={inputProps}
                   required={specs.required}
                   multiline={specs.multiline}
-                  variant="outlined"
                 />
-            )
+        )
+        return <DebounceInput
+                  id={id}
+                  key={id}
+                  name={id}
+                  onChange={this.handle_change}
+                  value={value || ''}
+                  type={specs.type}
+                  placeholder={specs.placeholder}
+                  fullWidth={specs.fullWidth}
+                  autoComplete="off"
+                  required={specs.required}
+                  multiline={specs.multiline}
+                />
     }}
 
 CSTextField.defaultProps = {

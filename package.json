@@ -22,6 +22,7 @@
     "query-string": "^6.2.0",
     "react": "^16.6.0",
     "react-cookie": "^3.0.4",
+    "react-debounce-input": "^3.2.0",
     "react-dom": "^16.6.0",
     "react-fancybox": "^0.2.3",
     "react-responsive-carousel": "^3.1.43",
