@@ -124,7 +124,7 @@ class FigureSelector extends React.Component {
                     <Paper style={{padding: 10, margin: 10}} elevation={3}>
                         <Typography variant="overline">Add a figure...</Typography>
                         <Grid container spacing={8}>
-                            <Grid item xs={12} justifyContent="center">
+                            <Grid item xs={12}>
                                 <Typography variant="body1">Choose a figure from your computer (you can also drag an image to the input below)</Typography>
                                 <input ref={ref => this.fileInput = ref}
                                        type="file"

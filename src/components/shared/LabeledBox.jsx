@@ -7,7 +7,8 @@ const styles = theme => ({
 	box: {
 		border: '2px solid black',
 		padding: 8,
-		position: 'relative'
+		position: 'relative',
+		marginTop: 5
 	},
 	label: {
 		background: theme.palette.bg,
@@ -25,10 +26,13 @@ class LabeledBox extends React.Component {
     }
 
 	render() {
-		let {label, classes} = this.props
+		let {label, classes, bgcolor, fontSize} = this.props
+		let st = {}
+		if (bgcolor != null) st.backgroundColor = bgcolor
+		if (fontSize != null) st.fontSize = fontSize
 		return (
 			<div className={classes.box}>
-				<Typography className={classes.label} variant="button">{ label }</Typography>
+				<Typography className={classes.label} variant="button" style={st}>{ label }</Typography>
 				{ this.props.children }
 			</div>
 		)
@@ -36,7 +40,9 @@ class LabeledBox extends React.Component {
 }
 
 LabeledBox.defaultProps = {
-	label: "Box"
+	label: "Box",
+	bgcolor: null,
+	fontSize: '0.75rem'
 };
 
 export default withStyles(styles)(LabeledBox);

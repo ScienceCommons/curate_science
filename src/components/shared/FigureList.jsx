@@ -65,7 +65,7 @@ class FigureList extends React.Component {
                   style={{backgroundImage: `url(${kf.image})`}} />
         )
         let tooltip = showDelete ? "Delete figure" : "Enlarge figure"
-        return <Tooltip title={tooltip}><a key={i} href="javascript:void(0)" onClick={this.figure_click(i)}>{ img }</a></Tooltip>
+        return <Tooltip title={tooltip} key={i}><a key={i} href="javascript:void(0)" onClick={this.figure_click(i)}>{ img }</a></Tooltip>
     }
 
 	render() {

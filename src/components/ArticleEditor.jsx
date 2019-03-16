@@ -15,6 +15,7 @@ import {List, Grid, Button, Icon, TextField,
 import C from '../constants/constants';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './FigureSelector.jsx';
+import LabeledBox from '../components/shared/LabeledBox.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {clone, set} from 'lodash'
 import {json_api_req, simple_api_req} from '../util/util.jsx'
@@ -526,7 +527,7 @@ class ArticleEditor extends React.Component {
                                 { this.render_field('original_article_url') }
                             </Grid>
                         </Grid>
-                        <Typography variant="body2" color="gray">'Close', 'Very close', or 'Exact' replications only. See <a href="/sitestatic/legacy/logos/replication-taxonomy-v4_small.png" target="_blank">replication taxonomy</a> for details.</Typography>
+                        <Typography variant="body2" color="textSecondary">'Close', 'Very close', or 'Exact' replications only. See <a href="/sitestatic/legacy/logos/replication-taxonomy-v4_small.png" target="_blank">replication taxonomy</a> for details.</Typography>
                     </Grid>
                 </Grid>
                 <Typography variant="overline">Key Figures</Typography>
@@ -673,6 +674,15 @@ ArticleEditor.defaultProps = {
     article_id: null
 }
 
+const csinput_styles = {
+    input: {
+        padding: 8,
+        display: 'block',
+        borderRadius: '3px',
+        border: '1px solid #CCC'
+    }
+}
+
 class CSTextField extends React.Component {
     constructor(props) {
         super(props);
@@ -692,66 +702,21 @@ class CSTextField extends React.Component {
             }
         }
         if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
-        // let tf = (
-        //     <TextField
-        //           id={id}
-        //           key={id}
-        //           name={id}
-        //           label={specs.label}
-        //           type={specs.type}
-        //           placeholder={specs.placeholder}
-        //           margin="dense"
-        //           fullWidth={specs.fullWidth}
-        //           autoComplete="off"
-        //           InputLabelProps={{
-        //             classes: {
-        //                 root: classes.cssLabel
-        //             }
-        //           }}
-        //           InputProps={{
-        //             classes: {
-        //                 root: classes.cssLabel
-        //             }
-        //           }}
-        //           SelectProps={{
-        //             classes: {
-        //                 root: classes.cssSelect
-        //             }
-        //           }}
-        //           InputProps={inputProps}
-        //           required={specs.required}
-        //           multiline={specs.multiline}
-        //           variant="outlined"
-        //         />
-        //     )
-        let tf = (
-            <input
-                  id={id}
-                  key={id}
-                  name={id}
-                  label={specs.label}
-                  type={specs.type}
-                  placeholder={specs.placeholder}
-                  margin="dense"
-                  fullWidth={specs.fullWidth}
-                  autoComplete="off"
-                  required={specs.required}
-                  multiline={specs.multiline}
-                />
-        )
-        return <DebounceInput
-                  id={id}
-                  key={id}
-                  name={id}
-                  onChange={this.handle_change}
-                  value={value || ''}
-                  type={specs.type}
-                  placeholder={specs.placeholder}
-                  fullWidth={specs.fullWidth}
-                  autoComplete="off"
-                  required={specs.required}
-                  multiline={specs.multiline}
-                />
+        return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={specs.label}>
+                    <DebounceInput
+                      id={id}
+                      key={id}
+                      name={id}
+                      onChange={this.handle_change}
+                      value={value || ''}
+                      type={specs.type}
+                      placeholder={specs.placeholder}
+                      autoComplete="off"
+                      required={specs.required}
+                      multiline={specs.multiline}
+                      className={classes.input}
+                    />
+                </LabeledBox>
     }}
 
 CSTextField.defaultProps = {
@@ -760,7 +725,7 @@ CSTextField.defaultProps = {
     specs: {}
 }
 
-const StyledCSTextField = withStyles(styles)(CSTextField)
+const StyledCSTextField = withStyles(csinput_styles)(CSTextField)
 
 
 export default withRouter(withCookies(withStyles(styles)(ArticleEditor)));
