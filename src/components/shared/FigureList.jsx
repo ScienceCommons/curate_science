@@ -9,7 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = {
     container: {
        display: 'flex',
-       flexDirection: 'row'
+       flexDirection: 'row',
+       overflow: 'scroll-x'
     },
     thumbnail: {
         display: 'inline-block',
@@ -45,6 +46,12 @@ class FigureList extends React.Component {
         if (this.props.onDelete != null) this.props.onDelete(idx)
     }
 
+    figure_click = idx => event => {
+        let {figures, showDelete} = this.props
+        if (showDelete) this.delete_figure(idx)
+        else this.props.onFigureClick(figures[idx])
+    }
+
     handle_add() {
         this.props.onAdd()
     }
@@ -53,12 +60,12 @@ class FigureList extends React.Component {
         let {classes, showDelete} = this.props
         let kind = kf.is_table ? 'Table' : 'Figure'
         let img = (
-            <span key={i}
+            <img key={i}
                   className={classes.thumbnail}
                   style={{backgroundImage: `url(${kf.image})`}} />
         )
-        if (showDelete) return <Tooltip title="Delete figure"><a key={i} href="javascript:void(0)" onClick={this.delete_figure(i)}>{ img }</a></Tooltip>
-        else return img
+        let tooltip = showDelete ? "Delete figure" : "Enlarge figure"
+        return <Tooltip title={tooltip}><a key={i} href="javascript:void(0)" onClick={this.figure_click(i)}>{ img }</a></Tooltip>
     }
 
 	render() {

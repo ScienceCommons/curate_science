@@ -31,7 +31,7 @@ class TransparencyBadge extends React.Component {
     }
 
 	render_feature(f, i) {
-		let {icon_size, reporting_standards_type, classes} = this.props
+		let {icon_size, reporting_standards_type, classes, article_type} = this.props
 		let repstd = f.id == 'REPSTD'
 		let url
 		let enabled = false
@@ -42,7 +42,7 @@ class TransparencyBadge extends React.Component {
 		if (repstd) {
 			enabled = reporting_standards_type != null
 		} else {
-			enabled = url != null
+			enabled = url != null && url.length > 0
 		}
 		let label = ''
 		let icon = f.icon
@@ -61,7 +61,8 @@ class TransparencyBadge extends React.Component {
 		)
 		if (!enabled) {
 			// If article type calls for transparencies to be bonuses, dont render disabled badges
-			return f.transparencies_bonus ? null : badge_icon
+			let tbonus = find(C.ARTICLE_TYPES, {id: article_type}).transparencies_bonus
+			return tbonus ? null : badge_icon
 		} else {
 			let popover_content
 			if (repstd) {
