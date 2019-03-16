@@ -13,10 +13,16 @@ class ArticleSelector extends React.Component {
         this.state = {
         };
         this.handleChange = this.handleChange.bind(this)
+        this.filter_already_linked = this.filter_already_linked.bind(this)
     }
 
     handleChange(value) {
         if (this.props.onChange != null) this.props.onChange(value)
+    }
+
+    filter_already_linked(a) {
+        let {author_articles} = this.props
+        return author_articles.indexOf(parseInt(a.id)) == -1
     }
 
     render() {
@@ -26,9 +32,9 @@ class ArticleSelector extends React.Component {
         return (
             <div>
                 <AutocompleteReactSelect
-                     creatable
                      labelProp="text"
                      listUrl="/api/articles/autocomplete/"
+                     filterFn={this.filter_already_linked}
                      placeholder="Search articles by title, DOI, etc *"
                      onChange={this.handleChange} />
             </div>
@@ -37,10 +43,11 @@ class ArticleSelector extends React.Component {
 }
 
 ArticleSelector.propTypes = {
-
+    author_articles: PropTypes.array
 }
 
 ArticleSelector.defaultProps = {
+    author_articles: []
 };
 
 export default withStyles(styles)(ArticleSelector);

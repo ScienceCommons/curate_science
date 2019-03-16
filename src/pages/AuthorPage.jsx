@@ -261,6 +261,7 @@ class AuthorPage extends React.Component {
             editing_article_id, popperAnchorEl, author_creator_showing,
             view_figure_thumb, view_figure_full} = this.state
         if (author == null) return <Loader />
+        let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
         let position = author.position_title
         let editable = this.editable()
@@ -320,7 +321,7 @@ class AuthorPage extends React.Component {
                               }}
                             >
                                 <div style={{width: "400px", height: "250px", padding: 14 }}>
-                                  <ArticleSelector onChange={this.link_existing_article} />
+                                  <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
                                 </div>
                             </Popover>
                         </div>

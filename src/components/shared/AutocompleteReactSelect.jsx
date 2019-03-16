@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Select from 'react-select';
 import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
+import Async from 'react-select/lib/Async';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import NoSsr from '@material-ui/core/NoSsr';
@@ -192,14 +193,16 @@ class AutocompleteReactSelect extends React.Component {
   }
 
   loadOptions(inputValue, cb) {
-    let {listUrl} = this.props
+    let {listUrl, filterFn} = this.props
     this.setState({loading: true}, () => {
       let query = encodeURIComponent(inputValue)
       return fetch(`${listUrl}?q=${query}`).then((res) => {
         return res.json()
       }).then((json) => {
         return this.setState({loading: false}, () => {
-          cb(json.results)
+          let res = json.results
+          if (filterFn != null) res = res.filter(filterFn)
+          cb(res)
         })
       })
     })
@@ -286,8 +289,13 @@ class AutocompleteReactSelect extends React.Component {
         )
     } else {
       sel = (
-        <Select
+        <Async
           onChange={this.handleChange}
+          isLoading={loading}
+          loadOptions={this.loadOptions}
+          isMulti={multi}
+          getOptionLabel={this.renderOptionLabel}
+          getOptionValue={this.renderOptionValue}
           {...params} />
       )
     }
@@ -311,7 +319,6 @@ AutocompleteReactSelect.defaultProps = {
 }
 
 AutocompleteReactSelect.propTypes = {
-  creatable: PropTypes.bool,
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   creatable: PropTypes.bool,
@@ -322,6 +329,7 @@ AutocompleteReactSelect.propTypes = {
   multi: PropTypes.bool,
   onChange: PropTypes.func,
   onCreate: PropTypes.func,
+  filterFn: PropTypes.func
 };
 
 export default withStyles(styles, { withTheme: true })(AutocompleteReactSelect);
