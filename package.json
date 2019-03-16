@@ -23,6 +23,7 @@
     "react": "^16.6.0",
     "react-cookie": "^3.0.4",
     "react-dom": "^16.6.0",
+    "react-fancybox": "^0.2.3",
     "react-responsive-carousel": "^3.1.43",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
@@ -38,6 +39,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
+    "react-svg-loader": "^2.1.0",
     "style-loader": "^0.23.1"
   }
 }

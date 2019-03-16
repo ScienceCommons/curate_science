@@ -19,6 +19,9 @@ import LabeledBox from '../components/shared/LabeledBox.jsx';
 
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
+import ReactFancyBox from 'react-fancybox'
+import 'react-fancybox/lib/fancybox.css'
+
 import {merge} from 'lodash'
 
 import {json_api_req, simple_api_req, randomId} from '../util/util.jsx'
@@ -62,7 +65,9 @@ class AuthorPage extends React.Component {
             edit_article_modal_open: false,
             editing_article_id: null,
             popperAnchorEl: null,
-            author_creator_showing: false
+            author_creator_showing: false,
+            view_figure_thumb: null,
+            view_figure_full: null
         }
 
         this.open_author_editor = this.toggle_author_editor.bind(this, true)
@@ -78,6 +83,7 @@ class AuthorPage extends React.Component {
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
         this.article_updated = this.article_updated.bind(this)
+        this.show_figure = this.show_figure.bind(this)
     }
 
     componentDidMount() {
@@ -244,14 +250,25 @@ class AuthorPage extends React.Component {
         });
     };
 
+    show_figure(fig) {
+        console.log(fig)
+        this.setState({view_figure_thumb: fig.thumbnail, view_figure_full: fig.image})
+    }
+
 	render() {
         let {classes, user_session} = this.props
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
-            editing_article_id, popperAnchorEl, author_creator_showing} = this.state
+            editing_article_id, popperAnchorEl, author_creator_showing,
+            view_figure_thumb, view_figure_full} = this.state
         if (author == null) return <Loader />
         const add_preexisting_open = Boolean(popperAnchorEl)
         let position = author.position_title
         let editable = this.editable()
+        let gallery
+        // gallery = <ReactFancyBox
+        //               thumbnail={view_figure_thumb}
+        //               image={view_figure_full}
+        //               showCloseBtn />
         if (author.affiliations != null) position += ', '
 		return (
             <div className={classes.root}>
@@ -315,9 +332,12 @@ class AuthorPage extends React.Component {
                                                 onEdit={this.handle_edit}
                                                 onDelete={this.handle_delete}
                                                 onUnlink={this.unlink}
+                                                onFigureClick={this.show_figure}
                                                 admin={user_session.admin} />) }
                     </Grid>
     			</Grid>
+
+                { gallery }
 
                 <AuthorEditor author={author}
                               open={edit_author_modal_open}
@@ -339,6 +359,7 @@ class ArticleWithActions extends React.Component {
         this.edit = this.edit.bind(this)
         this.unlink = this.unlink.bind(this)
         this.delete = this.delete.bind(this)
+        this.show_figure = this.show_figure.bind(this)
     }
 
     edit() {
@@ -356,6 +377,10 @@ class ArticleWithActions extends React.Component {
         this.props.onUnlink(article)
     }
 
+    show_figure(fig) {
+        this.props.onFigureClick(fig)
+    }
+
     render() {
         let {article, admin, editable} = this.props
         const ST = {
@@ -367,7 +392,7 @@ class ArticleWithActions extends React.Component {
         }
         return (
             <div key={article.id} className="ArticleWithActions">
-                <ArticleLI article={article} admin={false} />
+                <ArticleLI article={article} admin={false} onFigureClick={this.show_figure} />
                 <div className="ArticleActions">
                     <span hidden={!editable}>
                         <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>

@@ -82,6 +82,7 @@ class ArticleLI extends React.Component {
         };
 
         this.toggle_show_more = this.toggle_show_more.bind(this)
+        this.handle_figure_click = this.handle_figure_click.bind(this)
     }
 
     toggle_show_more() {
@@ -106,6 +107,10 @@ class ArticleLI extends React.Component {
     	}, (err) => {
 
     	})
+    }
+
+    handle_figure_click(fig) {
+      this.props.onFigureClick(fig)
     }
 
     empty(text) {
@@ -157,7 +162,7 @@ class ArticleLI extends React.Component {
 	  				<div id="details" hidden={!show_more}>
 	  					<Typography style={{lineHeight: 1.2, marginBottom: 10}}><TruncatedText text={article.abstract} /></Typography>
 	  					<ArticleKeywords keywords={article.keywords} />
-	  					<FigureList figures={show_figures} />
+	  					<FigureList figures={show_figures} onFigureClick={this.handle_figure_click} />
 	  					<div hidden={this.empty(article.author_contributions)}>
 		  					<Typography component="span">
 		  						<span className={classes.grayedTitle}>Author contributions:</span>
