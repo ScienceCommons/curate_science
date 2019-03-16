@@ -4,25 +4,49 @@ import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-const CLOSE_DELAY = 2000
+const CLOSE_DELAY = 1000
 
 const styles = theme => ({
   popover: {
-    pointerEvents: 'none',
+
   },
   paper: {
     padding: theme.spacing.unit,
   },
+  contentDiv: {
+
+  }
 });
 
 class MouseOverPopover extends React.Component {
-  state = {
-    anchorEl: null,
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchorEl: null,
+    }
+
+    this.interval_id = null
+    this.mouseOverPopover = this.mouseOverPopover.bind(this)
+    this.schedulePopoverClose = this.schedulePopoverClose.bind(this)
+  }
 
   handlePopoverOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
+
+  schedulePopoverClose() {
+    this.interval_id = window.setTimeout(() => {
+      this.handlePopoverClose()
+    }, CLOSE_DELAY)
+  }
+
+  mouseOverPopover() {
+    if (this.interval_id != null) {
+      window.clearTimeout(this.interval_id)
+      this.interval_id = null
+    }
+  }
 
   handlePopoverClose = () => {
     this.setState({ anchorEl: null })
@@ -38,8 +62,8 @@ class MouseOverPopover extends React.Component {
         <span
           aria-owns={open ? 'mouse-over-popover' : undefined}
           aria-haspopup="true"
-          onMouseEnter={this.handlePopoverOpen}
-          onMouseLeave={this.handlePopoverClose}
+          onMouseMove={this.handlePopoverOpen}
+          onMouseLeave={this.schedulePopoverClose}
         >
           { target }
         </span>
@@ -62,7 +86,7 @@ class MouseOverPopover extends React.Component {
           onClose={this.handlePopoverClose}
           disableRestoreFocus
         >
-          <div onMouseLeave={this.handlePopoverClose}>
+          <div onMouseEnter={this.mouseOverPopover} onMouseLeave={this.handlePopoverClose} className={classes.contentDiv}>
           { this.props.children }
           </div>
         </Popover>
