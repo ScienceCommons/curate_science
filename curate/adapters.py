@@ -3,6 +3,9 @@ from curate.models import UserProfile
 from allauth.account.adapter import DefaultAccountAdapter
 
 class AccountAdapter(DefaultAccountAdapter):
+    def is_open_for_signup(self, request):
+        return False
+
     def save_user(self, request, user, form):
         data = form.cleaned_data
         email = data.get('email')
