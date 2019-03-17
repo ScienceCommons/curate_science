@@ -61,6 +61,7 @@ class AuthorPage extends React.Component {
         this.state = {
             author: null,
             articles: [],
+            articles_loading: false,
             edit_author_modal_open: false,
             edit_article_modal_open: false,
             editing_article_id: null,
@@ -205,8 +206,10 @@ class AuthorPage extends React.Component {
         let {author} = this.state
         let slug = this.slug()
         if (slug != null) {
-            json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrftoken'), (res) => {
-                this.setState({articles: res})
+            this.setState({articles_loading: true}, () => {
+                json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrftoken'), (res) => {
+                    this.setState({articles: res, articles_loading: false})
+                })
             })
         }
     }
@@ -259,7 +262,7 @@ class AuthorPage extends React.Component {
         let {classes, user_session} = this.props
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
-            view_figure_thumb, view_figure_full} = this.state
+            view_figure_thumb, view_figure_full, articles_loading} = this.state
         if (author == null) return <Loader />
         let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
@@ -335,6 +338,7 @@ class AuthorPage extends React.Component {
                                                 onUnlink={this.unlink}
                                                 onFigureClick={this.show_figure}
                                                 admin={user_session.admin} />) }
+                        { articles_loading ? <Loader /> : null }
                     </Grid>
     			</Grid>
 

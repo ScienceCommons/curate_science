@@ -3,6 +3,10 @@ html, body {
     padding: 0;
 }
 
+::-webkit-input-placeholder {
+	color: #DDD;
+}
+
 #loader {
 	margin: 30px auto;
 }

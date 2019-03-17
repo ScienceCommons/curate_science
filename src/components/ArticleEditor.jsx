@@ -107,50 +107,64 @@ const INPUT_SPECS = {
         label: 'PDF URL',
         placeholder: "http://",
         type: 'url',
-        adornment: 'link'
+        adornment: 'link',
+        fullWidth: true
     },
     'html_url': {
         label: 'HTML URL',
         placeholder: "http://",
         type: 'url',
-        adornment: 'link'
+        adornment: 'link',
+        fullWidth: true
     },
     'preprint_url': {
         label: 'Preprint URL',
         placeholder: "http://",
         type: 'url',
-        adornment: 'link'
-
+        adornment: 'link',
+        fullWidth: true
     },
     'pdf_citations': {
         label: 'Citations',
         type: 'number',
-        adornment: 'format_quote'
+        placeholder: '2',
+        adornment: 'format_quote',
+        fullWidth: true
     },
     'pdf_downloads': {
         label: 'Downloads',
         type: 'number',
-        adornment: 'cloud_download'
+        placeholder: '2',
+        adornment: 'cloud_download',
+        fullWidth: true
     },
     'preprint_downloads': {
         label: 'Downloads',
         type: 'number',
-        adornment: 'cloud_download'
+        placeholder: '2',
+        adornment: 'cloud_download',
+        fullWidth: true
     },
     'pdf_views': {
         label: 'Views',
         type: 'number',
-        adornment: 'remove_red_eye'
+        placeholder: '2',
+        adornment: 'remove_red_eye',
+        fullWidth: true
     },
     'html_views': {
         label: 'Views',
         type: 'number',
-        adornment: 'remove_red_eye'
+        placeholder: '2',
+        adornment: 'remove_red_eye',
+        fullWidth: true
     },
     'preprint_views': {
         label: 'Views',
         type: 'number',
-        adornment: 'remove_red_eye'
+        placeholder: '2',
+        adornment: 'remove_red_eye',
+        fullWidth: true
     },
     'author_contributions': {
         label: "Author contributions",
@@ -204,19 +218,22 @@ const INPUT_SPECS = {
         label: "Public study materials URL",
         type: 'url',
         placeholder: 'http://...',
-        adornment: 'link'
+        adornment: 'link',
+        fullWidth: true
     },
     'public_data_url': {
         label: "Public data URL",
         type: 'url',
         placeholder: 'http://...',
-        adornment: 'link'
+        adornment: 'link',
+        fullWidth: true
     },
     'public_code_url': {
         label: "Public code URL",
         type: 'url',
         placeholder: 'http://...',
-        adornment: 'link'
+        adornment: 'link',
+        fullWidth: true
     },
     'reporting_standards_type': {
         label: "Reporting standards",
@@ -227,23 +244,27 @@ const INPUT_SPECS = {
     'number_of_reps': {
         label: "Number of reps",
         type: 'number',
-        placeholder: '2'
+        placeholder: '2',
+        fullWidth: true
     },
     'original_study': {
         label: "Original study",
         type: 'text',
-        placeholder: 'Kenrick et al (1989) Study 2'
+        placeholder: 'Kenrick et al (1989) Study 2',
+        fullWidth: true
     },
     'target_effects': {
         label: "Target effect(s)",
         type: 'text',
-        placeholder: 'playboy effect'
+        placeholder: 'playboy effect',
+        fullWidth: true
     },
     'original_article_url': {
         label: "Original article URL",
         type: 'url',
         placeholder: 'http://...',
-        adornment: 'link'
+        adornment: 'link',
+        fullWidth: true
     },
 
 }
@@ -551,18 +572,6 @@ class ArticleEditor extends React.Component {
                                 { this.render_field('prereg_protocol_type') }
                             </Grid>
                         </Grid>
-                        <div>
-                            <TransparencyIcon tt={{icon: 'materials'}} style={{paddingTop: 15}} /> { this.render_field('public_study_materials_url') }
-                        </div>
-                        <div>
-                            <TransparencyIcon tt={{icon: 'data'}} style={{paddingTop: 15}} /> { this.render_field('public_data_url') }
-                        </div>
-                        <div>
-                            <TransparencyIcon tt={{icon: 'code'}} style={{paddingTop: 15}} /> { this.render_field('public_code_url') }
-                        </div>
-                        <div>
-                            <TransparencyIcon tt={{icon: 'repstd'}} style={{paddingTop: 15}} /> { this.render_field('reporting_standards_type') }
-                        </div>
                     </Grid>
                     <Grid item xs={6}>
                         <Grid container spacing={8}>
@@ -602,6 +611,40 @@ class ArticleEditor extends React.Component {
                             </Grid>
                             <Grid item xs={3}>
                                 { this.render_field('preprint_views') }
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Grid container spacing={8}>
+                            <Grid item xs={1}>
+                                <TransparencyIcon tt={{icon: 'materials'}} style={{paddingTop: 15}} />
+                            </Grid>
+                            <Grid item xs={11}>
+                                { this.render_field('public_study_materials_url') }
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={8}>
+                            <Grid item xs={1}>
+                                <TransparencyIcon tt={{icon: 'data'}} style={{paddingTop: 15}} />
+                            </Grid>
+                            <Grid item xs={11}>
+                            { this.render_field('public_data_url') }
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={8}>
+                            <Grid item xs={1}>
+                                <TransparencyIcon tt={{icon: 'code'}} style={{paddingTop: 15}} />
+                            </Grid>
+                            <Grid item xs={11}>
+                                { this.render_field('public_code_url') }
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={8}>
+                            <Grid item xs={1}>
+                                <TransparencyIcon tt={{icon: 'repstd'}} style={{paddingTop: 15}} />
+                            </Grid>
+                            <Grid item xs={11}>
+                                { this.render_field('reporting_standards_type') }
                             </Grid>
                         </Grid>
                     </Grid>
@@ -677,6 +720,7 @@ ArticleEditor.defaultProps = {
 const csinput_styles = {
     input: {
         padding: 8,
+        boxSizing: 'border-box',
         display: 'block',
         borderRadius: '3px',
         border: '1px solid #CCC'
@@ -695,14 +739,16 @@ class CSTextField extends React.Component {
 
     render() {
         let {id, value, specs, classes} = this.props
-        let adornment = null
-        let inputProps = {
-            classes: {
-                root: classes.cssInput
-            }
-        }
-        if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
-        return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={specs.label}>
+        // let adornment = null
+        // let inputProps = {
+        //     classes: {
+        //         root: classes.cssInput
+        //     }
+        // }
+        // if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
+        let st = {}
+        if (specs.fullWidth) st.width = '100%'
+        return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={specs.label} inlineBlock={!specs.fullWidth}>
                     <DebounceInput
                       id={id}
                       key={id}
@@ -715,6 +761,7 @@ class CSTextField extends React.Component {
                       required={specs.required}
                       multiline={specs.multiline}
                       className={classes.input}
+                      style={st}
                     />
                 </LabeledBox>
     }}

@@ -26,12 +26,13 @@ class LabeledBox extends React.Component {
     }
 
 	render() {
-		let {label, classes, bgcolor, fontSize} = this.props
+		let {label, classes, bgcolor, fontSize, inlineBlock} = this.props
 		let st = {}
 		if (bgcolor != null) st.backgroundColor = bgcolor
 		if (fontSize != null) st.fontSize = fontSize
+		if (inlineBlock) st.display = 'inline-block'
 		return (
-			<div className={classes.box}>
+			<div className={classes.box} style={st}>
 				<Typography className={classes.label} variant="button" style={st}>{ label }</Typography>
 				{ this.props.children }
 			</div>
@@ -42,7 +43,8 @@ class LabeledBox extends React.Component {
 LabeledBox.defaultProps = {
 	label: "Box",
 	bgcolor: null,
-	fontSize: '0.75rem'
+	fontSize: '0.75rem',
+	inlineBlock: false
 };
 
 export default withStyles(styles)(LabeledBox);
