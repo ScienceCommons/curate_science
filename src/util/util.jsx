@@ -107,3 +107,13 @@ export const get_link_source_icon = (url) => {
     })
     return icon
 }
+
+export const summarize_api_errors = (res) => {
+    // Summarize all API errors in the most basic way to display in UI
+    // Ex: {"account":["Object with username=blah does not exist."]}
+    let messages = []
+    Object.keys(res).forEach((key) => {
+        messages = messages.concat(res[key])
+    })
+    return messages.join(' ')
+}
