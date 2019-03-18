@@ -154,12 +154,12 @@ class TopBar extends React.Component {
                 <Divider />
             </div>
         )
-        let author_page_link = has_author_page ? `/author/${user_session.author.slug}` : '/create_author'
         const user_dropdown_menu = [
             <div key="ddmenu">
                 <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
-                <Link to={author_page_link} key="author_page"><MenuItem>{ has_author_page ? "My author page" : "Create author page" }</MenuItem></Link>
-                <Link to="/admin/manage" key="new_article" hidden={!admin}><MenuItem>Add new article</MenuItem></Link>
+                <Link to={`/author/${user_session.author.slug}`} key="author_page" hidden={!has_author_page}><MenuItem>My author page</MenuItem></Link>
+                <Link to={'/create_author'} key="create_author_page" hidden={has_author_page && !admin}><MenuItem>Create author page</MenuItem></Link>
+                <Link to="/admin/manage" key="new_article" hidden={!admin}><MenuItem>Manage and add new articles</MenuItem></Link>
                 <Link to="/admin/invite" key="invite" hidden={!admin}><MenuItem>Invite new users</MenuItem></Link>
                 <Divider />
                 <MenuItem onClick={this.logout}>Logout</MenuItem>
