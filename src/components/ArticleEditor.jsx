@@ -313,6 +313,7 @@ class ArticleEditor extends React.Component {
             let pk = nextProps.article_id
             fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
                 let form = clone(res)
+                console.log(form)
                 delete form.key_figures
                 if (form.title.startsWith(C.PLACEHOLDER_TITLE_PREFIX)) form.title = ""
                 this.setState({form: form, figures: res.key_figures})
@@ -460,7 +461,10 @@ class ArticleEditor extends React.Component {
         if (specs.type == 'checkbox') return this.render_checkbox(id, value, specs)
         else if (specs.type == 'radio') return this.render_radio_group(id, value, specs)
         else if (specs.type == 'select') return this.render_select(id, value, specs)
-        else return <StyledCSTextField id={id} value={value} specs={specs} onChange={this.handle_change} />
+        else {
+            let disabled = id == 'year' && form.in_press === true
+            return <StyledCSTextField id={id} value={value} specs={specs} disabled={disabled} onChange={this.handle_change} />
+        }
     }
 
     render_commentaries() {
@@ -746,7 +750,7 @@ class CSTextField extends React.Component {
     }
 
     render() {
-        let {id, value, specs, classes} = this.props
+        let {id, value, specs, classes, disabled} = this.props
         // let adornment = null
         // let inputProps = {
         //     classes: {
@@ -766,6 +770,7 @@ class CSTextField extends React.Component {
                       type={specs.type}
                       placeholder={specs.placeholder}
                       autoComplete="off"
+                      disabled={disabled}
                       required={specs.required}
                       element={specs.multiline ? 'textarea' : 'input'}
                       multiline={specs.multiline}
