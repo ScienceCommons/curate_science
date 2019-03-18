@@ -30,7 +30,8 @@ class FigureSelector extends React.Component {
         super(props);
         this.state = {
             form: initialForm(),
-            creator_showing: false
+            creator_showing: false,
+            adding: false
         };
 
         this.do_upload = this.do_upload.bind(this)
@@ -68,25 +69,27 @@ class FigureSelector extends React.Component {
         // Upload figure
         let {form} = this.state
         let {figures, article_id, cookies} = this.props
-        let formData  = new FormData();
-        formData.append('file', form.file);
-        fetch(`/api/articles/${article_id}/key_figures/upload/`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRFToken': cookies.get('csrftoken'),
-            },
-            body: formData
-        }).then(r => {
-            if (r.ok && r.status == 201) {
-                r.json().then(data => {
-                    figures.push(data)
-                    if (this.props.onChange != null) this.props.onChange(figures)
-                    this.fileInput.value = ""
-                    this.setState({form: initialForm(), creator_showing: false})
-                })
-            } else {
-                console.error(r)
-            }
+        this.setState({adding: true}, () => {
+            let formData  = new FormData();
+            formData.append('file', form.file);
+            fetch(`/api/articles/${article_id}/key_figures/upload/`, {
+                method: 'PUT',
+                headers: {
+                    'X-CSRFToken': cookies.get('csrftoken'),
+                },
+                body: formData
+            }).then(r => {
+                if (r.ok && r.status == 201) {
+                    r.json().then(data => {
+                        figures.push(data)
+                        if (this.props.onChange != null) this.props.onChange(figures)
+                        this.fileInput.value = ""
+                        this.setState({form: initialForm(), creator_showing: false, adding: false})
+                    })
+                } else {
+                    console.error(r)
+                }
+            })
         })
     }
 
@@ -109,7 +112,7 @@ class FigureSelector extends React.Component {
 
 	render() {
 		let {classes, figures} = this.props
-        let {form, creator_showing} = this.state
+        let {form, creator_showing, adding} = this.state
 		return (
 			<div>
 				<FigureList
@@ -137,7 +140,7 @@ class FigureSelector extends React.Component {
 
         				<Button variant="contained"
                                 style={{marginTop: 15}}
-                                disabled={!this.figure_valid()}
+                                disabled={!this.figure_valid() || adding}
                                 onClick={this.do_upload}>Add Figure</Button>
                         <Button onClick={this.hide_creator}>Cancel</Button>
                     </Paper>
