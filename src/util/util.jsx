@@ -80,3 +80,30 @@ export const simple_api_req = (method, url, data, csrf_token, success, fail) => 
         }
     })
 }
+
+export const get_link_source_icon = (url) => {
+    const ICONS = [
+        {
+            strings: ["osf", "psyarxiv", "openscienceframework"],
+            icon: '/sitestatic/icons/preprint_osf.png'
+        },
+        {
+            strings: ["figshare"],
+            icon: "/sitestatic/icons/preprint_figshare.svg"
+        },
+        {
+            strings: ["ssrn"],
+            icon: "/sitestatic/icons/preprint_ssrn.png"
+        }
+    ]
+    let icon
+    ICONS.forEach((icon_spec) => {
+        let match = false
+        icon_spec.strings.forEach((str) => {
+            if (url.indexOf(str) > -1) {
+                icon = icon_spec.icon
+            }
+        })
+    })
+    return icon
+}

@@ -43,6 +43,14 @@ const styles = theme => ({
     },
     formControl: {
         minWidth: 200
+    },
+    checkbox: {
+        paddingTop: 4,
+        paddingBottom: 4,
+        paddingLeft: 10
+    },
+    radioButton: {
+        padding: 4
     }
 })
 
@@ -204,7 +212,7 @@ const INPUT_SPECS = {
         fullWidth: true
     },
     'prereg_protocol_url': {
-        label: "Prereg. protocol URL",
+        label: "Prereg. prot. URL",
         type: 'url',
         placeholder: 'http://...',
         adornment: 'link'
@@ -398,7 +406,7 @@ class ArticleEditor extends React.Component {
         return (
             <FormControlLabel
                   control={
-                    <Checkbox key={id} id={id} name={id} checked={value} onChange={this.handle_check_change} />
+                    <Checkbox key={id} id={id} name={id} checked={value} onChange={this.handle_check_change} className={classes.checkbox} />
                     }
                   label={specs.label}
                   />
@@ -418,7 +426,7 @@ class ArticleEditor extends React.Component {
                     onChange={this.handle_change}
                     >
                     { specs.options.map((op) => {
-                        return <FormControlLabel key={op.value} value={op.value} control={<Radio />} label={op.label} />
+                        return <FormControlLabel key={op.value} value={op.value} control={<Radio className={classes.radioButton} />} label={op.label} />
                     })}
 
                 </RadioGroup>
@@ -563,7 +571,7 @@ class ArticleEditor extends React.Component {
                     <Grid item xs={6}>
                         <Grid container spacing={8}>
                             <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'prereg'}} style={{paddingTop: 15}} />
+                                <TransparencyIcon tt={{icon: 'prereg'}} style={{paddingTop: 10}} />
                             </Grid>
                             <Grid item xs={5}>
                                 { this.render_field('prereg_protocol_url') }
@@ -617,7 +625,7 @@ class ArticleEditor extends React.Component {
                     <Grid item xs={6}>
                         <Grid container spacing={8}>
                             <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'materials'}} style={{paddingTop: 15}} />
+                                <TransparencyIcon tt={{icon: 'materials'}} style={{paddingTop: 10}} />
                             </Grid>
                             <Grid item xs={11}>
                                 { this.render_field('public_study_materials_url') }
@@ -625,7 +633,7 @@ class ArticleEditor extends React.Component {
                         </Grid>
                         <Grid container spacing={8}>
                             <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'data'}} style={{paddingTop: 15}} />
+                                <TransparencyIcon tt={{icon: 'data'}} style={{paddingTop: 10}} />
                             </Grid>
                             <Grid item xs={11}>
                             { this.render_field('public_data_url') }
@@ -633,7 +641,7 @@ class ArticleEditor extends React.Component {
                         </Grid>
                         <Grid container spacing={8}>
                             <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'code'}} style={{paddingTop: 15}} />
+                                <TransparencyIcon tt={{icon: 'code'}} style={{paddingTop: 10}} />
                             </Grid>
                             <Grid item xs={11}>
                                 { this.render_field('public_code_url') }
@@ -641,7 +649,7 @@ class ArticleEditor extends React.Component {
                         </Grid>
                         <Grid container spacing={8}>
                             <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'repstd'}} style={{paddingTop: 15}} />
+                                <TransparencyIcon tt={{icon: 'repstd'}} style={{paddingTop: 10}} />
                             </Grid>
                             <Grid item xs={11}>
                                 { this.render_field('reporting_standards_type') }
@@ -719,7 +727,7 @@ ArticleEditor.defaultProps = {
 
 const csinput_styles = {
     input: {
-        padding: 8,
+        padding: 2,
         boxSizing: 'border-box',
         display: 'block',
         borderRadius: '3px',

@@ -2,7 +2,10 @@ import React from 'react';
 
 import {Button, Icon, Typography} from '@material-ui/core';
 
+import {get_link_source_icon} from '../util/util.jsx'
+
 const LINK_TYPES = ['pdf', 'html', 'preprint']
+
 const COLORS = {
 	'preprint': '#9b59b6',
 	'html': '#000000',
@@ -22,21 +25,6 @@ const COUNT_ICON_ST = {
 	fontSize: '13px'
 }
 
-const ICONS = [
-	{
-		strings: ["osf", "psyarxiv", "openscienceframework"],
-		icon: 'preprint_osf.png'
-	},
-	{
-		strings: ["figshare"],
-		icon: "preprint_figshare.svg"
-	},
-	{
-		strings: ["ssrn"],
-		icon: "preprint_ssrn.png"
-	}
-]
-
 class ArticleContentLinks extends React.Component {
 	constructor(props) {
         super(props);
@@ -45,17 +33,9 @@ class ArticleContentLinks extends React.Component {
     }
 
     get_icon(url, color) {
-    	let icon
-    	ICONS.forEach((icon_spec) => {
-    		let match = false
-    		icon_spec.strings.forEach((str) => {
-    			if (url.indexOf(str) > -1) {
-    				icon = icon_spec.icon
-    			}
-    		})
-    	})
+    	let icon = get_link_source_icon(url)
     	if (icon == null) return null
-    	else return <img src={`/sitestatic/icons/${icon}`} width="10" style={SOURCE_ICON_ST} />
+    	else return <img src={icon} width="10" style={SOURCE_ICON_ST} />
     }
 
 	render_link(lt) {
