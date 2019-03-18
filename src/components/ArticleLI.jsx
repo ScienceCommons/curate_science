@@ -144,7 +144,7 @@ class ArticleLI extends React.Component {
 
 						<Typography className={classes.title} variant="h2" color="textPrimary">{article.title}</Typography>
 						<Typography className={classes.authors} color="textSecondary" gutterBottom>
-							<AuthorList author_list={article.author_list} year={article.year} />
+							<AuthorList author_list={article.author_list} year={article.year} in_press={article.in_press} />
 						</Typography>
 
 		  			<Typography className={classes.journal} color="textSecondary" gutterBottom>

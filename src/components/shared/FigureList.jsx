@@ -42,12 +42,13 @@ class FigureList extends React.Component {
         this.handle_add = this.handle_add.bind(this)
     }
 
-    delete_figure = idx => event => {
+    delete_figure = idx => {
         if (this.props.onDelete != null) this.props.onDelete(idx)
     }
 
-    figure_click = idx => event => {
+    figure_click = (idx, event) => {
         let {figures, showDelete} = this.props
+        console.log(`figure_click ${idx}`)
         if (showDelete) this.delete_figure(idx)
         else this.props.onFigureClick(figures[idx])
     }
@@ -58,6 +59,7 @@ class FigureList extends React.Component {
 
     render_thumbnail(kf, i) {
         let {classes, showDelete} = this.props
+        console.log(kf)
         let kind = kf.is_table ? 'Table' : 'Figure'
         let img = (
             <img key={i}
@@ -65,7 +67,7 @@ class FigureList extends React.Component {
                   style={{backgroundImage: `url(${kf.image})`}} />
         )
         let tooltip = showDelete ? "Delete figure" : "Enlarge figure"
-        return <Tooltip title={tooltip} key={i}><a key={i} href="javascript:void(0)" onClick={this.figure_click(i)}>{ img }</a></Tooltip>
+        return <Tooltip title={tooltip} key={i}><a key={i} href="javascript:void(0)" onClick={this.figure_click.bind(this, i)}>{ img }</a></Tooltip>
     }
 
 	render() {
