@@ -6,9 +6,9 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
 	box: {
 		border: '2px solid black',
-		padding: 8,
+		padding: 2,
 		position: 'relative',
-		marginTop: 5
+		marginTop: 10
 	},
 	label: {
 		background: theme.palette.bg,

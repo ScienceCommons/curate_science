@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import C from '../constants/constants';
-import {truncate} from '../util/util.jsx'
+import {truncate, get_link_source_icon} from '../util/util.jsx'
 import {find} from 'lodash'
 
 import MouseOverPopover from '../components/shared/MouseOverPopover.jsx';
@@ -70,7 +70,10 @@ class TransparencyBadge extends React.Component {
 				popover_content = <Typography>{ rep_std_label }</Typography>
 			} else {
 				let no_url = url == null || url.length == 0
-				if (!no_url) popover_content = <Typography><a href={url} target="_blank"><Icon fontSize="inherit">open_in_new</Icon> { truncate(url) }</a></Typography>
+				let source_icon
+				let source_icon_url = get_link_source_icon(url)
+				if (source_icon_url != null) source_icon = <img src={source_icon_url} width="10" style={{marginRight: 4}} />
+				if (!no_url) popover_content = <Typography>{ source_icon }<a href={url} target="_blank">{ truncate(url, 15) } <Icon fontSize="inherit">open_in_new</Icon></a></Typography>
 			}
 			return (
 				<MouseOverPopover target={badge_icon} key={i}>

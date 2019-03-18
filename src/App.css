@@ -15,6 +15,10 @@ a:link, a:visited, a:hover, a:active {
 	text-decoration: none;
 }
 
+textarea {
+	height: 18px;
+}
+
 .AppContent {
 	min-height: 600px;
 }

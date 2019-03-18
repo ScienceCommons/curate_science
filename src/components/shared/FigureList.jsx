@@ -14,8 +14,8 @@ const styles = {
     },
     thumbnail: {
         display: 'inline-block',
-        width: 110,
-        height: 110,
+        width: 80,
+        height: 80,
         marginRight: 10,
         marginTop: 10,
         border: '1px solid gray',
@@ -25,10 +25,10 @@ const styles = {
         textAlign: 'center'
     },
     add: {
-        width: 110,
-        height: 110,
+        width: 80,
+        height: 80,
         display: 'inline-block',
-        paddingTop: 30,
+        paddingTop: 10,
         color: 'black'
     }
 }
