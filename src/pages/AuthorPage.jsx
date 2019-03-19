@@ -149,33 +149,19 @@ class AuthorPage extends React.Component {
         this.setState({editing_article_id: a.id, edit_article_modal_open: true})
     }
 
-    unlink(a) {
+    update_linkage(a, linked) {
         let {cookies} = this.props
         let {author, articles} = this.state
         if (author != null) {
             // Update author to remove article_id from articles member
-            let article_ids = author.articles.filter(id => id != a.id)
-            let data = {
-                articles: article_ids
-            }
-            json_api_req('PATCH', `/api/authors/${this.slug()}/update/`, data, cookies.get('csrftoken'), (res) => {
-                articles = articles.filter(article => article.id != a.id)
-                this.setState({articles: articles})
-            })
-        }
-    }
-
-    link_existing_article(a) {
-        let {cookies} = this.props
-        let {author, articles} = this.state
-        if (author != null) {
-            // Update author to add article_id to articles member
-            let already_linked = author.articles.indexOf(a.id) > -1
-            if (!already_linked) {
-                let data = {
-                    articles: author.articles.concat(a.id)
+            let data = [
+                {
+                    article: a.id,
+                    linked: linked
                 }
-                json_api_req('PATCH', `/api/authors/${this.slug()}/update/`, data, cookies.get('csrftoken'), (res) => {
+            ]
+            json_api_req('POST', `/api/authors/${this.slug()}/articles/linkage/`, data, cookies.get('csrftoken'), (res) => {
+                if (linked) {
                     // Get full article object to add to list
                     json_api_req('GET', `/api/articles/${a.id}/`, {}, null, (res) => {
                         articles.unshift(res) // Add object to array
@@ -183,9 +169,21 @@ class AuthorPage extends React.Component {
                     }, (err) => {
                         console.error(err)
                     })
-                })
-            }
+                } else {
+                    // Remove unlinked from list
+                    articles = articles.filter(article => article.id != a.id)
+                    this.setState({articles: articles})
+                }
+            })
         }
+    }
+
+    unlink(a) {
+        this.update_linkage(a, false)
+    }
+
+    link_existing_article(a) {
+        this.update_linkage(a, true)
     }
 
     fetch_author_then_articles() {

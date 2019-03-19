@@ -96,8 +96,8 @@ class TransparencyBadge extends React.Component {
 	render_commentaries() {
 		return (
 			<ul>
-			{ this.props.commentaries.map((comm) => {
-				return <li><Typography><a href={comm.commentary_url} target="_blank">{ comm.authors_year }</a></Typography></li>
+			{ this.props.commentaries.map((comm, i) => {
+				return <li key={i}><Typography><a href={comm.commentary_url} target="_blank">{ comm.authors_year }</a></Typography></li>
 			}) }
 			</ul>
 		)
