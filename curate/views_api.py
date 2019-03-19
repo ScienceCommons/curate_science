@@ -171,32 +171,36 @@ def list_articles_for_author(request, slug):
     serializer=ArticleListSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
-@api_view(('POST', ))
+@api_view(('POST', 'GET', ))
 def link_articles_to_author(request, slug):
     '''
     Link and unlink articles to/from an author
     '''
-    author=get_object_or_404(Author, slug=slug)
-    serializer=AuthorArticleSerializer(data=request.data, many=True)
-    if serializer.is_valid():
-        for article in serializer.validated_data:
-            article_id = article.get('article')
-            linked = article.get('linked')
+    if request.method == 'POST':
+        author=get_object_or_404(Author, slug=slug)
+        serializer=AuthorArticleSerializer(data=request.data, many=True)
+        if serializer.is_valid():
+            for article in serializer.validated_data:
+                article_id = article.get('article')
+                linked = article.get('linked')
 
-            try:
-                instance = Article.objects.get(id=article_id)
-                if linked and instance not in author.articles.all():
-                    author.articles.add(instance)
-                elif (not linked) and instance in author.articles.all():
-                    author.articles.remove(instance)
-            except ObjectDoesNotExist:
-                return Response(
-                    'Invalid pk "{0}" - object does not exist.'.format(article_id),
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                try:
+                    instance = Article.objects.get(id=article_id)
+                    if linked and instance not in author.articles.all():
+                        author.articles.add(instance)
+                    elif (not linked) and instance in author.articles.all():
+                        author.articles.remove(instance)
+                except ObjectDoesNotExist:
+                    return Response(
+                        'Invalid pk "{0}" - object does not exist.'.format(article_id),
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)
     else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response(serializer.data)
+        serializer=AuthorArticleSerializer()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(('GET', ))
 def view_article(request, pk):
