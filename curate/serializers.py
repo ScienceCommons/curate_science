@@ -117,3 +117,7 @@ class InvitationSerializer(WritableNestedModelSerializer):
     class Meta:
         model=Invitation
         fields=('email','userprofile')
+
+class AuthorArticleSerializer(serializers.Serializer):
+    article = serializers.IntegerField(required=True)
+    linked = serializers.BooleanField(required=True)

@@ -39,6 +39,7 @@ urlpatterns += [
     # Article paths
     path('api/articles/', api.list_articles, name='api-list-articles'),
     path('api/authors/<slug>/articles/', api.list_articles_for_author, name='api-list-articles-for-author'),
+    path('api/authors/<slug>/articles/linkage/', api.link_articles_to_author, name='api-link-articles-to-author'),
     path('api/articles/autocomplete/', api.ArticleAutocomplete.as_view(), name='article-autocomplete'),
     path('api/articles/create/', api.create_article, name='api-create-article'),
     path('api/articles/search/', api.search_articles, name='api-search-articles'),

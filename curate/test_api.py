@@ -530,6 +530,52 @@ class TestAPIViews(TestCase):
         i = Invitation.objects.get(email="test.user@example.com")
         assert i.userprofile.slug == "test-user"
 
+
+    def test_link_article(self):
+        client = APIClient()
+        client.login(username='admin', password='password')
+        url = reverse('api-create-article')
+        r = client.post(url, {
+            "doi": "005",
+            "year": 2019,
+            "journal": "Science",
+            "title": "api test article 005",
+            "article_type": "ORIGINAL",
+            "research_area": "SOCIAL_SCIENCE",
+            "author_list": "LeBel et al",
+            "commentaries": [],
+            "authors": [],
+        }, format='json')
+        print(r.content.decode('utf-8'))
+        self.assertEqual(r.status_code, 201)
+        article = models.Article.objects.get(doi="005")
+        author = models.Author.objects.first()
+        url = reverse('api-link-articles-to-author', kwargs={'slug': author.slug})
+        r2 = client.post(url, [
+            {
+                "article": article.id,
+                "linked": True,
+            },
+        ], format='json')
+        self.assertEqual(r2.status_code, 200)
+        assert article in author.articles.all()
+        r3 = client.post(url, [
+            {
+                "article": article.id,
+                "linked": False,
+            },
+        ], format='json')
+        assert article not in author.articles.all()
+
+        r4 = client.post(url, [
+            {
+                "article": 12345,
+                "linked": True,
+            },
+        ], format='json')
+        self.assertEqual(r4.status_code, 400)
+
+
     # def test_article_search(self):
     #     self.client.login(username='new_user', password='password1')
     #     url = reverse('api-search-articles') + "?q=A"

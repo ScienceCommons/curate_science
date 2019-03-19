@@ -6,6 +6,7 @@ from django.contrib.postgres.search import SearchVector, SearchRank
 import logging
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from dal import autocomplete
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
@@ -25,6 +26,7 @@ from curate.models import (
 )
 from curate.serializers import (
     AuthorSerializer,
+    AuthorArticleSerializer,
     ArticleSerializerNested,
     ArticleListSerializer,
     CommentarySerializer,
@@ -167,6 +169,33 @@ def list_articles_for_author(request, slug):
     author=get_object_or_404(Author, slug=slug)
     queryset=author.articles.all().prefetch_related('commentaries')
     serializer=ArticleListSerializer(instance=queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(('POST', ))
+def link_articles_to_author(request, slug):
+    '''
+    Link and unlink articles to/from an author
+    '''
+    author=get_object_or_404(Author, slug=slug)
+    serializer=AuthorArticleSerializer(data=request.data, many=True)
+    if serializer.is_valid():
+        for article in serializer.validated_data:
+            article_id = article.get('article')
+            linked = article.get('linked')
+
+            try:
+                instance = Article.objects.get(id=article_id)
+                if linked and instance not in author.articles.all():
+                    author.articles.add(instance)
+                elif (not linked) and instance in author.articles.all():
+                    author.articles.remove(instance)
+            except ObjectDoesNotExist:
+                return Response(
+                    'Invalid pk "{0}" - object does not exist.'.format(article_id),
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.data)
 
 @api_view(('GET', ))
