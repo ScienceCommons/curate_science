@@ -12,6 +12,7 @@ from PIL import Image
 from django.conf import settings
 from invitations.models import Invitation
 import datetime
+from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -32,6 +33,13 @@ class UserProfile(models.Model):
         null=True,
     )
 
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance, name="{0} {1}".format(instance.first_name, instance.last_name))
+
+
 def populate_slug(instance):
     return ' '.join(
         [x for x in [instance.first_name, instance.middle_name, instance.last_name]
@@ -39,24 +47,23 @@ def populate_slug(instance):
     )
 
 class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT, null=True, blank=True)
+    userprofile = models.OneToOneField(UserProfile, on_delete=models.PROTECT, null=True, blank=True)
     orcid = models.CharField(max_length=255, null=True, blank=True)
-    name = models.CharField(max_length=255, null=True, blank=True)
     position_title = models.CharField(max_length=255, null=True, blank=True)
     affiliations = models.CharField(max_length=255, null=True, blank=True)
     profile_urls = JSONField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     articles = models.ManyToManyField('Article', related_name='authors', blank=True)
-    slug = AutoSlugField(
-        populate_from = 'name',
-        unique=True,
-        editable=True,
-        null=True
-    )
 
     def __str__(self):
         return self.name if self.name else "Unnamed Author"
+
+@receiver(post_save, sender=Author)
+def create_user_profile_for_author(sender, instance, created, **kwargs):
+    if created:
+        instance.userprofile = UserProfile.objects.create(name=instance.name)
+
 
 class Article(models.Model):
     """A written work with one or more Authors, reporting the results of a scientific Study."""
