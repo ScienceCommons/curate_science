@@ -47,6 +47,10 @@ class AuthorPageCreator extends React.Component {
 		let {form} = this.state
 		let csrf_token = cookies.get('csrftoken')
 		let data = clone(form)
+		if (data.account == null || data.account.length == 0) {
+			// Empty str for 'account' raises exception
+			delete data.account
+		}
 		json_api_req('POST', '/api/authors/create/', data, csrf_token, (res) => {
 			console.log(res)
 			let slug = res.slug
