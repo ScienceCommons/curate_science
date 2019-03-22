@@ -281,8 +281,8 @@ class AuthorPage extends React.Component {
                                 <Button variant="contained" color="secondary"
                                         className={classes.authorEditButton}
                                         onClick={this.open_author_editor}>
-                                    Edit
                                     <Icon>edit</Icon>
+                                    Edit
                                 </Button>
                             </span>
                             <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
@@ -296,16 +296,16 @@ class AuthorPage extends React.Component {
                     <Grid item xs={10}>
                         <div id="actions" className={classes.box} hidden={!editable}>
                             <Button variant="contained" color="secondary" onClick={this.create_new_article}>
-                                Add Article
                                 <Icon>add</Icon>
+                                Add Article
                             </Button>
                             <Button variant="contained"
                                     color="secondary"
                                     aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
                                     onClick={this.open_preexisting_popper}
                                     style={{marginLeft: 10}}>
-                                Add Preexisting Article
                                 <Icon>add</Icon>
+                                Add Preexisting Article
                             </Button>
                             <Popover
                               id="add_preexisting_popper"
@@ -399,20 +399,20 @@ class ArticleWithActions extends React.Component {
                 <div className="ArticleActions">
                     <span hidden={!editable}>
                         <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
-                            Edit
                             <Icon>edit</Icon>
+                            Edit
                         </Button>
                     </span>
                     <span hidden={!editable}>
                         <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
-                            Unlink
                             <Icon>link_off</Icon>
+                            Unlink
                         </Button>
                     </span>
                     <span hidden={!admin}>
                         <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
-                            Delete
                             <Icon color="inherit">delete</Icon>
+                            Delete
                         </Button>
                     </span>
                 </div>
