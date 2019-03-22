@@ -11,14 +11,14 @@ import {List, Grid, Button, Icon, TextField,
         Toolbar, IconButton, AppBar, MenuItem,
         Slide, InputAdornment, InputLabel, Select,
         FormControl, Radio, RadioGroup,
-        FormLabel} from '@material-ui/core';
+        FormLabel, Snackbar} from '@material-ui/core';
 import C from '../constants/constants';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './FigureSelector.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {clone, set} from 'lodash'
-import {json_api_req, simple_api_req} from '../util/util.jsx'
+import {json_api_req, simple_api_req, unspecified} from '../util/util.jsx'
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -289,7 +289,8 @@ class ArticleEditor extends React.Component {
         super(props);
         this.state = {
             form: initialFormState(),
-            figures: []
+            figures: [],
+            snack_message: null
         }
 
         this.handle_close = this.handle_close.bind(this)
@@ -299,6 +300,8 @@ class ArticleEditor extends React.Component {
         this.add_commentary = this.add_commentary.bind(this)
         this.delete_commentary = this.delete_commentary.bind(this)
         this.update_figures = this.update_figures.bind(this)
+        this.show_snack = this.show_snack.bind(this)
+        this.close_snack = this.close_snack.bind(this)
     }
 
     componentDidMount() {
@@ -322,6 +325,14 @@ class ArticleEditor extends React.Component {
     }
 
     componentWillUnmount() {
+    }
+
+    show_snack(message) {
+        this.setState({snack_message: message})
+    }
+
+    close_snack() {
+        this.setState({snack_message: null})
     }
 
     update_figures(figures) {
@@ -388,18 +399,44 @@ class ArticleEditor extends React.Component {
         this.setState({form})
     }
 
+    validate(data) {
+        let valid = true
+        let message = ''
+        if (unspecified(data.author_list)) {
+            valid = false
+            message = "Please enter article authors"
+        }
+        if (unspecified(data.title)) {
+            valid = false
+            message = "Please enter article title"
+        }
+        if (unspecified(data.year) && !data.in_press) {
+            valid = false
+            message = "Please enter publication year"
+        }
+        return {
+            valid: valid,
+            message: message
+        }
+    }
+
     save() {
         let {cookies} = this.props
         let {form} = this.state
         let pk = this.props.article_id
         let data = clone(form)
-        data.is_live = true  // Always set to live if saving
-        json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
-            console.log(res)
-            this.props.onUpdate(data)
-        }, (err) => {
-            console.error(err)
-        })
+        let {valid, message} = this.validate(data)
+        if (!valid) this.show_snack(message)
+        else {
+            data.is_live = true  // Always set to live if saving
+            if (data.in_press) data.year = null  // Otherwise server fails on non-integer
+            json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
+                console.log(res)
+                this.props.onUpdate(data)
+            }, (err) => {
+                console.error(err)
+            })
+        }
     }
 
     render_checkbox(id, value, specs) {
@@ -507,7 +544,7 @@ class ArticleEditor extends React.Component {
     }
 	render() {
         let {classes, article_id, open} = this.props
-        let {figures, form} = this.state
+        let {figures, form, snack_message} = this.state
         let content
         let replication = form.article_type == 'REPLICATION'
         if (article_id != null) content = (
@@ -690,6 +727,8 @@ class ArticleEditor extends React.Component {
                     { this.render_commentaries() }
                 </div>
 
+                <Typography>* indicates required field</Typography>
+
             </div>
         )
 		return (
@@ -720,6 +759,16 @@ class ArticleEditor extends React.Component {
                         <Button variant="text" onClick={this.handle_close}>cancel</Button>
                     </DialogActions>
                 </Dialog>
+                <Snackbar
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  open={snack_message != null}
+                  autoHideDuration={3000}
+                  onClose={this.close_snack}
+                  message={snack_message}
+                />
             </div>
 		)
 	}
@@ -760,7 +809,9 @@ class CSTextField extends React.Component {
         // if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
         let st = {}
         if (specs.fullWidth) st.width = '100%'
-        return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={specs.label} inlineBlock={!specs.fullWidth}>
+        let label = specs.label
+        if (specs.required) label += '  *'
+        return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={label} inlineBlock={!specs.fullWidth}>
                     <DebounceInput
                       id={id}
                       key={id}
