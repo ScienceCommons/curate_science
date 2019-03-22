@@ -49,11 +49,11 @@ textarea {
 }
 
 .ArticleCard .ContentLinkCounts {
-	display: none;
+	opacity: 0;
 }
 
 .ArticleCard:hover .ContentLinkCounts {
-	display: inline;
+	opacity: 1.0;
 }
 
 .ArticleType {
@@ -95,8 +95,9 @@ textarea {
 }
 
 .ArticleFullTextLinks {
-	width: 20%;
+/*	width: 20%;
 	min-width: 200px;
+*/
 	text-align: right;
 	float: right;
 }
