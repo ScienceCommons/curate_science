@@ -57,7 +57,6 @@ textarea {
 }
 
 .ArticleType {
-	float: left;
 	display: inline-block;
 	border-radius: 3px;
 	opacity: 0.4;
@@ -73,7 +72,6 @@ textarea {
 	padding: 1px 2px;
 	margin-left: 5px;
 }
-
 
 .ArticleCommentaryBadge {
 	background-color: #a7a7a7;

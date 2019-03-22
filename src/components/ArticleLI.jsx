@@ -35,8 +35,7 @@ const styles = {
   title: {
     fontSize: 19,
     fontWeight: 400,
-    clear: 'both',
-    paddingTop: 10,
+    paddingTop: 5,
     marginTop: 3,
     marginBottom: 3
   },

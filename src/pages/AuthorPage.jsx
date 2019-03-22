@@ -35,6 +35,9 @@ const styles = theme => ({
         paddingTop: 10,
         flexGrow: 1
     },
+    cardColumn: {
+        maxWidth: '530px'
+    },
     box: {
         padding: theme.spacing.unit * 2,
     },
@@ -275,7 +278,7 @@ class AuthorPage extends React.Component {
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" spacing={24}>
-                    <Grid item xs={10}>
+                    <Grid item lg={12} className={classes.cardColumn}>
                         <LabeledBox label="Author Information">
                             <span hidden={!editable}>
                                 <Button variant="contained" color="secondary"
@@ -292,8 +295,7 @@ class AuthorPage extends React.Component {
                             </Typography>
                             <AuthorLinks links={author.profile_urls} />
                         </LabeledBox>
-                    </Grid>
-                    <Grid item xs={10}>
+
                         <div id="actions" className={classes.box} hidden={!editable}>
                             <Button variant="contained" color="secondary" onClick={this.create_new_article}>
                                 <Icon>add</Icon>
@@ -326,8 +328,7 @@ class AuthorPage extends React.Component {
                                 </div>
                             </Popover>
                         </div>
-                    </Grid>
-                    <Grid item xs={10}>
+
                         { articles.filter(a => a.is_live).map(a => <ArticleWithActions key={a.id}
                                                 article={a}
                                                 editable={editable}
@@ -337,6 +338,7 @@ class AuthorPage extends React.Component {
                                                 onFigureClick={this.show_figure}
                                                 admin={user_session.admin} />) }
                         { articles_loading ? <Loader /> : null }
+
                     </Grid>
     			</Grid>
 

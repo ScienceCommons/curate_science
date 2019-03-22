@@ -35,7 +35,7 @@ class ArticleFullTextLinks extends React.Component {
     get_icon(url, color) {
     	let icon = get_link_source_icon(url)
     	if (icon == null) return null
-    	else return <img src={icon} width="10" style={SOURCE_ICON_ST} />
+    	else return <img src={icon} width="15" style={SOURCE_ICON_ST} />
     }
 
 	render_link(lt) {
@@ -45,7 +45,8 @@ class ArticleFullTextLinks extends React.Component {
 			marginLeft: 5,
 			color: color,
 			border: `1px solid ${color}`,
-			display: 'inline'
+			display: 'inline',
+			fontSize: 16
 		}
 		let url = this.props[`${lt}_url`]
 		let views = this.props[`${lt}_views`]
