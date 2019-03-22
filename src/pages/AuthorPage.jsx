@@ -38,13 +38,13 @@ const styles = theme => ({
     cardColumn: {
         maxWidth: '530px'
     },
+    authorEditButtonSpan: {
+        display: 'flex',
+        padding: 10,
+        justifyContent: 'flex-end'
+    },
     box: {
         padding: theme.spacing.unit * 2,
-    },
-    authorEditButton: {
-        position: 'absolute',
-        top: 8,
-        right: 8
     },
     subtitle: {
         textAlign: 'center'
@@ -277,12 +277,11 @@ class AuthorPage extends React.Component {
         if (author.affiliations != null) position += ', '
 		return (
             <div className={classes.root}>
-    			<Grid container justify="center" spacing={24}>
+    			<Grid container justify="center" spacing={24} className="AuthorPage">
                     <Grid item lg={12} className={classes.cardColumn}>
-                        <LabeledBox label="Author Information">
-                            <span hidden={!editable}>
+                        <LabeledBox label="Author Information" addClass="AuthorBox">
+                            <span hidden={!editable} className={classes.authorEditButtonSpan}>
                                 <Button variant="contained" color="secondary"
-                                        className={classes.authorEditButton}
                                         onClick={this.open_author_editor}>
                                     <Icon>edit</Icon>
                                     Edit
