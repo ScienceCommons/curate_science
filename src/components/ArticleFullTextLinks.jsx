@@ -25,7 +25,7 @@ const COUNT_ICON_ST = {
 	fontSize: '13px'
 }
 
-class ArticleContentLinks extends React.Component {
+class ArticleFullTextLinks extends React.Component {
 	constructor(props) {
         super(props);
 
@@ -74,11 +74,11 @@ class ArticleContentLinks extends React.Component {
 			let link = this.render_link(lt)
 			if (link != null) links.push(link)
 		})
-		return <div className="ArticleContentLinks">{ links }</div>
+		return <div className="ArticleFullTextLinks">{ links }</div>
 	}
 }
 
-ArticleContentLinks.defaultProps = {
+ArticleFullTextLinks.defaultProps = {
 };
 
-export default ArticleContentLinks;
+export default ArticleFullTextLinks;

@@ -19,7 +19,7 @@ import C from '../constants/constants';
 import TransparencyBadge from './TransparencyBadge.jsx';
 import ArticleType from './ArticleType.jsx';
 import JournalDOIBadge from './JournalDOIBadge.jsx';
-import ArticleContentLinks from './ArticleContentLinks.jsx';
+import ArticleFullTextLinks from './ArticleFullTextLinks.jsx';
 import AuthorList from './AuthorList.jsx';
 import FigureList from './shared/FigureList.jsx';
 import TruncatedText from './shared/TruncatedText.jsx';
@@ -140,7 +140,7 @@ class ArticleLI extends React.Component {
 				<Card className={classes.card} raised>
 					<CardContent>
 						<ArticleType type={article.article_type} replication_data={rd} />
-						<ArticleContentLinks {...content_links} />
+						<ArticleFullTextLinks {...content_links} />
 
 						<Typography className={classes.title} variant="h2" color="textPrimary">{article.title}</Typography>
 						<Typography className={classes.authors} color="textSecondary" gutterBottom>
