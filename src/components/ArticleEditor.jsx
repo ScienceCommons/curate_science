@@ -828,7 +828,6 @@ class CSTextField extends React.Component {
                       disabled={disabled}
                       required={specs.required}
                       element={specs.multiline ? 'textarea' : 'input'}
-                      multiline={specs.multiline}
                       className={classes.input}
                       style={st}
                     />

@@ -127,7 +127,6 @@ class AuthorPage extends React.Component {
         let {cookies} = this.props
         let {articles, author} = this.state
         let now = new Date()
-        let date_str = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
         let data = {
             title: `${C.PLACEHOLDER_TITLE_PREFIX}${randomId(15)}`,
             authors: [author.id],

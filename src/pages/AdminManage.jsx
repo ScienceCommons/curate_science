@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 
 import qs from 'query-string';
+import C from '../constants/constants';
 
 import { Link } from "react-router-dom";
 
@@ -12,7 +13,7 @@ import {Paper, List, ListItem, ListItemText, Grid, Button, Icon, Fab,
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import Loader from '../components/shared/Loader.jsx';
 
-import {json_api_req, simple_api_req} from '../util/util.jsx'
+import {json_api_req, simple_api_req, randomId} from '../util/util.jsx'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -55,21 +56,21 @@ class AdminManage extends React.Component {
     }
 
     create_new_article() {
-        let {cookies, author} = this.props
+        let {cookies} = this.props
         let {articles} = this.state
         let now = new Date()
-        let date_str = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
         let data = {
-            title: `New untitled article created at ${date_str}`,
+            title: `${C.PLACEHOLDER_TITLE_PREFIX}${randomId(15)}`,
             authors: [],
             article_type: 'ORIGINAL',
             year: now.getFullYear(),
             key_figures: [],
-            commentaries: []
+            commentaries: [],
+            is_live: false
         }
         json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
             articles.unshift(res) // Add object to array
-            this.setState({articles: articles})
+            this.setState({articles: articles, editing_article_id: res.id, edit_article_modal_open: true})
         }, (err) => {
             console.error(err)
         })
