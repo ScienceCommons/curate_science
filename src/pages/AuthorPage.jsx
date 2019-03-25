@@ -42,8 +42,8 @@ const styles = theme => ({
     },
     authorEditButton: {
         position: 'absolute',
-        top: 8,
-        right: 8
+        top: 0,
+        right: 0
     },
     box: {
         padding: theme.spacing.unit * 2,
