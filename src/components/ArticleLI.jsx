@@ -63,11 +63,15 @@ const styles = {
   	color: '#BBB'
   },
   reviewers: {
-  	color: "#009933"
+  	color: "#009933",
+    marginRight: 4
   },
-  moreIcon: {
+  moreIconHolder: {
   	justifyContent: 'center',
   	textAlign: 'center'
+  },
+  moreIcon: {
+    fontSizeLarge: 32
   }
 };
 
@@ -154,9 +158,9 @@ class ArticleLI extends React.Component {
 
             <TransparencyBadge {...transparency_data} />
 
-		  			<div className={classes.moreIcon}>
+		  			<div className={classes.moreIconHolder}>
 			  			<IconButton onClick={this.toggle_show_more} >
-			  				<Icon>{show_more ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
+			  				<Icon className={classes.moreIcon} fontSize="large">{show_more ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
 		  				</IconButton>
 	  				</div>
 
@@ -167,34 +171,34 @@ class ArticleLI extends React.Component {
 	  					<div hidden={this.empty(article.author_contributions)}>
 		  					<Typography component="span">
 		  						<span className={classes.grayedTitle}>Author contributions:</span>
-			  					<span className={classes.grayedDetails}><TruncatedText text={ article.author_contributions } /></span>
+			  					<span className={classes.grayedDetails}><TruncatedText text={ article.author_contributions } maxLength={85} /></span>
 			  				</Typography>
 	  					</div>
 	  					<div hidden={this.empty(article.competing_interests)}>
 		  					<Typography component="span">
 		  						<span className={classes.grayedTitle}>Competing interests:</span>
-			  					<span className={classes.grayedDetails}><TruncatedText text={ article.competing_interests } /></span>
+			  					<span className={classes.grayedDetails}><TruncatedText text={ article.competing_interests } maxLength={85} /></span>
 			  				</Typography>
 	  					</div>
 	  					<div hidden={this.empty(article.funding_sources)}>
 		  					<Typography component="span">
 		  						<span className={classes.grayedTitle}>Funding sources:</span>
-		  						<span className={classes.grayedDetails}><TruncatedText text={ article.funding_sources } /></span>
+		  						<span className={classes.grayedDetails}><TruncatedText text={ article.funding_sources } maxLength={85} /></span>
 		  					</Typography>
 		  				</div>
-		  				<div hidden={this.empty(article.peer_review_editor)}>
-		  					<Typography>
+              <Typography component="span" inline>
+  		  				<span hidden={this.empty(article.peer_review_editor)}>
 		  						<span className={classes.grayedTitle}>Editor:</span>
 	  							<span className={classes.reviewers}>{ article.peer_review_editor || '--' }</span>
-  							</Typography>
-	  					</div>
-		  				<div hidden={this.empty(article.peer_reviewers)}>
-		  					<Typography component="span">
+  	  					</span>
+  		  				<span hidden={this.empty(article.peer_reviewers)}>
 			  					<span className={classes.grayedTitle}>Reviewers:</span>
 		  						<span className={classes.reviewers}>{ article.peer_reviewers || '--' }</span>
-		  					</Typography>
-	  					</div>
-	  					<span hidden={article.peer_review_url == null || article.peer_review_url.length == 0}><Typography><a href={article.peer_review_url} target="_blank">Open peer review <Icon fontSize="inherit">open_in_new</Icon></a></Typography></span>
+  	  					</span>
+  	  					<span hidden={article.peer_review_url == null || article.peer_review_url.length == 0}>
+                  <a href={article.peer_review_url} target="_blank"><Icon fontSize="inherit">link</Icon> Open peer review <Icon fontSize="inherit">open_in_new</Icon></a>
+                </span>
+              </Typography>
 	  				</div>
 	  			</CardContent>
 				</Card>

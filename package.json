@@ -24,7 +24,7 @@
     "react-cookie": "^3.0.4",
     "react-debounce-input": "^3.2.0",
     "react-dom": "^16.6.0",
-    "react-fancybox": "^0.2.3",
+    "react-image-lightbox": "^5.1.0",
     "react-responsive-carousel": "^3.1.43",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
