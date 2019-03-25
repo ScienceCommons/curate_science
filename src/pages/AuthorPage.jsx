@@ -35,7 +35,7 @@ const styles = theme => ({
         flexGrow: 1
     },
     cardColumn: {
-        maxWidth: '650px'
+        width: '650px'
     },
     articleList: {
         marginTop: '10px'
@@ -250,7 +250,9 @@ class AuthorPage extends React.Component {
     }
 
     toggle_article_editor(open) {
-        this.setState({edit_article_modal_open: open})
+        let st = {edit_article_modal_open: open}
+        if (!open) st.editing_article_id = null
+        this.setState(st)
     }
 
     open_preexisting_popper = event => {
