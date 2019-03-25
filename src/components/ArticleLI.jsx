@@ -33,7 +33,8 @@ const styles = {
     marginBottom: '9px'
   },
   title: {
-    fontSize: 19,
+    fontSize: 18,
+    lineHeight: '20px',
     fontWeight: 400,
     paddingTop: 5,
     marginTop: 3,
@@ -47,7 +48,8 @@ const styles = {
   	marginBottom: 3,
   },
   abstract: {
-  	lineHeight: 1.1
+  	lineHeight: 1.2,
+    marginBottom: 10
   },
   journal: {
   	fontStyle: 'italic'
@@ -159,7 +161,7 @@ class ArticleLI extends React.Component {
 	  				</div>
 
 	  				<div id="details" hidden={!show_more}>
-	  					<Typography style={{lineHeight: 1.2, marginBottom: 10}}><TruncatedText text={article.abstract} /></Typography>
+	  					<Typography className={classes.abstract}><TruncatedText text={article.abstract} fontSize={12} /></Typography>
 	  					<ArticleKeywords keywords={article.keywords} />
 	  					<FigureList figures={show_figures} onFigureClick={this.handle_figure_click} />
 	  					<div hidden={this.empty(article.author_contributions)}>
