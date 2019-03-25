@@ -55,12 +55,13 @@ class AuthorEditor extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-            form: {}
+            form: {},
+            unsaved: false
         }
-
         this.handle_close = this.handle_close.bind(this)
         this.handle_change = this.handle_change.bind(this)
         this.save = this.save.bind(this)
+        this.onUnload = this.onUnload.bind(this)
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -75,19 +76,33 @@ class AuthorEditor extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener("beforeunload", this.onUnload)
     }
 
     componentWillUnmount() {
+        window.removeEventListener("beforeunload", this.onUnload)
+    }
+
+    onUnload(e) {
+        let {unsaved} = this.state
+        console.log(`unsaved ${unsaved}`)
+        if (unsaved) {
+            let confirmationMessage = "Your changes may not be saved"  // Doesn't show on modern browsers
+            (e || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
     }
 
     handle_close() {
-        this.props.onClose()
+        this.setState({unsaved: false}, () => {
+            this.props.onClose()
+        })
     }
 
     handle_change = event => {
         let {form} = this.state
         form[event.target.name] = event.target.value
-        this.setState({form})
+        this.setState({form: form, unsaved: true})
     }
 
     save() {
@@ -99,7 +114,9 @@ class AuthorEditor extends React.Component {
         data.profile_urls = pick(data, author_link_ids)
         json_api_req('PATCH', `/api/authors/${author.slug}/update/`, data, csrf_token, (res) => {
             console.log(res)
-            if (this.props.onAuthorUpdate != null) this.props.onAuthorUpdate(data)
+            this.setState({unsaved: false}, () => {
+                if (this.props.onAuthorUpdate != null) this.props.onAuthorUpdate(data)
+            })
         }, (error) => {
             console.error(error)
         })
