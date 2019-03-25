@@ -36,25 +36,33 @@ const styles = theme => ({
         flexGrow: 1
     },
     cardColumn: {
-        maxWidth: '530px'
+        maxWidth: '650px'
     },
-    authorEditButtonSpan: {
-        display: 'flex',
-        padding: 10,
-        justifyContent: 'flex-end'
+    articleList: {
+        marginTop: '10px'
+    },
+    authorEditButton: {
+        position: 'absolute',
+        top: 8,
+        right: 8
     },
     box: {
         padding: theme.spacing.unit * 2,
     },
     subtitle: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 14,
+        textTransform: 'none'
     },
     affiliation: {
         fontStyle: 'italic',
         paddingLeft: 4
     },
     name: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 4
     }
 })
 
@@ -279,9 +287,10 @@ class AuthorPage extends React.Component {
             <div className={classes.root}>
     			<Grid container justify="center" spacing={24} className="AuthorPage">
                     <Grid item lg={12} className={classes.cardColumn}>
-                        <LabeledBox label="Author Information" addClass="AuthorBox">
-                            <span hidden={!editable} className={classes.authorEditButtonSpan}>
+                        <div style={{position: 'relative'}}>
+                            <span hidden={!editable}>
                                 <Button variant="contained" color="secondary"
+                                        className={classes.authorEditButton}
                                         onClick={this.open_author_editor}>
                                     <Icon>edit</Icon>
                                     Edit
@@ -293,7 +302,7 @@ class AuthorPage extends React.Component {
                                 <span className={classes.affiliation}>{ author.affiliations }</span>
                             </Typography>
                             <AuthorLinks links={author.profile_urls} />
-                        </LabeledBox>
+                        </div>
 
                         <div id="actions" className={classes.box} hidden={!editable}>
                             <Button variant="contained" color="secondary" onClick={this.create_new_article}>
@@ -328,15 +337,17 @@ class AuthorPage extends React.Component {
                             </Popover>
                         </div>
 
-                        { articles.filter(a => a.is_live).map(a => <ArticleWithActions key={a.id}
-                                                article={a}
-                                                editable={editable}
-                                                onEdit={this.handle_edit}
-                                                onDelete={this.handle_delete}
-                                                onUnlink={this.unlink}
-                                                onFigureClick={this.show_figure}
-                                                admin={user_session.admin} />) }
-                        { articles_loading ? <Loader /> : null }
+                        <div className={classes.articleList}>
+                            { articles.filter(a => a.is_live).map(a => <ArticleWithActions key={a.id}
+                                                    article={a}
+                                                    editable={editable}
+                                                    onEdit={this.handle_edit}
+                                                    onDelete={this.handle_delete}
+                                                    onUnlink={this.unlink}
+                                                    onFigureClick={this.show_figure}
+                                                    admin={user_session.admin} />) }
+                            { articles_loading ? <Loader /> : null }
+                        </div>
 
                     </Grid>
     			</Grid>
