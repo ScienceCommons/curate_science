@@ -290,9 +290,11 @@ class ArticleEditor extends React.Component {
         this.state = {
             form: initialFormState(),
             figures: [],
-            snack_message: null
+            snack_message: null,
+            unsaved: false
         }
 
+        this.maybe_confirm_close = this.maybe_confirm_close.bind(this)
         this.handle_close = this.handle_close.bind(this)
         this.save = this.save.bind(this)
         this.handle_change = this.handle_change.bind(this)
@@ -319,7 +321,7 @@ class ArticleEditor extends React.Component {
                 console.log(form)
                 delete form.key_figures
                 if (form.title.startsWith(C.PLACEHOLDER_TITLE_PREFIX)) form.title = ""
-                this.setState({form: form, figures: res.key_figures})
+                this.setState({form: form, figures: res.key_figures, unsaved: false})
             })
         }
     }
@@ -353,6 +355,20 @@ class ArticleEditor extends React.Component {
         this.setState({form})
     }
 
+    maybe_confirm_close() {
+        // Confirm if unsaved changes
+        let {unsaved, form} = this.state
+        if (unsaved) {
+            let message = form.is_live ? "You have unsaved changes, are you sure you want to continue without saving?" :
+                "You have not yet saved this article, are you sure you want to continue without saving?"
+            if (confirm(message)) {
+                this.handle_close()
+            }
+        } else {
+            this.handle_close()
+        }
+    }
+
     handle_close() {
         let {form} = this.state
         if (!form.is_live && form.id != null) {
@@ -360,7 +376,7 @@ class ArticleEditor extends React.Component {
             this.handle_delete()
         } else {
             // Live, just close without saving
-            this.setState({form: initialFormState()}, () => {
+            this.setState({form: initialFormState(), unsaved: false}, () => {
                 this.props.onClose()
             })
         }
@@ -391,13 +407,13 @@ class ArticleEditor extends React.Component {
         } else {
             form[event.target.name] = val
         }
-        this.setState({form})
+        this.setState({form: form, unsaved: true})
     }
 
     handle_check_change = event => {
         let {form} = this.state
         form[event.target.name] = event.target.checked
-        this.setState({form})
+        this.setState({form: form, unsaved: true})
     }
 
     validate(data) {
@@ -738,13 +754,13 @@ class ArticleEditor extends React.Component {
 		return (
             <div>
                 <Dialog open={open}
-                        onClose={this.handle_close}
+                        onClose={this.maybe_confirm_close}
                         TransitionComponent={Transition}
                         fullScreen
                         aria-labelledby="edit-article">
                     <AppBar className={classes.appBar}>
                         <Toolbar>
-                            <IconButton color="inherit" onClick={this.handle_close} aria-label="Close">
+                            <IconButton color="inherit" onClick={this.maybe_confirm_close} aria-label="Close">
                                <Icon>close</Icon>
                             </IconButton>
                             <Typography variant="h6" color="inherit" className={classes.flex}>
@@ -760,7 +776,7 @@ class ArticleEditor extends React.Component {
 
                     <DialogActions>
                         <Button variant="contained" color="primary" onClick={this.save}>save</Button>
-                        <Button variant="text" onClick={this.handle_close}>cancel</Button>
+                        <Button variant="text" onClick={this.maybe_confirm_close}>cancel</Button>
                     </DialogActions>
                 </Dialog>
                 <Snackbar

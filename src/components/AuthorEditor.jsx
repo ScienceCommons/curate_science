@@ -58,6 +58,8 @@ class AuthorEditor extends React.Component {
             form: {},
             unsaved: false
         }
+
+        this.maybe_confirm_close = this.maybe_confirm_close.bind(this)
         this.handle_close = this.handle_close.bind(this)
         this.handle_change = this.handle_change.bind(this)
         this.save = this.save.bind(this)
@@ -90,6 +92,18 @@ class AuthorEditor extends React.Component {
             let confirmationMessage = "Your changes may not be saved"  // Doesn't show on modern browsers
             (e || window.event).returnValue = confirmationMessage;
             return confirmationMessage;
+        }
+    }
+
+    maybe_confirm_close() {
+        // Confirm if unsaved changes
+        let {unsaved} = this.state
+        if (unsaved) {
+            if (confirm("You have unsaved changes, are you sure you want to continue without saving?")) {
+                this.handle_close()
+            }
+        } else {
+            this.handle_close()
         }
     }
 
@@ -163,7 +177,7 @@ class AuthorEditor extends React.Component {
 		return (
             <div>
                 <Dialog open={open}
-                        onClose={this.handle_close}
+                        onClose={this.maybe_confirm_close}
                         aria-labelledby="edit-author"
                         className={classes.dialog}
                         fullWidth>
@@ -179,7 +193,7 @@ class AuthorEditor extends React.Component {
 
                     <DialogActions>
                         <Button variant="contained" color="primary" onClick={this.save}>save</Button>
-                        <Button variant="text" onClick={this.handle_close}>cancel</Button>
+                        <Button variant="text" onClick={this.maybe_confirm_close}>cancel</Button>
                     </DialogActions>
                 </Dialog>
 
