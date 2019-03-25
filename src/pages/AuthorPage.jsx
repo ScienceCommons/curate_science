@@ -272,6 +272,19 @@ class AuthorPage extends React.Component {
         this.setState({gallery_images: [fig.image], gallery_index: 0, gallery_showing: true})
     }
 
+    sorted_visible_articles() {
+        let {articles} = this.state
+        let sorted_visible = articles.filter(a => a.is_live)
+        sorted_visible.sort((a, b) => {
+            let aval = a.in_press ? 3000 : a.year
+            let bval = b.in_press ? 3000 : b.year
+            if (bval > aval) return 1
+            else if (bval < aval) return -1
+            else return 0
+        })
+        return sorted_visible
+    }
+
     render_position() {
         let {author} = this.state
         let position = author.position_title
@@ -363,7 +376,7 @@ class AuthorPage extends React.Component {
                         </div>
 
                         <div className={classes.articleList}>
-                            { articles.filter(a => a.is_live).map(a => <ArticleWithActions key={a.id}
+                            { this.sorted_visible_articles().map(a => <ArticleWithActions key={a.id}
                                                     article={a}
                                                     editable={editable}
                                                     onEdit={this.handle_edit}

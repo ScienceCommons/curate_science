@@ -18,7 +18,7 @@ import FigureSelector from './FigureSelector.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {clone, set} from 'lodash'
-import {json_api_req, simple_api_req, unspecified} from '../util/util.jsx'
+import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -375,6 +375,7 @@ class ArticleEditor extends React.Component {
                 this.props.onClose()
             })
         }, (err) => {
+            this.show_snack("Error deleting article")
             console.error(err)
         })
     }
@@ -434,6 +435,8 @@ class ArticleEditor extends React.Component {
                 console.log(res)
                 this.props.onUpdate(data)
             }, (err) => {
+                let message = summarize_api_errors(err)
+                this.show_snack(message)
                 console.error(err)
             })
         }
@@ -547,6 +550,7 @@ class ArticleEditor extends React.Component {
         let {figures, form, snack_message} = this.state
         let content
         let replication = form.article_type == 'REPLICATION'
+        let dialog_title = form.is_live ? "Edit Article" : "New Article"
         if (article_id != null) content = (
             <div className={classes.content}>
                 <Grid container spacing={8}>
@@ -744,7 +748,7 @@ class ArticleEditor extends React.Component {
                                <Icon>close</Icon>
                             </IconButton>
                             <Typography variant="h6" color="inherit" className={classes.flex}>
-                                Edit Article
+                                { dialog_title }
                             </Typography>
                             <Button color="inherit" onClick={this.save}>
                                 save

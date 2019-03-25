@@ -74,12 +74,13 @@ textarea {
 }
 
 .ArticleCommentaryBadge {
-	background-color: #a7a7a7;
+	background-color: white;
 	display: inline-block;
 	border-radius: 3px;
 	opacity: 0.4;
 	padding: 2px 7px;
-	color: white;
+	color: #444;
+	border: 1px solid #444;
 	font-size: .75rem;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 	vertical-align: top;
@@ -92,6 +93,7 @@ textarea {
 	color: black;
 	font-size: .55rem;
 	padding: 1px 2px;
+	border: 1px solid #444;
 }
 
 .ArticleFullTextLinks {
