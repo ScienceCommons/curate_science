@@ -16,11 +16,10 @@ import ArticleLI from '../components/ArticleLI.jsx';
 import Loader from '../components/shared/Loader.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
-
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
-import ReactFancyBox from 'react-fancybox'
-import 'react-fancybox/lib/fancybox.css'
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 import {merge} from 'lodash'
 
@@ -79,7 +78,11 @@ class AuthorPage extends React.Component {
             popperAnchorEl: null,
             author_creator_showing: false,
             view_figure_thumb: null,
-            view_figure_full: null
+            view_figure_full: null,
+            // Lightbox / gallery state
+            gallery_images: [],
+            gallery_showing: false,
+            gallery_index: 0
         }
 
         this.open_author_editor = this.toggle_author_editor.bind(this, true)
@@ -263,26 +266,46 @@ class AuthorPage extends React.Component {
     };
 
     show_figure(fig) {
-        console.log(fig)
-        this.setState({view_figure_thumb: fig.thumbnail, view_figure_full: fig.image})
+        // Currently shows only one at a time
+        this.setState({gallery_images: [fig.image], gallery_index: 0, gallery_showing: true})
+    }
+
+    render_position() {
+        let {author} = this.state
+        let position = author.position_title
+        if (author.affiliations != null) position += ', '
+        return position
     }
 
 	render() {
         let {classes, user_session} = this.props
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
-            view_figure_thumb, view_figure_full, articles_loading} = this.state
+            view_figure_thumb, view_figure_full, articles_loading, gallery_showing,
+            gallery_images, gallery_index} = this.state
         if (author == null) return <Loader />
         let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
-        let position = author.position_title
         let editable = this.editable()
         let gallery
-        // gallery = <ReactFancyBox
-        //               thumbnail={view_figure_thumb}
-        //               image={view_figure_full}
-        //               showCloseBtn />
-        if (author.affiliations != null) position += ', '
+        if (gallery_showing && gallery_images.length > 0) gallery = (
+            <Lightbox
+                mainSrc={gallery_images[gallery_index]}
+                nextSrc={gallery_images[(gallery_index + 1) % gallery_images.length]}
+                prevSrc={gallery_images[(gallery_index + gallery_images.length - 1) % gallery_images.length]}
+                onCloseRequest={() => this.setState({ gallery_showing: false })}
+                onMovePrevRequest={() =>
+                  this.setState({
+                    gallery_index: (gallery_index + gallery_images.length - 1) % gallery_images.length,
+                  })
+                }
+                onMoveNextRequest={() =>
+                  this.setState({
+                    gallery_index: (gallery_index + 1) % gallery_images.length,
+                  })
+                }
+              />
+        )
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" spacing={24} className="AuthorPage">
@@ -298,7 +321,7 @@ class AuthorPage extends React.Component {
                             </span>
                             <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
                             <Typography variant="h4" className={classes.subtitle}>
-                                <span className={classes.title}>{ position }</span>
+                                <span className={classes.title}>{ this.render_position() }</span>
                                 <span className={classes.affiliation}>{ author.affiliations }</span>
                             </Typography>
                             <AuthorLinks links={author.profile_urls} />
