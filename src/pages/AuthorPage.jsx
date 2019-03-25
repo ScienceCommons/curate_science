@@ -324,7 +324,7 @@ class AuthorPage extends React.Component {
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" spacing={24} className="AuthorPage">
-                    <Grid item lg={12} className={classes.cardColumn}>
+                    <Grid item className={classes.cardColumn}>
                         <div style={{position: 'relative'}}>
                             <span hidden={!editable}>
                                 <Button variant="contained" color="secondary"
