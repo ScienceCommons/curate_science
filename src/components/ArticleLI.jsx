@@ -80,10 +80,6 @@ class ArticleLI extends React.Component {
         super(props);
         this.state = {
         	show_more: false,
-        	// Below from article detail endpoint
-        	// Arrays after fetch
-        	figures: null,
-        	commentaries: null
         };
 
         this.toggle_show_more = this.toggle_show_more.bind(this)
@@ -91,8 +87,9 @@ class ArticleLI extends React.Component {
     }
 
     toggle_show_more() {
-    	let {show_more, figures} = this.state
-    	let details_fetched = figures != null
+    	let {show_more} = this.state
+      let {article} = this.props
+    	let details_fetched = article.key_figures != null
     	this.setState({show_more: !show_more}, () => {
     		if (!details_fetched) {
     			this.fetch_article_details()
@@ -108,14 +105,14 @@ class ArticleLI extends React.Component {
     		if (res.key_figures != null) figures = res.key_figures
     		if (res.commentaries != null) commentaries = res.commentaries
     		console.log(res)
-    		this.setState({figures: figures, commentaries: commentaries})
+        this.props.onFetchedArticleDetails(article.id, figures, commentaries)
     	}, (err) => {
 
     	})
     }
 
-    handle_figure_click(fig) {
-      this.props.onFigureClick(fig)
+    handle_figure_click(figures, idx) {
+      this.props.onFigureClick(figures, idx)
     }
 
     empty(text) {
@@ -123,7 +120,7 @@ class ArticleLI extends React.Component {
     }
 
 	render() {
-		let {show_more, figures, commentaries} = this.state
+		let {show_more} = this.state
     let { article, classes } = this.props;
     let content_links = pick(article, ['pdf_url', 'pdf_downloads', 'pdf_citations', 'pdf_views',
 	       						   'html_url', 'html_views',
@@ -138,7 +135,7 @@ class ArticleLI extends React.Component {
 									   'reporting_standards_type',
                      'commentaries'
 									   ])
-    let show_figures = article.key_figures || figures || []
+    let show_figures = article.key_figures || []
     let rd = pick(article, ['number_of_reps', 'original_study', 'target_effects', 'original_article_url'])
 		return (
 			<div className="ArticleCard">
