@@ -22,7 +22,6 @@ from curate.models import (
     Article,
     Commentary,
     KeyFigure,
-    UserProfile,
 )
 from curate.serializers import (
     AuthorSerializer,
@@ -32,7 +31,6 @@ from curate.serializers import (
     CommentarySerializer,
     InvitationSerializer,
     KeyFigureSerializer,
-    UserProfileSerializer,
     UserSerializer,
 )
 from PIL import Image
@@ -69,14 +67,12 @@ def create_invitation(request):
     if request.method == 'POST':
         serializer = InvitationSerializer(data=request.data)
         if serializer.is_valid():
-            profile = serializer.validated_data.get('userprofile')
-            invite = Invitation.create(
-                email=serializer.validated_data.get('email'),
-                inviter=request.user
-            )
-            up = UserProfile.objects.create(invite=invite, **profile)
+            email = serializer.validated_data.get('email')
+            name = serializer.validated_data.get('author')['name']
+            invite = Invitation.create(email=email, inviter=request.user)
+            author = Author.objects.create(name=name, invite=invite)
             invite.send_invitation(request)
-            serializer.data['userprofile']['slug'] = up.slug
+            serializer.data['author']['slug'] = author.slug
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -113,7 +109,7 @@ def create_author(request):
             if not request.user.is_superuser and not request.user.is_staff:
                 if hasattr(request.user, 'author'):
                     return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
-                author.user = request.user
+                author.userprofile = request.user.userprofile
                 author.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:

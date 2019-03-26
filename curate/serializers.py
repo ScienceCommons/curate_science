@@ -10,7 +10,6 @@ from curate.models import (
     Article,
     Commentary,
     KeyFigure,
-    UserProfile,
 )
 
 
@@ -88,20 +87,14 @@ class ArticleSerializerNested(WritableNestedModelSerializer):
         model=Article
         fields='__all__'
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=UserProfile
-        fields='__all__'
-
 class UserSerializer(WritableNestedModelSerializer):
-    userprofile = UserProfileSerializer(required=False, allow_null=True)
     author = AuthorSerializer(required=False, allow_null=True)
     password = CharField(write_only=True, required=False)
     email = EmailField(write_only=True, required=False)
     class Meta:
         model=User
         fields=('email', 'username', 'first_name',
-                'last_name', 'password', 'userprofile', 'author')
+                'last_name', 'password', 'author')
 
     def create(self, validated_data):
         user = User(
@@ -112,11 +105,16 @@ class UserSerializer(WritableNestedModelSerializer):
         user.save()
         return user
 
+class AuthorNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Author
+        fields=('name', 'slug')
+
 class InvitationSerializer(WritableNestedModelSerializer):
-    userprofile = UserProfileSerializer()
+    author = AuthorNameSerializer(required=True, allow_null=False)
     class Meta:
         model=Invitation
-        fields=('email','userprofile')
+        fields=('email', 'author')
 
 class AuthorArticleSerializer(serializers.Serializer):
     article = serializers.IntegerField(required=True)

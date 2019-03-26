@@ -14,16 +14,16 @@ class TestAPIViews(TestCase):
     def setUp(self):
         #create_model_instances()
         self.client = Client()
-        admin_user = models.User.objects.create(username='admin')
+        admin_user = models.User.objects.create(email='admin@curatescience.org')
         admin_user.set_password('password')
         admin_user.is_staff = True
         admin_user.save()
 
-        user = models.User.objects.create(username='new_user')
+        user = models.User.objects.create(email='new_user@curatescience.org')
         user.set_password('password1')
         user.save()
 
-        user = models.User.objects.create(username='new_user_2')
+        user = models.User.objects.create(email='new_user_2@curatescience.org')
         user.set_password('password2')
         user.save()
 
@@ -84,7 +84,7 @@ class TestAPIViews(TestCase):
 
     # Create Articles
     def test_authenticated_user_can_create_article_with_api(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-article')
         r = self.client.post(url, {
             "doi": "001",
@@ -99,9 +99,10 @@ class TestAPIViews(TestCase):
         assert a.title == "api test article"
 
     def test_non_admin_user_create_article_linked_to_author(self):
-        self.client.login(username='new_user', password='password1')
-        u = User.objects.get(username='new_user')
-        author = models.Author.objects.create(user=u, name='New User')
+        self.client.login(email='new_user@curatescience.org', password='password1')
+        u = User.objects.get(email='new_user@curatescience.org')
+        up = models.UserProfile.objects.create(name='New User')
+        author = models.Author.objects.create(user=u, userprofile=up)
         url = reverse('api-create-article')
         r = self.client.post(url, {
             "doi": "004",
@@ -113,11 +114,11 @@ class TestAPIViews(TestCase):
             "author_list": "LeBel et al",
         })
         article = models.Article.objects.get(doi="004")
-        assert article.authors.first().name == 'New User'
+        assert str(article.authors.first()) == 'New User'
 
     # def test_non_admin_author_can_only_update_own_articles(self):
-    #     self.client.login(username='new_user', password='password1')
-    #     u = User.objects.get(username='new_user')
+    #     self.client.login(email='new_user@curatescience.org', password='password1')
+    #     u = User.objects.get(email='new_user@curatescience.org')
     #     author = models.Author.objects.create(user=u, name='New User')
     #     article = models.Article.objects.first()
     #     url = reverse('api-update-article', kwargs={'pk': article.id})
@@ -127,7 +128,7 @@ class TestAPIViews(TestCase):
     #     assert r.status_code == 403
 
     def test_create_invalid_article_400(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-article')
         r = self.client.post(url, {
             "journal": "Science",
@@ -139,7 +140,7 @@ class TestAPIViews(TestCase):
         assert r.status_code == 400
 
     def test_article_year_can_be_in_press(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-article')
         r = self.client.post(url, {
             "doi": "000",
@@ -175,13 +176,13 @@ class TestAPIViews(TestCase):
         assert r.status_code == 403
 
     def test_authorized_user_can_get_article_create_form(self):
-        self.client.login(username='new_user', password='password1')
+        self.client.login(email='new_user@curatescience.org', password='password1')
         url = reverse('api-create-article')
         r = self.client.get(url)
         assert r.status_code == 200
 
     def test_admin_can_create_article_nested(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-article')
         r = self.client.post(url, {
             "key_figures": [],
@@ -206,10 +207,11 @@ class TestAPIViews(TestCase):
 
     # Update Articles
     def test_authenticated_user_can_edit_article_with_api(self):
-        self.client.login(username='new_user', password='password1')
+        self.client.login(email='new_user@curatescience.org', password='password1')
         article=models.Article.objects.first()
-        user = User.objects.get(username='new_user')
-        author = models.Author.objects.create(user=user, name='New User')
+        user = User.objects.get(email='new_user@curatescience.org')
+        up = models.UserProfile.objects.create(name='New User')
+        author = models.Author.objects.create(user=user, userprofile=up)
         article.authors.add(author)
         url = reverse('api-update-article', kwargs={'pk': article.id})
         r = self.client.patch(
@@ -232,13 +234,13 @@ class TestAPIViews(TestCase):
 
     def test_update_invalid_article_id_404(self):
         self.client=Client()
-        self.client.login(username='new_user', password='password1')
+        self.client.login(email='new_user@curatescience.org', password='password1')
         url = reverse('api-update-article', kwargs={'pk': 99999})
         r = self.client.put(url, {"title": "_"})
         assert r.status_code == 404
 
     def test_admin_can_edit_article_nested(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         article=models.Article.objects.first()
         url = reverse('api-update-article', kwargs={'pk': article.id})
         r = self.client.patch(
@@ -265,14 +267,14 @@ class TestAPIViews(TestCase):
         assert r.status_code == 403
 
     def test_user_cannot_delete_article_api(self):
-        self.client.login(username='new_user', password='password1')
+        self.client.login(email='new_user@curatescience.org', password='password1')
         article=models.Article.objects.first()
         url = reverse('api-delete-article', kwargs={'pk': article.id})
         r = self.client.delete(url)
         assert r.status_code == 403
 
     def test_admin_can_delete_article_api(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-article')
         r = self.client.post(url, {
             "doi": "003",
@@ -290,7 +292,7 @@ class TestAPIViews(TestCase):
         assert len(models.Article.objects.filter(id=article.id)) == 0
 
     def test_delete_invalid_article_404(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-delete-article', kwargs={'pk': 9999})
         r = self.client.delete(url)
         assert r.status_code == 404
@@ -309,7 +311,7 @@ class TestAPIViews(TestCase):
     # View Authors
     def test_anon_can_view_author_api(self):
         self.client=Client()
-        author = models.Author.objects.filter(name='Etienne LeBel').first()
+        author = models.Author.objects.filter(userprofile__name='Etienne LeBel').first()
         url = reverse('api-view-author', kwargs={'slug': author.slug})
         r = self.client.get(url)
         assert r.status_code == 200
@@ -336,22 +338,22 @@ class TestAPIViews(TestCase):
         assert r.status_code == 403
 
     def test_authorized_user_can_create_author_api(self):
-        self.client.login(username='new_user', password='password1')
+        self.client.login(email='new_user@curatescience.org', password='password1')
         url = reverse('api-create-author')
         r = self.client.post(url, {
             "name": "John Tester",
         })
-        a = models.Author.objects.get(name="John Tester")
+        a = models.Author.objects.get(userprofile__name="John Tester")
         assert a.name == "John Tester"
         assert a.user.username == "new_user"
 
     def test_user_with_author_cannot_create_another(self):
-        self.client.login(username='new_user_2', password='password2')
+        self.client.login(email='new_user_2@curatescience.org', password='password2')
         url = reverse('api-create-author')
         r = self.client.post(url, {
             "name": "John Doe",
         })
-        a = models.Author.objects.get(name="John Doe")
+        a = models.Author.objects.get(userprofile__name="John Doe")
         assert a.name == "John Doe"
         assert a.user.username == "new_user_2"
         r2 = self.client.post(url, {
@@ -361,7 +363,7 @@ class TestAPIViews(TestCase):
 
     def test_associated_user_can_update_author_api(self):
         self.client=Client()
-        self.client.login(username='new_user', password='password1')
+        self.client.login(email='new_user@curatescience.org', password='password1')
         url = reverse('api-create-author')
         r = self.client.post(url, {
             "name": "FirstNameTest LastNameTest"
@@ -377,7 +379,7 @@ class TestAPIViews(TestCase):
 
     def test_other_user_cannot_update_author_api(self):
         self.client=Client()
-        self.client.login(username='new_user_2', password='password2')
+        self.client.login(email='new_user_2@curatescience.org', password='password2')
         author=models.Author.objects.first()
         url = reverse('api-update-author', kwargs={'slug': author.slug})
         r = self.client.patch(url, {
@@ -387,7 +389,7 @@ class TestAPIViews(TestCase):
         assert r.status_code == 401
 
     def test_superuser_create_author(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-author')
         r = self.client.post(url, {
             "name": "Jill Tester",
@@ -397,7 +399,7 @@ class TestAPIViews(TestCase):
         assert a.user is None
 
     def test_authorized_user_can_get_author_create_form(self):
-        self.client.login(username='new_user', password='password1')
+        self.client.login(email='new_user@curatescience.org', password='password1')
         url = reverse('api-create-author')
         r = self.client.get(url)
         assert r.status_code == 200
@@ -414,9 +416,9 @@ class TestAPIViews(TestCase):
         assert r.status_code == 403
 
     def test_authorized_user_can_patch_author(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         author=models.Author.objects.first()
-        url = reverse('api-update-author', kwargs={'slug': author.slug})
+        url = reverse('api-update-author', kwargs={'slug': author.userprofile.slug})
         r = self.client.patch(
             url, {
                 "name": 'Jimmy'
@@ -425,9 +427,9 @@ class TestAPIViews(TestCase):
         assert r.status_code == 200
 
     def test_authorized_user_can_put_author(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         author=models.Author.objects.first()
-        url = reverse('api-update-author', kwargs={'slug': author.slug})
+        url = reverse('api-update-author', kwargs={'slug': author.userprofile.slug})
         r = self.client.put(
             url, {
                 "name": 'Chen-Bo Zhong',
@@ -435,31 +437,31 @@ class TestAPIViews(TestCase):
             content_type="application/json")
         author=models.Author.objects.first()
         assert r.status_code == 200
-        assert author.name == 'Chen-Bo Zhong'
+        assert str(author) == 'Chen-Bo Zhong'
 
     # Delete Authors
     def test_anon_cannot_delete_author_api(self):
         self.client=Client()
         author=models.Author.objects.first()
-        url = reverse('api-delete-author', kwargs={'slug': author.slug})
+        url = reverse('api-delete-author', kwargs={'slug': author.userprofile.slug})
         r = self.client.delete(url)
         assert r.status_code == 403
 
     def test_user_cannot_delete_author_api(self):
-        self.client.login(username='new_user', password='password1')
+        self.client.login(email='new_user@curatescience.org', password='password1')
         author=models.Author.objects.first()
-        url = reverse('api-delete-author', kwargs={'slug': author.slug})
+        url = reverse('api-delete-author', kwargs={'slug': author.userprofile.slug})
         r = self.client.delete(url)
         assert r.status_code == 403
 
     def test_admin_can_delete_author_api(self):
-        self.client.login(username='admin', password='password')
+        self.client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-author')
         r = self.client.post(url, {
             "name": "John Tester",
         })
         author = models.Author.objects.get(name="John Tester")
-        url = reverse('api-delete-author', kwargs={'slug': author.slug})
+        url = reverse('api-delete-author', kwargs={'slug': author.userprofile.slug})
         r = self.client.delete(url)
         assert auth.get_user(self.client).is_authenticated
         assert auth.get_user(self.client).is_staff
@@ -468,7 +470,7 @@ class TestAPIViews(TestCase):
 
     def test_authorized_user_can_create_key_figure(self):
         client = APIClient()
-        client.login(username='new_user', password='password1')
+        client.login(email='new_user@curatescience.org', password='password1')
         article = models.Article.objects.first()
         url = reverse('api-create-key-figure', kwargs={'article_pk': article.id})
         f = open('curate/fixtures/image.jpg', mode='rb')
@@ -491,7 +493,7 @@ class TestAPIViews(TestCase):
 
     def test_admin_can_delete_key_figure(self):
         client = APIClient()
-        client.login(username='admin', password='password')
+        client.login(email='admin@curatescience.org', password='password')
         article = models.Article.objects.first()
         url = reverse('api-create-key-figure', kwargs={'article_pk': article.id})
         f = open('curate/fixtures/image.jpg', mode='rb')
@@ -505,7 +507,7 @@ class TestAPIViews(TestCase):
 
     def test_non_admin_cannot_delete_key_figure(self):
         client = APIClient()
-        client.login(username='new_user', password='password1')
+        client.login(email='new_user@curatescience.org', password='password1')
         article = models.Article.objects.first()
         url = reverse('api-create-key-figure', kwargs={'article_pk': article.id})
         f = open('curate/fixtures/image.jpg', mode='rb')
@@ -518,7 +520,7 @@ class TestAPIViews(TestCase):
 
     def test_create_invitation(self):
         client = APIClient()
-        client.login(username='admin', password='password')
+        client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-invitation')
         res = client.post(url, {
             "email": "test.user@example.com",
@@ -533,7 +535,7 @@ class TestAPIViews(TestCase):
 
     def test_link_article(self):
         client = APIClient()
-        client.login(username='admin', password='password')
+        client.login(email='admin@curatescience.org', password='password')
         url = reverse('api-create-article')
         r = client.post(url, {
             "doi": "005",
@@ -577,7 +579,7 @@ class TestAPIViews(TestCase):
 
 
     # def test_article_search(self):
-    #     self.client.login(username='new_user', password='password1')
+    #     self.client.login(email='new_user@curatescience.org', password='password1')
     #     url = reverse('api-search-articles') + "?q=A"
     #     r = self.client.get(url)
     #     d = json.loads(r.content.decode('utf-8'))
@@ -585,7 +587,7 @@ class TestAPIViews(TestCase):
     #     assert d[0].get('title') == "A brief guide to evaluate replications"
 
     # def test_article_search_pagination(self):
-    #     self.client.login(username='new_user', password='password1')
+    #     self.client.login(email='new_user@curatescience.org', password='password1')
     #     url = reverse('api-search-articles') + "?q=LeBel&page_size=2"
     #     r = self.client.get(url)
     #     d = json.loads(r.content.decode('utf-8'))

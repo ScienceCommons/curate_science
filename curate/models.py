@@ -12,12 +12,46 @@ from PIL import Image
 from django.conf import settings
 from invitations.models import Invitation
 import datetime
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 
-# Create your models here.
+# Creation flows
+#
+# 1. User signs up on their own
+# 2. Admin invites user
+# 3. Admin creates author page then invites the user
 
-class UserProfile(models.Model):
+# Auto-fill User's username with e-mail on save
+@receiver(pre_save, sender=User)
+def fill_username_with_email(sender, instance, **kwargs):
+    instance.username = instance.email
+
+ # When a User is created, find an Author with matching e-mail and link if exists
+@receiver(post_save, sender=User)
+def link_user_to_author(sender, instance, created, **kwargs):
+    if created and not hasattr(instance, 'author'):
+        invite = Invitation.objects.filter(email=instance.email).first()
+        if invite and hasattr(invite, 'author'):
+            invite.author.user = instance
+            invite.author.save()
+        else:
+            Author.objects.create(user=instance, name=instance.first_name)
+
+def populate_slug(instance):
+    return ' '.join(
+        [x for x in [instance.first_name, instance.middle_name, instance.last_name]
+         if x is not None]
+    )
+
+class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=True)
+    orcid = models.CharField(max_length=255, null=True, blank=True)
+    position_title = models.CharField(max_length=255, null=True, blank=True)
+    affiliations = models.CharField(max_length=255, null=True, blank=True)
+    profile_urls = JSONField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    articles = models.ManyToManyField('Article', related_name='authors', blank=True)
     curation_contributions = JSONField(null=True, blank=True)
     browsing_history = JSONField(null=True, blank=True)
     tracked_content = JSONField(null=True, blank=True)
@@ -32,38 +66,10 @@ class UserProfile(models.Model):
         editable=True,
         null=True,
     )
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance, name="{0} {1}".format(instance.first_name, instance.last_name))
-
-
-def populate_slug(instance):
-    return ' '.join(
-        [x for x in [instance.first_name, instance.middle_name, instance.last_name]
-         if x is not None]
-    )
-
-class Author(models.Model):
-    userprofile = models.OneToOneField(UserProfile, on_delete=models.PROTECT, null=True, blank=True)
-    orcid = models.CharField(max_length=255, null=True, blank=True)
-    position_title = models.CharField(max_length=255, null=True, blank=True)
-    affiliations = models.CharField(max_length=255, null=True, blank=True)
-    profile_urls = JSONField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    articles = models.ManyToManyField('Article', related_name='authors', blank=True)
+    is_activated = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name if self.name else "Unnamed Author"
-
-@receiver(post_save, sender=Author)
-def create_user_profile_for_author(sender, instance, created, **kwargs):
-    if created:
-        instance.userprofile = UserProfile.objects.create(name=instance.name)
-
 
 class Article(models.Model):
     """A written work with one or more Authors, reporting the results of a scientific Study."""

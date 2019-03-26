@@ -48,7 +48,7 @@ class AdminInvite extends React.Component {
     	if (email != null && email.length > 0) {
 	    	let data = {
 	    		email: email,
-	    		userprofile: {
+	    		author: {
 					name: form.name || ''
 				}
 	    	}

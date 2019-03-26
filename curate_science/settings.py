@@ -204,12 +204,16 @@ LOGGING = {
 
 #Invitation system settings
 INVITATIONS_INVITATION_ONLY = True
+#INVITATIONS_INVITATION_ONLY = False
 #ACCOUNT_SIGNUP_FORM_CLASS = 'curate.forms.SignupForm'
 INVITATIONS_INVITATION_EXPIRY = 30 #invites expire after 30 days
 #INVITATIONS_ACCEPT_INVITE_AFTER_SIGNUP = True
 #ACCOUNT_FORMS = {'signup': 'curate.forms.CustomSignupForm'}
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_ADAPTER = 'curate.adapters.AccountAdapter'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_UNIQUE_EMAIL = True
+#ACCOUNT_ADAPTER = 'curate.adapters.AccountAdapter'
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
