@@ -124,7 +124,8 @@ class ArticleLI extends React.Component {
     let { article, classes } = this.props;
     let content_links = pick(article, ['pdf_url', 'pdf_downloads', 'pdf_citations', 'pdf_views',
 	       						   'html_url', 'html_views',
-	 	    					   'preprint_url', 'preprint_views', 'preprint_downloads'
+	 	    					   'preprint_url', 'preprint_views', 'preprint_downloads',
+                     'updated'
 	 	    					   ])
     let transparency_data = pick(article, ['article_type',
 									   'prereg_protocol_url',

@@ -3,8 +3,21 @@ import React from 'react';
 import {Button, Icon, Typography} from '@material-ui/core';
 
 import {get_link_source_icon} from '../util/util.jsx'
+var numeral = require('numeral')
 
 const LINK_TYPES = ['pdf', 'html', 'preprint']
+
+const LINK_TITLES = {
+	'pdf': "View PDF of this article (postprint).",
+	'html': "View interactive HTML version of this article (postprint).",
+	'preprint': "View preprint of this article."
+}
+
+const LINK_LABELS = {
+	'pdf': "PDF",
+	'preprint': "Preprint",
+	'html': "HTML"
+}
 
 const COLORS = {
 	'preprint': '#9b59b6',
@@ -39,6 +52,7 @@ class ArticleFullTextLinks extends React.Component {
     }
 
 	render_link(lt) {
+		let {updated} = this.props
 		let color = COLORS[lt] || '#444444'
 		let label = lt.toUpperCase()
 		const st = {
@@ -52,18 +66,25 @@ class ArticleFullTextLinks extends React.Component {
 		let views = this.props[`${lt}_views`]
 		let cites = this.props[`${lt}_citations`]
 		let dls = this.props[`${lt}_downloads`]
+		let update_dt = new Date(updated)
+		let update_date = update_dt.toLocaleDateString()
 		if (url == null || url.length == 0) return null
 		let icon
 		if (lt == 'preprint') icon = this.get_icon(url, color)
+		let title = LINK_TITLES[lt] || null
+		let link_label = LINK_LABELS[lt] || "Article"
+		let view_title = `${link_label} has been viewed ${numeral(views).format('0,0')} times (as of ${update_date})`
+		let dl_title = `${link_label} has been downloaded ${numeral(dls).format('0,0')} times (as of ${update_date})`
+		let cite_title = `${link_label} has been cited ${numeral(cites).format('0,0')} times (as of ${update_date})`
 		return (
 			<div key={lt}>
 				<Typography className="ContentLink" style={{marginBottom: 4}}>
 					<span className="ContentLinkCounts">
-						{ views > 0 ? <span key="views" style={COUNT_ST}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {views}</span> : null }
-						{ dls > 0 ? <span key="dls" style={COUNT_ST}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {dls}</span> : null }
-						{ cites > 0 ? <span key="cites" style={COUNT_ST}><Icon fontSize="inherit" style={COUNT_ICON_ST}>format_quote</Icon> {cites}</span> : null }
+						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {numeral(views).format('0.0a')}</span> : null }
+						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {numeral(dls).format('0.0a')}</span> : null }
+						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>format_quote</Icon> {numeral(cites).format('0.0a')}</span> : null }
 					</span>
-					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank">{icon}{label}</a>
+					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}{label}</a>
 				</Typography>
 			</div>
 		)
@@ -80,6 +101,7 @@ class ArticleFullTextLinks extends React.Component {
 }
 
 ArticleFullTextLinks.defaultProps = {
+	updated: ''
 };
 
 export default ArticleFullTextLinks;
