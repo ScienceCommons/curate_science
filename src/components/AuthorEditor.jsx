@@ -87,9 +87,10 @@ class AuthorEditor extends React.Component {
 
     onUnload(e) {
         let {unsaved} = this.state
+        let confirmationMessage = null
         console.log(`unsaved ${unsaved}`)
         if (unsaved) {
-            let confirmationMessage = "Your changes may not be saved"  // Doesn't show on modern browsers
+            confirmationMessage = "Your changes may not be saved"  // Doesn't show on modern browsers
             (e || window.event).returnValue = confirmationMessage;
             return confirmationMessage;
         }
