@@ -280,6 +280,7 @@ const INPUT_SPECS = {
 function initialFormState() {
     return {
         article_type: 'ORIGINAL',
+        key_figures: [],
         commentaries: []
     }
 }
@@ -289,7 +290,6 @@ class ArticleEditor extends React.Component {
         super(props);
         this.state = {
             form: initialFormState(),
-            figures: [],
             snack_message: null,
             unsaved: false
         }
@@ -319,9 +319,9 @@ class ArticleEditor extends React.Component {
             fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
                 let form = clone(res)
                 console.log(form)
-                delete form.key_figures
+                // delete form.key_figures
                 if (form.title.startsWith(C.PLACEHOLDER_TITLE_PREFIX)) form.title = ""
-                this.setState({form: form, figures: res.key_figures, unsaved: false})
+                this.setState({form: form, unsaved: false})
             })
         }
     }
@@ -338,7 +338,9 @@ class ArticleEditor extends React.Component {
     }
 
     update_figures(figures) {
-        this.setState({figures: figures})
+        let {form} = this.state
+        form.key_figures = figures
+        this.setState({form})
     }
 
     add_commentary() {
@@ -443,12 +445,17 @@ class ArticleEditor extends React.Component {
         let pk = this.props.article_id
         let data = clone(form)
         let {valid, message} = this.validate(data)
+        let key_figures = []
         if (!valid) this.show_snack(message)
         else {
             data.is_live = true  // Always set to live if saving
             if (data.in_press) data.year = null  // Otherwise server fails on non-integer
+            if (data.key_figures) {
+                key_figures = data.key_figures
+                delete data.key_figures
+            }
             json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
-                console.log(res)
+                data.key_figures = key_figures // Re-add to update figures in article list
                 this.props.onUpdate(data)
             }, (err) => {
                 let message = summarize_api_errors(err)
@@ -563,7 +570,7 @@ class ArticleEditor extends React.Component {
     }
 	render() {
         let {classes, article_id, open} = this.props
-        let {figures, form, snack_message} = this.state
+        let {form, snack_message} = this.state
         let content
         let replication = form.article_type == 'REPLICATION'
         let dialog_title = form.is_live ? "Edit Article" : "New Article"
@@ -625,7 +632,7 @@ class ArticleEditor extends React.Component {
                     <Grid item xs={12}>
                         <FigureSelector article_id={article_id}
                             onChange={this.update_figures}
-                            figures={figures} />
+                            figures={form.key_figures} />
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
@@ -844,7 +851,6 @@ class CSTextField extends React.Component {
                       disabled={disabled}
                       required={specs.required}
                       element={specs.multiline ? 'textarea' : 'input'}
-                      multiline={specs.multiline}
                       className={classes.input}
                       style={st}
                     />

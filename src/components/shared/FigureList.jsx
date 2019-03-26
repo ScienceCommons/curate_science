@@ -50,7 +50,7 @@ class FigureList extends React.Component {
         let {figures, showDelete} = this.props
         console.log(`figure_click ${idx}`)
         if (showDelete) this.delete_figure(idx)
-        else this.props.onFigureClick(figures[idx])
+        else this.props.onFigureClick(figures, idx)
     }
 
     handle_add() {
@@ -59,7 +59,6 @@ class FigureList extends React.Component {
 
     render_thumbnail(kf, i) {
         let {classes, showDelete} = this.props
-        console.log(kf)
         let kind = kf.is_table ? 'Table' : 'Figure'
         let img = (
             <img key={i}

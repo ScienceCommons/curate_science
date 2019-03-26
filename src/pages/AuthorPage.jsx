@@ -99,6 +99,7 @@ class AuthorPage extends React.Component {
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
         this.article_updated = this.article_updated.bind(this)
         this.show_figure = this.show_figure.bind(this)
+        this.got_article_details = this.got_article_details.bind(this)
     }
 
     componentDidMount() {
@@ -127,7 +128,6 @@ class AuthorPage extends React.Component {
         let {cookies} = this.props
         let {articles, author} = this.state
         let now = new Date()
-        let date_str = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
         let data = {
             title: `${C.PLACEHOLDER_TITLE_PREFIX}${randomId(15)}`,
             authors: [author.id],
@@ -245,6 +245,18 @@ class AuthorPage extends React.Component {
         this.setState({articles, edit_article_modal_open: false, editing_article_id: null})
     }
 
+    got_article_details(id, figures, commentaries) {
+        let {articles} = this.state
+        for (let i=0; i<articles.length; i++) {
+            if (articles[i].id == id) {
+                // Replace with updated object
+                articles[i].key_figures = figures
+                articles[i].commentaries = commentaries
+            }
+        }
+        this.setState({articles})
+    }
+
     toggle_author_editor(open) {
         this.setState({edit_author_modal_open: open})
     }
@@ -267,9 +279,9 @@ class AuthorPage extends React.Component {
         });
     };
 
-    show_figure(fig) {
+    show_figure(figures, index) {
         // Currently shows only one at a time
-        this.setState({gallery_images: [fig.image], gallery_index: 0, gallery_showing: true})
+        this.setState({gallery_images: figures.map((fig) => fig.image), gallery_index: index, gallery_showing: true})
     }
 
     sorted_visible_articles() {
@@ -383,6 +395,7 @@ class AuthorPage extends React.Component {
                                                     onDelete={this.handle_delete}
                                                     onUnlink={this.unlink}
                                                     onFigureClick={this.show_figure}
+                                                    onFetchedArticleDetails={this.got_article_details}
                                                     admin={user_session.admin} />) }
                             { articles_loading ? <Loader /> : null }
                         </div>
@@ -413,6 +426,7 @@ class ArticleWithActions extends React.Component {
         this.unlink = this.unlink.bind(this)
         this.delete = this.delete.bind(this)
         this.show_figure = this.show_figure.bind(this)
+        this.got_article_details = this.got_article_details.bind(this)
     }
 
     edit() {
@@ -430,8 +444,12 @@ class ArticleWithActions extends React.Component {
         this.props.onUnlink(article)
     }
 
-    show_figure(fig) {
-        this.props.onFigureClick(fig)
+    show_figure(figures, index) {
+        this.props.onFigureClick(figures, index)
+    }
+
+    got_article_details(id, figures, commentaries) {
+        this.props.onFetchedArticleDetails(id, figures, commentaries)
     }
 
     render() {
@@ -445,7 +463,10 @@ class ArticleWithActions extends React.Component {
         }
         return (
             <div key={article.id} className="ArticleWithActions">
-                <ArticleLI article={article} admin={false} onFigureClick={this.show_figure} />
+                <ArticleLI article={article}
+                           admin={false}
+                           onFetchedArticleDetails={this.got_article_details}
+                           onFigureClick={this.show_figure} />
                 <div className="ArticleActions">
                     <span hidden={!editable}>
                         <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
