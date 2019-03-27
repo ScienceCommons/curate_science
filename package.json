@@ -18,7 +18,7 @@
     "html-webpack-plugin": "^3.2.0",
     "lodash": "^4.17.11",
     "moment-timezone": "^0.5.23",
-    "numeral": "^2.0.6",
+    "numbro": "^2.1.2",
     "path": "^0.12.7",
     "query-string": "^6.2.0",
     "react": "^16.6.0",

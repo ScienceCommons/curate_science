@@ -3,7 +3,7 @@ import React from 'react';
 import {Button, Icon, Typography} from '@material-ui/core';
 
 import {get_link_source_icon} from '../util/util.jsx'
-var numeral = require('numeral')
+var numbro = require("numbro");
 
 const LINK_TYPES = ['pdf', 'html', 'preprint']
 
@@ -51,6 +51,20 @@ class ArticleFullTextLinks extends React.Component {
     	else return <img src={icon} width="15" style={SOURCE_ICON_ST} />
     }
 
+	short_number(num) {
+		return numbro(num).format({
+		    average: true,
+		    mantissa: 1,
+		    optionalMantissa: true
+		}).toUpperCase()
+	}
+
+	number(num) {
+		return numbro(num).format({
+			thousandSeparated: true
+		})
+	}
+
 	render_link(lt) {
 		let {updated} = this.props
 		let color = COLORS[lt] || '#444444'
@@ -73,16 +87,16 @@ class ArticleFullTextLinks extends React.Component {
 		if (lt == 'preprint') icon = this.get_icon(url, color)
 		let title = LINK_TITLES[lt] || null
 		let link_label = LINK_LABELS[lt] || "Article"
-		let view_title = `${link_label} has been viewed ${numeral(views).format('0,0')} times (as of ${update_date})`
-		let dl_title = `${link_label} has been downloaded ${numeral(dls).format('0,0')} times (as of ${update_date})`
-		let cite_title = `${link_label} has been cited ${numeral(cites).format('0,0')} times (as of ${update_date})`
+		let view_title = `${link_label} has been viewed ${this.number(views)} times (as of ${update_date})`
+		let dl_title = `${link_label} has been downloaded ${this.number(dls)} times (as of ${update_date})`
+		let cite_title = `${link_label} has been cited ${this.number(cites)} times (as of ${update_date})`
 		return (
 			<div key={lt}>
 				<Typography className="ContentLink" style={{marginBottom: 4}}>
 					<span className="ContentLinkCounts">
-						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {numeral(views).format('0.0a')}</span> : null }
-						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {numeral(dls).format('0.0a')}</span> : null }
-						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>format_quote</Icon> {numeral(cites).format('0.0a')}</span> : null }
+						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
+						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
+						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
 					</span>
 					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}{label}</a>
 				</Typography>
