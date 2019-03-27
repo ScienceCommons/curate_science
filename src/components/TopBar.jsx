@@ -135,6 +135,11 @@ class TopBar extends React.Component {
         let drawer_menu = (
             <div className={classes.drawer} key="drawer">
                 <List>
+                    <Link to="/replications" key="replications">
+                        <ListItem key="replications">
+                            <ListItemText primary={"Replications"} />
+                        </ListItem>
+                    </Link>
                     <Link to="/about" key="about">
                         <ListItem>
                             <ListItemText primary="About" />
@@ -145,9 +150,9 @@ class TopBar extends React.Component {
                             <ListItemText primary={"FAQ"} />
                         </ListItem>
                     </Link>
-                    <Link to="/replications" key="replications">
-                        <ListItem key="replications">
-                            <ListItemText primary={"Replications"} />
+                    <Link to="/help" key="help">
+                        <ListItem key="help">
+                            <ListItemText primary={"Help"} />
                         </ListItem>
                     </Link>
                 </List>
@@ -184,7 +189,7 @@ class TopBar extends React.Component {
 
                         <div className={classes.rightSide} key="right">
 
-                            <Link to="/about"><Button variant="text" className={classes.topLink}>About</Button></Link>
+                            <Link to="/help"><Button variant="text" className={classes.topLink}>Help</Button></Link>
 
                             {user_session.authenticated ? (
                             <span>
