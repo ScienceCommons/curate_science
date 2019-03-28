@@ -1,0 +1,121 @@
+import React from 'react';
+
+import {Button, Icon, Typography} from '@material-ui/core';
+
+import {get_link_source_icon} from '../util/util.jsx'
+var numbro = require("numbro");
+
+const LINK_TYPES = ['pdf', 'html', 'preprint']
+
+const LINK_TITLES = {
+	'pdf': "View PDF of this article (postprint).",
+	'html': "View interactive HTML version of this article (postprint).",
+	'preprint': "View preprint of this article."
+}
+
+const LINK_LABELS = {
+	'pdf': "PDF",
+	'preprint': "Preprint",
+	'html': "HTML"
+}
+
+const COLORS = {
+	'preprint': '#9b59b6',
+	'html': '#000000',
+	'pdf': '#920007'
+}
+
+const SOURCE_ICON_ST = {
+	marginRight: 4
+}
+const COUNT_ST = {
+	fontSize: 12,
+	color: '#BCBCBC',
+	display: 'inline',
+	marginRight: 7
+}
+const COUNT_ICON_ST = {
+	fontSize: '13px'
+}
+
+class ArticleFullTextLinks extends React.Component {
+	constructor(props) {
+        super(props);
+
+        this.render_link = this.render_link.bind(this)
+    }
+
+    get_icon(url, color) {
+    	let icon = get_link_source_icon(url)
+    	if (icon == null) return null
+    	else return <img src={icon} width="15" style={SOURCE_ICON_ST} />
+    }
+
+	short_number(num) {
+		return numbro(num).format({
+		    average: true,
+		    mantissa: 1,
+		    optionalMantissa: true
+		}).toUpperCase()
+	}
+
+	number(num) {
+		return numbro(num).format({
+			thousandSeparated: true
+		})
+	}
+
+	render_link(lt) {
+		let {updated} = this.props
+		let color = COLORS[lt] || '#444444'
+		let label = lt.toUpperCase()
+		const st = {
+			marginLeft: 5,
+			color: color,
+			border: `1px solid ${color}`,
+			display: 'inline',
+			fontSize: 16
+		}
+		let url = this.props[`${lt}_url`]
+		let views = this.props[`${lt}_views`]
+		let cites = this.props[`${lt}_citations`]
+		let dls = this.props[`${lt}_downloads`]
+		let update_dt = new Date(updated)
+		let update_date = update_dt.toLocaleDateString()
+		if (url == null || url.length == 0) return null
+		let icon
+		if (lt == 'preprint') icon = this.get_icon(url, color)
+		let title = LINK_TITLES[lt] || null
+		let link_label = LINK_LABELS[lt] || "Article"
+		let view_title = `${link_label} has been viewed ${this.number(views)} times (as of ${update_date})`
+		let dl_title = `${link_label} has been downloaded ${this.number(dls)} times (as of ${update_date})`
+		let cite_title = `${link_label} has been cited ${this.number(cites)} times (as of ${update_date})`
+		return (
+			<div key={lt}>
+				<Typography className="ContentLink" style={{marginBottom: 4}}>
+					<span className="ContentLinkCounts">
+						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
+						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
+						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
+					</span>
+					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}{label}</a>
+				</Typography>
+			</div>
+		)
+	}
+
+	render() {
+		let links = []
+		LINK_TYPES.forEach((lt) => {
+			let link = this.render_link(lt)
+			if (link != null) links.push(link)
+		})
+		return <div className="ArticleFullTextLinks">{ links }</div>
+	}
+}
+
+ArticleFullTextLinks.defaultProps = {
+	updated: ''
+};
+
+export default ArticleFullTextLinks;

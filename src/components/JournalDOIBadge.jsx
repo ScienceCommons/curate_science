@@ -15,8 +15,8 @@ class JournalDOIBadge extends React.Component {
 	render() {
 		let {journal, doi, classes} = this.props
 		let url = `https://dx.doi.org/${doi}`
-		let name = journal == null ? "Unknown Journal" : journal
-		let link = (doi != null && doi.length > 0) ? <a href={url} className={classes.doi}>{ doi } <Icon fontSize="inherit">open_in_new</Icon></a> : null
+		let name = journal || ""
+		let link = (doi != null && doi.length > 0) ? <a href={url} className={classes.doi} target="_blank">{ doi } <Icon fontSize="inherit">open_in_new</Icon></a> : null
 		return <span><span className="JournalBadge-Journal">{ name }</span> {link}</span>
 	}
 }

@@ -117,3 +117,7 @@ export const summarize_api_errors = (res) => {
     })
     return messages.join(' ')
 }
+
+export const unspecified = (s) => {
+    return s == null || s.length == 0
+}

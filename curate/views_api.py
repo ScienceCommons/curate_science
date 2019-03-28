@@ -394,5 +394,5 @@ class ArticleAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
         queryset = Article.objects.all()
         if self.q:
             queryset = queryset.filter(Q(author_list__icontains=self.q)
-                                       | Q(title__istartswith=self.q))
+                                       | Q(title__icontains=self.q))
         return queryset

@@ -5,19 +5,25 @@ import { withCookies, Cookies } from 'react-cookie';
 import { withStyles } from '@material-ui/core/styles';
 
 import {Typography, Avatar, Grid, Paper, TextField, Button,
-	Snackbar} from '@material-ui/core';
+	Snackbar, RadioGroup, Radio, FormControlLabel, FormControl} from '@material-ui/core';
 
 import {json_api_req, simple_api_req} from '../util/util.jsx'
 import {clone} from 'lodash'
 
-const styles = {}
+const styles = {
+	textfield: {
+		marginBottom: 5
+	}
+}
 
 class AdminInvite extends React.Component {
 	constructor(props) {
         super(props);
 
         this.state = {
-        	form: {},
+        	form: {
+        		invite_type: 'with_author_page'
+        	},
         	snack_message: null
         }
 
@@ -72,19 +78,64 @@ class AdminInvite extends React.Component {
 						<Typography variant="h2">Invite Users</Typography>
 
 						<Paper style={{padding: 10}}>
-							<Typography variant="body1">Enter the email address of a user to invite below</Typography>
-							<TextField name="email" key="email" label="Email"
-									   placeholder="Email" type="email"
-									   fullWidth autoComplete="off"
-									   onChange={this.handle_change}
-									   value={form.email||''}/>
 
-							<TextField name="name" key="name" label="Full name"
-									   placeholder="Full name" type="text"
-									   fullWidth autoComplete="off"
-									   onChange={this.handle_change}
-									   value={form.name||''}/>
+							<FormControl component="fieldset" className={classes.formControl}>
+					          <RadioGroup
+					            aria-label="Invite Type"
+					            name="invite_type"
+					            className={classes.group}
+					            value={form.invite_type}
+					            onChange={this.handle_change}
+					          >
 
+					          	<FormControlLabel value='with_author_page' control={<Radio />} label={<span>Invite user <u>with</u> pre-enabled author page</span>} />
+
+								<TextField name="email" key="email1" label="Email"
+										   placeholder="Email" type="email"
+										   fullWidth autoComplete="off"
+										   className={classes.textfield}
+										   onChange={this.handle_change}
+										   variant="outlined"
+										   required
+										   disabled={form.invite_type != 'with_author_page'}
+										   value={form.email||''}/>
+
+								<TextField name="username" key="username" label="Username / Author page URL"
+										   placeholder="Username / Author page URL" type="text"
+										   fullWidth autoComplete="off"
+										   className={classes.textfield}
+										   onChange={this.handle_change}
+										   variant="outlined"
+										   required
+										   disabled={form.invite_type != 'with_author_page'}
+										   value={form.username||''}/>
+
+								<FormControlLabel value='without_author_page' control={<Radio />} label={<span>Invite user <u>without</u> pre-enabled author page</span>} />
+
+								<TextField name="email" key="email2" label="Email"
+										   placeholder="Email" type="email"
+										   fullWidth autoComplete="off"
+										   className={classes.textfield}
+										   onChange={this.handle_change}
+										   variant="outlined"
+										   required
+										   disabled={form.invite_type != 'without_author_page'}
+										   value={form.email||''}/>
+
+								<TextField name="name" key="name" label="Full name"
+										   placeholder="Full name" type="text"
+										   fullWidth autoComplete="off"
+										   className={classes.textfield}
+										   onChange={this.handle_change}
+										   variant="outlined"
+										   required
+										   disabled={form.invite_type != 'without_author_page'}
+										   value={form.name||''}/>
+
+					          </RadioGroup>
+					        </FormControl>
+
+					        <br/>
 							<Button variant="contained" color='primary' style={{marginTop: 15}} onClick={this.invite}>Send Invite</Button>
 						</Paper>
 					</Grid>

@@ -19,7 +19,7 @@ import C from '../constants/constants';
 import TransparencyBadge from './TransparencyBadge.jsx';
 import ArticleType from './ArticleType.jsx';
 import JournalDOIBadge from './JournalDOIBadge.jsx';
-import ArticleContentLinks from './ArticleContentLinks.jsx';
+import ArticleFullTextLinks from './ArticleFullTextLinks.jsx';
 import AuthorList from './AuthorList.jsx';
 import FigureList from './shared/FigureList.jsx';
 import TruncatedText from './shared/TruncatedText.jsx';
@@ -33,10 +33,10 @@ const styles = {
     marginBottom: '9px'
   },
   title: {
-    fontSize: 19,
+    fontSize: 18,
+    lineHeight: '20px',
     fontWeight: 400,
-    clear: 'both',
-    paddingTop: 10,
+    paddingTop: 5,
     marginTop: 3,
     marginBottom: 3
   },
@@ -48,7 +48,8 @@ const styles = {
   	marginBottom: 3,
   },
   abstract: {
-  	lineHeight: 1.1
+  	lineHeight: 1.2,
+    marginBottom: 10
   },
   journal: {
   	fontStyle: 'italic'
@@ -62,11 +63,15 @@ const styles = {
   	color: '#BBB'
   },
   reviewers: {
-  	color: "#009933"
+  	color: "#009933",
+    marginRight: 4
   },
-  moreIcon: {
+  moreIconHolder: {
   	justifyContent: 'center',
   	textAlign: 'center'
+  },
+  moreIcon: {
+    fontSizeLarge: 32
   }
 };
 
@@ -75,10 +80,6 @@ class ArticleLI extends React.Component {
         super(props);
         this.state = {
         	show_more: false,
-        	// Below from article detail endpoint
-        	// Arrays after fetch
-        	figures: null,
-        	commentaries: null
         };
 
         this.toggle_show_more = this.toggle_show_more.bind(this)
@@ -86,8 +87,9 @@ class ArticleLI extends React.Component {
     }
 
     toggle_show_more() {
-    	let {show_more, figures} = this.state
-    	let details_fetched = figures != null
+    	let {show_more} = this.state
+      let {article} = this.props
+    	let details_fetched = article.key_figures != null
     	this.setState({show_more: !show_more}, () => {
     		if (!details_fetched) {
     			this.fetch_article_details()
@@ -103,14 +105,14 @@ class ArticleLI extends React.Component {
     		if (res.key_figures != null) figures = res.key_figures
     		if (res.commentaries != null) commentaries = res.commentaries
     		console.log(res)
-    		this.setState({figures: figures, commentaries: commentaries})
+        this.props.onFetchedArticleDetails(article.id, figures, commentaries)
     	}, (err) => {
 
     	})
     }
 
-    handle_figure_click(fig) {
-      this.props.onFigureClick(fig)
+    handle_figure_click(figures, idx) {
+      this.props.onFigureClick(figures, idx)
     }
 
     empty(text) {
@@ -118,11 +120,12 @@ class ArticleLI extends React.Component {
     }
 
 	render() {
-		let {show_more, figures, commentaries} = this.state
+		let {show_more} = this.state
     let { article, classes } = this.props;
     let content_links = pick(article, ['pdf_url', 'pdf_downloads', 'pdf_citations', 'pdf_views',
 	       						   'html_url', 'html_views',
-	 	    					   'preprint_url', 'preprint_views', 'preprint_downloads'
+	 	    					   'preprint_url', 'preprint_views', 'preprint_downloads',
+                     'updated'
 	 	    					   ])
     let transparency_data = pick(article, ['article_type',
 									   'prereg_protocol_url',
@@ -133,14 +136,14 @@ class ArticleLI extends React.Component {
 									   'reporting_standards_type',
                      'commentaries'
 									   ])
-    let show_figures = article.key_figures || figures || []
+    let show_figures = article.key_figures || []
     let rd = pick(article, ['number_of_reps', 'original_study', 'target_effects', 'original_article_url'])
 		return (
 			<div className="ArticleCard">
 				<Card className={classes.card} raised>
 					<CardContent>
 						<ArticleType type={article.article_type} replication_data={rd} />
-						<ArticleContentLinks {...content_links} />
+						<ArticleFullTextLinks {...content_links} />
 
 						<Typography className={classes.title} variant="h2" color="textPrimary">{article.title}</Typography>
 						<Typography className={classes.authors} color="textSecondary" gutterBottom>
@@ -153,47 +156,47 @@ class ArticleLI extends React.Component {
 
             <TransparencyBadge {...transparency_data} />
 
-		  			<div className={classes.moreIcon}>
+		  			<div className={classes.moreIconHolder}>
 			  			<IconButton onClick={this.toggle_show_more} >
-			  				<Icon>{show_more ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
+			  				<Icon className={classes.moreIcon} fontSize="large">{show_more ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
 		  				</IconButton>
 	  				</div>
 
 	  				<div id="details" hidden={!show_more}>
-	  					<Typography style={{lineHeight: 1.2, marginBottom: 10}}><TruncatedText text={article.abstract} /></Typography>
+	  					<Typography className={classes.abstract}><TruncatedText text={article.abstract} fontSize={12} /></Typography>
 	  					<ArticleKeywords keywords={article.keywords} />
 	  					<FigureList figures={show_figures} onFigureClick={this.handle_figure_click} />
 	  					<div hidden={this.empty(article.author_contributions)}>
 		  					<Typography component="span">
 		  						<span className={classes.grayedTitle}>Author contributions:</span>
-			  					<span className={classes.grayedDetails}><TruncatedText text={ article.author_contributions } /></span>
+			  					<span className={classes.grayedDetails}><TruncatedText text={ article.author_contributions } maxLength={85} /></span>
 			  				</Typography>
 	  					</div>
 	  					<div hidden={this.empty(article.competing_interests)}>
 		  					<Typography component="span">
 		  						<span className={classes.grayedTitle}>Competing interests:</span>
-			  					<span className={classes.grayedDetails}><TruncatedText text={ article.competing_interests } /></span>
+			  					<span className={classes.grayedDetails}><TruncatedText text={ article.competing_interests } maxLength={85} /></span>
 			  				</Typography>
 	  					</div>
 	  					<div hidden={this.empty(article.funding_sources)}>
 		  					<Typography component="span">
 		  						<span className={classes.grayedTitle}>Funding sources:</span>
-		  						<span className={classes.grayedDetails}><TruncatedText text={ article.funding_sources } /></span>
+		  						<span className={classes.grayedDetails}><TruncatedText text={ article.funding_sources } maxLength={85} /></span>
 		  					</Typography>
 		  				</div>
-		  				<div hidden={this.empty(article.peer_review_editor)}>
-		  					<Typography>
+              <Typography component="span" inline>
+  		  				<span hidden={this.empty(article.peer_review_editor)}>
 		  						<span className={classes.grayedTitle}>Editor:</span>
 	  							<span className={classes.reviewers}>{ article.peer_review_editor || '--' }</span>
-  							</Typography>
-	  					</div>
-		  				<div hidden={this.empty(article.peer_reviewers)}>
-		  					<Typography component="span">
+  	  					</span>
+  		  				<span hidden={this.empty(article.peer_reviewers)}>
 			  					<span className={classes.grayedTitle}>Reviewers:</span>
 		  						<span className={classes.reviewers}>{ article.peer_reviewers || '--' }</span>
-		  					</Typography>
-	  					</div>
-	  					<span hidden={article.peer_review_url == null || article.peer_review_url.length == 0}><Typography><a href={article.peer_review_url} target="_blank">Open peer review <Icon fontSize="inherit">open_in_new</Icon></a></Typography></span>
+  	  					</span>
+  	  					<span hidden={article.peer_review_url == null || article.peer_review_url.length == 0}>
+                  <a href={article.peer_review_url} target="_blank"><Icon fontSize="inherit">link</Icon> Open peer review <Icon fontSize="inherit">open_in_new</Icon></a>
+                </span>
+              </Typography>
 	  				</div>
 	  			</CardContent>
 				</Card>

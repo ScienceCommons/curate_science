@@ -11,14 +11,14 @@ import {List, Grid, Button, Icon, TextField,
         Toolbar, IconButton, AppBar, MenuItem,
         Slide, InputAdornment, InputLabel, Select,
         FormControl, Radio, RadioGroup,
-        FormLabel} from '@material-ui/core';
+        FormLabel, Snackbar} from '@material-ui/core';
 import C from '../constants/constants';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './FigureSelector.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {clone, set} from 'lodash'
-import {json_api_req, simple_api_req} from '../util/util.jsx'
+import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -280,6 +280,7 @@ const INPUT_SPECS = {
 function initialFormState() {
     return {
         article_type: 'ORIGINAL',
+        key_figures: [],
         commentaries: []
     }
 }
@@ -289,9 +290,11 @@ class ArticleEditor extends React.Component {
         super(props);
         this.state = {
             form: initialFormState(),
-            figures: []
+            snack_message: null,
+            unsaved: false
         }
 
+        this.maybe_confirm_close = this.maybe_confirm_close.bind(this)
         this.handle_close = this.handle_close.bind(this)
         this.save = this.save.bind(this)
         this.handle_change = this.handle_change.bind(this)
@@ -299,6 +302,8 @@ class ArticleEditor extends React.Component {
         this.add_commentary = this.add_commentary.bind(this)
         this.delete_commentary = this.delete_commentary.bind(this)
         this.update_figures = this.update_figures.bind(this)
+        this.show_snack = this.show_snack.bind(this)
+        this.close_snack = this.close_snack.bind(this)
     }
 
     componentDidMount() {
@@ -314,9 +319,9 @@ class ArticleEditor extends React.Component {
             fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
                 let form = clone(res)
                 console.log(form)
-                delete form.key_figures
+                // delete form.key_figures
                 if (form.title.startsWith(C.PLACEHOLDER_TITLE_PREFIX)) form.title = ""
-                this.setState({form: form, figures: res.key_figures})
+                this.setState({form: form, unsaved: false})
             })
         }
     }
@@ -324,8 +329,18 @@ class ArticleEditor extends React.Component {
     componentWillUnmount() {
     }
 
+    show_snack(message) {
+        this.setState({snack_message: message})
+    }
+
+    close_snack() {
+        this.setState({snack_message: null})
+    }
+
     update_figures(figures) {
-        this.setState({figures: figures})
+        let {form} = this.state
+        form.key_figures = figures
+        this.setState({form})
     }
 
     add_commentary() {
@@ -342,6 +357,20 @@ class ArticleEditor extends React.Component {
         this.setState({form})
     }
 
+    maybe_confirm_close() {
+        // Confirm if unsaved changes
+        let {unsaved, form} = this.state
+        if (unsaved) {
+            let message = form.is_live ? "You have unsaved changes, are you sure you want to continue without saving?" :
+                "You have not yet saved this article, are you sure you want to continue without saving?"
+            if (confirm(message)) {
+                this.handle_close()
+            }
+        } else {
+            this.handle_close()
+        }
+    }
+
     handle_close() {
         let {form} = this.state
         if (!form.is_live && form.id != null) {
@@ -349,7 +378,7 @@ class ArticleEditor extends React.Component {
             this.handle_delete()
         } else {
             // Live, just close without saving
-            this.setState({form: initialFormState()}, () => {
+            this.setState({form: initialFormState(), unsaved: false}, () => {
                 this.props.onClose()
             })
         }
@@ -364,6 +393,7 @@ class ArticleEditor extends React.Component {
                 this.props.onClose()
             })
         }, (err) => {
+            this.show_snack("Error deleting article")
             console.error(err)
         })
     }
@@ -379,13 +409,34 @@ class ArticleEditor extends React.Component {
         } else {
             form[event.target.name] = val
         }
-        this.setState({form})
+        this.setState({form: form, unsaved: true})
     }
 
     handle_check_change = event => {
         let {form} = this.state
         form[event.target.name] = event.target.checked
-        this.setState({form})
+        this.setState({form: form, unsaved: true})
+    }
+
+    validate(data) {
+        let valid = true
+        let message = ''
+        if (unspecified(data.author_list)) {
+            valid = false
+            message = "Please enter article authors"
+        }
+        if (unspecified(data.title)) {
+            valid = false
+            message = "Please enter article title"
+        }
+        if (unspecified(data.year) && !data.in_press) {
+            valid = false
+            message = "Please enter publication year"
+        }
+        return {
+            valid: valid,
+            message: message
+        }
     }
 
     save() {
@@ -393,13 +444,25 @@ class ArticleEditor extends React.Component {
         let {form} = this.state
         let pk = this.props.article_id
         let data = clone(form)
-        data.is_live = true  // Always set to live if saving
-        json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
-            console.log(res)
-            this.props.onUpdate(data)
-        }, (err) => {
-            console.error(err)
-        })
+        let {valid, message} = this.validate(data)
+        let key_figures = []
+        if (!valid) this.show_snack(message)
+        else {
+            data.is_live = true  // Always set to live if saving
+            if (data.in_press) data.year = null  // Otherwise server fails on non-integer
+            if (data.key_figures) {
+                key_figures = data.key_figures
+                delete data.key_figures
+            }
+            json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
+                data.key_figures = key_figures // Re-add to update figures in article list
+                this.props.onUpdate(data)
+            }, (err) => {
+                let message = summarize_api_errors(err)
+                this.show_snack(message)
+                console.error(err)
+            })
+        }
     }
 
     render_checkbox(id, value, specs) {
@@ -507,9 +570,10 @@ class ArticleEditor extends React.Component {
     }
 	render() {
         let {classes, article_id, open} = this.props
-        let {figures, form} = this.state
+        let {form, snack_message} = this.state
         let content
         let replication = form.article_type == 'REPLICATION'
+        let dialog_title = form.is_live ? "Edit Article" : "New Article"
         if (article_id != null) content = (
             <div className={classes.content}>
                 <Grid container spacing={8}>
@@ -568,7 +632,7 @@ class ArticleEditor extends React.Component {
                     <Grid item xs={12}>
                         <FigureSelector article_id={article_id}
                             onChange={this.update_figures}
-                            figures={figures} />
+                            figures={form.key_figures} />
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
@@ -690,22 +754,24 @@ class ArticleEditor extends React.Component {
                     { this.render_commentaries() }
                 </div>
 
+                <Typography>* indicates required field</Typography>
+
             </div>
         )
 		return (
             <div>
                 <Dialog open={open}
-                        onClose={this.handle_close}
+                        onClose={this.maybe_confirm_close}
                         TransitionComponent={Transition}
                         fullScreen
                         aria-labelledby="edit-article">
                     <AppBar className={classes.appBar}>
                         <Toolbar>
-                            <IconButton color="inherit" onClick={this.handle_close} aria-label="Close">
+                            <IconButton color="inherit" onClick={this.maybe_confirm_close} aria-label="Close">
                                <Icon>close</Icon>
                             </IconButton>
                             <Typography variant="h6" color="inherit" className={classes.flex}>
-                                Edit Article
+                                { dialog_title }
                             </Typography>
                             <Button color="inherit" onClick={this.save}>
                                 save
@@ -717,9 +783,19 @@ class ArticleEditor extends React.Component {
 
                     <DialogActions>
                         <Button variant="contained" color="primary" onClick={this.save}>save</Button>
-                        <Button variant="text" onClick={this.handle_close}>cancel</Button>
+                        <Button variant="text" onClick={this.maybe_confirm_close}>cancel</Button>
                     </DialogActions>
                 </Dialog>
+                <Snackbar
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  open={snack_message != null}
+                  autoHideDuration={3000}
+                  onClose={this.close_snack}
+                  message={snack_message}
+                />
             </div>
 		)
 	}
@@ -760,7 +836,9 @@ class CSTextField extends React.Component {
         // if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
         let st = {}
         if (specs.fullWidth) st.width = '100%'
-        return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={specs.label} inlineBlock={!specs.fullWidth}>
+        let label = specs.label
+        if (specs.required) label += '  *'
+        return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={label} inlineBlock={!specs.fullWidth}>
                     <DebounceInput
                       id={id}
                       key={id}
@@ -773,7 +851,6 @@ class CSTextField extends React.Component {
                       disabled={disabled}
                       required={specs.required}
                       element={specs.multiline ? 'textarea' : 'input'}
-                      multiline={specs.multiline}
                       className={classes.input}
                       style={st}
                     />

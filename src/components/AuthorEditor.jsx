@@ -55,12 +55,15 @@ class AuthorEditor extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-            form: {}
+            form: {},
+            unsaved: false
         }
 
+        this.maybe_confirm_close = this.maybe_confirm_close.bind(this)
         this.handle_close = this.handle_close.bind(this)
         this.handle_change = this.handle_change.bind(this)
         this.save = this.save.bind(this)
+        this.onUnload = this.onUnload.bind(this)
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -75,19 +78,46 @@ class AuthorEditor extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener("beforeunload", this.onUnload)
     }
 
     componentWillUnmount() {
+        window.removeEventListener("beforeunload", this.onUnload)
+    }
+
+    onUnload(e) {
+        let {unsaved} = this.state
+        let confirmationMessage = null
+        console.log(`unsaved ${unsaved}`)
+        if (unsaved) {
+            confirmationMessage = "Your changes may not be saved"  // Doesn't show on modern browsers
+            (e || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
+    }
+
+    maybe_confirm_close() {
+        // Confirm if unsaved changes
+        let {unsaved} = this.state
+        if (unsaved) {
+            if (confirm("You have unsaved changes, are you sure you want to continue without saving?")) {
+                this.handle_close()
+            }
+        } else {
+            this.handle_close()
+        }
     }
 
     handle_close() {
-        this.props.onClose()
+        this.setState({unsaved: false}, () => {
+            this.props.onClose()
+        })
     }
 
     handle_change = event => {
         let {form} = this.state
         form[event.target.name] = event.target.value
-        this.setState({form})
+        this.setState({form: form, unsaved: true})
     }
 
     save() {
@@ -99,7 +129,9 @@ class AuthorEditor extends React.Component {
         data.profile_urls = pick(data, author_link_ids)
         json_api_req('PATCH', `/api/authors/${author.slug}/update/`, data, csrf_token, (res) => {
             console.log(res)
-            if (this.props.onAuthorUpdate != null) this.props.onAuthorUpdate(data)
+            this.setState({unsaved: false}, () => {
+                if (this.props.onAuthorUpdate != null) this.props.onAuthorUpdate(data)
+            })
         }, (error) => {
             console.error(error)
         })
@@ -146,7 +178,7 @@ class AuthorEditor extends React.Component {
 		return (
             <div>
                 <Dialog open={open}
-                        onClose={this.handle_close}
+                        onClose={this.maybe_confirm_close}
                         aria-labelledby="edit-author"
                         className={classes.dialog}
                         fullWidth>
@@ -162,7 +194,7 @@ class AuthorEditor extends React.Component {
 
                     <DialogActions>
                         <Button variant="contained" color="primary" onClick={this.save}>save</Button>
-                        <Button variant="text" onClick={this.handle_close}>cancel</Button>
+                        <Button variant="text" onClick={this.maybe_confirm_close}>cancel</Button>
                     </DialogActions>
                 </Dialog>
 

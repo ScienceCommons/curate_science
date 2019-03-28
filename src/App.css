@@ -31,7 +31,7 @@ textarea {
 	display: none;
 	text-align: right;
 	position: absolute;
-	width: 500px;
+	width: 270px;
 	bottom: 10px;
 	right: 10px;
 }
@@ -49,15 +49,14 @@ textarea {
 }
 
 .ArticleCard .ContentLinkCounts {
-	display: none;
+	opacity: 0;
 }
 
 .ArticleCard:hover .ContentLinkCounts {
-	display: inline;
+	opacity: 1.0;
 }
 
 .ArticleType {
-	float: left;
 	display: inline-block;
 	border-radius: 3px;
 	opacity: 0.4;
@@ -74,14 +73,14 @@ textarea {
 	margin-left: 5px;
 }
 
-
 .ArticleCommentaryBadge {
-	background-color: #a7a7a7;
+	background-color: white;
 	display: inline-block;
 	border-radius: 3px;
 	opacity: 0.4;
 	padding: 2px 7px;
-	color: white;
+	color: #444;
+	border: 1px solid #444;
 	font-size: .75rem;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 	vertical-align: top;
@@ -94,11 +93,13 @@ textarea {
 	color: black;
 	font-size: .55rem;
 	padding: 1px 2px;
+	border: 1px solid #444;
 }
 
-.ArticleContentLinks {
-	width: 20%;
+.ArticleFullTextLinks {
+/*	width: 20%;
 	min-width: 200px;
+*/
 	text-align: right;
 	float: right;
 }

@@ -7,8 +7,6 @@ import { withStyles } from '@material-ui/core/styles';
 import {clone} from 'lodash'
 import {truncate} from '../../util/util.jsx'
 
-const MAX_LEN = 500
-
 class TruncatedText extends React.Component {
 	constructor(props) {
         super(props);
@@ -23,11 +21,11 @@ class TruncatedText extends React.Component {
     }
 
 	render() {
-		let {classes, text, fontSize} = this.props
+		let {classes, text, fontSize, maxLength} = this.props
         let {expanded} = this.state
         if (text == null || text.length == 0) text = "--"
-        let long = text.length > MAX_LEN
-        if (!expanded && long) text = truncate(text, MAX_LEN)
+        let long = text.length > maxLength
+        if (!expanded && long) text = truncate(text, maxLength)
         let st = {fontSize: fontSize}
 		return (
 			<span style={st}>
@@ -47,7 +45,8 @@ TruncatedText.propTypes = {
 TruncatedText.defaultProps = {
 	text: "",
     fontSize: 11,
-    style: {}
+    style: {},
+    maxLength: 500
 }
 
 export default TruncatedText
