@@ -75,16 +75,6 @@ class AuthorPageCreator extends React.Component {
 							fullWidth
 							onChange={this.handle_change} /><br/>
 
-						<div hidden={!admin}>
-							<TextField label="username (admin only, optional)"
-								placeholder="username (admin only)"
-								name="account"
-								value={form.account || ''}
-								fullWidth
-								onChange={this.handle_change} /><br/>
-							<Typography variant="body1">This field is optional. If specified, we will link author page to user with specified username.</Typography>
-						</div>
-
 						<Button variant="contained" color="primary" style={{marginTop: 10}} onClick={this.create}>Create</Button>
 					</Paper>
 				</Grid>

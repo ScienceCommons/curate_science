@@ -67,12 +67,24 @@ def create_invitation(request):
     if request.method == 'POST':
         serializer = InvitationSerializer(data=request.data)
         if serializer.is_valid():
+            author = serializer.validated_data.get('author')
             email = serializer.validated_data.get('email')
-            name = serializer.validated_data.get('author')['name']
+            author_slug = author.get('slug')
+            author_name = author.get('name')
             invite = Invitation.create(email=email, inviter=request.user)
-            author = Author.objects.create(name=name, invite=invite)
+            author_instance = None
+            if author_slug:
+                try:
+                    author_instance = Author.objects.get(slug=author_slug)
+                    author_instance.invite = invite
+                    author_instance.save()
+                except ObjectDoesNotExist:
+                    pass
+
+            if author_instance is None:
+                author_instance = Author.objects.create(name=author_name, invite=invite)
+
             invite.send_invitation(request)
-            serializer.data['author']['slug'] = author.slug
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -100,17 +112,12 @@ def view_author(request, slug):
     return Response(serializer.data)
 
 @api_view(('GET', 'POST', ))
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, IsAdminUser,))
 def create_author(request):
     if request.method == 'POST':
         serializer=AuthorSerializer(data=request.data)
         if serializer.is_valid():
             author = serializer.save()
-            if not request.user.is_superuser and not request.user.is_staff:
-                if hasattr(request.user, 'author'):
-                    return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
-                author.userprofile = request.user.userprofile
-                author.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

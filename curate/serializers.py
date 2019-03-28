@@ -105,7 +105,7 @@ class UserSerializer(WritableNestedModelSerializer):
         user.save()
         return user
 
-class AuthorNameSerializer(serializers.ModelSerializer):
+class AuthorNameSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model=Author
         fields=('name', 'slug')
