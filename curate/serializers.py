@@ -24,7 +24,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         model=Author
         fields=(
             'id', 'account', 'orcid', 'name', 'position_title', 'affiliations',
-            'profile_urls', 'created', 'slug', 'articles',
+            'profile_urls', 'created', 'slug', 'articles', 'is_activated',
         )
 
 class KeyFigureSerializer(serializers.ModelSerializer):
