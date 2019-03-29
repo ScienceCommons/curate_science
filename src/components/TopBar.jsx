@@ -164,7 +164,7 @@ class TopBar extends React.Component {
         const user_dropdown_menu = [
             <div key="ddmenu">
                 <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
-                <Link to={`/author/${author_slug}`} key="author_page" hidden={!has_author_page}><MenuItem>My author page</MenuItem></Link>
+                <Link to={`/author/${author_slug}`} key="author_page" hidden={!has_author_page}><MenuItem>My author page (<b>{author_slug}</b>)</MenuItem></Link>
                 <Link to={'/create_author'} key="create_author_page" hidden={has_author_page && !admin}><MenuItem>Create author page</MenuItem></Link>
                 <Link to="/admin/manage" key="new_article" hidden={!admin}><MenuItem>Manage and add new articles</MenuItem></Link>
                 <Link to="/admin/invite" key="invite" hidden={!admin}><MenuItem>Invite new users</MenuItem></Link>
