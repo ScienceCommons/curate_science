@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {Typography, Avatar, Grid, Paper, TextField, Button,
 	Snackbar, RadioGroup, Radio, FormControlLabel, FormControl} from '@material-ui/core';
 
-import {json_api_req, simple_api_req, unspecified} from '../util/util.jsx'
+import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
 import {clone} from 'lodash'
 import Or from '../components/shared/Or.jsx';
 
@@ -87,7 +87,8 @@ class AdminInvite extends React.Component {
 		    		this.show_snack(`Invite sent to ${email}!`)
 	    		})
 	    	}, (err) => {
-	    		this.show_snack('Error inviting!')
+				let message = summarize_api_errors(err)
+				if (message != null) this.show_snack(message)
 	    	})
     	}
     }
