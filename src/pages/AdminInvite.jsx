@@ -7,12 +7,13 @@ import { withStyles } from '@material-ui/core/styles';
 import {Typography, Avatar, Grid, Paper, TextField, Button,
 	Snackbar, RadioGroup, Radio, FormControlLabel, FormControl} from '@material-ui/core';
 
-import {json_api_req, simple_api_req} from '../util/util.jsx'
+import {json_api_req, simple_api_req, unspecified} from '../util/util.jsx'
 import {clone} from 'lodash'
+import Or from '../components/shared/Or.jsx';
 
 const styles = {
 	textfield: {
-		marginBottom: 5
+		marginBottom: 9
 	}
 }
 
@@ -39,6 +40,12 @@ class AdminInvite extends React.Component {
     	this.setState({form})
     }
 
+	check_change = event => {
+        let {form} = this.state
+        form.invite_type = event.target.value
+	    this.setState({form})
+    }
+
     show_snack(message) {
     	this.setState({snack_message: message})
     }
@@ -47,17 +54,34 @@ class AdminInvite extends React.Component {
     	this.setState({snack_message: null})
     }
 
+    valid() {
+		let {form} = this.state
+		if (unspecified(form.email)) {
+			this.show_snack('Email is required')
+			return false
+		}
+		if (form.invite_type == 'with_author_page' && unspecified(form.username)) {
+			this.show_snack('Username is required when inviting user with existing author page')
+			return false
+		}
+		if (form.invite_type == 'without_author_page' && unspecified(form.name)) {
+			this.show_snack('Full name is required to create new user and author page')
+			return false
+		}
+		return true
+    }
+
     invite() {
     	let {cookies} = this.props
     	let {form} = this.state
     	let email = form.email
-    	if (email != null && email.length > 0) {
+    	if (this.valid()) {
 	    	let data = {
 	    		email: email,
-	    		author: {
-					name: form.name || ''
-				}
+	    		author: {}
 	    	}
+	    	if (form.invite_type == 'without_author_page') data.author.name = form.name || ''
+			else data.author.slug = form.username
 	    	json_api_req('POST', `/api/invitations/create/`, data, cookies.get('csrftoken'), (res) => {
 	    		this.setState({form: {}}, () => {
 		    		this.show_snack(`Invite sent to ${email}!`)
@@ -72,71 +96,66 @@ class AdminInvite extends React.Component {
 		let {classes} = this.props
 		let {snack_message, form} = this.state
 		return (
-			<div style={{textAlign: 'center'}}>
+			<div>
 				<Grid container justify="center">
 					<Grid item xs={6}>
+
 						<Typography variant="h2">Invite Users</Typography>
 
 						<Paper style={{padding: 10}}>
 
-							<FormControl component="fieldset" className={classes.formControl}>
-					          <RadioGroup
-					            aria-label="Invite Type"
-					            name="invite_type"
-					            className={classes.group}
-					            value={form.invite_type}
-					            onChange={this.handle_change}
-					          >
+				          	<FormControlLabel value='with_author_page' control={<Radio value='with_author_page' checked={form.invite_type === 'with_author_page'} onChange={this.check_change} />} label={<span>Invite user with an existing author page</span>} />
 
-					          	<FormControlLabel value='with_author_page' control={<Radio />} label={<span>Invite user <u>with</u> pre-enabled author page</span>} />
+							<TextField name="email" key="email1" label="Email"
+									   placeholder="Email" type="email"
+									   fullWidth autoComplete="off"
+									   className={classes.textfield}
+									   onChange={this.handle_change}
+									   variant="outlined"
+									   required
+									   disabled={form.invite_type != 'with_author_page'}
+									   value={form.email||''}/>
 
-								<TextField name="email" key="email1" label="Email"
-										   placeholder="Email" type="email"
-										   fullWidth autoComplete="off"
-										   className={classes.textfield}
-										   onChange={this.handle_change}
-										   variant="outlined"
-										   required
-										   disabled={form.invite_type != 'with_author_page'}
-										   value={form.email||''}/>
+							<TextField name="username" key="username" label="Username / Author page URL"
+									   placeholder="Username / Author page URL" type="text"
+									   fullWidth autoComplete="off"
+									   className={classes.textfield}
+									   onChange={this.handle_change}
+									   variant="outlined"
+									   required
+									   disabled={form.invite_type != 'with_author_page'}
+									   value={form.username||''}/>
 
-								<TextField name="username" key="username" label="Username / Author page URL"
-										   placeholder="Username / Author page URL" type="text"
-										   fullWidth autoComplete="off"
-										   className={classes.textfield}
-										   onChange={this.handle_change}
-										   variant="outlined"
-										   required
-										   disabled={form.invite_type != 'with_author_page'}
-										   value={form.username||''}/>
+							<Or/>
 
-								<FormControlLabel value='without_author_page' control={<Radio />} label={<span>Invite user <u>without</u> pre-enabled author page</span>} />
+							<FormControlLabel value='without_author_page' control={<Radio value='without_author_page' checked={form.invite_type === 'without_author_page'} onChange={this.check_change} />} label={<span>Invite user and create their author page</span>} />
 
-								<TextField name="email" key="email2" label="Email"
-										   placeholder="Email" type="email"
-										   fullWidth autoComplete="off"
-										   className={classes.textfield}
-										   onChange={this.handle_change}
-										   variant="outlined"
-										   required
-										   disabled={form.invite_type != 'without_author_page'}
-										   value={form.email||''}/>
+							<TextField name="email" key="email2" label="Email"
+									   placeholder="Email" type="email"
+									   fullWidth autoComplete="off"
+									   className={classes.textfield}
+									   onChange={this.handle_change}
+									   variant="outlined"
+									   required
+									   disabled={form.invite_type != 'without_author_page'}
+									   value={form.email||''}/>
 
-								<TextField name="name" key="name" label="Full name"
-										   placeholder="Full name" type="text"
-										   fullWidth autoComplete="off"
-										   className={classes.textfield}
-										   onChange={this.handle_change}
-										   variant="outlined"
-										   required
-										   disabled={form.invite_type != 'without_author_page'}
-										   value={form.name||''}/>
-
-					          </RadioGroup>
-					        </FormControl>
+							<TextField name="name" key="name" label="Full name"
+									   placeholder="Full name" type="text"
+									   fullWidth autoComplete="off"
+									   className={classes.textfield}
+									   onChange={this.handle_change}
+									   variant="outlined"
+									   required
+									   disabled={form.invite_type != 'without_author_page'}
+									   value={form.name||''}/>
 
 					        <br/>
-							<Button variant="contained" color='primary' style={{marginTop: 15}} onClick={this.invite}>Send Invite</Button>
+
+					        <div align="center">
+								<Button variant="contained" color='primary' style={{marginTop: 15}} onClick={this.invite}>Send Invite</Button>
+							</div>
+
 						</Paper>
 					</Grid>
 				</Grid>

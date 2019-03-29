@@ -21,7 +21,10 @@ def router_index(request, *args, **kwargs):
             'authenticated': request.user.is_authenticated
         })
         if hasattr(request.user, 'author'):
-            user_session['author'] = AuthorSerializer(request.user.author).data
+            # TODO: Check here if author page is_activated?
+            serialized = AuthorSerializer(request.user.author).data
+            if serialized['is_activated']:
+                user_session['author'] = serialized
     session_data = {
         'user_session_json': json.dumps(user_session)
     }
