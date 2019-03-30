@@ -131,7 +131,7 @@ class TopBar extends React.Component {
         let {user_session} = this.props
         let { anchors, menuOpen, search_term, drawerOpen } = this.state;
         let admin = user_session.admin
-        let has_author_page = user_session.author != null;
+        let has_author_page = user_session.author != null && user_session.author.is_activated;
         let drawer_menu = (
             <div className={classes.drawer} key="drawer">
                 <List>

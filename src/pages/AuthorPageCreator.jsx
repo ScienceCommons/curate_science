@@ -126,16 +126,19 @@ class AuthorPageCreator extends React.Component {
 
 				          	<div hidden={!admin}>
 					        	<FormControlLabel value='new' control={<Radio value='new' checked={form.create_type === 'new'} onChange={this.check_change} />} label="New user" />
+								<TextField label="Full Name"
+									placeholder="Full Name"
+									name="name"
+									value={form.name || ''}
+									fullWidth
+									variant="outlined"
+									disabled={form.create_type != 'new'}
+									onChange={this.handle_change} /><br/>
 					        </div>
 
-							<TextField label="Full Name"
-								placeholder="Full Name"
-								name="name"
-								value={form.name || ''}
-								fullWidth
-								variant="outlined"
-								disabled={form.create_type != 'new'}
-								onChange={this.handle_change} /><br/>
+					        <div hidden={admin}>
+					        	<Typography variant="body2">To create your author page, click 'create' below.</Typography>
+					       	</div>
 
 							<div hidden={!admin}>
 
