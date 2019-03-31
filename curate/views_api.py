@@ -264,11 +264,19 @@ def update_article(request, pk):
         return Response(serializer.data)
 
 @api_view(('DELETE', ))
-@permission_classes((IsAuthenticated, IsAdminUser,))
+@permission_classes((IsAuthenticated, ))
 def delete_article(request, pk):
-    article=get_object_or_404(Article, id=pk)
-    article.delete()
-    return Response(status=status.HTTP_200_OK)
+    article=get_object_or_404(Article.objects.prefetch_related('authors'), id=pk)
+    #non-admins can only delete an article if they are the only author
+    if request.user.is_superuser or request.user.is_staff:
+        article.delete()
+        return Response(status=status.HTTP_200_OK)
+    elif hasattr(request.user, "author") and all(a == request.user.author for a in article.authors.all()):
+        article.delete()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 # Commentary views
 @api_view(('GET', ))

@@ -257,12 +257,25 @@ class TestAPIViews(TestCase):
         r = self.client.delete(url)
         assert r.status_code == 403
 
-    def test_user_cannot_delete_article_api(self):
-        self.client.login(email='new_user@curatescience.org', password='password1')
-        article=models.Article.objects.first()
-        url = reverse('api-delete-article', kwargs={'pk': article.id})
+    def test_user_can_delete_article_if_only_author(self):
+        new_user = User.objects.get(email='new_user@curatescience.org')
+        self.client.login(email=new_user.email, password='password1')
+        new_article = models.Article.objects.create(doi="75643527", year = 1999, title = "New Article")
+        new_article.authors.add(new_user.author)
+        url = reverse('api-delete-article', kwargs={'pk': new_article.id})
         r = self.client.delete(url)
-        assert r.status_code == 403
+        assert r.status_code == 200
+
+    def test_user_cannot_delete_multi_author_article(self):
+        new_user = User.objects.get(email='new_user@curatescience.org')
+        new_user_2 = User.objects.get(email='new_user_2@curatescience.org')
+        self.client.login(email=new_user.email, password='password1')
+        new_article = models.Article.objects.create(doi="71564527", year = 2000, title = "New Article 2")
+        new_article.authors.add(new_user.author)
+        new_article.authors.add(new_user_2.author)
+        url = reverse('api-delete-article', kwargs={'pk': new_article.id})
+        r = self.client.delete(url)
+        assert r.status_code == 405
 
     def test_admin_can_delete_article_api(self):
         self.client.login(email='admin@curatescience.org', password='password')
