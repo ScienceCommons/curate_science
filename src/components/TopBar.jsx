@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 
 import qs from 'query-string';
 
@@ -18,6 +19,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
 import C from '../constants/constants';
 
+import {json_api_req, summarize_api_errors, unspecified} from '../util/util.jsx'
 
 const styles = theme => ({
     root: {
@@ -79,22 +81,11 @@ class TopBar extends React.Component {
             drawerOpen: false
         };
 
-        this.handleSearchBoxChange = this.handleSearchBoxChange.bind(this)
-        this.handleSearchKeyPress = this.handleSearchKeyPress.bind(this)
+        this.handle_create_author_page = this.handle_create_author_page.bind(this)
     }
 
     logout() {
         window.location.replace('/accounts/logout/')
-    }
-
-    handleSearchBoxChange(e) {
-        this.setState({search_term: e.target.value})
-    }
-
-    handleSearchKeyPress(e) {
-        if (e.key == 'Enter') {
-            this.refreshSearch()
-        }
     }
 
     handleMenu = menu_id => event => {
@@ -109,21 +100,40 @@ class TopBar extends React.Component {
         this.setState({ anchors })
     }
 
+    handle_create_author_page() {
+        let {cookies, user_session} = this.props
+        let has_page = this.user_has_author_page()
+        if (has_page) {
+            // Admin going to creator
+            window.location.replace('/app/create_author')
+        } else {
+            // User or admin creating their own page on the fly
+            let csrf_token = cookies.get('csrftoken')
+            let author = user_session.author
+            let slug = author.slug
+            let data = {is_activated: true}
+            json_api_req('PATCH', `/api/authors/${slug}/update/`, data, csrf_token, (res) => {
+                console.log(res)
+                window.location.replace(`/app/author/${slug}`)
+            }, (err) => {
+                let message = summarize_api_errors(err)
+                if (message != null) alert(message)
+            })
+        }
+    }
+
     menuOpen = menu_id => {
         let {anchors} = this.state
         return Boolean(anchors[menu_id])
     }
 
-    refreshSearch() {
-        let {search_term} = this.state
-        let parsed = qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
-        let f = parsed.f || ''
-        let query = encodeURIComponent(search_term)
-        this.props.history.replace(`/articles/search?q=${query}&f=${f}`);
-    }
-
     toggleDrawer = (open) => () => {
         this.setState({drawerOpen: !this.state.drawerOpen})
+    }
+
+    user_has_author_page() {
+        let {user_session} = this.props
+        return user_session.author != null && user_session.author.is_activated
     }
 
     render() {
@@ -131,7 +141,7 @@ class TopBar extends React.Component {
         let {user_session} = this.props
         let { anchors, menuOpen, search_term, drawerOpen } = this.state;
         let admin = user_session.admin
-        let has_author_page = user_session.author != null && user_session.author.is_activated;
+        let has_author_page = this.user_has_author_page()
         let drawer_menu = (
             <div className={classes.drawer} key="drawer">
                 <List>
@@ -165,7 +175,7 @@ class TopBar extends React.Component {
             <div key="ddmenu">
                 <ListSubheader>Signed in as <b>{ user_session.username }</b></ListSubheader>
                 <Link to={`/author/${author_slug}`} key="author_page" hidden={!has_author_page}><MenuItem>My author page (<b>{author_slug}</b>)</MenuItem></Link>
-                <Link to={'/create_author'} key="create_author_page" hidden={has_author_page && !admin}><MenuItem>Create author page</MenuItem></Link>
+                <span key="create_author_page" hidden={has_author_page && !admin}><MenuItem onClick={this.handle_create_author_page}>Create author page</MenuItem></span>
                 <Link to="/admin/manage" key="new_article" hidden={!admin}><MenuItem>Manage and add new articles</MenuItem></Link>
                 <Link to="/admin/invite" key="invite" hidden={!admin}><MenuItem>Invite new users</MenuItem></Link>
                 <Divider />
@@ -237,4 +247,4 @@ class TopBar extends React.Component {
     }
 }
 
-export default withRouter(withStyles(styles)(TopBar));
+export default withRouter(withCookies(withStyles(styles)(TopBar)));

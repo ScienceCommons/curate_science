@@ -88,17 +88,8 @@ class AuthorPageCreator extends React.Component {
 		let csrf_token = cookies.get('csrftoken')
 		let data = clone(form)
 		if (form.create_type == 'new') {
-			if (user_session.admin) {
-				// Admin creating new user & author page
-				if (!unspecified(form.name)) this.create_author(form.name)
-			} else {
-				// User enabling own author page
-				let author = user_session.author
-				this.update_author(author.slug, {
-					is_activated: true,
-					name: form.name
-				})
-			}
+			// Admin creating new user & author page
+			if (!unspecified(form.name)) this.create_author(form.name)
 		} else if (form.create_type == 'existing') {
 			// Admin user activating an existing user's author page
 			if (!unspecified(form.username)) {
@@ -113,8 +104,7 @@ class AuthorPageCreator extends React.Component {
 	render() {
 		let {user_session, classes} = this.props
 		let {form, snack_message} = this.state
-		let admin = user_session.admin
-		let title = admin ? "Create Author Page" : "Create Your Author Page"
+		let title = "Create Author Page"
 		return (
 			<div>
 				<Grid container justify="center">
@@ -124,7 +114,7 @@ class AuthorPageCreator extends React.Component {
 
 						<Paper style={{padding: 10}}>
 
-				          	<div hidden={!admin}>
+				          	<div>
 					        	<FormControlLabel value='new' control={<Radio value='new' checked={form.create_type === 'new'} onChange={this.check_change} />} label="New user" />
 								<TextField label="Full Name"
 									placeholder="Full Name"
@@ -136,11 +126,7 @@ class AuthorPageCreator extends React.Component {
 									onChange={this.handle_change} /><br/>
 					        </div>
 
-					        <div hidden={admin}>
-					        	<Typography variant="body2">To create your author page, click 'create' below.</Typography>
-					       	</div>
-
-							<div hidden={!admin}>
+							<div>
 
 								<Or />
 

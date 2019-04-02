@@ -129,7 +129,7 @@ class AdminInvite extends React.Component {
 
 							<Or/>
 
-							<FormControlLabel value='without_author_page' control={<Radio value='without_author_page' checked={form.invite_type === 'without_author_page'} onChange={this.check_change} />} label={<span>Invite user and create their author page</span>} />
+							<FormControlLabel value='without_author_page' control={<Radio value='without_author_page' checked={form.invite_type === 'without_author_page'} onChange={this.check_change} />} label={<span>Invite user without activating author page</span>} />
 
 							<TextField name="email" key="email2" label="Email"
 									   placeholder="Email" type="email"

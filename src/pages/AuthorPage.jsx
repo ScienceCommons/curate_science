@@ -311,6 +311,7 @@ class AuthorPage extends React.Component {
             view_figure_thumb, view_figure_full, articles_loading, gallery_showing,
             gallery_images, gallery_index} = this.state
         if (author == null) return <Loader />
+        else if (!author.is_activated) return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
         let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
         let editable = this.editable()
