@@ -57,7 +57,7 @@ const styles = theme => ({
 const INPUT_SPECS = {
     'author_list': {
         label: 'Authors',
-        placeholder: "e.g. RJ Balzarini, L Campbell, & K Dobson",
+        placeholder: "e.g., SS Smith, JJ Jones, & KK Pratt",
         required: true,
         type: 'text',
         fullWidth: true
@@ -135,42 +135,36 @@ const INPUT_SPECS = {
     'pdf_citations': {
         label: 'Citations',
         type: 'number',
-        placeholder: '2',
         adornment: 'format_quote',
         fullWidth: true
     },
     'pdf_downloads': {
         label: 'Downloads',
         type: 'number',
-        placeholder: '2',
         adornment: 'cloud_download',
         fullWidth: true
     },
     'preprint_downloads': {
         label: 'Downloads',
         type: 'number',
-        placeholder: '2',
         adornment: 'cloud_download',
         fullWidth: true
     },
     'pdf_views': {
         label: 'Views',
         type: 'number',
-        placeholder: '2',
         adornment: 'remove_red_eye',
         fullWidth: true
     },
     'html_views': {
         label: 'Views',
         type: 'number',
-        placeholder: '2',
         adornment: 'remove_red_eye',
         fullWidth: true
     },
     'preprint_views': {
         label: 'Views',
         type: 'number',
-        placeholder: '2',
         adornment: 'remove_red_eye',
         fullWidth: true
     },
@@ -194,19 +188,19 @@ const INPUT_SPECS = {
     },
     'peer_review_editor': {
         label: "Action editor",
-        placeholder: "DJ Simons",
+        placeholder: "e.g., SS Smith",
         type: 'text',
         fullWidth: true
     },
     'peer_reviewers': {
         label: "Peer reviewers",
-        placeholder: "MB Nuijten, Anonymous reviewer 3 (separate using ';')",
+        placeholder: "e.g., SS Smith, Anonymous reviewer 2 (separate using ',')",
         type: 'text',
         fullWidth: true
     },
     'peer_review_url': {
         label: "Open peer-review URL",
-        placeholder: "https://osf.io/dsn72/",
+        placeholder: "http://...",
         type: 'url',
         adornment: 'link',
         fullWidth: true
@@ -252,19 +246,18 @@ const INPUT_SPECS = {
     'number_of_reps': {
         label: "Number of reps",
         type: 'number',
-        placeholder: '2',
         fullWidth: true
     },
     'original_study': {
         label: "Original study",
         type: 'text',
-        placeholder: 'Kenrick et al (1989) Study 2',
+        placeholder: 'e.g., SS Smith et al. (1989) Study 2',
         fullWidth: true
     },
     'target_effects': {
         label: "Target effect(s)",
         type: 'text',
-        placeholder: 'playboy effect',
+        placeholder: 'e.g., playboy effect',
         fullWidth: true
     },
     'original_article_url': {
@@ -537,13 +530,13 @@ class ArticleEditor extends React.Component {
             let id_url = `commentaries.${idx}.commentary_url`
             let spec_pubyear = {
                 label: "Authors/publication year",
-                placeholder: "Smith & Smith (2019)",
+                placeholder: "e.g., Smith & Smith (2019)",
                 fullWidth: true
             }
             let spec_url = {
                 label: "Commentary URL",
                 type: 'url',
-                placeholder: 'https://osf.io/dsn72/',
+                placeholder: 'http://...',
                 adornment: 'link',
                 fullWidth: true
             }
@@ -564,7 +557,7 @@ class ArticleEditor extends React.Component {
         return (
             <div>
                 { commentary_rows }
-                <Button onClick={this.add_commentary}><Icon fontSize="inherit">add</Icon> Add additional commentary</Button>
+                <Button onClick={this.add_commentary}><Icon fontSize="inherit">add</Icon> Add commentary</Button>
             </div>
         )
     }
