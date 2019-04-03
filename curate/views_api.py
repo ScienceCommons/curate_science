@@ -101,7 +101,7 @@ def view_user(request, username):
 # Author views
 @api_view(('GET', ))
 def list_authors(request):
-    queryset=Author.objects.all().prefetch_related('articles')
+    queryset=Author.objects.all().select_related('user').prefetch_related('articles')
     serializer=AuthorSerializer(instance=queryset, many=True)
     return Response(serializer.data)
 
