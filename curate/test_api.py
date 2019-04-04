@@ -105,6 +105,7 @@ class TestAPIViews(TestCase):
             "article_type": "ORIGINAL",
             "research_area": "SOCIAL_SCIENCE",
             "author_list": "LeBel et al",
+            "authors": [u.author.id]
         })
         article = models.Article.objects.get(doi="004")
         assert str(article.authors.first()) == 'New User'
