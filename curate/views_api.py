@@ -228,9 +228,6 @@ def create_article(request):
         serializer=ArticleSerializerNested(data=request.data)
         if serializer.is_valid():
             article = serializer.save()
-            if hasattr(request.user, 'author'):
-                # If the user is an author, link the article to the author
-                user.author.articles.add(article)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
