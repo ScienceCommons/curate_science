@@ -10,6 +10,7 @@ install:
 before_script:
 - export DB_USER=postgres DB_PASS=''
 script:
+- python manage.py migrate
 - python manage.py test
 deploy:
   provider: gae
