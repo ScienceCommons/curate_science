@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.utils import model_meta
 from rest_framework.fields import ImageField, CharField, EmailField
+from rest_framework.validators import UniqueValidator
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from drf_writable_nested import WritableNestedModelSerializer, UniqueFieldsMixin
@@ -111,7 +112,10 @@ class AuthorNameSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
         fields=('name', 'slug')
 
 class InvitationSerializer(WritableNestedModelSerializer):
+    email = EmailField(validators=[UniqueValidator(queryset=User.objects.all()),
+                                   UniqueValidator(queryset=Invitation.objects.all())])
     author = AuthorNameSerializer(required=True, allow_null=False)
+
     class Meta:
         model=Invitation
         fields=('email', 'author')

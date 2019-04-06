@@ -85,7 +85,8 @@ def create_invitation(request):
                 author_instance = Author.objects.create(name=author_name, invite=invite)
 
             invite.send_invitation(request)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            response_serializer = InvitationSerializer(invite)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:

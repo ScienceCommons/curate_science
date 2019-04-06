@@ -518,6 +518,23 @@ class TestAPIViews(TestCase):
         i = Invitation.objects.get(email="test.user@example.com")
         assert i.author.slug == "test-user"
 
+    def test_cannot_invite_duplicate_email(self):
+        client = APIClient()
+        client.force_authenticate(user = User.objects.get(email="admin@curatescience.org"))
+        email = 'fake_email@address.com'
+        u = User.objects.create(email=email, first_name='Fake User')
+        user_with_same_email = User.objects.filter(email=email).first()
+        assert user_with_same_email is not None
+        url = reverse('api-create-invitation')
+        res = client.post(url, {
+            "email": email,
+            "author": {
+                "name": "Fake User"
+            }
+        }, format="json")
+        print(res.content.decode('utf-8'))
+        print(res.status_code)
+        assert res.status_code == 400
 
     def test_link_article(self):
         client = APIClient()
