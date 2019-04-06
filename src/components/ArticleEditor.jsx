@@ -213,7 +213,7 @@ const INPUT_SPECS = {
     },
     'prereg_protocol_type': {
         type: 'radio',
-        label: 'Protocol Type',
+        label: 'Preregistration Type',
         options: C.PREREG_PROTOCOL_TYPES
     },
     'public_study_materials_url': {

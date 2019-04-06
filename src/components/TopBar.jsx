@@ -21,6 +21,8 @@ import C from '../constants/constants';
 
 import {json_api_req, summarize_api_errors, unspecified} from '../util/util.jsx'
 
+const TOPBAR_HEIGHT = 56
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -46,7 +48,13 @@ const styles = theme => ({
     },
     topBar: {
         background: 'linear-gradient(0deg, #333 70%, #555 100%)',
-        boxShadow: 'none'
+        boxShadow: 'none',
+        height: TOPBAR_HEIGHT,
+        minHeight: TOPBAR_HEIGHT
+    },
+    toolbar: {
+        height: TOPBAR_HEIGHT,
+        minHeight: TOPBAR_HEIGHT
     },
     grow: {
         flexGrow: 1,
@@ -185,7 +193,7 @@ class TopBar extends React.Component {
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.topBar}>
-                    <Toolbar>
+                    <Toolbar className={classes.toolbar}>
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                             <MenuIcon />
                         </IconButton>

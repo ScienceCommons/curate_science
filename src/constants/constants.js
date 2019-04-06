@@ -6,7 +6,8 @@ var C = {
 			id: "ORIGINAL",
 			label: "Original",
 			relevant_sections: ['studies'],
-			color: '#000000'
+			color: '#000000',
+			description: "Article reports original empirical observations (not directly comparable to previous research)"
 		},
 	    {
 			id: "REPLICATION",
@@ -17,31 +18,36 @@ var C = {
         {
 			id: "REPRODUCIBILITY",
 			label: "Reanalysis - Reproducibility/Robustness",
-			relevant_sections: ['reanalysis']
+			relevant_sections: ['reanalysis'],
+			description: "Article reports a reproducibility/robustness reanalysis of a previously published result"
 		},
         {
 			id: "META_ANALYSIS",
 			label: "Renalysis - Meta-analysis",
-			relevant_sections: ['reanalysis']
+			relevant_sections: ['reanalysis'],
+			description: "Article reports a (traditional) meta-analysis of a target effect/phenomenon"
 		},
         {
 			id: "META_RESEARCH",
 			label: "Renalysis - Meta-research",
-			relevant_sections: ['reanalysis']
+			relevant_sections: ['reanalysis'],
+			description: "Article reports a reanalysis of results from previously published studies (meta-research)"
 		},
         {
 			id: "COMMENTARY",
 			label: "Commentary",
 			relevant_sections: ['commentary'],
 			color: '#5F5F5F',
-			transparencies_bonus: true
+			transparencies_bonus: true,
+			description: "Article is a commentary on previous research"
 		},
         {
 			id: "CONCEPTUAL",
 			label: "Conceptual",
 			color: '#008080',
 			relevant_sections: ['studies'],
-			transparencies_bonus: true
+			transparencies_bonus: true,
+			description: "Article involves a conceptual/theoretical contribution"
 		}
 	],
 	RESEARCH_AREAS: [

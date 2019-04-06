@@ -36,8 +36,8 @@ const styles = {
     fontSize: 18,
     lineHeight: '20px',
     fontWeight: 400,
-    paddingTop: 5,
-    marginTop: 3,
+    paddingTop: 2,
+    marginTop: 0,
     marginBottom: 3
   },
   title_a: {
@@ -142,7 +142,6 @@ class ArticleLI extends React.Component {
 			<div className="ArticleCard">
 				<Card className={classes.card} raised>
 					<CardContent>
-						<ArticleType type={article.article_type} replication_data={rd} />
 						<ArticleFullTextLinks {...content_links} />
 
 						<Typography className={classes.title} variant="h2" color="textPrimary">{article.title}</Typography>
@@ -153,6 +152,8 @@ class ArticleLI extends React.Component {
 		  			<Typography className={classes.journal} color="textSecondary" gutterBottom>
 		  				<JournalDOIBadge journal={article.journal} doi={article.doi} />
 		  			</Typography>
+
+            <ArticleType type={article.article_type} replication_data={rd} registered_report={article.prereg_protocol_type == 'REGISTERED_REPORT'} />
 
             <TransparencyBadge {...transparency_data} />
 
