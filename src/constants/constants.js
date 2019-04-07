@@ -132,7 +132,7 @@ var C = {
 			label: "Transparency",
 			items: [
 				{
-					id: 'prereg',
+					id: 'preregplus',
 					label: "Preregistration"
 				},
 				{
@@ -158,7 +158,7 @@ var C = {
 		{
 			id: "PREREG",
 			label: "Preregistration",
-			icon: "prereg",
+			icon: "preregplus",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#C60018',
 			url_prop: 'prereg_protocol_url'

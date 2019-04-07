@@ -469,19 +469,19 @@ class ArticleWithActions extends React.Component {
                            onFetchedArticleDetails={this.got_article_details}
                            onFigureClick={this.show_figure} />
                 <div className="ArticleActions">
-                    <span hidden={!editable}>
+                    <span hidden={!editable} className="ActionButton">
                         <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
                             <Icon>edit</Icon>
                             Edit
                         </Button>
                     </span>
-                    <span hidden={!editable}>
+                    <span hidden={!editable} className="ActionButton">
                         <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
                             <Icon>link_off</Icon>
                             Unlink
                         </Button>
                     </span>
-                    <span hidden={!admin}>
+                    <span hidden={!admin} className="ActionButton">
                         <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
                             <Icon color="inherit">delete</Icon>
                             Delete

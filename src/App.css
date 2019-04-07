@@ -25,15 +25,22 @@ textarea {
 
 .ArticleWithActions {
 	position: relative;
+	padding-right: 100px;
+	width: 750px;
 }
 
 .ArticleWithActions .ArticleActions {
 	display: none;
-	text-align: right;
+	text-align: left;
 	position: absolute;
-	width: 270px;
-	bottom: 10px;
-	right: 10px;
+	width: 100px;
+	top: 10px;
+	left: 650px;
+}
+
+.ArticleWithActions .ArticleActions > .ActionButton {
+	display: inline-block;
+	margin-bottom: 8px;
 }
 
 .ArticleWithActions:hover .ArticleActions {

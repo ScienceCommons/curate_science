@@ -632,7 +632,7 @@ class ArticleEditor extends React.Component {
                     <Grid item xs={6}>
                         <Grid container spacing={8}>
                             <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'prereg'}} style={{paddingTop: 10}} />
+                                <TransparencyIcon tt={{icon: 'preregplus'}} style={{paddingTop: 10}} />
                             </Grid>
                             <Grid item xs={5}>
                                 { this.render_field('prereg_protocol_url') }

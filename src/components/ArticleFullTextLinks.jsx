@@ -35,7 +35,8 @@ const COUNT_ST = {
 	marginRight: 7
 }
 const COUNT_ICON_ST = {
-	fontSize: '13px'
+	fontSize: '13px',
+	verticalAlign: -2
 }
 
 class ArticleFullTextLinks extends React.Component {

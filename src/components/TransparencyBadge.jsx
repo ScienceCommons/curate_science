@@ -31,9 +31,9 @@ class TransparencyBadge extends React.Component {
     }
 
 	render_feature(f, i) {
-		let {icon_size, reporting_standards_type, classes, article_type} = this.props
+		let {icon_size, reporting_standards_type, prereg_protocol_type, classes, article_type} = this.props
 		let repstd = f.id == 'REPSTD'
-		let url
+		let url, subtitle
 		let enabled = false
 		if (f.url_prop != null) url = this.props[f.url_prop]
 		let reporting_standards = []
@@ -72,13 +72,18 @@ class TransparencyBadge extends React.Component {
 				let no_url = url == null || url.length == 0
 				let source_icon
 				let source_icon_url = get_link_source_icon(url)
-				if (source_icon_url != null) source_icon = <img src={source_icon_url} width="10" style={{marginRight: 4}} />
+				if (source_icon_url != null) source_icon = <img src={source_icon_url} width="13" style={{marginRight: 4}} />
 				if (!no_url) popover_content = <Typography>{ source_icon }<a href={url} target="_blank">{ truncate(url, 15) } <Icon fontSize="inherit">open_in_new</Icon></a></Typography>
+				if (f.id === 'PREREG') {
+					let ppt = find(C.PREREG_PROTOCOL_TYPES, {value: prereg_protocol_type})
+					if (ppt != null) subtitle = <Typography variant="body2" style={{color: 'gray', fontStyle: 'italic'}}>{ ppt.label }</Typography>
+				}
 			}
 			return (
 				<MouseOverPopover target={badge_icon} key={i}>
 					<div style={{padding: 10}}>
 						<Typography variant="h5">{ f.label }</Typography>
+						{ subtitle }
 						{ popover_content }
 					</div>
 				</MouseOverPopover>
