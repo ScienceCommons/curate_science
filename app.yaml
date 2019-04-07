@@ -6,6 +6,15 @@ handlers:
 - url: /favicon.ico
   static_files: sitestatic/favicon.ico
   upload: sitestatic/favicon\.ico
+- url: /favicon-16x16.png
+  static_files: sitestatic/favicon-16x16.png
+  upload: sitestatic/favicon-16x16\.png
+- url: /favicon-32x32.png
+  static_files: sitestatic/favicon-32x32.png
+  upload: sitestatic/favicon-32x32\.png
+- url: /favicon-96x96.png
+  static_files: sitestatic/favicon-96x96.ico
+  upload: sitestatic/favicon-96x96\.ico
 - url: /sitestatic
   static_dir: sitestatic
 - url: /static

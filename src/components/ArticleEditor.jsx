@@ -449,6 +449,8 @@ class ArticleEditor extends React.Component {
             }
             json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
                 data.key_figures = key_figures // Re-add to update figures in article list
+                data.updated = new Date().toISOString()
+                // Set update date to now
                 this.props.onUpdate(data)
             }, (err) => {
                 let message = summarize_api_errors(err)

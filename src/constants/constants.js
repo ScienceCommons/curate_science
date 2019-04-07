@@ -261,7 +261,7 @@ var C = {
     PREREG_PROTOCOL_TYPES: [
     	{ value: "PREREG_STUDY_DESIGN_ANALYSIS", label: "Preregistered study design + analysis"},
     	{ value: "PREREG_STUDY_DESIGN", label: "Preregistered study design"},
-    	{ value: "REGISTERED_REPORT", label: "Registered report"}
+    	{ value: "REGISTERED_REPORT", label: "Peer-reviewed preregistered study design + analyses"}
 	],
     AUTHOR_LINKS: [
 	    {

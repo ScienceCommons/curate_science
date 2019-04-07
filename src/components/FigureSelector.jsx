@@ -138,10 +138,6 @@ class FigureSelector extends React.Component {
                             </Grid>
                         </Grid>
 
-        				<Button variant="contained"
-                                style={{marginTop: 15}}
-                                disabled={!this.figure_valid() || adding}
-                                onClick={this.do_upload}>Add Figure</Button>
                         <Button onClick={this.hide_creator}>Cancel</Button>
                     </Paper>
                 </div>
