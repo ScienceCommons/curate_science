@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 import {List, Grid, Button, Icon,
-        Popover} from '@material-ui/core';
+        Popover, Snackbar} from '@material-ui/core';
 
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
@@ -82,7 +82,8 @@ class AuthorPage extends React.Component {
             // Lightbox / gallery state
             gallery_images: [],
             gallery_showing: false,
-            gallery_index: 0
+            gallery_index: 0,
+            snack_message: null
         }
 
         this.open_author_editor = this.toggle_author_editor.bind(this, true)
@@ -100,6 +101,8 @@ class AuthorPage extends React.Component {
         this.article_updated = this.article_updated.bind(this)
         this.show_figure = this.show_figure.bind(this)
         this.got_article_details = this.got_article_details.bind(this)
+        this.show_snack = this.show_snack.bind(this)
+        this.close_snack = this.close_snack.bind(this)
     }
 
     componentDidMount() {
@@ -107,6 +110,14 @@ class AuthorPage extends React.Component {
     }
 
     componentWillUnmount() {
+    }
+
+    show_snack(message) {
+        this.setState({snack_message: message})
+    }
+
+    close_snack() {
+        this.setState({snack_message: null})
     }
 
     editable() {
@@ -309,7 +320,7 @@ class AuthorPage extends React.Component {
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
             view_figure_thumb, view_figure_full, articles_loading, gallery_showing,
-            gallery_images, gallery_index} = this.state
+            gallery_images, gallery_index, snack_message} = this.state
         if (author == null) return <Loader />
         else if (!author.is_activated) return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
         let article_ids = articles.map((a) => a.id)
@@ -410,11 +421,23 @@ class AuthorPage extends React.Component {
                 <AuthorEditor author={author}
                               open={edit_author_modal_open}
                               onClose={this.close_author_editor}
-                              onAuthorUpdate={this.author_updated} />
+                              onAuthorUpdate={this.author_updated}
+                              onShowSnack={this.show_snack} />
                 <ArticleEditor article_id={editing_article_id}
                         open={edit_article_modal_open}
                         onUpdate={this.article_updated}
                         onClose={this.close_article_editor} />
+
+                <Snackbar
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  open={snack_message != null}
+                  autoHideDuration={3000}
+                  onClose={this.close_snack}
+                  message={snack_message}
+                />
             </div>
 		)
 	}

@@ -12,7 +12,7 @@ import {List, Grid, Button, Icon, Dialog, DialogTitle, DialogContent,
 import C from '../constants/constants';
 
 import {pick, merge, clone} from 'lodash'
-import {json_api_req} from '../util/util.jsx'
+import {json_api_req, validUrl} from '../util/util.jsx'
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -120,6 +120,28 @@ class AuthorEditor extends React.Component {
         this.setState({form: form, unsaved: true})
     }
 
+    validate(profile_urls) {
+        let valid = true
+        let error = null
+        Object.keys(profile_urls).forEach((url_key) => {
+            if (url_key != 'email') {
+                // Not yet validating email
+                let url = profile_urls[url_key]
+                let empty = url == null || url.length == 0
+                if (!empty && !validUrl(url)) {
+                    error = `Invalid URL: '${url}'`
+                    valid = false
+                }
+            }
+        })
+        if (error != null) this.show_snack(error)
+        return valid
+    }
+
+    show_snack(message) {
+        this.props.onShowSnack(message)
+    }
+
     save() {
         let {author, cookies} = this.props
         let {form} = this.state
@@ -127,14 +149,15 @@ class AuthorEditor extends React.Component {
         let author_link_ids = C.AUTHOR_LINKS.map((al) => al.id)
         let csrf_token = cookies.get('csrftoken')
         data.profile_urls = pick(data, author_link_ids)
-        json_api_req('PATCH', `/api/authors/${author.slug}/update/`, data, csrf_token, (res) => {
-            console.log(res)
-            this.setState({unsaved: false}, () => {
-                if (this.props.onAuthorUpdate != null) this.props.onAuthorUpdate(data)
+        if (this.validate(data.profile_urls)) {
+            json_api_req('PATCH', `/api/authors/${author.slug}/update/`, data, csrf_token, (res) => {
+                this.setState({unsaved: false}, () => {
+                    if (this.props.onAuthorUpdate != null) this.props.onAuthorUpdate(data)
+                })
+            }, (error) => {
+                console.error(error)
             })
-        }, (error) => {
-            console.error(error)
-        })
+        }
     }
 
     render_inputs() {

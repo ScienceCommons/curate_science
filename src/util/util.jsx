@@ -34,6 +34,10 @@ export const randomId = (length = 8) => {
     return text;
 }
 
+export const validUrl = (url) => {
+    return url != null && (url.startsWith('http://') || url.startsWith('https://'))
+}
+
 export const truncate = (s, _chars) => {
     if (s == null) s = ''
     let chars = _chars || 30;

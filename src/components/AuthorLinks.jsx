@@ -20,7 +20,7 @@ class AuthorLinks extends React.Component {
 		if (link_type == 'email') url = 'mailto:' + url
 		let tooltip = label
 		return (
-			<Tooltip title={tooltip} aria-label={link_type} key={url}>
+			<Tooltip title={tooltip} aria-label={link_type} key={label}>
 				<IconButton href={url} key={link_type} style={st} target="_blank"><img width={25} src={`/sitestatic/icons/${link_type}.svg`} /></IconButton>
 			</Tooltip>
 		)
