@@ -460,6 +460,15 @@ class ArticleEditor extends React.Component {
         }
     }
 
+    get_relevant_transparency_badges() {
+        let {form} = this.state
+        let visible = {}
+        C.TRANSPARENCY_BADGES.forEach((tb) => {
+            visible[tb.id] = tb.article_types.indexOf(form.article_type) > -1
+        })
+        return visible
+    }
+
     render_checkbox(id, value, specs) {
         let {classes} = this.props
         return (
@@ -563,11 +572,13 @@ class ArticleEditor extends React.Component {
             </div>
         )
     }
+
 	render() {
         let {classes, article_id, open} = this.props
         let {form, snack_message} = this.state
         let content
         let replication = form.article_type == 'REPLICATION'
+        let visible_transparencies = this.get_relevant_transparency_badges()
         let dialog_title = form.is_live ? "Edit Article" : "New Article"
         if (article_id != null) content = (
             <div className={classes.content}>
@@ -686,38 +697,46 @@ class ArticleEditor extends React.Component {
                         </Grid>
                     </Grid>
                     <Grid item xs={6}>
-                        <Grid container spacing={8}>
-                            <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'materials'}} style={{paddingTop: 10}} />
+                        <div hidden={!visible_transparencies.MATERIALS}>
+                            <Grid container spacing={8}>
+                                <Grid item xs={1}>
+                                    <TransparencyIcon tt={{icon: 'materials'}} style={{paddingTop: 10}} />
+                                </Grid>
+                                <Grid item xs={11}>
+                                    { this.render_field('public_study_materials_url') }
+                                </Grid>
                             </Grid>
-                            <Grid item xs={11}>
-                                { this.render_field('public_study_materials_url') }
+                        </div>
+                        <div hidden={!visible_transparencies.DATA}>
+                            <Grid container spacing={8}>
+                                <Grid item xs={1}>
+                                    <TransparencyIcon tt={{icon: 'data'}} style={{paddingTop: 10}} />
+                                </Grid>
+                                <Grid item xs={11}>
+                                { this.render_field('public_data_url') }
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid container spacing={8}>
-                            <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'data'}} style={{paddingTop: 10}} />
+                        </div>
+                        <div hidden={!visible_transparencies.CODE}>
+                            <Grid container spacing={8}>
+                                <Grid item xs={1}>
+                                    <TransparencyIcon tt={{icon: 'code'}} style={{paddingTop: 10}} />
+                                </Grid>
+                                <Grid item xs={11}>
+                                    { this.render_field('public_code_url') }
+                                </Grid>
                             </Grid>
-                            <Grid item xs={11}>
-                            { this.render_field('public_data_url') }
+                        </div>
+                        <div hidden={!visible_transparencies.REPSTD}>
+                            <Grid container spacing={8}>
+                                <Grid item xs={1}>
+                                    <TransparencyIcon tt={{icon: 'repstd'}} style={{paddingTop: 10}} />
+                                </Grid>
+                                <Grid item xs={11}>
+                                    { this.render_field('reporting_standards_type') }
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid container spacing={8}>
-                            <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'code'}} style={{paddingTop: 10}} />
-                            </Grid>
-                            <Grid item xs={11}>
-                                { this.render_field('public_code_url') }
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={8}>
-                            <Grid item xs={1}>
-                                <TransparencyIcon tt={{icon: 'repstd'}} style={{paddingTop: 10}} />
-                            </Grid>
-                            <Grid item xs={11}>
-                                { this.render_field('reporting_standards_type') }
-                            </Grid>
-                        </Grid>
+                        </div>
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
@@ -822,13 +841,6 @@ class CSTextField extends React.Component {
 
     render() {
         let {id, value, specs, classes, disabled} = this.props
-        // let adornment = null
-        // let inputProps = {
-        //     classes: {
-        //         root: classes.cssInput
-        //     }
-        // }
-        // if (specs.adornment != null) inputProps.startAdornment = <InputAdornment position="start"><Icon>{specs.adornment}</Icon></InputAdornment>
         let st = {}
         if (specs.fullWidth) st.width = '100%'
         let label = specs.label
