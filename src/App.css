@@ -25,8 +25,11 @@ textarea {
 
 .ArticleWithActions {
 	position: relative;
-	padding-right: 100px;
-	width: 750px;
+}
+
+.ArticleWithActions .Article {
+	display: 'block';
+	width: 650px;
 }
 
 .ArticleWithActions .ArticleActions {
@@ -35,6 +38,7 @@ textarea {
 	position: absolute;
 	width: 100px;
 	top: 10px;
+	padding: 5px 20px;
 	left: 650px;
 }
 

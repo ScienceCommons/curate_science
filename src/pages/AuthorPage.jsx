@@ -337,55 +337,57 @@ class AuthorPage extends React.Component {
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" spacing={24} className="AuthorPage">
-                    <Grid item className={classes.cardColumn}>
-                        <div style={{position: 'relative'}}>
-                            <span hidden={!editable}>
-                                <Button variant="contained" color="secondary"
-                                        className={classes.authorEditButton}
-                                        onClick={this.open_author_editor}>
-                                    <Icon>edit</Icon>
-                                    Edit
-                                </Button>
-                            </span>
-                            <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
-                            <Typography variant="h4" className={classes.subtitle}>
-                                <span className={classes.title}>{ this.render_position() }</span>
-                                <span className={classes.affiliation}>{ author.affiliations }</span>
-                            </Typography>
-                            <AuthorLinks links={author.profile_urls} />
-                        </div>
+                    <Grid item>
+                        <div className={classes.cardColumn}>
+                            <div style={{position: 'relative'}}>
+                                <span hidden={!editable}>
+                                    <Button variant="contained" color="secondary"
+                                            className={classes.authorEditButton}
+                                            onClick={this.open_author_editor}>
+                                        <Icon>edit</Icon>
+                                        Edit
+                                    </Button>
+                                </span>
+                                <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
+                                <Typography variant="h4" className={classes.subtitle}>
+                                    <span className={classes.title}>{ this.render_position() }</span>
+                                    <span className={classes.affiliation}>{ author.affiliations }</span>
+                                </Typography>
+                                <AuthorLinks links={author.profile_urls} />
+                            </div>
 
-                        <div id="actions" className={classes.box} hidden={!editable}>
-                            <Button variant="contained" color="secondary" onClick={this.create_new_article}>
-                                <Icon>add</Icon>
-                                Add Article
-                            </Button>
-                            <Button variant="contained"
-                                    color="secondary"
-                                    aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
-                                    onClick={this.open_preexisting_popper}
-                                    style={{marginLeft: 10}}>
-                                <Icon>add</Icon>
-                                Add Preexisting Article
-                            </Button>
-                            <Popover
-                              id="add_preexisting_popper"
-                              open={add_preexisting_open}
-                              anchorEl={popperAnchorEl}
-                              onClose={this.close_preexisting_popper}
-                              anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                              }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                              }}
-                            >
-                                <div style={{width: "400px", height: "250px", padding: 14 }}>
-                                  <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
-                                </div>
-                            </Popover>
+                            <div id="actions" className={classes.box} hidden={!editable}>
+                                <Button variant="contained" color="secondary" onClick={this.create_new_article}>
+                                    <Icon>add</Icon>
+                                    Add Article
+                                </Button>
+                                <Button variant="contained"
+                                        color="secondary"
+                                        aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
+                                        onClick={this.open_preexisting_popper}
+                                        style={{marginLeft: 10}}>
+                                    <Icon>add</Icon>
+                                    Add Preexisting Article
+                                </Button>
+                                <Popover
+                                  id="add_preexisting_popper"
+                                  open={add_preexisting_open}
+                                  anchorEl={popperAnchorEl}
+                                  onClose={this.close_preexisting_popper}
+                                  anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                  }}
+                                  transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                  }}
+                                >
+                                    <div style={{width: "400px", height: "250px", padding: 14 }}>
+                                      <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
+                                    </div>
+                                </Popover>
+                            </div>
                         </div>
 
                         <div className={classes.articleList}>
@@ -400,7 +402,6 @@ class AuthorPage extends React.Component {
                                                     admin={user_session.admin} />) }
                             { articles_loading ? <Loader /> : null }
                         </div>
-
                     </Grid>
     			</Grid>
 
@@ -454,7 +455,7 @@ class ArticleWithActions extends React.Component {
     }
 
     render() {
-        let {article, admin, editable} = this.props
+        let {article, admin, editable, classes} = this.props
         const ST = {
             marginRight: 10
         }
@@ -464,10 +465,12 @@ class ArticleWithActions extends React.Component {
         }
         return (
             <div key={article.id} className="ArticleWithActions">
-                <ArticleLI article={article}
-                           admin={false}
-                           onFetchedArticleDetails={this.got_article_details}
-                           onFigureClick={this.show_figure} />
+                <div className="Article">
+                    <ArticleLI article={article}
+                               admin={false}
+                               onFetchedArticleDetails={this.got_article_details}
+                               onFigureClick={this.show_figure} />
+               </div>
                 <div className="ArticleActions">
                     <span hidden={!editable} className="ActionButton">
                         <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
