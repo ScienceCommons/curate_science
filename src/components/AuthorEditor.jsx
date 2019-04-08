@@ -36,7 +36,9 @@ const INPUTS = [
         id: 'name',
         type: 'text',
         label: "Name",
-        required: true
+        required: true,
+        autoFocus: true,
+        selectOnFocus: true
     },
     {
         id: 'position_title',
@@ -166,6 +168,10 @@ class AuthorEditor extends React.Component {
         return INPUTS.map((io) => {
             let id = io.id
             let value = form[id] || ''
+            let attrs = {}
+            if (io.selectOnFocus) attrs.onFocus = (event) => {
+                event.target.select()
+            }
             let input_el = <TextField
                       id={id}
                       key={id}
@@ -180,6 +186,8 @@ class AuthorEditor extends React.Component {
                       fullWidth
                       required={io.required}
                       variant="outlined"
+                      autoFocus={io.autoFocus}
+                      {...attrs}
                     />
             return (
                 <Grid container key={id}>
