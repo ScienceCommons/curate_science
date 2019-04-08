@@ -16,6 +16,7 @@ import C from '../constants/constants';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './FigureSelector.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
+import Loader from '../components/shared/Loader.jsx';
 import { withStyles } from '@material-ui/core/styles';
 import {clone, set} from 'lodash'
 import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
@@ -55,16 +56,18 @@ const styles = theme => ({
 })
 
 const INPUT_SPECS = {
-    'author_list': {
-        label: 'Authors',
-        placeholder: "e.g., SS Smith, JJ Jones, & KK Pratt",
-        required: true,
-        type: 'text',
-        fullWidth: true
-    },
     'title': {
         label: 'Article title',
         placeholder: "e.g., Does exposure to erotica reduce attraction and love for romantic partners in men?",
+        required: true,
+        type: 'text',
+        fullWidth: true,
+        autoFocus: true,
+        selectOnFocus: true
+    },
+    'author_list': {
+        label: 'Authors',
+        placeholder: "e.g., SS Smith, JJ Jones, & KK Pratt",
         required: true,
         type: 'text',
         fullWidth: true
@@ -136,37 +139,43 @@ const INPUT_SPECS = {
         label: 'Citations',
         type: 'number',
         adornment: 'format_quote',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'pdf_downloads': {
         label: 'Downloads',
         type: 'number',
         adornment: 'cloud_download',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'preprint_downloads': {
         label: 'Downloads',
         type: 'number',
         adornment: 'cloud_download',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'pdf_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'html_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'preprint_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'author_contributions': {
         label: "Author contributions",
@@ -284,7 +293,8 @@ class ArticleEditor extends React.Component {
         this.state = {
             form: initialFormState(),
             snack_message: null,
-            unsaved: false
+            unsaved: false,
+            loading: false
         }
 
         this.maybe_confirm_close = this.maybe_confirm_close.bind(this)
@@ -309,12 +319,14 @@ class ArticleEditor extends React.Component {
             // Fetch article from server to ensure up to date
             // Populate form
             let pk = nextProps.article_id
-            fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
-                let form = clone(res)
-                console.log(form)
-                // delete form.key_figures
-                if (form.title.startsWith(C.PLACEHOLDER_TITLE_PREFIX)) form.title = ""
-                this.setState({form: form, unsaved: false})
+            this.setState({loading: true}, () => {
+                fetch(`/api/articles/${pk}`).then(res => res.json()).then((res) => {
+                    let form = clone(res)
+                    console.log(form)
+                    // delete form.key_figures
+                    if (form.title.startsWith(C.PLACEHOLDER_TITLE_PREFIX)) form.title = ""
+                    this.setState({form: form, unsaved: false, loading: false})
+                })
             })
         }
     }
@@ -447,6 +459,13 @@ class ArticleEditor extends React.Component {
                 key_figures = data.key_figures
                 delete data.key_figures
             }
+            // Server errors when trying to save empty string to numeric fields
+            Object.keys(INPUT_SPECS).forEach((spec_key) => {
+                let spec = INPUT_SPECS[spec_key]
+                if (spec.zero_empty_str && data[spec_key] === '') {
+                    data[spec_key] = 0
+                }
+            })
             json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
                 data.key_figures = key_figures // Re-add to update figures in article list
                 data.updated = new Date().toISOString()
@@ -530,7 +549,11 @@ class ArticleEditor extends React.Component {
         else if (specs.type == 'select') return this.render_select(id, value, specs)
         else {
             let disabled = id == 'year' && form.in_press === true
-            return <StyledCSTextField id={id} value={value} specs={specs} disabled={disabled} onChange={this.handle_change} />
+            return <StyledCSTextField id={id}
+                                      value={value}
+                                      specs={specs}
+                                      disabled={disabled}
+                                      onChange={this.handle_change} />
         }
     }
 
@@ -575,11 +598,12 @@ class ArticleEditor extends React.Component {
 
 	render() {
         let {classes, article_id, open} = this.props
-        let {form, snack_message} = this.state
+        let {form, snack_message, loading} = this.state
         let content
         let replication = form.article_type == 'REPLICATION'
         let visible_transparencies = this.get_relevant_transparency_badges()
         let dialog_title = form.is_live ? "Edit Article" : "New Article"
+        if (loading) return <Loader />
         if (article_id != null) content = (
             <div className={classes.content}>
                 <Grid container spacing={8}>
@@ -845,6 +869,10 @@ class CSTextField extends React.Component {
         if (specs.fullWidth) st.width = '100%'
         let label = specs.label
         if (specs.required) label += '  *'
+        let attrs = {}
+        if (specs.selectOnFocus) attrs.onFocus = (event) => {
+            event.target.select()
+        }
         return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={label} inlineBlock={!specs.fullWidth}>
                     <DebounceInput
                       id={id}
@@ -859,7 +887,9 @@ class CSTextField extends React.Component {
                       required={specs.required}
                       element={specs.multiline ? 'textarea' : 'input'}
                       className={classes.input}
+                      autoFocus={specs.autoFocus}
                       style={st}
+                      {...attrs}
                     />
                 </LabeledBox>
     }}
