@@ -136,37 +136,43 @@ const INPUT_SPECS = {
         label: 'Citations',
         type: 'number',
         adornment: 'format_quote',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'pdf_downloads': {
         label: 'Downloads',
         type: 'number',
         adornment: 'cloud_download',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'preprint_downloads': {
         label: 'Downloads',
         type: 'number',
         adornment: 'cloud_download',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'pdf_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'html_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'preprint_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
-        fullWidth: true
+        fullWidth: true,
+        zero_empty_str: true
     },
     'author_contributions': {
         label: "Author contributions",
@@ -447,6 +453,13 @@ class ArticleEditor extends React.Component {
                 key_figures = data.key_figures
                 delete data.key_figures
             }
+            // Server errors when trying to save empty string to numeric fields
+            Object.keys(INPUT_SPECS).forEach((spec_key) => {
+                let spec = INPUT_SPECS[spec_key]
+                if (spec.zero_empty_str && data[spec_key] === '') {
+                    data[spec_key] = 0
+                }
+            })
             json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
                 data.key_figures = key_figures // Re-add to update figures in article list
                 data.updated = new Date().toISOString()
