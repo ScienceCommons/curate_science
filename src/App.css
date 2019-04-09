@@ -42,7 +42,7 @@ textarea {
 	left: 650px;
 }
 
-.ArticleWithActions .ArticleActions > .ActionButton {
+.ArticleWithActions .ArticleActions .ActionButton {
 	display: inline-block;
 	margin-bottom: 8px;
 }

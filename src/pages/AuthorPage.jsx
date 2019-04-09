@@ -495,23 +495,27 @@ class ArticleWithActions extends React.Component {
                                onFigureClick={this.show_figure} />
                </div>
                 <div className="ArticleActions">
-                    <span hidden={!editable} className="ActionButton">
-                        <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
-                            <Icon>edit</Icon>
-                            Edit
-                        </Button>
+                    <span hidden={!editable}>
+                        <span className="ActionButton">
+                            <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
+                                <Icon>edit</Icon>
+                                Edit
+                            </Button>
+                        </span>
+                        <span className="ActionButton">
+                            <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
+                                <Icon>link_off</Icon>
+                                Unlink
+                            </Button>
+                        </span>
                     </span>
-                    <span hidden={!editable} className="ActionButton">
-                        <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
-                            <Icon>link_off</Icon>
-                            Unlink
-                        </Button>
-                    </span>
-                    <span hidden={!admin} className="ActionButton">
-                        <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
-                            <Icon color="inherit">delete</Icon>
-                            Delete
-                        </Button>
+                    <span hidden={!admin}>
+                        <span className="ActionButton">
+                            <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
+                                <Icon color="inherit">delete</Icon>
+                                Delete
+                            </Button>
+                        </span>
                     </span>
                 </div>
             </div>
