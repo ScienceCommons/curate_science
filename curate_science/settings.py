@@ -28,10 +28,14 @@ if os.getenv('GOOGLE_CLOUD_PROJECT'):
     DB_HOST='35.205.158.247' #curatevm
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
-    if os.getenv('GOOGLE_CLOUD_PROJECT') == 'curatescience-staging':
+    if os.getenv('GOOGLE_CLOUD_PROJECT') in ('curatescience-staging', 'curate-science-staging-2'):
         DB_NAME = 'curate_staging'
-        GS_BUCKET_NAME = 'curatescience-staging.appspot.com'
         DEBUG = True
+        if os.getenv('GOOGLE_CLOUD_PROJECT') == 'curatescience-staging':
+            GS_BUCKET_NAME = 'curatescience-staging.appspot.com'
+        else:
+            GS_BUCKET_NAME = 'curate-science-staging-2.appspot.com'
+
     else:
         DB_NAME = 'curate'
         GS_BUCKET_NAME = 'curate-science-216207.appspot.com'
