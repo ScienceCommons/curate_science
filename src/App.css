@@ -1,10 +1,11 @@
 html, body {
     margin: 0;
     padding: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 ::-webkit-input-placeholder {
-	color: #DDD;
+	color: #CCC;
 }
 
 #loader {
@@ -129,4 +130,22 @@ textarea {
 	padding: 2px 7px;
 	font-size: 11px;
 	margin-right: 5px;
+}
+
+.StaticPages p {
+	font-size: 16px;
+}
+
+.StaticPages input {
+	padding: 3px;
+	font-size: 15px;
+	min-width: 200px;
+	border-radius: 2px;
+	border: 1px solid #DDD;
+}
+
+.StaticPages h4 {
+	font-weight: 500;
+	text-align: center;
+	font-size: 18px;
 }

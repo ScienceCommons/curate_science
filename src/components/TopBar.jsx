@@ -168,6 +168,11 @@ class TopBar extends React.Component {
                             <ListItemText primary={"FAQ"} />
                         </ListItem>
                     </Link>
+                    <Link to="/newsletter" key="newsletter">
+                        <ListItem key="newsletter">
+                            <ListItemText primary={"Newsletter"} />
+                        </ListItem>
+                    </Link>
                     <Link to="/help" key="help">
                         <ListItem key="help">
                             <ListItemText primary={"Help"} />
