@@ -248,7 +248,7 @@ class AutocompleteReactSelect extends React.Component {
 
   render() {
     const { classes, theme, suggestions, placeholder, creatable,
-      multi, labelProp, name, value } = this.props;
+      multi, labelProp, name, value, autoFocus } = this.props;
     let {loading} = this.state
 
     const selectStyles = {
@@ -285,6 +285,7 @@ class AutocompleteReactSelect extends React.Component {
           formatCreateLabel={this.formatCreateLabel}
           loadOptions={this.loadOptions}
           isMulti={multi}
+          autoFocus={autoFocus}
           {...params} />
         )
     } else {
@@ -294,6 +295,7 @@ class AutocompleteReactSelect extends React.Component {
           isLoading={loading}
           loadOptions={this.loadOptions}
           isMulti={multi}
+          autoFocus={autoFocus}
           getOptionLabel={this.renderOptionLabel}
           getOptionValue={this.renderOptionValue}
           {...params} />
@@ -314,6 +316,7 @@ AutocompleteReactSelect.defaultProps = {
   creatable: false,
   listUrl: null,
   createUrl: null,
+  autoFocus: false,
   labelProp: 'text',
   multi: false
 }
@@ -322,6 +325,7 @@ AutocompleteReactSelect.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   creatable: PropTypes.bool,
+  autoFocus: PropTypes.bool,
   listUrl: PropTypes.string,
   createUrl: PropTypes.string,
   labelProp: PropTypes.string,
