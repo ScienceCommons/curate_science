@@ -16,9 +16,7 @@ deploy:
   keyfile: curate_science/google_application_credentials.json
   project:
     master: curate-science-216207
-    staging:
-      - curatescience-staging
-      - curate-science-staging-2
+    staging: curate-science-staging-2
   skip_cleanup: true
 env:
   global:
