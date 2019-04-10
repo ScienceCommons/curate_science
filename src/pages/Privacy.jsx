@@ -15,7 +15,7 @@ class Privacy extends React.Component {
 	render() {
 		let {classes} = this.props
 		return (
-			<div style={{textAlign: 'center'}}>
+			<div style={{textAlign: 'center'}} className="StaticPages">
 				<div>
 					<Typography variant="h3" align="center">Terms of Service</Typography>
 

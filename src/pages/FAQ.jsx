@@ -115,7 +115,7 @@ class FAQ extends React.Component {
     	let {classes} = this.props
     	return (
 	    	<div className="section" key={sec.name}>
-	    		<Typography variant="h4" className={classes.sectionHeader}>{sec.name}</Typography>
+	    		<Typography variant="h2" className={classes.sectionHeader}>{sec.name}</Typography>
 
 	    		{ sec.qas.map((qa, i) => {
 	    			return (
@@ -131,7 +131,7 @@ class FAQ extends React.Component {
 
 	render() {
 		return (
-			<div style={{margin: '10px auto', maxWidth: 800}}>
+			<div style={{margin: '10px auto', maxWidth: 800}} className="StaticPages">
 				<Typography variant="h3" align="center">FAQ</Typography>
 
 				{ this.SECTIONS.map(this.render_section) }

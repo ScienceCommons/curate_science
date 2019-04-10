@@ -69,21 +69,25 @@ class About extends React.Component {
 	        	image: "/sitestatic/people/vanpaemel_o.jpg",
 	        	name: "Wolf Vanpaemel",
 	        	affiliation: "KU Leuven",
+	        	title: "Conceptual/Funding Advisor"
 	        },
 	        {
 	        	url: "https://psychology.msu.edu/people/graduate-student/morri640",
 	        	image: "/sitestatic/people/morrison_o.jpg",
 	        	name: "Mike Morrison",
+	        	title: "Technical Advisor"
 	        },
 	        {
 	        	image: "/sitestatic/people/touko_o.jpg",
 	        	name: "Touko Kuusi",
 	        	affiliation: "University of Helsinki",
+	        	title: "Volunteer Curator"
 	        },
 	        {
 	        	url: "https://github.com/alexkyllo",
 	        	image: "/sitestatic/people/kyllo_o.jpg",
 	        	name: "Alex Kyllo",
+	        	title: "Software Developer"
 	        }
 
         ]
@@ -209,7 +213,7 @@ class About extends React.Component {
 	render() {
 		let {classes} = this.props
 		return (
-			<div style={{margin: '10px auto', maxWidth: 800}}>
+			<div style={{margin: '10px auto', maxWidth: 800}} className="StaticPages">
 				<div>
 					<Typography variant="h3" align="center">About</Typography>
 
@@ -270,7 +274,6 @@ class About extends React.Component {
 					<Typography variant="h2" className={classes.boxHeader}>Advisory Board (as of April 2019)</Typography>
 
 					<Grid container>
-						<Typography variant="body1">Advisory board members periodically provide feedback on grant proposal applications and related manuscripts and general advice regarding Curate Science's current focus areas and future directions.</Typography>
 						{ this.ADVISORS.map(this.render_person) }
 					</Grid>
 

@@ -21,10 +21,6 @@ const style = {
 		paddingTop: 20,
 		paddingBottom: 20,
 		color: 'grey'
-	},
-	link: {
-		color: 'gray',
-		marginRight: 10
 	}
 }
 
@@ -34,7 +30,7 @@ class Footer extends React.Component {
 		let {classes} = this.props
 		let year = new Date().getFullYear()
 		return (
-			<div className={classes.footer}>
+			<div className={classes.footer + " Footer"}>
 
 				<Grid container>
 					<Grid item xs={4}>
@@ -56,7 +52,7 @@ class Footer extends React.Component {
 								Tiensestraat 102, Leuven, Belgium 3000 <br/>
 								email: curatescience@gmail.com<br/>
 								<a href="https://twitter.com/curatescience"><i className="fab fa-twitter fa-2" aria-hidden="true"></i></a>
-								<a href="https://github.com/ScienceCommons/curate_science"><i className="fab fa-github fa-2" aria-hidden="true"></i></a>
+								<a href="https://github.com/ScienceCommons/curate_science" style={{marginLeft: 5}}><i className="fab fa-github fa-2" aria-hidden="true"></i></a>
 							</p>
 					</Grid>
 				</Grid>
@@ -68,7 +64,9 @@ class Footer extends React.Component {
 							<img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License" />
 						</a>
 					</div>
-					<Link to="/privacy" className={classes.link}>Privacy Policy</Link>
+					<Link to="/privacy" >Terms of Service</Link>
+					&nbsp;&bull;&nbsp;
+					<Link to="/privacy">Privacy Policy</Link>
 				</div>
 			</div>
 		)
