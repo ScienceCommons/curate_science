@@ -202,7 +202,7 @@ class TopBar extends React.Component {
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                             <MenuIcon />
                         </IconButton>
-                        <a href="/app" className={classes.sitename}>
+                        <a href="/app" id="sitename" className={classes.sitename}>
                             <Typography variant="h6" color="inherit">
                               <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME}
                             </Typography>

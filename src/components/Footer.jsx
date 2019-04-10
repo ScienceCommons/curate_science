@@ -46,7 +46,7 @@ class Footer extends React.Component {
 						<b>Previous Funders</b>
 						<br/>
 						<a href="https://cos.io/"><img src="/sitestatic/legacy/logos/COS-logo.png" style={{marginTop: 15}} /></a>
-						<a href="http://www.bitss.org/" style={{marginLeft: 20}}><img src="/sitestatic/legacy/logos/BITSS-logo.png" style={{marginTop: 15}} /></a>
+						<a href="http://www.bitss.org/" style={{marginLeft: 20}} target="_blank"><img src="/sitestatic/legacy/logos/BITSS-logo.png" style={{marginTop: 15}} /></a>
 					</Grid>
 					<Grid item xs={4}>
 						<span style={{fontWeight: 'bold', marginBottom: 15}}>Contact Details</span>
@@ -68,7 +68,7 @@ class Footer extends React.Component {
 							<img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License" />
 						</a>
 					</div>
-					Terms of Service &bull; <Link to="/privacy" className={classes.link}>Privacy Policy</Link>
+					<Link to="/privacy" className={classes.link}>Privacy Policy</Link>
 				</div>
 			</div>
 		)

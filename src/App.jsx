@@ -50,6 +50,9 @@ const theme = createMuiTheme({
         marginTop: 10,
         marginBottom: 10
     },
+    h3: {
+        marginTop: 20,
+    },
     h4: {
         textTransform: 'uppercase',
         fontSize: 18,

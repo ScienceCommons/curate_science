@@ -13,7 +13,16 @@ html, body {
 }
 
 a:link, a:visited, a:hover, a:active {
+	color: #337ab7;
 	text-decoration: none;
+}
+
+a:hover {
+	color: #2A689C;
+}
+
+#sitename {
+	color: white;
 }
 
 textarea {
