@@ -36,6 +36,7 @@ class ArticleSelector extends React.Component {
                      listUrl="/api/articles/autocomplete/"
                      filterFn={this.filter_already_linked}
                      placeholder="Search articles by title or author last name"
+                     autoFocus={true}
                      onChange={this.handleChange} />
             </div>
         )

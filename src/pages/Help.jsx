@@ -126,7 +126,7 @@ class Help extends React.Component {
 										<br/><br/>
 										NOTE: Please ensure that the corresponding figure and table captions are included in the image files of the key figures/tables (<a href="/app/author/etienne-lebel" target="_blank">example</a>).
 										<br/><br/>
-										To delete an added figure, click on the image thumbnail of the figure you want to delete.
+										To delete an added figure, click on the image thumbnail of the figure you want to delete (administrator users only).
 									</li>
 								</ul>
 

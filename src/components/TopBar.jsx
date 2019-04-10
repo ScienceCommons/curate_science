@@ -168,6 +168,11 @@ class TopBar extends React.Component {
                             <ListItemText primary={"FAQ"} />
                         </ListItem>
                     </Link>
+                    <Link to="/newsletter" key="newsletter">
+                        <ListItem key="newsletter">
+                            <ListItemText primary={"Newsletter"} />
+                        </ListItem>
+                    </Link>
                     <Link to="/help" key="help">
                         <ListItem key="help">
                             <ListItemText primary={"Help"} />
@@ -197,7 +202,7 @@ class TopBar extends React.Component {
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                             <MenuIcon />
                         </IconButton>
-                        <a href="/app" className={classes.sitename}>
+                        <a href="/app" id="sitename" className={classes.sitename}>
                             <Typography variant="h6" color="inherit">
                               <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME}
                             </Typography>

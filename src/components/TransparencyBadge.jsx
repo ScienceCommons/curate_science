@@ -76,7 +76,8 @@ class TransparencyBadge extends React.Component {
 				if (!no_url) popover_content = <Typography>{ source_icon }<a href={url} target="_blank">{ truncate(url, 15) } <Icon fontSize="inherit">open_in_new</Icon></a></Typography>
 				if (f.id === 'PREREG') {
 					let ppt = find(C.PREREG_PROTOCOL_TYPES, {value: prereg_protocol_type})
-					if (ppt != null) subtitle = <Typography variant="body2" style={{color: 'gray', fontStyle: 'italic'}}>{ ppt.label }</Typography>
+					let display_label = ppt.label_detail || ppt.label || ''
+					if (ppt != null) subtitle = <Typography variant="body2" style={{color: 'gray', fontStyle: 'italic'}}>{ display_label }</Typography>
 				}
 			}
 			return (

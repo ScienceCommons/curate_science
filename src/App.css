@@ -1,18 +1,23 @@
 html, body {
     margin: 0;
     padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+a:link, a:visited, a:hover, a:active {
+	text-decoration: none;
 }
 
 ::-webkit-input-placeholder {
-	color: #DDD;
+	color: #CCC;
 }
 
 #loader {
 	margin: 30px auto;
 }
 
-a:link, a:visited, a:hover, a:active {
-	text-decoration: none;
+#sitename {
+	color: white;
 }
 
 textarea {
@@ -42,7 +47,7 @@ textarea {
 	left: 650px;
 }
 
-.ArticleWithActions .ArticleActions > .ActionButton {
+.ArticleWithActions .ArticleActions .ActionButton {
 	display: inline-block;
 	margin-bottom: 8px;
 }
@@ -130,3 +135,35 @@ textarea {
 	font-size: 11px;
 	margin-right: 5px;
 }
+
+.StaticPages p {
+
+}
+
+.StaticPages input {
+	padding: 3px;
+	font-size: 15px;
+	min-width: 200px;
+	border-radius: 2px;
+	border: 1px solid #DDD;
+}
+
+.StaticPages h4 {
+	font-weight: 500;
+	text-align: center;
+}
+
+
+.StaticPages a:link, .StaticPages a:visited, .StaticPages a:hover, .StaticPages a:active,
+.Footer a:link, .Footer a:visited, .Footer a:hover, .Footer a:active {
+	color: #337ab7;
+	text-decoration: none;
+}
+
+.StaticPages a:hover, .Footer a:hover {
+	color: #2A689C;
+}
+
+/*.Footer a.DottedLinks:link, .Footer a.DottedLinks:visited, .Footer a.DottedLinks:active {
+	color: gray;
+}*/

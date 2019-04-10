@@ -6,15 +6,20 @@ import {Typography, Avatar, Grid, Paper} from '@material-ui/core';
 
 const styles = {
 	name: {
-		fontSize: 16
+		fontSize: 13,
+		fontWeight: 700,
+		marginTop: 3,
+		lineHeight: '18px'
 	},
 	affiliation: {
-		fontSize: 12,
-		color: "#CCC"
+		fontSize: 13,
+		fontStyle: 'italic',
+		textAlign: 'center'
 	},
 	title: {
-		fontSize: 12,
-		color: "#444"
+		fontSize: 13,
+		textAlign: 'center',
+		lineHeight: '18px'
 	},
 	avatar: {
 		width: 80,
@@ -26,9 +31,20 @@ const styles = {
 		margin: 15
 	},
 	boxHeader: {
-		fontSize: 32,
-		color: 'gray',
+		display: 'block',
+		fontSize: 16,
+		marginTop: 20,
+		fontWeight: 'bold',
+		color: 'CornflowerBlue',
 		textAlign: 'center'
+	},
+	UL: {
+		lineHeight: '18px'
+	},
+	OL: {
+		fontSize: 16,
+		lineHeight: '21px',
+		marginTop: 3
 	}
 }
 
@@ -40,7 +56,7 @@ class About extends React.Component {
 
         this.render_person = this.render_person.bind(this)
 
-        this.CONTRIBUTORS = [
+        this.MAIN_TEAM = [
 	        {
 	        	url: "http://etiennelebel.com",
 	        	image: "/sitestatic/people/lebel_o.jpg",
@@ -53,30 +69,27 @@ class About extends React.Component {
 	        	image: "/sitestatic/people/vanpaemel_o.jpg",
 	        	name: "Wolf Vanpaemel",
 	        	affiliation: "KU Leuven",
+	        	title: "Conceptual/Funding Advisor"
+	        },
+	        {
+	        	url: "https://psychology.msu.edu/people/graduate-student/morri640",
+	        	image: "/sitestatic/people/morrison_o.jpg",
+	        	name: "Mike Morrison",
+	        	title: "Technical Advisor"
 	        },
 	        {
 	        	image: "/sitestatic/people/touko_o.jpg",
 	        	name: "Touko Kuusi",
 	        	affiliation: "University of Helsinki",
+	        	title: "Volunteer Curator"
 	        },
 	        {
-	        	url: "https://osf.io/xjhab/",
-	        	image: "/sitestatic/people/mccarthy_o.jpg",
-	        	name: "Randy McCarthy",
-	        	affiliation: "Northern Illinois University",
-	        },
-	        {
-	        	url: "https://oxford.academia.edu/BrianDEarp",
-	        	image: "/sitestatic/people/earp_o.jpg",
-	        	name: "Brian Earp",
-	        	affiliation: "University of Oxford",
-	        },
-	        {
-	        	url: "http://malte-elson.com/",
-	        	image: "/sitestatic/people/elson_o.jpg",
-	        	name: "Malte Elson",
-	        	affiliation: "Ruhr University Bochum",
+	        	url: "https://github.com/alexkyllo",
+	        	image: "/sitestatic/people/kyllo_o.jpg",
+	        	name: "Alex Kyllo",
+	        	title: "Software Developer"
 	        }
+
         ]
 
         this.ADVISORS = [
@@ -183,29 +196,16 @@ class About extends React.Component {
 	        	affiliation: "Tilburg University",
 	        }
         ]
-
-        this.TECHNICAL_ADVISORS = [
-	        {
-	        	url: "https://github.com/alexkyllo",
-	        	image: "/sitestatic/people/kyllo_o.jpg",
-	        	name: "Alex Kyllo",
-	        },
-	        {
-	        	url: "https://psychology.msu.edu/people/graduate-student/morri640",
-	        	image: "/sitestatic/people/morrison_o.jpg",
-	        	name: "Mike Morrison",
-	        }
-        ]
     }
 
     render_person(p) {
     	let {classes} = this.props
 		return (
-			<Grid item xs={3} align="center" justify="center">
+			<Grid item xs={3} align="center" justifyContent="center">
 				<a href={p.url} target="_blank"><Avatar src={p.image} className={classes.avatar} /></a>
 				<Typography variant="h3" className={classes.name}>{ p.name }</Typography>
-				{ p.title && <Typography variant="h5" className={classes.title}>{ p.title }</Typography> }
 				<Typography variant="h5" className={classes.affiliation}>{ p.affiliation }</Typography>
+				{ p.title && <Typography variant="h5" className={classes.title}>{ p.title }</Typography> }
 			</Grid>
 		)
     }
@@ -213,79 +213,72 @@ class About extends React.Component {
 	render() {
 		let {classes} = this.props
 		return (
-			<div style={{textAlign: 'center'}}>
+			<div style={{margin: '10px auto', maxWidth: 800}} className="StaticPages">
 				<div>
-					<Typography variant="h1">About</Typography>
+					<Typography variant="h3" align="center">About</Typography>
 
-					<Typography variant="h3">Our Approach</Typography>
-					<p>(See our <a href="http://curatescience.org/docs/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf" target="_blank">white paper</a> for full details of our approach.)</p>
 					<p>
-						Science requires <u><i>transparency</i></u>. Different transparency standards, however, apply to different kinds of empirical research. <strong>Curate Science</strong> is a community platform to organize the <i>transparency</i> of published findings according to the relevant standards. It does so for the 3 most fundamental aspects of transparency:
+						<strong>Science requires transparency.</strong> However, no platform currently exists to look up the transparency of scientific articles. <strong>Curate Science</strong> aims to solve this problem by developing a platform for researchers to <i>label</i> and <i>link</i> the transparency and replication of their research.
 					</p>
+
+					<img src="/sitestatic/about/transparency_labels.png" className="img-responsive" />
+
+					<img src="/sitestatic/about/kinds_of_transparency.png" className="img-responsive" />
+
+					<img src="/sitestatic/about/article_types.png" className="img-responsive" />
+
+					<p><i>Why would researchers want to label and link the transparency of their research?</i></p>
+
+					<p>Because it will selfishly benefit them in several ways:</p>
+						<ol className={classes.OL}>
+							<li><strong>It will increase the impact, value, and discoverability of their research:</strong>
+								<ul className={classes.UL}>
+									<li style={{marginTop: 3}}>Increase the number of citations, downloads, and views of their articles (postprints and preprints)</li>
+									<li>Increase the number of downloads and views of their publicly available study materials, data, and code</li>
+								</ul>
+							</li>
+							<li style={{marginTop: 3}}><strong>It is easiest and best way to organize their publications: </strong>
+								<ul className={classes.UL}>
+									<li style={{marginTop: 3}}>Fastest way to find article full-text and associated content (e.g., study materials, data, code, preregistered protocol)</li>
+									<li>Fastest way to share an article and refer to specific figures and/or materials, data, or code in emails or on social media (for themselves and others, the latter which will further boost reuse and citation counts)</li>
+								</ul>
+							</li>
+							<li style={{marginTop: 3}}><strong>It will give them a competitive edge in job applications, job promotions, and grant applications:</strong>
+								<ul className={classes.UL}>
+									<li style={{marginTop: 3}}>Most compelling way to communicate one's full commitment to open science</li>
+								</ul>
+							</li>
+							<li style={{marginTop: 3}}><strong>It will maximize their research integrity and accountability to research funders and to the public</strong></li>
+						</ol>
+						<br/>
+						Researchers should also want to do this because it will benefit the research community and students:
+						<ol className={classes.OL}>
+							<li style={{marginTop: 3}}>It will help the community reuse and reanalyze empirical findings (e.g., in meta-analyses), accelerating scientific progress</li>
+							<li style={{marginTop: 3}}>It will make it substantially easier for the community to replicate and extend published findings, also accelerating progress</li>
+							<li style={{marginTop: 3}}>It will yield rich metadata resources for teaching and meta-science research on transparency, reproducibility, and replication</li>
+						</ol>
+						<br/>
+						For a full list of benefits of labeling transparency, see our <a href="/sitestatic/papers/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf" target="_blank">white paper (Table 1)</a>. The paper also outlines the theoretical principles that guide the design and implementation of our platform.
+
 				</div>
 
-				<div >
-						<div className="row" >
-							<div className="col-md-4 center">
-								<Typography variant="h3" className={classes.about}>Method/Data Transparency</Typography>
-								<img src='/sitestatic/about/method-data-transparency-diagram.png' width="275px" />
-							</div>
-							<div className="col-md-4 center" >
-								<Typography variant="h3" className={classes.about}>Effect Replicability Transparency</Typography>
-								<img src='/sitestatic/about/replicability-logo.png' />
-								<img src='/sitestatic/about/reproducible-code.png' className='shrunk-28'/>
-								<br/>
-								<span className="transp-text-description">Transparent new sample replications of published effects.</span>
-								<div className="popUpOnHover" >
-									<img src="/sitestatic/about/replicability-diagram-about-section.png"  className="responsive" />
-								</div>
-							</div>
-							<div className="col-md-4 center" >
-								<Typography variant="h3" className={classes.about}>Analytic Reproducibility Transparency</Typography>
-								<img src='/sitestatic/about/scatterplot.png' className='shrunk-28'/>
-								<img src='/sitestatic/about/reproducible-code.png' className='shrunk-28'/>
-								<div className="transp-text-description">Transparent analytic reproducibility and robustness re-analyses.</div>
-								<div className="transp-text-description" >Analytic Reproducibility:</div>
-								<div className="transp-text-description" >A study's primary result is reproducible by repeating the <i>same</i> statistical analyses (and data processing choices) on the data.</div>
-								<div className="transp-text-description" >Analytic Robustness:</div>
-								<div className="transp-text-description" >A study's primary result is <i>robust</i> across <i>all justifiable (alternative)</i> statistical analyses and data processing choices.</div>
-							</div>
-						</div>
+				<div style={{marginTop: 50}}>
+					<Typography variant="h3" align="center" id="people">People</Typography>
+
+					<Typography variant="h2" className={classes.boxHeader}>Main Team</Typography>
+
+					<Grid container>
+						{ this.MAIN_TEAM.map(this.render_person) }
+					</Grid>
+
+					<Typography variant="h2" className={classes.boxHeader}>Advisory Board (as of April 2019)</Typography>
+
+					<Grid container>
+						{ this.ADVISORS.map(this.render_person) }
+					</Grid>
+
 				</div>
-				<div >
-						<p >The platform allows researchers to label the transparency of their empirical research: <span >Think nutritional labels for scientific papers</span> (but much more!). This publicly recognizes researchers who take the extra effort to report their research transparently, but also maximizes the re-use, value, and impact of research (in addition to several other distinct benefits for various research stakeholders, see our <a href="http://curatescience.org/docs/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf" target="_blank">white paper's Table 1</a> for a full list of benefits).
-						<p>Practicing what we preach, the platform is developed openly, with an <a href="https://github.com/eplebel/science-commons" target="_blank">open-source code base</a>, an <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">open license</a>, and eventually an open API. For more details regarding the theoretical framework that guides the design of our platform, see our recently <a href="http://curatescience.org/docs/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf" target="_blank">published paper at <i>Advanced in Methods and Practices in Psychological Science</i> (LeBel, McCarthy, Earp, Elson, & Vanpaemel, in press</a>).
-						</p>
-						</p>
-						<p>Thanks to a 2-year grant from the European Commission (<a href="https://cordis.europa.eu/project/rcn/215183_en.html" target="_blank">Marie-Curie grant</a>), we will soon be scaling up the website to allow curation at a larger scale.
-						</p>
-
-						<Typography variant="h3" className={classes.about}><a className="offset" id="people">People</a></Typography>
-
-						<Paper className={classes.box}>
-							<Grid container>
-								<Typography variant="h2" className={classes.boxHeader}>Current Contributors</Typography>
-								<Typography variant="body1">Current contributors are helping with conceptual developments of Curate Science, writing/editing of related manuscripts, and/or with curation.</Typography>
-								{ this.CONTRIBUTORS.map(this.render_person) }
-							</Grid>
-						</Paper>
-
-						<Paper className={classes.box}>
-							<Grid container>
-								<Typography variant="h2" className={classes.boxHeader}>Current Advisory Board (as of Nov 2018)</Typography>
-								<Typography variant="body1">Advisory board members periodically provide feedback on grant proposal applications and related manuscripts and general advice regarding Curate Science's current focus areas and future directions.</Typography>
-								{ this.ADVISORS.map(this.render_person) }
-							</Grid>
-						</Paper>
-
-						<Paper className={classes.box}>
-							<Grid container>
-								<Typography variant="h2" className={classes.boxHeader}>Technical Advisors</Typography>
-								{ this.TECHNICAL_ADVISORS.map(this.render_person) }
-							</Grid>
-						</Paper>
-					</div>
-				</div>
+			</div>
 		)
 	}
 }

@@ -9,6 +9,7 @@ import TopBar from './components/TopBar.jsx';
 import Splash from './pages/Splash.jsx';
 import About from './pages/About.jsx';
 import FAQ from './pages/FAQ.jsx';
+import Newsletter from './pages/Newsletter.jsx';
 import Help from './pages/Help.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Recent from './pages/Recent.jsx';
@@ -40,7 +41,7 @@ const theme = createMuiTheme({
   palette: {
     primary: { main: '#793DF7' },
     secondary: { main: '#8F0DCC' },
-    bg: '#EEE'
+    bg: '#FFF'
   },
   typography: {
     useNextVariants: true,
@@ -48,6 +49,9 @@ const theme = createMuiTheme({
     h2: {
         marginTop: 10,
         marginBottom: 10
+    },
+    h3: {
+        marginTop: 20,
     },
     h4: {
         textTransform: 'uppercase',
@@ -92,6 +96,7 @@ class App extends React.Component {
                                 <Route exact path="/replications" component={Replications} />
                                 <Route path="/about" component={About} />
                                 <Route path="/faq" component={FAQ} />
+                                <Route path="/newsletter" component={Newsletter} />
                                 <Route path="/help" component={Help} />
                                 <Route path="/privacy" component={Privacy} />
                                 <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
