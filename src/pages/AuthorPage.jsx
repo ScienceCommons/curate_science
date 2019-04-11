@@ -7,7 +7,7 @@ import qs from 'query-string';
 import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
-import {List, Grid, Button, Icon,
+import {List, Grid, Button, Icon, IconButton,
         Popover, Snackbar} from '@material-ui/core';
 
 import AuthorEditor from '../components/AuthorEditor.jsx';
@@ -225,13 +225,19 @@ class AuthorPage extends React.Component {
     }
 
     fetch_articles() {
-        let {match, cookies} = this.props
+        let {match, cookies, location} = this.props
         let {author} = this.state
         let slug = this.slug()
         if (slug != null) {
             this.setState({articles_loading: true}, () => {
                 json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrftoken'), (res) => {
-                    this.setState({articles: res, articles_loading: false})
+                    this.setState({articles: res, articles_loading: false}, () => {
+                        // If anchor in URI, scroll here now that we have articles loaded
+                        if (location.hash != null) {
+                            window.location.hash = ''  // Need to change to ensure scroll
+                            window.location.hash = location.hash
+                        }
+                    })
                 })
             })
         }
@@ -486,14 +492,22 @@ class ArticleWithActions extends React.Component {
             borderColor: 'red',
             color: 'red'
         }
+        let article_ui_id = article.doi || article.id
         return (
-            <div key={article.id} className="ArticleWithActions">
+            <div key={article.id} className="ArticleWithActions" id={article_ui_id}>
                 <div className="Article">
                     <ArticleLI article={article}
                                admin={false}
                                onFetchedArticleDetails={this.got_article_details}
                                onFigureClick={this.show_figure} />
-               </div>
+                </div>
+                <div className="ArticleLeftActions">
+                    <span className="ActionButton">
+                        <IconButton href={`#${article_ui_id}`} size="small" style={{color: 'gray'}}>
+                            <Icon>link</Icon>
+                        </IconButton>
+                    </span>
+                </div>
                 <div className="ArticleActions">
                     <span hidden={!editable}>
                         <span className="ActionButton">

@@ -47,13 +47,28 @@ textarea {
 	left: 650px;
 }
 
-.ArticleWithActions .ArticleActions .ActionButton {
-	display: inline-block;
-	margin-bottom: 8px;
-}
-
 .ArticleWithActions:hover .ArticleActions {
 	display: block;
+}
+
+.ArticleWithActions .ArticleLeftActions {
+	display: none;
+	text-align: right;
+	position: absolute;
+	width: 100px;
+	height: 200px;
+	top: 0px;
+	padding: -25px;
+	left: -100px;
+}
+
+.ArticleWithActions:hover .ArticleLeftActions {
+	display: block;
+}
+
+.ArticleWithActions .ActionButton {
+	display: inline-block;
+	margin-bottom: 8px;
 }
 
 .ArticleCard {
@@ -163,7 +178,3 @@ textarea {
 .StaticPages a:hover, .Footer a:hover {
 	color: #2A689C;
 }
-
-/*.Footer a.DottedLinks:link, .Footer a.DottedLinks:visited, .Footer a.DottedLinks:active {
-	color: gray;
-}*/
