@@ -6,23 +6,39 @@ handlers:
 - url: /favicon.ico
   static_files: sitestatic/favicon.ico
   upload: sitestatic/favicon\.ico
+  secure: always
+  redirect_http_response_code: 301
 - url: /favicon-16x16.png
   static_files: sitestatic/favicon-16x16.png
   upload: sitestatic/favicon-16x16\.png
+  secure: always
+  redirect_http_response_code: 301
 - url: /favicon-32x32.png
   static_files: sitestatic/favicon-32x32.png
   upload: sitestatic/favicon-32x32\.png
+  secure: always
+  redirect_http_response_code: 301
 - url: /favicon-96x96.png
   static_files: sitestatic/favicon-96x96.ico
   upload: sitestatic/favicon-96x96\.ico
+  secure: always
+  redirect_http_response_code: 301
 - url: /sitestatic
   static_dir: sitestatic
+  secure: always
+  redirect_http_response_code: 301
 - url: /static
   static_dir: static
+  secure: always
+  redirect_http_response_code: 301
 - url: /dist
   static_dir: dist
+  secure: always
+  redirect_http_response_code: 301
 - url: /.*
   script: auto
+  secure: always
+  redirect_http_response_code: 301
 
 # Only pure Python libraries can be vendored
 # Python libraries that use C extensions can
