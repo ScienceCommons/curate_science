@@ -52,7 +52,7 @@ class TransparencyBadge extends React.Component {
 		}
 		let badge_icon = (
 			<img
-   			   key={i}
+   			   key={`badgeicon-${i}`}
 			   src={`/sitestatic/icons/${icon}.svg`}
 			   title={label}
 			   width={icon_size}
@@ -81,7 +81,7 @@ class TransparencyBadge extends React.Component {
 				}
 			}
 			return (
-				<MouseOverPopover target={badge_icon} key={i}>
+				<MouseOverPopover target={badge_icon} key={`mouseover-${i}`}>
 					<div style={{padding: 10}}>
 						<Typography variant="h5">{ f.label }</Typography>
 						{ subtitle }
@@ -123,9 +123,15 @@ class TransparencyBadge extends React.Component {
 				</MouseOverPopover>
 			)
 		}
-		return (
+		let badges = []
+		this.relevant_badges().forEach((b, i) => {
+			let badge_rendered = this.render_feature(b, i)
+			if (badge_rendered != null) badges.push(badge_rendered)
+		})
+		if (badges.length == 0) return null
+		else return (
 			<div>
-				<span style={{marginRight: 10}}>{ this.relevant_badges().map(this.render_feature) }</span>
+				<span style={{marginRight: 10}}>{ badges }</span>
 				{ commentary_popover }
 			</div>
 		)

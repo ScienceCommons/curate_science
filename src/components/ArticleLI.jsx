@@ -138,10 +138,11 @@ class ArticleLI extends React.Component {
 									   ])
     let show_figures = article.key_figures || []
     let rd = pick(article, ['number_of_reps', 'original_study', 'target_effects', 'original_article_url'])
+    const cc_st = {paddingBottom: 16} // Fix for .MuiCardContent-root-325:last-child adding 24px padding-bottom
 		return (
 			<div className="ArticleCard">
 				<Card className={classes.card} raised>
-					<CardContent>
+					<CardContent style={cc_st}>
 						<ArticleFullTextLinks {...content_links} />
 
 						<Typography className={classes.title} variant="h2" color="textPrimary">{article.title}</Typography>
