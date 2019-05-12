@@ -95,9 +95,9 @@ class ArticleFullTextLinks extends React.Component {
 			<div key={lt}>
 				<Typography className="ContentLink" style={{marginBottom: 4}}>
 					<span className="ContentLinkCounts">
-						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
-						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
 						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
+						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
+						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
 					</span>
 					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}{label}</a>
 				</Typography>
