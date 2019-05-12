@@ -23,13 +23,13 @@ var C = {
 		},
         {
 			id: "META_ANALYSIS",
-			label: "Renalysis - Meta-analysis",
+			label: "Reanalysis - Meta-analysis",
 			relevant_sections: ['reanalysis'],
 			description: "Article reports a (traditional) meta-analysis of a target effect/phenomenon"
 		},
         {
 			id: "META_RESEARCH",
-			label: "Renalysis - Meta-research",
+			label: "Reanalysis - Meta-research",
 			relevant_sections: ['reanalysis'],
 			description: "Article reports a reanalysis of results from previously published studies (meta-research)"
 		},
