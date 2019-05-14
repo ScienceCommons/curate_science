@@ -48,6 +48,9 @@ const styles = theme => ({
     box: {
         padding: theme.spacing.unit * 2,
     },
+    leftIcon: {
+        marginRight: theme.spacing.unit
+    },
     subtitle: {
         textAlign: 'center',
         fontSize: 14,
@@ -375,7 +378,7 @@ class AuthorPage extends React.Component {
 
                             <div id="actions" className={classes.box} hidden={!editable}>
                                 <Button variant="contained" color="secondary" onClick={this.create_new_article}>
-                                    <Icon>add</Icon>
+                                    <Icon className={classes.leftIcon}>add</Icon>
                                     Add Article
                                 </Button>
                                 <Button variant="contained"
@@ -383,11 +386,11 @@ class AuthorPage extends React.Component {
                                         aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
                                         onClick={this.open_preexisting_popper}
                                         style={{marginLeft: 10}}>
-                                    <Icon>link</Icon>
+                                    <Icon className={classes.leftIcon}>link</Icon>
                                     Link Existing Article
                                 </Button>
                                 <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
-                                    <IconButton aria-label="Info">
+                                    <IconButton aria-label="Info" style={{cursor: 'default'}} disableRipple>
                                         <Icon>info</Icon>
                                     </IconButton>
                                 </Tooltip>
