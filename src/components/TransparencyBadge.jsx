@@ -66,7 +66,8 @@ class TransparencyBadge extends React.Component {
 		} else {
 			let popover_content
 			if (repstd) {
-				let rep_std_label = find(C.REPORTING_STANDARDS_TYPES, {value: reporting_standards_type}).label
+				let rep_std_type = find(C.REPORTING_STANDARDS_TYPES, {value: reporting_standards_type})
+				let rep_std_label = rep_std_type == null ? '?' : rep_std_type.label
 				popover_content = <Typography>{ rep_std_label }</Typography>
 			} else {
 				let no_url = url == null || url.length == 0
@@ -76,7 +77,7 @@ class TransparencyBadge extends React.Component {
 				if (!no_url) popover_content = <Typography>{ source_icon }<a href={url} target="_blank">{ truncate(url, 15) } <Icon fontSize="inherit">open_in_new</Icon></a></Typography>
 				if (f.id === 'PREREG') {
 					let ppt = find(C.PREREG_PROTOCOL_TYPES, {value: prereg_protocol_type})
-					let display_label = ppt.label_detail || ppt.label || ''
+					let display_label = ppt == null ? '' : ppt.label_detail || ppt.label || ''
 					if (ppt != null) subtitle = <Typography variant="body2" style={{color: 'gray', fontStyle: 'italic'}}>{ display_label }</Typography>
 				}
 			}
