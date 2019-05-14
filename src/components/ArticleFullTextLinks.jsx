@@ -90,7 +90,7 @@ class ArticleFullTextLinks extends React.Component {
 		let link_label = LINK_LABELS[lt] || "Article"
 		let view_title = `${link_label} has been viewed ${this.number(views)} times (as of ${update_date})`
 		let dl_title = `${link_label} has been downloaded ${this.number(dls)} times (as of ${update_date})`
-		let cite_title = `${link_label} has been cited ${this.number(cites)} times (as of ${update_date})`
+		let cite_title = `${link_label} has been cited ${this.number(cites)} times (as of ${update_date}; Google Scholar)`
 		return (
 			<div key={lt}>
 				<Typography className="ContentLink" style={{marginBottom: 4}}>

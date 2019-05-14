@@ -191,7 +191,7 @@ var C = {
 			id: "REPSTD",
 			label: "Reporting Standards",
 			icon: "repstd",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'COMMENTARY', 'CONCEPTUAL'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'COMMENTARY', 'CONCEPTUAL'],
 			singular: true,
 			color: '#7ED321'
 		}

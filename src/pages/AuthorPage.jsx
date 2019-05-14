@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 import {List, Grid, Button, Icon, IconButton,
-        Popover, Snackbar} from '@material-ui/core';
+        Popover, Snackbar, Tooltip} from '@material-ui/core';
 
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
@@ -383,9 +383,14 @@ class AuthorPage extends React.Component {
                                         aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
                                         onClick={this.open_preexisting_popper}
                                         style={{marginLeft: 10}}>
-                                    <Icon>add</Icon>
-                                    Add Preexisting Article
+                                    <Icon>link</Icon>
+                                    Link Existing Article
                                 </Button>
+                                <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
+                                    <IconButton aria-label="Info">
+                                        <Icon>info</Icon>
+                                    </IconButton>
+                                </Tooltip>
                                 <Popover
                                   id="add_preexisting_popper"
                                   open={add_preexisting_open}

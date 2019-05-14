@@ -140,42 +140,48 @@ const INPUT_SPECS = {
         type: 'number',
         adornment: 'format_quote',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'pdf_downloads': {
         label: 'Downloads',
         type: 'number',
         adornment: 'cloud_download',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'preprint_downloads': {
         label: 'Downloads',
         type: 'number',
         adornment: 'cloud_download',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'pdf_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'html_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'preprint_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'author_contributions': {
         label: "Author contributions",
@@ -255,7 +261,8 @@ const INPUT_SPECS = {
     'number_of_reps': {
         label: "Number of reps",
         type: 'number',
-        fullWidth: true
+        fullWidth: true,
+        min: 0
     },
     'original_study': {
         label: "Original study",
@@ -307,9 +314,16 @@ class ArticleEditor extends React.Component {
         this.update_figures = this.update_figures.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
+        this.handle_command_s_save = this.handle_command_s_save.bind(this)
     }
 
     componentDidMount() {
+        // Set up listener for Ctrl/Command-S
+        document.addEventListener("keydown", this.handle_command_s_save, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handle_command_s_save, false);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -331,7 +345,11 @@ class ArticleEditor extends React.Component {
         }
     }
 
-    componentWillUnmount() {
+    handle_command_s_save(e) {
+        if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
+            this.save()
+            e.preventDefault();
+        }
     }
 
     show_snack(message) {
@@ -873,6 +891,7 @@ class CSTextField extends React.Component {
         if (specs.selectOnFocus) attrs.onFocus = (event) => {
             event.target.select()
         }
+        if (specs.min != null) attrs.min = specs.min
         return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={label} inlineBlock={!specs.fullWidth}>
                     <DebounceInput
                       id={id}
