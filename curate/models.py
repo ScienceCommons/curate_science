@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import pre_save
 from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
 from django.contrib.postgres.fields import JSONField
@@ -185,8 +186,18 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse('view-article', args=[str(self.id)])
 
+    def validate_doi(self):
+        DOI_PREFIX = "https://dx.doi.org/"
+        if self.doi and self.doi.startswith(DOI_PREFIX):
+            self.doi = self.doi.replace(DOI_PREFIX, "")
+            if not self.doi:
+                self.doi = None
     class Meta:
         unique_together=('title', 'year')
+
+@receiver(pre_save, sender=Article)
+def article_presave(sender, instance, *args, **kwargs):
+    instance.validate_doi()
 
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article,
