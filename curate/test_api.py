@@ -250,6 +250,21 @@ class TestAPIViews(TestCase):
         assert r.status_code == 200
         assert article.commentaries.first().authors_year == "Test"
 
+    def test_doi_validation_in_article_update(self):
+        self.client.login(email='new_user@curatescience.org', password='password1')
+        article=models.Article.objects.first()
+        TEST_DOI = '500'
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        r = self.client.patch(
+            url, {
+                "id": article.id,
+                "doi": "https://dx.doi.org/%s" % TEST_DOI
+            },
+            content_type="application/json")
+        d = json.loads(r.content.decode('utf-8'))
+        updated_doi = d.get('doi')
+        assert updated_doi == TEST_DOI
+
     # Delete Articles
     def test_anon_cannot_delete_article_api(self):
         self.client=Client()
