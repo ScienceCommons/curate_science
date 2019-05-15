@@ -253,10 +253,12 @@ def update_article(request, pk):
         serializer = ArticleSerializerNested(queryset, data=request.data, partial=is_partial)
         if serializer.is_valid():
             serializer.save()
+            response_data = serializer.data
             result_status=status.HTTP_200_OK
         else:
+            response_data = serializer.errors
             result_status=status.HTTP_400_BAD_REQUEST
-        return Response(serializer.errors, status=result_status)
+        return Response(response_data, status=result_status)
     else:
         serializer = ArticleSerializerNested(instance=queryset)
         return Response(serializer.data)

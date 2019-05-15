@@ -364,7 +364,7 @@ class AuthorPage extends React.Component {
                                     <Button variant="contained" color="secondary"
                                             className={classes.authorEditButton}
                                             onClick={this.open_author_editor}>
-                                        <Icon>edit</Icon>
+                                        <Icon className={classes.leftIcon}>edit</Icon>
                                         Edit
                                     </Button>
                                 </span>
@@ -416,7 +416,7 @@ class AuthorPage extends React.Component {
                         </div>
 
                         <div className={classes.articleList}>
-                            { this.sorted_visible_articles().map(a => <ArticleWithActions key={a.id}
+                            { this.sorted_visible_articles().map(a => <StyledArticleWithActions key={a.id}
                                                     article={a}
                                                     editable={editable}
                                                     onEdit={this.handle_edit}
@@ -520,13 +520,13 @@ class ArticleWithActions extends React.Component {
                     <span hidden={!editable}>
                         <span className="ActionButton">
                             <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
-                                <Icon>edit</Icon>
+                                <Icon className={classes.leftIcon}>edit</Icon>
                                 Edit
                             </Button>
                         </span>
                         <span className="ActionButton">
                             <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
-                                <Icon>link_off</Icon>
+                                <Icon className={classes.leftIcon}>link_off</Icon>
                                 Unlink
                             </Button>
                         </span>
@@ -534,7 +534,7 @@ class ArticleWithActions extends React.Component {
                     <span hidden={!admin}>
                         <span className="ActionButton">
                             <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
-                                <Icon color="inherit">delete</Icon>
+                                <Icon color="inherit" className={classes.leftIcon}>delete</Icon>
                                 Delete
                             </Button>
                         </span>
@@ -548,5 +548,7 @@ class ArticleWithActions extends React.Component {
 ArticleWithActions.defaultProps = {
     editable: false
 }
+
+const StyledArticleWithActions = withStyles(styles)(ArticleWithActions)
 
 export default withRouter(withCookies(withStyles(styles)(AuthorPage)));

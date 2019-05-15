@@ -192,6 +192,7 @@ class Article(models.Model):
             self.doi = self.doi.replace(DOI_PREFIX, "")
             if not self.doi:
                 self.doi = None
+
     class Meta:
         unique_together=('title', 'year')
 
