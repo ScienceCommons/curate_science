@@ -4,6 +4,7 @@ from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
 from django.contrib.postgres.fields import JSONField
 from autoslug import AutoSlugField
+import re
 import os
 from io import BytesIO
 from django.db import models
@@ -187,11 +188,9 @@ class Article(models.Model):
         return reverse('view-article', args=[str(self.id)])
 
     def validate_doi(self):
-        DOI_PREFIX = "https://dx.doi.org/"
-        if self.doi and self.doi.startswith(DOI_PREFIX):
-            self.doi = self.doi.replace(DOI_PREFIX, "")
-            if not self.doi:
-                self.doi = None
+        # Strip leading doi.org domain (various forms), if included
+        if self.doi:
+            self.doi = re.sub(r'http[s]?:\/\/[^.]*[.]?doi.org\/', '', self.doi)
 
     class Meta:
         unique_together=('title', 'year')

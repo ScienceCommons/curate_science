@@ -258,7 +258,7 @@ class TestAPIViews(TestCase):
         r = self.client.patch(
             url, {
                 "id": article.id,
-                "doi": "https://dx.doi.org/%s" % TEST_DOI
+                "doi": "http://dx.doi.org/%s" % TEST_DOI
             },
             content_type="application/json")
         d = json.loads(r.content.decode('utf-8'))
