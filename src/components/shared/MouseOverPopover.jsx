@@ -42,6 +42,7 @@ class MouseOverPopover extends React.Component {
       <span>
         <Tooltip
           interactive
+          placement="top"
           classes={{ tooltip: classes.tooltip, popper: classes.popper }}
           PopperProps={popperProps}
           title={content_fragment}>
