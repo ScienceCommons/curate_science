@@ -14,6 +14,9 @@ const styles = theme => ({
   popper: {
     opacity: 1.0
   },
+  tooltipPlacementTop: {
+    margin: '2px 0'
+  },
   contentDiv: {
 
   }
@@ -38,12 +41,17 @@ class MouseOverPopover extends React.Component {
         </div>
       </React.Fragment>
     )
+    const cls = {
+      tooltip: classes.tooltip,
+      popper: classes.popper,
+      tooltipPlacementTop: classes.tooltipPlacementTop
+    }
     return (
       <span>
         <Tooltip
           interactive
           placement="top"
-          classes={{ tooltip: classes.tooltip, popper: classes.popper }}
+          classes={cls}
           PopperProps={popperProps}
           title={content_fragment}>
         { target }
