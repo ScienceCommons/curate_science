@@ -187,17 +187,8 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse('view-article', args=[str(self.id)])
 
-    def validate_doi(self):
-        # Strip leading doi.org domain (various forms), if included
-        if self.doi:
-            self.doi = re.sub(r'http[s]?:\/\/[^.]*[.]?doi.org\/', '', self.doi)
-
     class Meta:
         unique_together=('title', 'year')
-
-@receiver(pre_save, sender=Article)
-def article_presave(sender, instance, *args, **kwargs):
-    instance.validate_doi()
 
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article,
