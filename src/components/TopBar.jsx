@@ -32,11 +32,9 @@ const styles = theme => ({
         fontSize: 10
     },
     appBar: {
-        background: 'white',
-        boxShadow: 'none',
+        background: 'linear-gradient(0deg, #333 70%, #555 100%)',
     },
     toolbar: {
-        background: 'linear-gradient(0deg, #333 70%, #555 100%)',
         boxShadow: 'none',
         height: TOPBAR_HEIGHT,
         minHeight: TOPBAR_HEIGHT,

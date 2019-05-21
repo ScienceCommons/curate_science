@@ -43,7 +43,7 @@ const styles = theme => ({
         padding: 8
     },
     dialogRoot: {
-        width: C.COL_WIDTH + 'px'
+        width: C.DIALOG_WIDTH + 'px'
     },
     formControl: {
         minWidth: 200
