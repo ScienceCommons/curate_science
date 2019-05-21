@@ -86,9 +86,10 @@ class ArticleSerializerNested(WritableNestedModelSerializer):
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
 
     def validate_doi(self, value):
-        value = re.sub(r'http[s]?:\/\/[^.]*[.]?doi.org\/', '', value)
-        if len(Article.objects.filter(doi=value)) > 0:
-            raise serializers.ValidationError("DOI must be unique.")
+        if value:
+            value = re.sub(r'http[s]?:\/\/[^.]*[.]?doi.org\/', '', value)
+            if len(Article.objects.filter(doi=value)) > 0:
+                raise serializers.ValidationError("DOI must be unique.")
         return value
 
     class Meta:
