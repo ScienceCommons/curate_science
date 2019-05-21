@@ -214,6 +214,24 @@ class TestAPIViews(TestCase):
             content_type="application/json")
         assert r.status_code == 200
 
+    def test_authenticated_user_can_edit_article_empty_doi(self):
+        self.client.login(email='new_user@curatescience.org', password='password1')
+        article=models.Article.objects.first()
+        user = User.objects.get(email='new_user@curatescience.org')
+        article.authors.add(user.author)
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        r = self.client.patch(
+            url, {
+                "id": article.id,
+                "doi": "",
+                "html_url": "http://www.curatescience.org/"
+            },
+            content_type="application/json")
+        d = json.loads(r.content.decode('utf-8'))
+        updated_doi = d.get('doi')
+        assert r.status_code == 200
+        assert bool(updated_doi) == False
+
     def test_anonymous_user_cannot_edit_article_api(self):
         self.client=Client()
         article=models.Article.objects.first()
