@@ -28,6 +28,12 @@ textarea {
 	min-height: 600px;
 }
 
+.CenteredContent {
+	display: block;
+	margin: 0 auto;
+	max-width: 650px;
+}
+
 .ArticleWithActions {
 	position: relative;
 }

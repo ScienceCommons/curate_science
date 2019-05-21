@@ -31,6 +31,25 @@ const styles = theme => ({
         color: 'white',
         fontSize: 10
     },
+    appBar: {
+        background: 'white',
+        boxShadow: 'none',
+    },
+    toolbar: {
+        background: 'linear-gradient(0deg, #333 70%, #555 100%)',
+        boxShadow: 'none',
+        height: TOPBAR_HEIGHT,
+        minHeight: TOPBAR_HEIGHT,
+        width: C.COL_WIDTH + 'px',
+    },
+    centeredCol: {
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        width: C.COL_WIDTH + 'px',
+        height: TOPBAR_HEIGHT,
+        margin: '0px auto'
+    },
     sitelogo: {
         height: 20,
         verticalAlign: 'middle',
@@ -45,16 +64,6 @@ const styles = theme => ({
     },
     topLink: {
         color: 'white',
-    },
-    topBar: {
-        background: 'linear-gradient(0deg, #333 70%, #555 100%)',
-        boxShadow: 'none',
-        height: TOPBAR_HEIGHT,
-        minHeight: TOPBAR_HEIGHT
-    },
-    toolbar: {
-        height: TOPBAR_HEIGHT,
-        minHeight: TOPBAR_HEIGHT
     },
     grow: {
         flexGrow: 1,
@@ -197,53 +206,55 @@ class TopBar extends React.Component {
         ]
         return (
             <div className={classes.root}>
-                <AppBar position="static" className={classes.topBar}>
-                    <Toolbar className={classes.toolbar}>
-                        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
-                            <MenuIcon />
-                        </IconButton>
-                        <a href="/app" id="sitename" className={classes.sitename}>
-                            <Typography variant="h6" color="inherit">
-                              <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME}
-                            </Typography>
-                        </a>
+                <AppBar position="static" className={classes.appBar}>
+                    <div className={classes.centeredCol}>
+                        <Toolbar className={classes.toolbar} disableGutters>
+                            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
+                                <MenuIcon />
+                            </IconButton>
+                            <a href="/app" id="sitename" className={classes.sitename}>
+                                <Typography variant="h6" color="inherit">
+                                  <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME}
+                                </Typography>
+                            </a>
 
-                        <div className={classes.grow} key="grow" />
+                            <div className={classes.grow} key="grow" />
 
-                        <div className={classes.rightSide} key="right">
+                            <div className={classes.rightSide} key="right">
 
-                            <Link to="/help"><Button variant="text" className={classes.topLink}>Help</Button></Link>
+                                <Link to="/help"><Button variant="text" className={classes.topLink}>Help</Button></Link>
 
-                            {user_session.authenticated ? (
-                            <span>
-                                <IconButton
-                                    aria-owns={this.menuOpen('account') ? 'menu-account' : undefined}
-                                    aria-haspopup="true"
-                                    onClick={this.handleMenu('account')}
-                                    color="inherit"
+                                {user_session.authenticated ? (
+                                <span>
+                                    <IconButton
+                                        aria-owns={this.menuOpen('account') ? 'menu-account' : undefined}
+                                        aria-haspopup="true"
+                                        onClick={this.handleMenu('account')}
+                                        color="inherit"
+                                      >
+                                        <AccountCircle />
+                                  </IconButton>
+                                  <Menu
+                                    id="menu-account"
+                                    anchorEl={anchors.account}
+                                    anchorOrigin={{
+                                      vertical: 'top',
+                                      horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                      vertical: 'top',
+                                      horizontal: 'right',
+                                    }}
+                                    open={this.menuOpen('account')}
+                                    onClose={this.handleClose('account')}
                                   >
-                                    <AccountCircle />
-                              </IconButton>
-                              <Menu
-                                id="menu-account"
-                                anchorEl={anchors.account}
-                                anchorOrigin={{
-                                  vertical: 'top',
-                                  horizontal: 'right',
-                                }}
-                                transformOrigin={{
-                                  vertical: 'top',
-                                  horizontal: 'right',
-                                }}
-                                open={this.menuOpen('account')}
-                                onClose={this.handleClose('account')}
-                              >
-                                { user_dropdown_menu }
-                              </Menu>
-                            </span>
-                          ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login to Curate</Button></a>}
-                        </div>
-                    </Toolbar>
+                                    { user_dropdown_menu }
+                                  </Menu>
+                                </span>
+                              ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login to Curate</Button></a>}
+                            </div>
+                        </Toolbar>
+                    </div>
                 </AppBar>
                 <Drawer open={drawerOpen} onClose={this.toggleDrawer(false)}>
                   <div

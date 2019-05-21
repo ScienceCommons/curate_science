@@ -35,7 +35,7 @@ const styles = theme => ({
         flexGrow: 1
     },
     cardColumn: {
-        width: '650px'
+        maxWidth: C.CARD_COL_WIDTH + 'px'
     },
     articleList: {
         marginTop: '10px'
@@ -356,7 +356,7 @@ class AuthorPage extends React.Component {
         )
 		return (
             <div className={classes.root}>
-    			<Grid container justify="center" spacing={24} className="AuthorPage">
+    			<Grid container justify="center" className="AuthorPage">
                     <Grid item>
                         <div className={classes.cardColumn}>
                             <div style={{position: 'relative'}}>

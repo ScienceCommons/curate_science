@@ -42,6 +42,9 @@ const styles = theme => ({
     content: {
         padding: 8
     },
+    dialogRoot: {
+        width: C.COL_WIDTH + 'px'
+    },
     formControl: {
         minWidth: 200
     },
@@ -636,7 +639,7 @@ class ArticleEditor extends React.Component {
                     </Grid>
                     <Grid item xs={3}>
                         { this.render_field('year') }
-                        { this.render_field('in_press') }
+                        &nbsp;{ this.render_field('in_press') }
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
@@ -820,9 +823,10 @@ class ArticleEditor extends React.Component {
                 <Dialog open={open}
                         onClose={this.maybe_confirm_close}
                         TransitionComponent={Transition}
-                        fullScreen
+                        maxWidth='lg'
+                        classes={{paperWidthLg: classes.dialogRoot}}
                         aria-labelledby="edit-article">
-                    <AppBar className={classes.appBar}>
+                    <AppBar className={classes.appBar} position='fixed'>
                         <Toolbar>
                             <IconButton color="inherit" onClick={this.maybe_confirm_close} aria-label="Close">
                                <Icon>close</Icon>

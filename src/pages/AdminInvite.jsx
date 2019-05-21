@@ -98,68 +98,66 @@ class AdminInvite extends React.Component {
 		let {snack_message, form} = this.state
 		return (
 			<div>
-				<Grid container justify="center">
-					<Grid item xs={6}>
+				<div className="CenteredContent">
 
-						<Typography variant="h2">Invite Users</Typography>
+					<Typography variant="h2">Invite Users</Typography>
 
-						<Paper style={{padding: 10}}>
+					<Paper style={{padding: 10}}>
 
-				          	<FormControlLabel value='with_author_page' control={<Radio value='with_author_page' checked={form.invite_type === 'with_author_page'} onChange={this.check_change} />} label={<span>Invite user with an existing author page</span>} />
+			          	<FormControlLabel value='with_author_page' control={<Radio value='with_author_page' checked={form.invite_type === 'with_author_page'} onChange={this.check_change} />} label={<span>Invite user with an existing author page</span>} />
 
-							<TextField name="email" key="email1" label="Email"
-									   placeholder="Email" type="email"
-									   fullWidth autoComplete="off"
-									   className={classes.textfield}
-									   onChange={this.handle_change}
-									   variant="outlined"
-									   required
-									   disabled={form.invite_type != 'with_author_page'}
-									   value={form.email||''}/>
+						<TextField name="email" key="email1" label="Email"
+								   placeholder="Email" type="email"
+								   fullWidth autoComplete="off"
+								   className={classes.textfield}
+								   onChange={this.handle_change}
+								   variant="outlined"
+								   required
+								   disabled={form.invite_type != 'with_author_page'}
+								   value={form.email||''}/>
 
-							<TextField name="username" key="username" label="Username / Author page URL"
-									   placeholder="Username / Author page URL" type="text"
-									   fullWidth autoComplete="off"
-									   className={classes.textfield}
-									   onChange={this.handle_change}
-									   variant="outlined"
-									   required
-									   disabled={form.invite_type != 'with_author_page'}
-									   value={form.username||''}/>
+						<TextField name="username" key="username" label="Username / Author page URL"
+								   placeholder="Username / Author page URL" type="text"
+								   fullWidth autoComplete="off"
+								   className={classes.textfield}
+								   onChange={this.handle_change}
+								   variant="outlined"
+								   required
+								   disabled={form.invite_type != 'with_author_page'}
+								   value={form.username||''}/>
 
-							<Or/>
+						<Or/>
 
-							<FormControlLabel value='without_author_page' control={<Radio value='without_author_page' checked={form.invite_type === 'without_author_page'} onChange={this.check_change} />} label={<span>Invite user without activating author page</span>} />
+						<FormControlLabel value='without_author_page' control={<Radio value='without_author_page' checked={form.invite_type === 'without_author_page'} onChange={this.check_change} />} label={<span>Invite user without activating author page</span>} />
 
-							<TextField name="email" key="email2" label="Email"
-									   placeholder="Email" type="email"
-									   fullWidth autoComplete="off"
-									   className={classes.textfield}
-									   onChange={this.handle_change}
-									   variant="outlined"
-									   required
-									   disabled={form.invite_type != 'without_author_page'}
-									   value={form.email||''}/>
+						<TextField name="email" key="email2" label="Email"
+								   placeholder="Email" type="email"
+								   fullWidth autoComplete="off"
+								   className={classes.textfield}
+								   onChange={this.handle_change}
+								   variant="outlined"
+								   required
+								   disabled={form.invite_type != 'without_author_page'}
+								   value={form.email||''}/>
 
-							<TextField name="name" key="name" label="Full name"
-									   placeholder="Full name" type="text"
-									   fullWidth autoComplete="off"
-									   className={classes.textfield}
-									   onChange={this.handle_change}
-									   variant="outlined"
-									   required
-									   disabled={form.invite_type != 'without_author_page'}
-									   value={form.name||''}/>
+						<TextField name="name" key="name" label="Full name"
+								   placeholder="Full name" type="text"
+								   fullWidth autoComplete="off"
+								   className={classes.textfield}
+								   onChange={this.handle_change}
+								   variant="outlined"
+								   required
+								   disabled={form.invite_type != 'without_author_page'}
+								   value={form.name||''}/>
 
-					        <br/>
+				        <br/>
 
-					        <div align="center">
-								<Button variant="contained" color='primary' style={{marginTop: 15}} onClick={this.invite}>Send Invite</Button>
-							</div>
+				        <div align="center">
+							<Button variant="contained" color='primary' style={{marginTop: 15}} onClick={this.invite}>Send Invite</Button>
+						</div>
 
-						</Paper>
-					</Grid>
-				</Grid>
+					</Paper>
+				</div>
 
 				<Snackbar
 		          anchorOrigin={{

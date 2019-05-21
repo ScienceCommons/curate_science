@@ -1,6 +1,8 @@
 var C = {
 	SITENAME: "Curate Science",
 	PLACEHOLDER_TITLE_PREFIX: "PHTITLE:",
+	COL_WIDTH: 1100,
+	CARD_COL_WIDTH: 650,
 	ARTICLE_TYPES: [
         {
 			id: "ORIGINAL",

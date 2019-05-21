@@ -114,43 +114,37 @@ class AdminManage extends React.Component {
 		let {articles, edit_article_modal_open,
             editing_article_id} = this.state
 		return (
-            <div className={classes.root}>
-                <Grid container justify="center">
+            <div className="CenteredContent">
+                <Typography variant="h2">Manage articles (admin only)</Typography>
 
-                    <Grid item xs={8}>
-                        <Typography variant="h2">Manage articles (admin only)</Typography>
+                <Typography variant="subtitle1">
+                    Admins can manage all articles below, or create new ones.
+                </Typography>
 
-                        <Typography variant="subtitle1">
-                            Admins can manage all articles below, or create new ones.
-                        </Typography>
+                <br/>
 
-                        <br/>
+                <Paper style={{marginTop: 15}}>
+        			<List>
+                        { articles.map((a) => {
+                            let title = a.title
+                            if (!a.is_live) title = `[NOT LIVE] ${title}`
+                            return (
+                                <ListItem button key={a.id} onClick={this.handle_edit.bind(this, a)}>
+                                    <ListItemText primary={title} secondary={a.author_list} />
+                                    <ListItemSecondaryAction>
+                                        <IconButton aria-label="Delete" onClick={this.handle_delete.bind(this, a)}>
+                                            <Icon>delete</Icon>
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            )
+                        })}
+                    </List>
+                </Paper>
 
-                        <Paper style={{marginTop: 15}}>
-                			<List>
-                                { articles.map((a) => {
-                                    let title = a.title
-                                    if (!a.is_live) title = `[NOT LIVE] ${title}`
-                                    return (
-                                        <ListItem button key={a.id} onClick={this.handle_edit.bind(this, a)}>
-                                            <ListItemText primary={title} secondary={a.author_list} />
-                                            <ListItemSecondaryAction>
-                                                <IconButton aria-label="Delete" onClick={this.handle_delete.bind(this, a)}>
-                                                    <Icon>delete</Icon>
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                    )
-                                })}
-                            </List>
-                        </Paper>
-
-
-                    </Grid>
-                    <Grid item xs={8} justifyContent="center">
-                        <Fab color="primary" variant="round" className={classes.fab} onClick={this.create_new_article}><Icon>add</Icon></Fab>
-                    </Grid>
-                </Grid>
+                <div align="right">
+                    <Fab color="primary" variant="round" className={classes.fab} onClick={this.create_new_article}><Icon>add</Icon></Fab>
+                </div>
 
                 <ArticleEditor
                     article_id={editing_article_id}
