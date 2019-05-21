@@ -88,7 +88,7 @@ class ArticleSerializerNested(WritableNestedModelSerializer):
     def validate_doi(self, value):
         if value:
             value = re.sub(r'http[s]?:\/\/[^.]*[.]?doi.org\/', '', value)
-            if len(Article.objects.filter(doi=value)) > 0:
+            if len(Article.objects.filter(doi=value).exclude(id=self.initial_data.get('id'))) > 0:
                 raise serializers.ValidationError("DOI must be unique.")
         return value
 
