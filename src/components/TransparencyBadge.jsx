@@ -10,15 +10,10 @@ import MouseOverPopover from '../components/shared/MouseOverPopover.jsx';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import {Icon, Typography, Popover, Menu} from '@material-ui/core';
+import {Icon, Typography, Menu} from '@material-ui/core';
 
 const styles = theme => ({
-  popover: {
-    pointerEvents: 'none',
-  },
-  paper: {
-    padding: theme.spacing.unit,
-  },
+
 })
 
 class TransparencyBadge extends React.Component {

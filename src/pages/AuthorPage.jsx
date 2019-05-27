@@ -361,7 +361,7 @@ class AuthorPage extends React.Component {
                         <div className={classes.cardColumn}>
                             <div style={{position: 'relative'}}>
                                 <span hidden={!editable}>
-                                    <Button variant="contained" color="secondary"
+                                    <Button variant="outlined" color="secondary"
                                             className={classes.authorEditButton}
                                             onClick={this.open_author_editor}>
                                         <Icon className={classes.leftIcon}>edit</Icon>
@@ -381,7 +381,7 @@ class AuthorPage extends React.Component {
                                     <Icon className={classes.leftIcon}>add</Icon>
                                     Add Article
                                 </Button>
-                                <Button variant="contained"
+                                <Button variant="outlined"
                                         color="secondary"
                                         aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
                                         onClick={this.open_preexisting_popper}

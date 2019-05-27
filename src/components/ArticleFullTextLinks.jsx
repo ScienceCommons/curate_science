@@ -111,7 +111,7 @@ class ArticleFullTextLinks extends React.Component {
 			let link = this.render_link(lt)
 			if (link != null) links.push(link)
 		})
-		return <div className="ArticleFullTextLinks">{ links }</div>
+		return <div className="ArticleFullTextLinks" style={{marginTop: 2}}>{ links }</div>
 	}
 }
 

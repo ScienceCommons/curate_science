@@ -9,6 +9,7 @@ const CLOSE_DELAY = 1000
 const styles = theme => ({
   tooltip: {
     backgroundColor: 'white',
+    color: 'black',
     boxShadow: theme.shadows[1]
   },
   popper: {
@@ -52,6 +53,7 @@ class MouseOverPopover extends React.Component {
           interactive
           placement="top"
           classes={cls}
+          leaveDelay={20000}
           PopperProps={popperProps}
           title={content_fragment}>
         { target }
