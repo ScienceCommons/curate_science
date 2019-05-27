@@ -53,7 +53,6 @@ class MouseOverPopover extends React.Component {
           interactive
           placement="top"
           classes={cls}
-          leaveDelay={20000}
           PopperProps={popperProps}
           title={content_fragment}>
         { target }
