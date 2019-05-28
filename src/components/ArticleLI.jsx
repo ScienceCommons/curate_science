@@ -70,12 +70,16 @@ const styles = {
     marginRight: 4
   },
   moreIconHolder: {
-  	justifyContent: 'center',
-  	textAlign: 'center',
+    position: 'relative',
+    height: 36,
     marginTop: '-15px',
-    marginBottom: '-5px'
+    marginBottom: '5px'
   },
   moreIconButton: {
+    display: 'block',
+    position: 'absolute',
+    left: '50%',
+    marginLeft: '-18px',
     padding: 6
   },
   moreIcon: {
