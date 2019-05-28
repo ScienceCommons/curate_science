@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Link } from "react-router-dom";
-
 import {Typography, Grid} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import C from '../constants/constants';
 
 const style = {
 	footer: {
@@ -13,6 +13,10 @@ const style = {
 		textAlign: 'center',
 		backgroundColor: 'whitesmoke',
 		paddingTop: 30,
+		margin: '0 auto'
+	},
+	footerContent: {
+		width: C.COL_WIDTH + 'px',
 		margin: '0 auto'
 	},
 	bottomText: {
@@ -32,7 +36,7 @@ class Footer extends React.Component {
 		return (
 			<div className={classes.footer + " Footer"}>
 
-				<Grid container>
+				<Grid container className={classes.footerContent}>
 					<Grid item xs={4}>
 						<b>Current Funders</b>
 						<br/>

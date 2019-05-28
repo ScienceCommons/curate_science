@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 import {List, Grid, Button, Icon, IconButton,
-        Popover, Snackbar} from '@material-ui/core';
+        Popover, Snackbar, Tooltip} from '@material-ui/core';
 
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
@@ -35,7 +35,7 @@ const styles = theme => ({
         flexGrow: 1
     },
     cardColumn: {
-        width: '650px'
+        maxWidth: C.CARD_COL_WIDTH + 'px'
     },
     articleList: {
         marginTop: '10px'
@@ -47,6 +47,9 @@ const styles = theme => ({
     },
     box: {
         padding: theme.spacing.unit * 2,
+    },
+    leftIcon: {
+        marginRight: theme.spacing.unit
     },
     subtitle: {
         textAlign: 'center',
@@ -353,15 +356,15 @@ class AuthorPage extends React.Component {
         )
 		return (
             <div className={classes.root}>
-    			<Grid container justify="center" spacing={24} className="AuthorPage">
+    			<Grid container justify="center" className="AuthorPage">
                     <Grid item>
                         <div className={classes.cardColumn}>
                             <div style={{position: 'relative'}}>
                                 <span hidden={!editable}>
-                                    <Button variant="contained" color="secondary"
+                                    <Button variant="outlined" color="secondary"
                                             className={classes.authorEditButton}
                                             onClick={this.open_author_editor}>
-                                        <Icon>edit</Icon>
+                                        <Icon className={classes.leftIcon}>edit</Icon>
                                         Edit
                                     </Button>
                                 </span>
@@ -375,17 +378,22 @@ class AuthorPage extends React.Component {
 
                             <div id="actions" className={classes.box} hidden={!editable}>
                                 <Button variant="contained" color="secondary" onClick={this.create_new_article}>
-                                    <Icon>add</Icon>
+                                    <Icon className={classes.leftIcon}>add</Icon>
                                     Add Article
                                 </Button>
-                                <Button variant="contained"
+                                <Button variant="outlined"
                                         color="secondary"
                                         aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
                                         onClick={this.open_preexisting_popper}
                                         style={{marginLeft: 10}}>
-                                    <Icon>add</Icon>
-                                    Add Preexisting Article
+                                    <Icon className={classes.leftIcon}>link</Icon>
+                                    Link Existing Article
                                 </Button>
+                                <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
+                                    <IconButton aria-label="Info" style={{cursor: 'default'}} disableRipple>
+                                        <Icon>info</Icon>
+                                    </IconButton>
+                                </Tooltip>
                                 <Popover
                                   id="add_preexisting_popper"
                                   open={add_preexisting_open}
@@ -408,7 +416,7 @@ class AuthorPage extends React.Component {
                         </div>
 
                         <div className={classes.articleList}>
-                            { this.sorted_visible_articles().map(a => <ArticleWithActions key={a.id}
+                            { this.sorted_visible_articles().map(a => <StyledArticleWithActions key={a.id}
                                                     article={a}
                                                     editable={editable}
                                                     onEdit={this.handle_edit}
@@ -512,13 +520,13 @@ class ArticleWithActions extends React.Component {
                     <span hidden={!editable}>
                         <span className="ActionButton">
                             <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
-                                <Icon>edit</Icon>
+                                <Icon className={classes.leftIcon}>edit</Icon>
                                 Edit
                             </Button>
                         </span>
                         <span className="ActionButton">
                             <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
-                                <Icon>link_off</Icon>
+                                <Icon className={classes.leftIcon}>link_off</Icon>
                                 Unlink
                             </Button>
                         </span>
@@ -526,7 +534,7 @@ class ArticleWithActions extends React.Component {
                     <span hidden={!admin}>
                         <span className="ActionButton">
                             <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
-                                <Icon color="inherit">delete</Icon>
+                                <Icon color="inherit" className={classes.leftIcon}>delete</Icon>
                                 Delete
                             </Button>
                         </span>
@@ -540,5 +548,7 @@ class ArticleWithActions extends React.Component {
 ArticleWithActions.defaultProps = {
     editable: false
 }
+
+const StyledArticleWithActions = withStyles(styles)(ArticleWithActions)
 
 export default withRouter(withCookies(withStyles(styles)(AuthorPage)));

@@ -12,6 +12,7 @@ from curate.models import (
     Commentary,
     KeyFigure,
 )
+import re
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -83,6 +84,13 @@ class ArticleSerializerNested(WritableNestedModelSerializer):
     key_figures = KeyFigureSerializer(many=True, required=False, allow_null=True)
     commentaries = CommentarySerializer(many=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+
+    def validate_doi(self, value):
+        if value:
+            value = re.sub(r'http[s]?:\/\/[^.]*[.]?doi.org\/', '', value)
+            if len(Article.objects.filter(doi=value).exclude(id=self.initial_data.get('id'))) > 0:
+                raise serializers.ValidationError("DOI must be unique.")
+        return value
 
     class Meta:
         model=Article

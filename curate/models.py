@@ -1,8 +1,10 @@
 from django.db import models
+from django.db.models.signals import pre_save
 from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
 from django.contrib.postgres.fields import JSONField
 from autoslug import AutoSlugField
+import re
 import os
 from io import BytesIO
 from django.db import models

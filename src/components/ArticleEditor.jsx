@@ -42,6 +42,9 @@ const styles = theme => ({
     content: {
         padding: 8
     },
+    dialogRoot: {
+        width: C.DIALOG_WIDTH + 'px'
+    },
     formControl: {
         minWidth: 200
     },
@@ -140,42 +143,48 @@ const INPUT_SPECS = {
         type: 'number',
         adornment: 'format_quote',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'pdf_downloads': {
         label: 'Downloads',
         type: 'number',
         adornment: 'cloud_download',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'preprint_downloads': {
         label: 'Downloads',
         type: 'number',
         adornment: 'cloud_download',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'pdf_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'html_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'preprint_views': {
         label: 'Views',
         type: 'number',
         adornment: 'remove_red_eye',
         fullWidth: true,
-        zero_empty_str: true
+        zero_empty_str: true,
+        min: 0
     },
     'author_contributions': {
         label: "Author contributions",
@@ -255,7 +264,8 @@ const INPUT_SPECS = {
     'number_of_reps': {
         label: "Number of reps",
         type: 'number',
-        fullWidth: true
+        fullWidth: true,
+        min: 0
     },
     'original_study': {
         label: "Original study",
@@ -307,9 +317,16 @@ class ArticleEditor extends React.Component {
         this.update_figures = this.update_figures.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
+        this.handle_command_s_save = this.handle_command_s_save.bind(this)
     }
 
     componentDidMount() {
+        // Set up listener for Ctrl/Command-S
+        document.addEventListener("keydown", this.handle_command_s_save, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handle_command_s_save, false);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -331,7 +348,11 @@ class ArticleEditor extends React.Component {
         }
     }
 
-    componentWillUnmount() {
+    handle_command_s_save(e) {
+        if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
+            this.save()
+            e.preventDefault();
+        }
     }
 
     show_snack(message) {
@@ -467,6 +488,7 @@ class ArticleEditor extends React.Component {
                 }
             })
             json_api_req('PATCH', `/api/articles/${pk}/update/`, data, cookies.get('csrftoken'), (res) => {
+                data = res
                 data.key_figures = key_figures // Re-add to update figures in article list
                 data.updated = new Date().toISOString()
                 // Set update date to now
@@ -617,7 +639,7 @@ class ArticleEditor extends React.Component {
                     </Grid>
                     <Grid item xs={3}>
                         { this.render_field('year') }
-                        { this.render_field('in_press') }
+                        &nbsp;{ this.render_field('in_press') }
                     </Grid>
                 </Grid>
                 <Grid container spacing={8}>
@@ -801,9 +823,10 @@ class ArticleEditor extends React.Component {
                 <Dialog open={open}
                         onClose={this.maybe_confirm_close}
                         TransitionComponent={Transition}
-                        fullScreen
+                        maxWidth='lg'
+                        classes={{paperWidthLg: classes.dialogRoot}}
                         aria-labelledby="edit-article">
-                    <AppBar className={classes.appBar}>
+                    <AppBar className={classes.appBar} position='fixed'>
                         <Toolbar>
                             <IconButton color="inherit" onClick={this.maybe_confirm_close} aria-label="Close">
                                <Icon>close</Icon>
@@ -873,6 +896,7 @@ class CSTextField extends React.Component {
         if (specs.selectOnFocus) attrs.onFocus = (event) => {
             event.target.select()
         }
+        if (specs.min != null) attrs.min = specs.min
         return <LabeledBox bgcolor="#FFF" fontSize='0.55rem' label={label} inlineBlock={!specs.fullWidth}>
                     <DebounceInput
                       id={id}

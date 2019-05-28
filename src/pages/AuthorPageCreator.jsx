@@ -106,61 +106,59 @@ class AuthorPageCreator extends React.Component {
 		let {form, snack_message} = this.state
 		let title = "Create Author Page"
 		return (
-			<div>
-				<Grid container justify="center">
-					<Grid item xs={6}>
+			<div className="CenteredContent">
 
-						<Typography variant="h2">{title}</Typography>
+				<Typography variant="h2">{title}</Typography>
 
-						<Paper style={{padding: 10}}>
+				<Paper style={{padding: 10}}>
 
-				          	<div>
-					        	<FormControlLabel value='new' control={<Radio value='new' checked={form.create_type === 'new'} onChange={this.check_change} />} label="New user" />
-								<TextField label="Full Name"
-									placeholder="Full Name"
-									name="name"
-									value={form.name || ''}
-									fullWidth
-									variant="outlined"
-									disabled={form.create_type != 'new'}
-									onChange={this.handle_change} /><br/>
-					        </div>
+		          	<div>
+			        	<FormControlLabel value='new' control={<Radio value='new' checked={form.create_type === 'new'} onChange={this.check_change} />} label="New user" />
+						<TextField label="Full Name"
+							placeholder="Full Name"
+							name="name"
+							value={form.name || ''}
+							fullWidth
+							variant="outlined"
+							disabled={form.create_type != 'new'}
+							onChange={this.handle_change} /><br/>
+			        </div>
 
-							<div>
+					<div>
 
-								<Or />
+						<Or />
 
-						        <FormControlLabel value='existing' control={<Radio value='existing' checked={form.create_type === 'existing'} onChange={this.check_change} />} label="Pre-existing user" />
+				        <FormControlLabel value='existing' control={<Radio value='existing' checked={form.create_type === 'existing'} onChange={this.check_change} />} label="Pre-existing user" />
 
-								<TextField label="Username"
-									placeholder="Username"
-									name="username"
-									value={form.username || ''}
-									fullWidth
-									variant="outlined"
-									disabled={form.create_type != 'existing'}
-									onChange={this.handle_change} /><br/>
-							</div>
+						<TextField label="Username"
+							placeholder="Username"
+							name="username"
+							value={form.username || ''}
+							fullWidth
+							variant="outlined"
+							disabled={form.create_type != 'existing'}
+							onChange={this.handle_change} /><br/>
+					</div>
 
 
-					        <br/>
+			        <br/>
 
-					        <div align="center">
-								<Button variant="contained" color="primary" style={{marginTop: 10}} onClick={this.submit}>Create</Button>
-							</div>
-						</Paper>
-					</Grid>
-					<Snackbar
-			          anchorOrigin={{
-			            vertical: 'bottom',
-			            horizontal: 'left',
-			          }}
-			          open={snack_message != null}
-			          autoHideDuration={3000}
-			          onClose={this.close_snack}
-			          message={snack_message}
-			        />
-				</Grid>
+			        <div align="center">
+						<Button variant="contained" color="primary" style={{marginTop: 10}} onClick={this.submit}>Create</Button>
+					</div>
+				</Paper>
+
+				<Snackbar
+		          anchorOrigin={{
+		            vertical: 'bottom',
+		            horizontal: 'left',
+		          }}
+		          open={snack_message != null}
+		          autoHideDuration={3000}
+		          onClose={this.close_snack}
+		          message={snack_message}
+		        />
+
 			</div>
 		)
 	}

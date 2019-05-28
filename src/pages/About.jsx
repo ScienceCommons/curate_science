@@ -69,12 +69,13 @@ class About extends React.Component {
 	        	image: "/sitestatic/people/vanpaemel_o.jpg",
 	        	name: "Wolf Vanpaemel",
 	        	affiliation: "KU Leuven",
-	        	title: "Conceptual/Funding Advisor"
+	        	title: "Conceptual Advisor"
 	        },
 	        {
 	        	url: "https://psychology.msu.edu/people/graduate-student/morri640",
 	        	image: "/sitestatic/people/morrison_o.jpg",
 	        	name: "Mike Morrison",
+	        	affiliation: "Michigan State University",
 	        	title: "Technical Advisor"
 	        },
 	        {
@@ -194,6 +195,12 @@ class About extends React.Component {
 	        	image: "/sitestatic/people/brandt_o.jpg",
 	        	name: "Mark Brandt",
 	        	affiliation: "Tilburg University",
+	        },
+	        {
+	        	url: "http://shiffrin.cogs.indiana.edu/",
+	        	image: "/sitestatic/people/shiffrin_o.jpg",
+	        	name: "Richard Shiffrin",
+	        	affiliation: "Indiana University"
 	        }
         ]
     }

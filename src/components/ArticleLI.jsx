@@ -32,11 +32,14 @@ const styles = {
     minWidth: 275,
     marginBottom: '9px'
   },
+  cardContent: {
+    padding: 12
+  },
   title: {
     fontSize: 18,
     lineHeight: '20px',
     fontWeight: 400,
-    paddingTop: 2,
+    paddingTop: 0,
     marginTop: 0,
     marginBottom: 3
   },
@@ -67,8 +70,17 @@ const styles = {
     marginRight: 4
   },
   moreIconHolder: {
-  	justifyContent: 'center',
-  	textAlign: 'center'
+    position: 'relative',
+    height: 36,
+    marginTop: '-15px',
+    marginBottom: '5px'
+  },
+  moreIconButton: {
+    display: 'block',
+    position: 'absolute',
+    left: '50%',
+    marginLeft: '-24px', // Icon width 36/2 + 6px padding = 24
+    padding: 6
   },
   moreIcon: {
     fontSizeLarge: 32
@@ -138,10 +150,11 @@ class ArticleLI extends React.Component {
 									   ])
     let show_figures = article.key_figures || []
     let rd = pick(article, ['number_of_reps', 'original_study', 'target_effects', 'original_article_url'])
+    const CC_ST = {paddingBottom: 12} // Fix for .MuiCardContent-root-325:last-child adding 24px padding-bottom
 		return (
 			<div className="ArticleCard">
 				<Card className={classes.card} raised>
-					<CardContent>
+					<CardContent className={classes.cardContent} style={CC_ST}>
 						<ArticleFullTextLinks {...content_links} />
 
 						<Typography className={classes.title} variant="h2" color="textPrimary">{article.title}</Typography>
@@ -158,7 +171,7 @@ class ArticleLI extends React.Component {
             <TransparencyBadge {...transparency_data} />
 
 		  			<div className={classes.moreIconHolder}>
-			  			<IconButton onClick={this.toggle_show_more} >
+			  			<IconButton onClick={this.toggle_show_more} className={classes.moreIconButton}>
 			  				<Icon className={classes.moreIcon} fontSize="large">{show_more ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
 		  				</IconButton>
 	  				</div>

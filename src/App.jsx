@@ -67,10 +67,14 @@ const theme = createMuiTheme({
         sizeLarge: {
            padding: 20
         }
+    },
+    MuiTooltip: {
+        tooltip: {
+            fontSize: 13
+        }
     }
   }
 });
-
 
 class App extends React.Component {
     constructor(props) {
