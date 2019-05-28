@@ -79,7 +79,7 @@ const styles = {
     display: 'block',
     position: 'absolute',
     left: '50%',
-    marginLeft: '-18px',
+    marginLeft: '-24px', // Icon width 36/2 + 6px padding = 24
     padding: 6
   },
   moreIcon: {
