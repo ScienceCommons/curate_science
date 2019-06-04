@@ -49,6 +49,7 @@ const styles = {
   	color: "#009933",
   	marginTop: 3,
   	marginBottom: 3,
+    lineHeight: 1.24
   },
   abstract: {
   	lineHeight: 1.2,

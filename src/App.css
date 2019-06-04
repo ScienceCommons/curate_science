@@ -98,7 +98,7 @@ textarea {
 	border-radius: 3px;
 	margin-bottom: 5px;
 	opacity: 0.4;
-	padding: 2px 7px;
+	padding: 1px 4px;
 }
 
 .ArticleType .Count {
@@ -116,12 +116,13 @@ textarea {
 	display: inline-block;
 	border-radius: 3px;
 	opacity: 0.4;
-	padding: 2px 7px;
+	padding: 1px 4px;
 	color: #444;
 	border: 1px solid #444;
 	font-size: .75rem;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 	vertical-align: top;
+	line-height: 1.5em;
 	margin-top: 5px;
 }
 
@@ -135,17 +136,19 @@ textarea {
 }
 
 .ArticleFullTextLinks {
-/*	width: 20%;
-	min-width: 200px;
-*/
+	margin-top: 0px;
+	margin-right: -4px;
 	text-align: right;
 	float: right;
 }
 
 .ArticleContentLink {
 	display: inline-block;
-	border-radius: 3px;
-	padding: 2px 7px;
+	padding: 2px 4px;
+}
+
+.ArticleContentLink .LinkLabel {
+	padding: 0 4px;
 }
 
 .ArticleKeyword {
