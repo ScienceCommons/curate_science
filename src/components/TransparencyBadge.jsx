@@ -42,7 +42,7 @@ class TransparencyBadge extends React.Component {
 		let label = ''
 		let icon = f.icon
 		if (!enabled) {
-			label = `${f.label} not available`
+			label = `${f.label_long} is not (yet) available`
 			icon += "_dis"
 		}
 		let badge_icon = (
@@ -109,7 +109,7 @@ class TransparencyBadge extends React.Component {
 		let {commentaries} = this.props
 		let commentary_el, commentary_popover
 		if (commentaries.length > 0) {
-			commentary_el = <span className="ArticleCommentaryBadge">Commentaries <span className="Count">{ commentaries.length }</span></span>
+			commentary_el = <span className="ArticleBadgeWithCount ArticleCommentaryBadge">Commentaries <span className="Count">{ commentaries.length }</span></span>
 			commentary_popover = (
 				<MouseOverPopover target={commentary_el} key='commentary'>
 					<div style={{padding: 10}}>

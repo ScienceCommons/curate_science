@@ -136,23 +136,28 @@ var C = {
 			items: [
 				{
 					id: 'preregplus',
-					label: "Preregistration"
+					label: "Preregistration",
+					label_long: "Preregistration information"
 				},
 				{
 					id: 'materials',
-					label: "Open Study Materials"
+					label: "Open Study Materials",
+					label_long: "Open/public study materials information"
 				},
 				{
 					id: 'data',
-					label: "Open Data"
+					label: "Open Data",
+					label_long: "Open/public data information"
 				},
 				{
 					id: 'code',
-					label: "Open Code"
+					label: "Open Code",
+					label_long: "Open/public code information"
 				},
 				{
 					id: 'repstd',
-					label: "Reporting Standards"
+					label: "Reporting Standards",
+					label_long: "Reporting standards compliance information"
 				}
 			]
 		}
