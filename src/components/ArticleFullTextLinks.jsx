@@ -43,7 +43,8 @@ const COUNT_ICON_ST = {
 
 const CITE_COUNT_ICON_ST = {
 	fontSize: '18px',
-	verticalAlign: -5
+	verticalAlign: -5,
+	marginRight: '-3px'
 }
 
 class ArticleFullTextLinks extends React.Component {

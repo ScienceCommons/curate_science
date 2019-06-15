@@ -77,95 +77,11 @@ var C = {
 			label: "Exact"
 		}
 	],
-	FILTERS: [
-		{
-			category: 'area',
-			label: "Research area",
-			type: 'radio',
-			items: [
-				{
-					id: "social_science",
-					label: "Social Sciences"
-				},
-				{
-					id: "medical_life",
-					label: "Medical/Life Sciences"
-				},
-				{
-					id: "all",
-					label: "All"
-				}
-			]
-		},
-		{
-			category: 'content_type',
-			label: "Content type",
-			items: [
-				{
-					id: 'REPLICATION',
-					icon: '',
-					label: "Replications"
-				},
-				{
-					id: 'COLLECTION',
-					icon: '',
-					label: "Collections of replications",
-					disabled: true
-				},
-				{
-					id: 'REPRODUCIBILITY',
-					icon: '',
-					label: "Renalyses - Reproducibility/Robustness"
-				},
-				{
-					id: 'META_ANALYSIS',
-					icon: '',
-					label: "Renalyses - Meta-analyses (traditional)"
-				},
-				{
-					id: 'ORIGINAL',
-					icon: '',
-					label: "Original Research"
-				}
-			]
-		},
-		// Sync with TRANSPARENCY_BADGES & transparency data model
-		{
-			category: 'transparency',
-			label: "Transparency",
-			items: [
-				{
-					id: 'preregplus',
-					label: "Preregistration",
-					label_long: "Preregistration information"
-				},
-				{
-					id: 'materials',
-					label: "Open Study Materials",
-					label_long: "Open/public study materials information"
-				},
-				{
-					id: 'data',
-					label: "Open Data",
-					label_long: "Open/public data information"
-				},
-				{
-					id: 'code',
-					label: "Open Code",
-					label_long: "Open/public code information"
-				},
-				{
-					id: 'repstd',
-					label: "Reporting Standards",
-					label_long: "Reporting standards compliance information"
-				}
-			]
-		}
-	],
 	TRANSPARENCY_BADGES: [
 		{
 			id: "PREREG",
 			label: "Preregistration",
+			label_long: "Preregistration information",
 			icon: "preregplus",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#C60018',
@@ -174,6 +90,7 @@ var C = {
 		{
 			id: "MATERIALS",
 			label: "Public Materials",
+			label_long: "Open/public study materials information",
 			icon: "materials",
 			article_types: ['ORIGINAL', 'REPLICATION', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#F5A623',
@@ -182,6 +99,7 @@ var C = {
 		{
 			id: "DATA",
 			label: "Public Data",
+			label_long: "Open/public data information",
 			icon: "data",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#2D96E8',
@@ -190,6 +108,7 @@ var C = {
 		{
 			id: "CODE",
 			label: "Public Code",
+			label_long: "Open/public code information",
 			icon: "code",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#50E3C2',
@@ -198,6 +117,7 @@ var C = {
 		{
 			id: "REPSTD",
 			label: "Reporting Standards",
+			label_long: "Reporting standards compliance information",
 			icon: "repstd",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'COMMENTARY', 'CONCEPTUAL'],
 			singular: true,

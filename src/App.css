@@ -94,6 +94,7 @@ textarea {
 }
 
 .ArticleBadgeWithCount {
+	box-sizing: border-box;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 	font-size: .75rem;
 	display: inline-block;
@@ -112,11 +113,15 @@ textarea {
 	box-sizing: border-box;
 	background: white;
 	color: black;
-	font-size: .45rem;
+	font-size: .55rem;
 	padding: 0px 2px;
 	margin: 0 0 0 5px;
 	border: 1px solid #BBB;
 	vertical-align: 1.75px;
+}
+
+.ArticleBadgeWithCount.ArticleType {
+	margin-top: 2px;
 }
 
 .ArticleCommentaryBadge {
