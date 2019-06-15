@@ -16,7 +16,14 @@ class JournalDOIBadge extends React.Component {
 		let {journal, doi, classes} = this.props
 		let url = `https://dx.doi.org/${doi}`
 		let name = journal || ""
-		let link = (doi != null && doi.length > 0) ? <a href={url} className={classes.doi} target="_blank">{ doi } <Icon fontSize="inherit">open_in_new</Icon></a> : null
+		const doi_icon = <img
+   			   key={`doi-icon`}
+			   src={`/sitestatic/icons/doi.svg`}
+			   width={16}
+			   height={16}
+			   style={{verticalAlign: 'bottom', marginLeft: '3px', opacity: 0.2}}
+			   type="image/svg+xml" />
+		let link = (doi != null && doi.length > 0) ? <a href={url} className={classes.doi} title="Go to journal publisher's website (opens in new window)" target="_blank">{ doi_icon }</a> : null
 		return <span><span className="JournalBadge-Journal">{ name }</span> {link}</span>
 	}
 }

@@ -26,8 +26,10 @@ const COLORS = {
 }
 
 const SOURCE_ICON_ST = {
-	marginRight: 4
+	marginRight: '0px',
+	verticalAlign: 'middle'
 }
+
 const COUNT_ST = {
 	fontSize: 12,
 	color: '#BCBCBC',
@@ -37,6 +39,12 @@ const COUNT_ST = {
 const COUNT_ICON_ST = {
 	fontSize: '13px',
 	verticalAlign: -2
+}
+
+const CITE_COUNT_ICON_ST = {
+	fontSize: '18px',
+	verticalAlign: -5,
+	marginRight: '-3px'
 }
 
 class ArticleFullTextLinks extends React.Component {
@@ -69,13 +77,15 @@ class ArticleFullTextLinks extends React.Component {
 	render_link(lt) {
 		let {updated} = this.props
 		let color = COLORS[lt] || '#444444'
-		let label = lt.toUpperCase()
+		let label = lt.toLowerCase()
 		const st = {
 			marginLeft: 5,
 			color: color,
-			border: `1px solid ${color}`,
 			display: 'inline',
 			fontSize: 16
+		}
+		const LINK_ICON = {
+			marginBottom: '-2px'
 		}
 		let url = this.props[`${lt}_url`]
 		let views = this.props[`${lt}_views`]
@@ -95,11 +105,11 @@ class ArticleFullTextLinks extends React.Component {
 			<div key={lt}>
 				<Typography className="ContentLink" style={{marginBottom: 4}}>
 					<span className="ContentLinkCounts">
-						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
+						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={CITE_COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
 						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
 						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
 					</span>
-					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}{label}</a>
+					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}<span className="LinkLabel">{label}</span><Icon fontSize="inherit" style={LINK_ICON}>open_in_new</Icon></a>
 				</Typography>
 			</div>
 		)
@@ -111,7 +121,7 @@ class ArticleFullTextLinks extends React.Component {
 			let link = this.render_link(lt)
 			if (link != null) links.push(link)
 		})
-		return <div className="ArticleFullTextLinks" style={{marginTop: 2}}>{ links }</div>
+		return <div className="ArticleFullTextLinks">{ links }</div>
 	}
 }
 

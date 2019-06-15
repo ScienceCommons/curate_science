@@ -93,59 +93,60 @@ textarea {
 	opacity: 1.0;
 }
 
-.ArticleType {
+.ArticleBadgeWithCount {
+	box-sizing: border-box;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	font-size: .75rem;
 	display: inline-block;
 	border-radius: 3px;
 	margin-bottom: 5px;
+	margin-top: 5px;
+	margin-right: 5px;
+	vertical-align: top;
+	line-height: 1.5em;
 	opacity: 0.4;
-	padding: 2px 7px;
+	padding: 1px 4px;
 }
 
-.ArticleType .Count {
+.ArticleBadgeWithCount .Count {
 	border-radius: 3px;
+	box-sizing: border-box;
 	background: white;
-	border: 1px solid #BBB;
 	color: black;
 	font-size: .55rem;
-	padding: 1px 2px;
-	margin-left: 5px;
+	padding: 0px 2px;
+	margin: 0 0 0 5px;
+	border: 1px solid #BBB;
+	vertical-align: 1.75px;
+}
+
+.ArticleBadgeWithCount.ArticleType {
+	margin-top: 2px;
 }
 
 .ArticleCommentaryBadge {
 	background-color: white;
-	display: inline-block;
-	border-radius: 3px;
-	opacity: 0.4;
-	padding: 2px 7px;
 	color: #444;
 	border: 1px solid #444;
-	font-size: .75rem;
-	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-	vertical-align: top;
-	margin-top: 5px;
 }
 
 .ArticleCommentaryBadge .Count {
-	border-radius: 3px;
-	background: white;
-	color: black;
-	font-size: .55rem;
-	padding: 1px 2px;
-	border: 1px solid #444;
 }
 
 .ArticleFullTextLinks {
-/*	width: 20%;
-	min-width: 200px;
-*/
+	margin-top: 0px;
+	margin-right: -4px;
 	text-align: right;
 	float: right;
 }
 
 .ArticleContentLink {
 	display: inline-block;
-	border-radius: 3px;
-	padding: 2px 7px;
+	padding: 2px 4px;
+}
+
+.ArticleContentLink .LinkLabel {
+	padding: 0 4px;
 }
 
 .ArticleKeyword {

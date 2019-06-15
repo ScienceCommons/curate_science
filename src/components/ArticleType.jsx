@@ -24,8 +24,8 @@ class ArticleType extends React.Component {
 			count = <span className="Count">{replication_data.number_of_reps}</span>
 		}
 		let type_label = (
-			<span className="ArticleType" style={st} title={at.description}>
-				<Typography color="inherit">{ label }{ count }</Typography>
+			<span className="ArticleBadgeWithCount ArticleType" style={st} title={at.description}>
+				{ label }{ count }
 			</span>
 		)
 		if (type == 'REPLICATION') {
@@ -51,11 +51,9 @@ class ArticleType extends React.Component {
 		const st = {
 			color: rr_color,
 			border: `1px solid ${rr_color}`,
-			opacity: 1.0,
-			marginLeft: 5
 		}
 		if (registered_report) rr = (
-			<span className="ArticleType" style={st}>
+			<span className="ArticleBadgeWithCount ArticleType" style={st}>
 				<Typography color="inherit">Registered Report</Typography>
 			</span>
 		)

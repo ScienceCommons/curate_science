@@ -49,6 +49,7 @@ const styles = {
   	color: "#009933",
   	marginTop: 3,
   	marginBottom: 3,
+    lineHeight: 1.24
   },
   abstract: {
   	lineHeight: 1.2,
@@ -177,7 +178,7 @@ class ArticleLI extends React.Component {
 	  				</div>
 
 	  				<div id="details" hidden={!show_more}>
-	  					<Typography className={classes.abstract}><TruncatedText text={article.abstract} fontSize={12} /></Typography>
+	  					<Typography className={classes.abstract}><TruncatedText text={article.abstract} maxLength={540} fontSize={12} /></Typography>
 	  					<ArticleKeywords keywords={article.keywords} />
 	  					<FigureList figures={show_figures} onFigureClick={this.handle_figure_click} />
 	  					<div hidden={this.empty(article.author_contributions)}>
