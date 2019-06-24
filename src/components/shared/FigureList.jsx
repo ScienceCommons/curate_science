@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Loader from './Loader.jsx';
+
 import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 	FormControl, Select, OutlinedInput, InputBase, Tooltip} from '@material-ui/core';
 
@@ -70,18 +72,20 @@ class FigureList extends React.Component {
     }
 
 	render() {
-		let {classes, figures, showAdd} = this.props
-        let addButton
+		let {classes, figures, showAdd, loading} = this.props
+        let addButton, spinner
         if (figures == null) figures = []
         if (showAdd) addButton = <a href="javascript:void(0)" onClick={this.handle_add} className={classes.thumbnail}>
             <span className={classes.add}>
                 <Icon fontSize='large'>add</Icon> <Typography>Add</Typography>
             </span>
         </a>
+        if (loading) spinner = <Loader size="25" />
 		return (
 			<div className={classes.container}>
 				{ figures.map(this.render_thumbnail) }
                 { addButton }
+                { spinner }
             </div>
         )
 	}
@@ -90,13 +94,15 @@ class FigureList extends React.Component {
 FigureList.propTypes = {
     onDelete: PropTypes.func,
     showDelete: PropTypes.bool,
-    showAdd: PropTypes.bool
+    showAdd: PropTypes.bool,
+    loading: PropTypes.bool
 }
 
 FigureList.defaultProps = {
 	figures: [],
     showDelete: false,
-    showAdd: false
+    showAdd: false,
+    loading: false
 };
 
 export default withStyles(styles)(FigureList);

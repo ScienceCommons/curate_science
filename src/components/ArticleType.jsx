@@ -32,7 +32,7 @@ class ArticleType extends React.Component {
 			return (
 				<MouseOverPopover target={type_label} key='rep_popover'>
 					<div style={{padding: 10}}>
-						<Typography variant="body1">Article reports { replication_data.number_of_reps } replications of <a href={replication_data.original_article_url} target="_blank">{ replication_data.original_study }</a> (target effects: { replication_data.target_effects }).</Typography>
+						<Typography variant="body1">Article reports { replication_data.number_of_reps } replications of <a href={replication_data.original_article_url} target="_blank">{ replication_data.original_study }</a> <em>{ replication_data.target_effects || "" }</em></Typography>
 						<Typography variant="body2" style={{marginTop: 15, color: "#808080"}}>
 							A replication is a study that uses a methodology that is
 							'close' or 'very close' to a previous study (see <a href="/sitestatic/legacy/logos/replication-taxonomy-v4_small.png" target="_blank">replication taxonomy</a> for details).

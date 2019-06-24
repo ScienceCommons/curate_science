@@ -270,7 +270,7 @@ const INPUT_SPECS = {
     'original_study': {
         label: "Original study",
         type: 'text',
-        placeholder: 'e.g., SS Smith et al. (1989) Study 2',
+        placeholder: 'e.g., Smith (2000) Study 2',
         fullWidth: true
     },
     'target_effects': {
@@ -350,8 +350,11 @@ class ArticleEditor extends React.Component {
 
     handle_command_s_save(e) {
         if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
-            this.save()
-            e.preventDefault();
+            let {open} = this.props
+            if (open) {
+                this.save()
+                e.preventDefault();
+            }
         }
     }
 
@@ -625,8 +628,7 @@ class ArticleEditor extends React.Component {
         let replication = form.article_type == 'REPLICATION'
         let visible_transparencies = this.get_relevant_transparency_badges()
         let dialog_title = form.is_live ? "Edit Article" : "New Article"
-        if (loading) return <Loader />
-        if (article_id != null) content = (
+        if (!loading && article_id != null) content = (
             <div className={classes.content}>
                 <Grid container spacing={8}>
                     <Grid item xs={9}>
@@ -834,9 +836,11 @@ class ArticleEditor extends React.Component {
                             <Typography variant="h6" color="inherit" className={classes.flex}>
                                 { dialog_title }
                             </Typography>
+                            { loading ? <Loader /> :
                             <Button color="inherit" onClick={this.save}>
                                 save
                             </Button>
+                            }
                         </Toolbar>
                     </AppBar>
 

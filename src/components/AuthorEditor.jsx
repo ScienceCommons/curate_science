@@ -66,6 +66,7 @@ class AuthorEditor extends React.Component {
         this.handle_change = this.handle_change.bind(this)
         this.save = this.save.bind(this)
         this.onUnload = this.onUnload.bind(this)
+        this.handle_command_s_save = this.handle_command_s_save.bind(this)
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -81,10 +82,13 @@ class AuthorEditor extends React.Component {
 
     componentDidMount() {
         window.addEventListener("beforeunload", this.onUnload)
+                // Set up listener for Ctrl/Command-S
+        document.addEventListener("keydown", this.handle_command_s_save, false);
     }
 
     componentWillUnmount() {
         window.removeEventListener("beforeunload", this.onUnload)
+        document.removeEventListener("keydown", this.handle_command_s_save, false);
     }
 
     onUnload(e) {
@@ -95,6 +99,16 @@ class AuthorEditor extends React.Component {
             confirmationMessage = "Your changes may not be saved"  // Doesn't show on modern browsers
             (e || window.event).returnValue = confirmationMessage;
             return confirmationMessage;
+        }
+    }
+
+    handle_command_s_save(e) {
+        if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))      {
+            let {open} = this.props
+            if (open) {
+                this.save()
+                e.preventDefault();
+            }
         }
     }
 

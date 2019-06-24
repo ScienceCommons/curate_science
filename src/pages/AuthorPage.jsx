@@ -416,6 +416,7 @@ class AuthorPage extends React.Component {
                         </div>
 
                         <div className={classes.articleList}>
+                            { articles_loading ? <Loader /> : null }
                             { this.sorted_visible_articles().map(a => <StyledArticleWithActions key={a.id}
                                                     article={a}
                                                     editable={editable}
@@ -425,7 +426,6 @@ class AuthorPage extends React.Component {
                                                     onFigureClick={this.show_figure}
                                                     onFetchedArticleDetails={this.got_article_details}
                                                     admin={user_session.admin} />) }
-                            { articles_loading ? <Loader /> : null }
                         </div>
                     </Grid>
     			</Grid>

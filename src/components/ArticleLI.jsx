@@ -74,14 +74,16 @@ const styles = {
     position: 'relative',
     height: 36,
     marginTop: '-15px',
-    marginBottom: '5px'
+    marginBottom: '5px',
+    pointerEvents: 'none' // Prevent interference with transparency popups
   },
   moreIconButton: {
     display: 'block',
     position: 'absolute',
     left: '50%',
     marginLeft: '-24px', // Icon width 36/2 + 6px padding = 24
-    padding: 6
+    padding: 6,
+    pointerEvents: 'auto'
   },
   moreIcon: {
     fontSizeLarge: 32
@@ -93,6 +95,7 @@ class ArticleLI extends React.Component {
         super(props);
         this.state = {
         	show_more: false,
+          loading: false
         };
 
         this.toggle_show_more = this.toggle_show_more.bind(this)
@@ -114,14 +117,17 @@ class ArticleLI extends React.Component {
     	let {article} = this.props
     	let {figures, commentaries} = this.state
     	console.log("Fetching article details...")
-    	json_api_req('GET', `/api/articles/${article.id}/`, {}, null, (res) => {
-    		if (res.key_figures != null) figures = res.key_figures
-    		if (res.commentaries != null) commentaries = res.commentaries
-    		console.log(res)
-        this.props.onFetchedArticleDetails(article.id, figures, commentaries)
-    	}, (err) => {
-
-    	})
+      this.setState({loading: true}, () => {
+        json_api_req('GET', `/api/articles/${article.id}/`, {}, null, (res) => {
+          if (res.key_figures != null) figures = res.key_figures
+          if (res.commentaries != null) commentaries = res.commentaries
+          console.log(res)
+          this.props.onFetchedArticleDetails(article.id, figures, commentaries)
+          this.setState({loading: false})
+        }, (err) => {
+          this.setState({loading: false})
+        })
+      })
     }
 
     handle_figure_click(figures, idx) {
@@ -133,7 +139,7 @@ class ArticleLI extends React.Component {
     }
 
 	render() {
-		let {show_more} = this.state
+		let {show_more, loading} = this.state
     let { article, classes } = this.props;
     let content_links = pick(article, ['pdf_url', 'pdf_downloads', 'pdf_citations', 'pdf_views',
 	       						   'html_url', 'html_views',
@@ -180,7 +186,7 @@ class ArticleLI extends React.Component {
 	  				<div id="details" hidden={!show_more}>
 	  					<Typography className={classes.abstract}><TruncatedText text={article.abstract} maxLength={540} fontSize={12} /></Typography>
 	  					<ArticleKeywords keywords={article.keywords} />
-	  					<FigureList figures={show_figures} onFigureClick={this.handle_figure_click} />
+	  					<FigureList figures={show_figures} loading={loading} onFigureClick={this.handle_figure_click} />
 	  					<div hidden={this.empty(article.author_contributions)}>
 		  					<Typography component="span">
 		  						<span className={classes.grayedTitle}>Author contributions:</span>
