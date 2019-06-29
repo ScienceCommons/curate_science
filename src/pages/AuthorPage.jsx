@@ -75,6 +75,7 @@ class AuthorPage extends React.Component {
             author: null,
             articles: [],
             articles_loading: false,
+            loading: false,
             edit_author_modal_open: false,
             edit_article_modal_open: false,
             editing_article_id: null,
@@ -151,13 +152,16 @@ class AuthorPage extends React.Component {
             commentaries: [],
             is_live: false
         }
-        json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
-            articles.unshift(res) // Add object to array, though will initially not render since is_live=false
-            this.setState({articles: articles}, () => {
-                this.handle_edit(res)
+        this.setState({loading: true}, () => {
+            json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
+                articles.unshift(res) // Add object to array, though will initially not render since is_live=false
+                this.setState({articles: articles}, () => {
+                    this.handle_edit(res)
+                })
+            }, (err) => {
+                console.error(err)
+                this.setState({loading: false})
             })
-        }, (err) => {
-            console.error(err)
         })
     }
 
@@ -174,7 +178,7 @@ class AuthorPage extends React.Component {
     }
 
     handle_edit(a) {
-        this.setState({editing_article_id: a.id, edit_article_modal_open: true})
+        this.setState({editing_article_id: a.id, edit_article_modal_open: true, loading: false})
     }
 
     update_linkage(a, linked) {
@@ -329,7 +333,7 @@ class AuthorPage extends React.Component {
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
             view_figure_thumb, view_figure_full, articles_loading, gallery_showing,
-            gallery_images, gallery_index, snack_message} = this.state
+            gallery_images, gallery_index, snack_message, loading} = this.state
         if (author == null) return <Loader />
         else if (!author.is_activated) return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
         let article_ids = articles.map((a) => a.id)
@@ -377,7 +381,7 @@ class AuthorPage extends React.Component {
                             </div>
 
                             <div id="actions" className={classes.box} hidden={!editable}>
-                                <Button variant="contained" color="secondary" onClick={this.create_new_article}>
+                                <Button variant="contained" color="secondary" onClick={this.create_new_article} disabled={loading}>
                                     <Icon className={classes.leftIcon}>add</Icon>
                                     Add Article
                                 </Button>

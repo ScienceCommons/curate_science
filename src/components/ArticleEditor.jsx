@@ -40,7 +40,8 @@ const styles = theme => ({
         flex: 1
     },
     content: {
-        padding: 8
+        padding: 8,
+        minHeight: 300
     },
     dialogRoot: {
         width: C.DIALOG_WIDTH + 'px'
@@ -624,12 +625,12 @@ class ArticleEditor extends React.Component {
 	render() {
         let {classes, article_id, open} = this.props
         let {form, snack_message, loading} = this.state
-        let content
+        let content = <Loader />
         let replication = form.article_type == 'REPLICATION'
         let visible_transparencies = this.get_relevant_transparency_badges()
         let dialog_title = form.is_live ? "Edit Article" : "New Article"
         if (!loading && article_id != null) content = (
-            <div className={classes.content}>
+            <div>
                 <Grid container spacing={8}>
                     <Grid item xs={9}>
                         { this.render_field('title') }
@@ -836,18 +837,18 @@ class ArticleEditor extends React.Component {
                             <Typography variant="h6" color="inherit" className={classes.flex}>
                                 { dialog_title }
                             </Typography>
-                            { loading ? <Loader /> :
-                            <Button color="inherit" onClick={this.save}>
+                            <Button color="inherit" onClick={this.save} disabled={loading}>
                                 save
                             </Button>
-                            }
                         </Toolbar>
                     </AppBar>
 
+                    <DialogContent className={classes.content}>
                     { content }
+                    </DialogContent>
 
                     <DialogActions>
-                        <Button variant="contained" color="primary" onClick={this.save}>save</Button>
+                        <Button variant="contained" color="primary" onClick={this.save} disabled={loading}>save</Button>
                         <Button variant="text" onClick={this.maybe_confirm_close}>cancel</Button>
                     </DialogActions>
                 </Dialog>
