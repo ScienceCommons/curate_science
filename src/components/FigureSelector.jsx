@@ -6,6 +6,7 @@ import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 	FormControl, Select, OutlinedInput, InputBase, RadioGroup, FormControlLabel,
     Radio, FormGroup, Paper} from '@material-ui/core';
 
+import Loader from './shared/Loader.jsx';
 import FigureList from './shared/FigureList.jsx';
 
 import {simple_api_req} from '../util/util.jsx'
@@ -31,7 +32,7 @@ class FigureSelector extends React.Component {
         this.state = {
             form: initialForm(),
             creator_showing: false,
-            adding: false
+            loading: false
         };
 
         this.do_upload = this.do_upload.bind(this)
@@ -69,7 +70,7 @@ class FigureSelector extends React.Component {
         // Upload figure
         let {form} = this.state
         let {figures, article_id, cookies} = this.props
-        this.setState({adding: true}, () => {
+        this.setState({loading: true}, () => {
             let formData  = new FormData();
             formData.append('file', form.file);
             fetch(`/api/articles/${article_id}/key_figures/upload/`, {
@@ -84,9 +85,10 @@ class FigureSelector extends React.Component {
                         figures.push(data)
                         if (this.props.onChange != null) this.props.onChange(figures)
                         this.fileInput.value = ""
-                        this.setState({form: initialForm(), creator_showing: false, adding: false})
+                        this.setState({form: initialForm(), creator_showing: false, loading: false})
                     })
                 } else {
+                    this.setState({loading: false})
                     console.error(r)
                 }
             })
@@ -96,11 +98,16 @@ class FigureSelector extends React.Component {
     handle_delete(idx) {
     	let {figures, cookies} = this.props
         let pk = figures[idx].id
-        simple_api_req('DELETE', `/api/key_figures/${pk}/delete/`, null, cookies.get('csrftoken'), (res) => {
-            figures.splice(idx, 1)
-            if (this.props.onChange != null) this.props.onChange(figures)
-        }, (err) => {
-            console.error(err)
+        this.setState({loading: true}, () => {
+            simple_api_req('DELETE', `/api/key_figures/${pk}/delete/`, null, cookies.get('csrftoken'), (res) => {
+                figures.splice(idx, 1)
+                this.setState({loading: false}, () => {
+                    if (this.props.onChange != null) this.props.onChange(figures)
+                })
+            }, (err) => {
+                this.setState({loading: false})
+                console.error(err)
+            })
         })
     }
 
@@ -112,7 +119,13 @@ class FigureSelector extends React.Component {
 
 	render() {
 		let {classes, figures} = this.props
-        let {form, creator_showing, adding} = this.state
+        let {form, creator_showing, loading} = this.state
+        let loader
+        let CREATOR_ST = {padding: 10, margin: 10}
+        if (loading) {
+            loader = <Loader />
+            CREATOR_ST.opacity = 0.5
+        }
 		return (
 			<div>
 				<FigureList
@@ -124,7 +137,7 @@ class FigureSelector extends React.Component {
                     onAdd={this.show_creator} />
 
                 <div hidden={!creator_showing}>
-                    <Paper style={{padding: 10, margin: 10}} elevation={3}>
+                    <Paper style={CREATOR_ST} elevation={3}>
                         <Typography variant="overline">Add a figure...</Typography>
                         <Grid container spacing={8}>
                             <Grid item xs={12}>
@@ -138,7 +151,8 @@ class FigureSelector extends React.Component {
                             </Grid>
                         </Grid>
 
-                        <Button onClick={this.hide_creator}>Cancel</Button>
+                        { loader }
+                        <Button onClick={this.hide_creator} disabled={loading}>Cancel</Button>
                     </Paper>
                 </div>
             </div>
