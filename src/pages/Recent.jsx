@@ -1,30 +1,49 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
+import Grid from '@material-ui/core/Grid';
+
+import ArticleList from '../components/ArticleList.jsx';
+
 class Home extends React.Component {
-	constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      articles: [],
+      searched: false
+    };
 
-    componentDidMount() {
-    }
+    this.update_articles = this.update_articles.bind(this)
+  }
 
-    componentWillUnmount() {
-    }
+  componentDidMount() {
+    this.fetch_recent_articles()
+  }
 
-	render() {
-    const st = {
-      border: 0,
-      margin: 0
-    }
-		return (
-			<div>
+  fetch_recent_articles() {
+    fetch(`/api/articles/`).then(res => res.json()).then((res) => {
+      this.setState({ articles: res })
+    })
+  }
 
-        <iframe src="/sitestatic/legacy/recent.html" width="100%" height="1000px" style={st} />
+  update_articles(articles) {
+    this.setState({ articles: articles })
+  }
 
-      </div>
+  render() {
+    let {articles, searched} = this.state
+    return (
+      <Grid container justify="center">
+        <Grid>
+          <ArticleList
+            articles={articles}
+            onArticlesUpdated={this.update_articles}
+            user_session={this.props.user_session}
+          />
+          </Grid>
+        </Grid>
     )
-	}
+  }
 }
 
 export default withRouter(Home);

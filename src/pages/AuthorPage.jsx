@@ -13,6 +13,7 @@ import {List, Grid, Button, Icon, IconButton,
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
+import ArticleList from '../components/ArticleList.jsx';
 import Loader from '../components/shared/Loader.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
@@ -328,6 +329,10 @@ class AuthorPage extends React.Component {
         return position
     }
 
+    update_articles(articles) {
+        this.setState({ articles: articles })
+    }
+
 	render() {
         let {classes, user_session} = this.props
 		let {articles, author, edit_author_modal_open, edit_article_modal_open,
@@ -419,28 +424,21 @@ class AuthorPage extends React.Component {
                             </div>
                         </div>
 
-                        <div className={classes.articleList}>
-                            { articles_loading ? <Loader /> : null }
-                            { this.sorted_visible_articles().map(a => <StyledArticleWithActions key={a.id}
-                                                    article={a}
-                                                    editable={editable}
-                                                    onEdit={this.handle_edit}
-                                                    onDelete={this.handle_delete}
-                                                    onUnlink={this.unlink}
-                                                    onFigureClick={this.show_figure}
-                                                    onFetchedArticleDetails={this.got_article_details}
-                                                    admin={user_session.admin} />) }
-                        </div>
+                        <ArticleList
+                          articles={this.sorted_visible_articles()}
+                          onArticlesUpdated={this.update_articles}
+                          user_session={this.props.user_session}
+                        />
                     </Grid>
     			</Grid>
 
-                { gallery }
 
                 <AuthorEditor author={author}
                               open={edit_author_modal_open}
                               onClose={this.close_author_editor}
                               onAuthorUpdate={this.author_updated}
                               onShowSnack={this.show_snack} />
+
                 <ArticleEditor article_id={editing_article_id}
                         open={edit_article_modal_open}
                         onUpdate={this.article_updated}
@@ -460,99 +458,5 @@ class AuthorPage extends React.Component {
 		)
 	}
 }
-
-class ArticleWithActions extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.edit = this.edit.bind(this)
-        this.unlink = this.unlink.bind(this)
-        this.delete = this.delete.bind(this)
-        this.show_figure = this.show_figure.bind(this)
-        this.got_article_details = this.got_article_details.bind(this)
-    }
-
-    edit() {
-        let {article} = this.props
-        this.props.onEdit(article)
-    }
-
-    delete() {
-        let {article} = this.props
-        this.props.onDelete(article)
-    }
-
-    unlink() {
-        let {article} = this.props
-        this.props.onUnlink(article)
-    }
-
-    show_figure(figures, index) {
-        this.props.onFigureClick(figures, index)
-    }
-
-    got_article_details(id, figures, commentaries) {
-        this.props.onFetchedArticleDetails(id, figures, commentaries)
-    }
-
-    render() {
-        let {article, admin, editable, classes} = this.props
-        const ST = {
-            marginRight: 10
-        }
-        const DELETE_ST = {
-            borderColor: 'red',
-            color: 'red'
-        }
-        let article_ui_id = article.doi || article.id
-        return (
-            <div key={article.id} className="ArticleWithActions" id={article_ui_id}>
-                <div className="Article">
-                    <ArticleLI article={article}
-                               admin={false}
-                               onFetchedArticleDetails={this.got_article_details}
-                               onFigureClick={this.show_figure} />
-                </div>
-                <div className="ArticleLeftActions">
-                    <span className="ActionButton">
-                        <IconButton href={`#${article_ui_id}`} size="small" style={{color: 'gray'}}>
-                            <Icon>link</Icon>
-                        </IconButton>
-                    </span>
-                </div>
-                <div className="ArticleActions">
-                    <span hidden={!editable}>
-                        <span className="ActionButton">
-                            <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
-                                <Icon className={classes.leftIcon}>edit</Icon>
-                                Edit
-                            </Button>
-                        </span>
-                        <span className="ActionButton">
-                            <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
-                                <Icon className={classes.leftIcon}>link_off</Icon>
-                                Unlink
-                            </Button>
-                        </span>
-                    </span>
-                    <span hidden={!admin}>
-                        <span className="ActionButton">
-                            <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
-                                <Icon color="inherit" className={classes.leftIcon}>delete</Icon>
-                                Delete
-                            </Button>
-                        </span>
-                    </span>
-                </div>
-            </div>
-        )
-    }
-}
-
-ArticleWithActions.defaultProps = {
-    editable: false
-}
-
-const StyledArticleWithActions = withStyles(styles)(ArticleWithActions)
 
 export default withRouter(withCookies(withStyles(styles)(AuthorPage)));
