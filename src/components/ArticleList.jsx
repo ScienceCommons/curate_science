@@ -4,6 +4,8 @@ import { withCookies } from 'react-cookie';
 
 import { Button, Grid, Icon, IconButton } from '@material-ui/core';
 
+import { get, includes } from 'lodash'
+
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
 import Loader from '../components/shared/Loader.jsx';
@@ -56,16 +58,6 @@ class ArticleList extends React.Component {
     this.show_figure = this.show_figure.bind(this)
     this.got_article_details = this.got_article_details.bind(this)
   }
-
-  editable() {
-    // Show edit functions if admin or user-owned author page
-    let {user_session} = this.props
-    let {author} = this.state
-    let admin = user_session.admin
-    let me = author != null && user_session.author != null && user_session.author.id == author.id
-    return admin || me
-  }
-
 
   handle_delete(a) {
     let pk = a.id
@@ -167,7 +159,6 @@ class ArticleList extends React.Component {
       gallery_index,
       loading
     } = this.state
-    let editable = this.editable()
 
     let gallery
     if (gallery_showing && gallery_images.length > 0) gallery = (
@@ -196,13 +187,12 @@ class ArticleList extends React.Component {
               { articles.map(a => 
                 <StyledArticleWithActions key={a.id}
                   article={a}
-                  editable={editable}
+                  user_session={user_session}
                   onEdit={this.handle_edit}
                   onDelete={this.handle_delete}
                   onUnlink={this.unlink}
                   onFigureClick={this.show_figure}
                   onFetchedArticleDetails={this.got_article_details}
-                  admin={user_session.admin}
                 />) }
                 </div>
 
@@ -252,8 +242,22 @@ class ArticleWithActions extends React.Component {
     this.props.onFetchedArticleDetails(id, figures, commentaries)
   }
 
+  editable() {
+    // Show edit functions if the user is an admin or the user is one of the authors
+    let { article, user_session } = this.props
+    let admin = user_session.admin
+
+    const user_author_id = get(user_session, 'author.id')
+    const user_is_author = includes(article.authors, user_author_id)
+
+    return admin || user_is_author
+  }
+
   render() {
-    let {article, admin, editable, classes} = this.props
+    let { article, classes } = this.props
+    const admin = this.props.user_session.admin
+    const editable = this.editable()
+
     const ST = {
       marginRight: 10
     }
