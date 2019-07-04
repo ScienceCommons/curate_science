@@ -52,8 +52,6 @@ class ArticleList extends React.Component {
     this.close_article_editor = this.toggle_article_editor.bind(this, false)
     this.handle_edit = this.handle_edit.bind(this)
     this.handle_delete = this.handle_delete.bind(this)
-    this.unlink = this.unlink.bind(this)
-    this.link_existing_article = this.link_existing_article.bind(this)
     this.article_updated = this.article_updated.bind(this)
     this.show_figure = this.show_figure.bind(this)
     this.got_article_details = this.got_article_details.bind(this)
@@ -72,43 +70,6 @@ class ArticleList extends React.Component {
 
   handle_edit(a) {
     this.setState({editing_article_id: a.id, edit_article_modal_open: true, loading: false})
-  }
-
-  update_linkage(a, linked) {
-    let {articles, cookies} = this.props
-    let {author} = this.state
-    if (author != null) {
-      // Update author to remove article_id from articles member
-      let data = [
-        {
-          article: a.id,
-          linked: linked
-        }
-      ]
-      json_api_req('POST', `/api/authors/${this.slug()}/articles/linkage/`, data, cookies.get('csrftoken'), (res) => {
-        if (linked) {
-          // Get full article object to add to list
-          json_api_req('GET', `/api/articles/${a.id}/`, {}, null, (res) => {
-            articles.unshift(res) // Add object to array
-            this.props.onArticlesUpdated(articles)
-          }, (err) => {
-            console.error(err)
-          })
-        } else {
-          // Remove unlinked from list
-          articles = articles.filter(article => article.id != a.id)
-          this.props.onArticlesUpdated(articles)
-        }
-      })
-    }
-  }
-
-  unlink(a) {
-    this.update_linkage(a, false)
-  }
-
-  link_existing_article(a) {
-    this.update_linkage(a, true)
   }
 
   article_updated(article) {
@@ -190,7 +151,7 @@ class ArticleList extends React.Component {
                   user_session={user_session}
                   onEdit={this.handle_edit}
                   onDelete={this.handle_delete}
-                  onUnlink={this.unlink}
+                  onUpdate={this.article_updated}
                   onFigureClick={this.show_figure}
                   onFetchedArticleDetails={this.got_article_details}
                 />) }
@@ -213,10 +174,11 @@ class ArticleWithActions extends React.Component {
     super(props);
 
     this.edit = this.edit.bind(this)
-    this.unlink = this.unlink.bind(this)
     this.delete = this.delete.bind(this)
     this.show_figure = this.show_figure.bind(this)
+    this.user_is_author = this.user_is_author.bind(this)
     this.got_article_details = this.got_article_details.bind(this)
+    this.toggle_link = this.toggle_link.bind(this)
   }
 
   edit() {
@@ -229,9 +191,31 @@ class ArticleWithActions extends React.Component {
     this.props.onDelete(article)
   }
 
-  unlink() {
-    let {article} = this.props
-    this.props.onUnlink(article)
+  update_linkage(linked) {
+    let { article, cookies, user_session } = this.props
+    const author_slug = get(user_session, 'author.slug')
+    if (author_slug != null) {
+      // Update author to remove article_id from articles member
+      let data = [
+        {
+          article: article.id,
+          linked: linked
+        }
+      ]
+      json_api_req('POST', `/api/authors/${author_slug}/articles/linkage/`, data, cookies.get('csrftoken'), () => {
+        json_api_req('GET', `/api/articles/${article.id}/`, {}, null, (res) => {
+          this.props.onUpdate(res)
+        })
+      })
+    }
+  }
+
+  toggle_link() {
+    if (this.user_is_author()) {
+      this.update_linkage(false)
+    } else {
+      this.update_linkage(true)
+    }
   }
 
   show_figure(figures, index) {
@@ -242,21 +226,28 @@ class ArticleWithActions extends React.Component {
     this.props.onFetchedArticleDetails(id, figures, commentaries)
   }
 
-  editable() {
-    // Show edit functions if the user is an admin or the user is one of the authors
+  user_has_associated_author() {
+    let { user_session } = this.props
+    return (typeof user_session.author !== 'undefined')
+  }
+
+  user_is_author() {
     let { article, user_session } = this.props
-    let admin = user_session.admin
-
     const user_author_id = get(user_session, 'author.id')
-    const user_is_author = includes(article.authors, user_author_id)
+    return includes(article.authors, user_author_id)
+  }
 
-    return admin || user_is_author
+  editable() {
+    // Show edit function if the user is an admin or the user is one of the authors
+    return this.props.user_session.admin || this.user_is_author()
   }
 
   render() {
     let { article, classes } = this.props
     const admin = this.props.user_session.admin
     const editable = this.editable()
+    const user_has_associated_author = this.user_has_associated_author()
+    const user_is_author = this.user_is_author()
 
     const ST = {
       marginRight: 10
@@ -289,10 +280,12 @@ class ArticleWithActions extends React.Component {
                   Edit
               </Button>
             </span>
+          </span>
+          <span hidden={!user_has_associated_author}>
             <span className="ActionButton">
-              <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
-                <Icon className={classes.leftIcon}>link_off</Icon>
-                  Unlink
+              <Button variant="outlined" size="small" color="secondary" onClick={this.toggle_link} style={ST}>
+                <Icon className={classes.leftIcon}>{user_is_author ? 'link_off' : 'link'}</Icon>
+                  {user_is_author ? 'Unlink' : 'Link'}
               </Button>
             </span>
           </span>
@@ -310,10 +303,6 @@ class ArticleWithActions extends React.Component {
   }
 }
 
-ArticleWithActions.defaultProps = {
-    editable: false
-}
-
-const StyledArticleWithActions = withStyles(styles)(ArticleWithActions)
+const StyledArticleWithActions = withCookies(withStyles(styles)(ArticleWithActions))
 
 export default withRouter(withCookies(withStyles(styles)(ArticleList)));
