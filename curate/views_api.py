@@ -160,8 +160,23 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
-    queryset=Article.objects.all().prefetch_related('commentaries')
-    serializer=ArticleListSerializer(instance=queryset, many=True)
+    PAGE_SIZE = 10
+    queryset = Article.objects.all().prefetch_related('commentaries')
+    serializer = ArticleListSerializer(instance=queryset, many=True)
+
+    paginator = PageNumberPagination()
+    paginator.page_size = PAGE_SIZE
+
+    result_page = paginator.paginate_queryset(queryset, request)
+
+    # Sort the results by field or property
+    ordering = request.query_params.get('ordering')
+    if ordering not in ['created', 'impact']:
+        ordering = 'created'
+    sorted_result_page = sorted(result_page, key=lambda article: getattr(article, ordering), reverse=True)
+
+    serializer = ArticleListSerializer(instance=sorted_result_page, many=True)
+
     return Response(serializer.data)
 
 # Article views
