@@ -180,7 +180,28 @@ def list_articles(request):
         impact = sum(map(F, impact_fields))
         queryset = Article.objects.annotate(impact=impact).order_by('-impact')
 
+    # Filters
+    filters = request.query_params.getlist('filter')
+
+    # A dict where the key is the expected query parameter and the value is a
+    # queryset filter that will return the appropriate articles
+    filter_expressions = {
+        'open_code': Q(public_code_url__isnull=False) & ~Q(public_code_url=''),
+        'open_data': Q(public_data_url__isnull=False) & ~Q(public_data_url=''),
+        'open_materials': Q(public_study_materials_url__isnull=False) & ~Q(public_study_materials_url=''),
+        'registered_design_analysis': Q(prereg_protocol_type=Article.PREREG_STUDY_DESIGN_ANALYSIS),
+        'registered_report': Q(prereg_protocol_type=Article.REGISTERED_REPORT),
+        'reporting_standards': Q(reporting_standards_type__isnull=False),
+    }
+
+    # Remove any invalid filters
+    valid_filters = [filter for filter in filters if filter in filter_expressions.keys()]
+
+    for filter in valid_filters:
+        queryset = queryset.filter(filter_expressions[filter])
+
     queryset = queryset.prefetch_related('commentaries', 'authors')
+
     serializer = ArticleListSerializer(instance=queryset, many=True)
 
     paginator = PageNumberPagination()
