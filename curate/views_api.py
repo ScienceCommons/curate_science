@@ -160,12 +160,11 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
-    PAGE_SIZE = 10
     queryset = Article.objects.all().prefetch_related('commentaries')
     serializer = ArticleListSerializer(instance=queryset, many=True)
 
     paginator = PageNumberPagination()
-    paginator.page_size = PAGE_SIZE
+    paginator.page_size = int(request.GET.get('page_size', 10))
 
     result_page = paginator.paginate_queryset(queryset, request)
 
