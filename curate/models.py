@@ -129,15 +129,19 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     abstract = models.TextField(null=True, blank=True, max_length=4000)
     keywords = models.CharField(max_length=255, null=True, blank=True)
-    article_type = models.CharField(max_length=255, choices=(
-        (ORIGINAL, 'original'),
-        (CONCEPTUAL, 'conceptual'),
-        (REPLICATION, 'replication'),
-        (REPRODUCIBILITY, 'reanalysis - reproducibility'),
-        (META_ANALYSIS, 'reanalysis - meta-analysis'),
-        (META_RESEARCH, 'reanalysis - meta-research'),
-        (COMMENTARY, 'commentary'),
-    ))
+    article_type = models.CharField(
+        max_length=255,
+        choices=(
+            (ORIGINAL, 'original'),
+            (CONCEPTUAL, 'conceptual'),
+            (REPLICATION, 'replication'),
+            (REPRODUCIBILITY, 'reanalysis - reproducibility'),
+            (META_ANALYSIS, 'reanalysis - meta-analysis'),
+            (META_RESEARCH, 'reanalysis - meta-research'),
+            (COMMENTARY, 'commentary'),
+        ),
+        default='original'
+    )
     reporting_standards_type = models.CharField(
         max_length=255,
         null=True,
