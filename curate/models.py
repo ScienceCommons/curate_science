@@ -190,21 +190,6 @@ class Article(models.Model):
     class Meta:
         unique_together=('title', 'year')
 
-    @property
-    def impact(self):
-        impact_fields = [
-            'pdf_citations',
-            'pdf_downloads',
-            'pdf_views',
-            'html_views',
-            'preprint_downloads',
-            'preprint_views',
-        ]
-        impact = 0
-        for field in impact_fields:
-            impact += getattr(self, field, 0)
-        return impact
-
 
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article,

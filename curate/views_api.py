@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.db.models import F, Q
 from django.contrib.postgres.search import SearchVector, SearchRank
 import logging
 from django.contrib.auth.forms import UserCreationForm
@@ -160,7 +160,27 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
-    queryset = Article.objects.all().prefetch_related('commentaries')
+    # Sort the results by created or impact
+    ordering = request.query_params.get('ordering')
+    if ordering not in ['created', 'impact']:
+        ordering = 'created'
+
+    if ordering == 'created':
+        queryset = Article.objects.order_by('-created')
+    elif ordering == 'impact':
+        # Caculate the impact value by adding all view, citations and downloads
+        impact_fields = [
+            'pdf_citations',
+            'pdf_downloads',
+            'pdf_views',
+            'html_views',
+            'preprint_downloads',
+            'preprint_views',
+        ]
+        impact = sum(map(F, impact_fields))
+        queryset = Article.objects.annotate(impact=impact).order_by('-impact')
+
+    queryset = queryset.prefetch_related('commentaries', 'authors')
     serializer = ArticleListSerializer(instance=queryset, many=True)
 
     paginator = PageNumberPagination()
@@ -168,13 +188,7 @@ def list_articles(request):
 
     result_page = paginator.paginate_queryset(queryset, request)
 
-    # Sort the results by field or property
-    ordering = request.query_params.get('ordering')
-    if ordering not in ['created', 'impact']:
-        ordering = 'created'
-    sorted_result_page = sorted(result_page, key=lambda article: getattr(article, ordering), reverse=True)
-
-    serializer = ArticleListSerializer(instance=sorted_result_page, many=True)
+    serializer = ArticleListSerializer(instance=result_page, many=True)
 
     return Response(serializer.data)
 

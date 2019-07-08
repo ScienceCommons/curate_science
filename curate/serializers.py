@@ -44,7 +44,6 @@ class CommentarySerializer(serializers.ModelSerializer):
 class ArticleListSerializer(serializers.ModelSerializer):
     commentaries = CommentarySerializer(many=True, required=False, allow_null=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
-    impact = serializers.IntegerField()
 
     class Meta:
         model=Article
