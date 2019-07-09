@@ -679,13 +679,78 @@ class TestAPIViews(TestCase):
         url = '{base_url}?ordering=impact'.format(base_url=reverse('api-list-articles'))
         r = self.client.get(url)
         d = json.loads(r.content.decode('utf-8'))
-
-        def article_index(article):
-            # Get the index of `article` in the JSON list
-            return next((index for (index, d) in enumerate(d) if d['id'] == article.id), None)
+        article_ids = [article['id'] for article in d]
 
         assert (
-            article_index(article_impact_10) >
-            article_index(article_impact_100) >
-            article_index(article_impact_5000)
+            article_ids.index(article_impact_10.id) >
+            article_ids.index(article_impact_100.id) >
+            article_ids.index(article_impact_5000.id)
         )
+
+    def test_api_list_filtering(self):
+        new_article = models.Article.objects.create(title='new article')
+
+        def get_filtered_article_ids(filters):
+            filter_query = '&'.join([f'filter={filter}' for filter in filters])
+            base_url = reverse('api-list-articles')
+            url = f'{base_url}?{filter_query}'
+            r = self.client.get(url)
+            d = json.loads(r.content.decode('utf-8'))
+            return [article['id'] for article in d]
+
+        # Open code
+        assert new_article.id not in get_filtered_article_ids(['open_code'])
+
+        new_article.public_code_url = 'http://example.com'
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['open_code'])
+
+        # Open data
+        assert new_article.id not in get_filtered_article_ids(['open_data'])
+
+        new_article.public_data_url = 'http://example.com'
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['open_data'])
+
+        # Open materials
+        assert new_article.id not in get_filtered_article_ids(['open_materials'])
+
+        new_article.public_study_materials_url = 'http://example.com'
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['open_materials'])
+
+        # Registered design analysis
+        assert new_article.id not in get_filtered_article_ids(['registered_design_analysis'])
+
+        new_article.prereg_protocol_type = models.Article.PREREG_STUDY_DESIGN_ANALYSIS
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['registered_design_analysis'])
+
+        # Registered report
+        assert new_article.id not in get_filtered_article_ids(['registered_report'])
+
+        new_article.prereg_protocol_type = models.Article.REGISTERED_REPORT
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['registered_report'])
+
+        # Reporting standards
+        assert new_article.id not in get_filtered_article_ids(['reporting_standards'])
+
+        new_article.reporting_standards_type = models.Article.BASIC_4_AT_SUBMISSION
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['reporting_standards'])
+
+        # Combined filter
+        open_code_data_article = models.Article.objects.create(
+            title='open code & data', public_code_url='code.com', public_data_url='data.net'
+        )
+
+        assert open_code_data_article.id in get_filtered_article_ids(['open_code'])
+        assert open_code_data_article.id in get_filtered_article_ids(['open_code', 'open_data'])
+        assert open_code_data_article.id not in get_filtered_article_ids(['open_code', 'open_data', 'open_materials'])
