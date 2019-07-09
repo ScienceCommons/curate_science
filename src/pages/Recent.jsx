@@ -58,19 +58,11 @@ class Home extends React.PureComponent {
       filters: ['open_code', 'open_data', 'open_materials'],
       searched: false,
       sort_by: 'created',
-      sort_by_menu_open: false,
     };
 
-    this.sort_by_options = {
-      created: 'Newest first',
-      impact: 'Impact',
-    }
-
-    this.close_sort_by_menu = this.close_sort_by_menu.bind(this)
-    this.handle_sort_by_menu_click = this.handle_sort_by_menu_click.bind(this)
-    this.set_sort_by = this.set_sort_by.bind(this)
     this.update_articles = this.update_articles.bind(this)
     this.set_filters = this.set_filters.bind(this)
+    this.set_sort_by = this.set_sort_by.bind(this)
   }
 
   componentDidMount() {
@@ -104,26 +96,12 @@ class Home extends React.PureComponent {
     })
   }
 
-  close_sort_by_menu() {
-    this.setState({ sort_by_menu_open: false })
-  }
-
   set_filters(filters) {
     this.setState({ filters: filters })
   }
 
-  handle_sort_by_menu_click() {
-    this.setState({ sort_by_menu_open: !this.state.sort_by_menu_open })
-  }
-
-  sorted_by() {
-    const { sort_by } = this.state
-    return this.sort_by_options[sort_by]
-  }
-
   set_sort_by(value) {
     this.setState({ sort_by: value })
-    this.close_sort_by_menu()
   }
 
   update_articles(articles) {
@@ -131,43 +109,15 @@ class Home extends React.PureComponent {
   }
 
   render() {
-    let { articles, filters, searched, sort_by_menu_open } = this.state
+    let { articles, filters, searched, sort_by } = this.state
     let { classes } = this.props
-    const sorted_by = this.sorted_by()
 
     return (
       <Grid container justify="center">
         <Grid>
           <Grid container justify="space-between">
             <FilterButton filters={filters} onFilterUpdate={this.set_filters}/>
-
-            <div className={classes.menuRoot}>
-              <ClickAwayListener onClickAway={this.close_sort_by_menu}>
-                <div>
-                  <Button
-                    onClick={this.handle_sort_by_menu_click}
-                    size="large"
-                  >
-                    <Icon>sort</Icon>
-                    Sort by: { sorted_by }
-                  </Button>
-                  { sort_by_menu_open ? (
-                    <Paper className={classes.menu}>
-                      <MenuList>
-                          {
-                            Object.keys(this.sort_by_options).map(value => 
-                              <MenuItem onClick={this.set_sort_by.bind(this, value)} key={value}>
-                                {this.sort_by_options[value]}
-                              </MenuItem>
-                            )
-                          }
-                      </MenuList>
-                    </Paper>
-                  ) : null}
-                </div>
-              </ClickAwayListener>
-            </div>
-
+            <SortByButton sort_by={sort_by} onSortByUpdate={this.set_sort_by}/>
           </Grid>
 
           <ArticleList
@@ -304,5 +254,78 @@ class Filter extends React.PureComponent {
   }
 }
 
+class SortBy extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      menu_open: false,
+    };
+
+    this.sort_by_options = {
+      created: 'Newest first',
+      impact: 'Impact',
+    }
+
+    this.close_menu = this.close_menu.bind(this)
+    this.handle_menu_click = this.handle_menu_click.bind(this)
+    this.set_sort_by = this.set_sort_by.bind(this)
+  }
+
+  close_menu() {
+    this.setState({ menu_open: false })
+  }
+
+  set_sort_by(value) {
+    const { onSortByUpdate }  = this.props
+    onSortByUpdate(value)
+    this.close_menu()
+  }
+
+  handle_menu_click() {
+    this.setState({ menu_open: !this.state.menu_open })
+  }
+
+  sorted_by() {
+    const { sort_by } = this.props
+    return this.sort_by_options[sort_by]
+  }
+
+  render() {
+    let { menu_open } = this.state
+    let { classes, filters } = this.props
+    const sorted_by = this.sorted_by()
+
+    return (
+      <div className={classes.menuRoot}>
+        <ClickAwayListener onClickAway={this.close_menu}>
+          <div>
+            <Button
+              onClick={this.handle_menu_click}
+              size="large"
+            >
+              <Icon>sort</Icon>
+                Sort by: { sorted_by }
+            </Button>
+              { menu_open ? (
+                <Paper className={classes.menu}>
+                  <MenuList>
+                      {
+                        Object.keys(this.sort_by_options).map(value => 
+                          <MenuItem onClick={this.set_sort_by.bind(this, value)} key={value}>
+                              {this.sort_by_options[value]}
+                          </MenuItem>
+                        )
+                      }
+                  </MenuList>
+                </Paper>
+              ) : null}
+          </div>
+        </ClickAwayListener>
+      </div>
+    )
+  }
+}
+
 const FilterButton = withStyles(styles)(Filter)
+const SortByButton = withStyles(styles)(SortBy)
 export default withRouter(withStyles(styles)(Home));
