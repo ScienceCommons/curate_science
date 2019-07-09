@@ -656,3 +656,36 @@ class TestAPIViews(TestCase):
     #     d = json.loads(r.content.decode('utf-8'))
     #     assert r.status_code == 200
     #     assert len(d) == 2
+
+    def test_api_ordering_by_created(self):
+        new_article = models.Article.objects.create(title='new article')
+
+        url = '{base_url}?ordering=created'.format(base_url=reverse('api-list-articles'))
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+
+        assert d[0]['id'] == new_article.id
+
+        created = d[0]['created']
+        for article in d[1:]:
+            assert article['created'] <= created
+            created = article['created']
+
+    def test_api_ordering_by_impact(self):
+        article_impact_100 = models.Article.objects.create(title='100 views', pdf_views=100)
+        article_impact_10 = models.Article.objects.create(title='10 views', pdf_views=10)
+        article_impact_5000 = models.Article.objects.create(title='5000 views', pdf_views=5000)
+
+        url = '{base_url}?ordering=impact'.format(base_url=reverse('api-list-articles'))
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+
+        def article_index(article):
+            # Get the index of `article` in the JSON list
+            return next((index for (index, d) in enumerate(d) if d['id'] == article.id), None)
+
+        assert (
+            article_index(article_impact_10) >
+            article_index(article_impact_100) >
+            article_index(article_impact_5000)
+        )
