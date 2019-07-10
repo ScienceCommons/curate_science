@@ -754,3 +754,28 @@ class TestAPIViews(TestCase):
         assert open_code_data_article.id in get_filtered_article_ids(['open_code'])
         assert open_code_data_article.id in get_filtered_article_ids(['open_code', 'open_data'])
         assert open_code_data_article.id not in get_filtered_article_ids(['open_code', 'open_data', 'open_materials'])
+
+    def test_api_list_pagination(self):
+        # Create 11 new articles
+        models.Article.objects.bulk_create([models.Article(title=f'Article {i}') for i in range(11)])
+
+        # First page should return `page_size` articles
+        base_url = reverse('api-list-articles')
+        page_size = 10
+        url = f'{base_url}?page_size={page_size}'
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert len(d) == page_size
+
+        # Last page should have the remainder of the articles (e.g. 2 if page_size=10, number_of_articles=12)
+        number_of_articles = models.Article.objects.count()
+        last_page = (number_of_articles // page_size) + 1
+        url += f'&page={last_page}'
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert len(d) == number_of_articles % page_size
+
+        # Requests for invalid pages should return a 404
+        url += f'&page={last_page + 1}'
+        r = self.client.get(url)
+        assert r.status_code == 404
