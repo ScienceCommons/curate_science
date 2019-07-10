@@ -155,16 +155,16 @@ class ArticleList extends React.Component {
                   onFigureClick={this.show_figure}
                   onFetchedArticleDetails={this.got_article_details}
                 />) }
-                </div>
+          </div>
 
-                  { gallery }
+          { gallery }
 
-                <ArticleEditor article_id={editing_article_id}
-                  open={edit_article_modal_open}
-                  onUpdate={this.article_updated}
-                  onClose={this.close_article_editor} />
+        <ArticleEditor article_id={editing_article_id}
+          open={edit_article_modal_open}
+          onUpdate={this.article_updated}
+          onClose={this.close_article_editor} />
 
-              </div>
+      </div>
     )
   }
 }
