@@ -108,7 +108,7 @@ class ArticleList extends React.Component {
   }
 
   render() {
-    let {articles, classes, user_session} = this.props
+    let {articles, classes, show_date, user_session} = this.props
     let {
       edit_article_modal_open,
       editing_article_id,
@@ -149,6 +149,7 @@ class ArticleList extends React.Component {
                 <StyledArticleWithActions key={a.id}
                   article={a}
                   user_session={user_session}
+                  show_date={show_date}
                   onEdit={this.handle_edit}
                   onDelete={this.handle_delete}
                   onUpdate={this.article_updated}
@@ -243,7 +244,7 @@ class ArticleWithActions extends React.Component {
   }
 
   render() {
-    let { article, classes } = this.props
+    let { article, classes, show_date } = this.props
     const admin = this.props.user_session.admin
     const editable = this.editable()
     const user_has_associated_author = this.user_has_associated_author()
@@ -263,7 +264,9 @@ class ArticleWithActions extends React.Component {
           <ArticleLI article={article}
             admin={false}
             onFetchedArticleDetails={this.got_article_details}
-            onFigureClick={this.show_figure} />
+            onFigureClick={this.show_figure}
+            show_date={show_date}
+          />
         </div>
         <div className="ArticleLeftActions">
           <span className="ActionButton">

@@ -155,6 +155,7 @@ class Home extends React.PureComponent {
                     articles={articles}
                     onArticlesUpdated={this.update_articles}
                     user_session={this.props.user_session}
+                    show_date={true}
                   />
 
                   { articles.length === 0 ? null :

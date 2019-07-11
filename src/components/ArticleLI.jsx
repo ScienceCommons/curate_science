@@ -35,6 +35,10 @@ const styles = {
   cardContent: {
     padding: 12
   },
+  createdDate: {
+    fontStyle: 'italic',
+    textAlign: 'right',
+  },
   title: {
     fontSize: 18,
     lineHeight: '20px',
@@ -138,9 +142,38 @@ class ArticleLI extends React.Component {
     	return text == null || text.length == 0
     }
 
+    created_at() {
+      const created = this.props.article.created
+
+      if (!created) {
+        return '-'
+      }
+
+      const date = new Date(created)
+      const months = {
+        0: 'January',
+        1: 'February',
+        2: 'March',
+        3: 'April',
+        4: 'May',
+        5: 'June',
+        6: 'July',
+        7: 'August',
+        8: 'September',
+        9: 'October',
+        10: 'November',
+        11: 'December'
+      }
+
+      const day = date.getDate()
+      const month = months[date.getMonth()]
+      const year = date.getFullYear()
+      return `Added ${month} ${day}, ${year}`
+    }
+
 	render() {
 		let {show_more, loading} = this.state
-    let { article, classes } = this.props;
+    let { article, classes, show_date } = this.props;
     let content_links = pick(article, ['pdf_url', 'pdf_downloads', 'pdf_citations', 'pdf_views',
 	       						   'html_url', 'html_views',
 	 	    					   'preprint_url', 'preprint_views', 'preprint_downloads',
@@ -158,6 +191,8 @@ class ArticleLI extends React.Component {
     let show_figures = article.key_figures || []
     let rd = pick(article, ['number_of_reps', 'original_study', 'target_effects', 'original_article_url'])
     const CC_ST = {paddingBottom: 12} // Fix for .MuiCardContent-root-325:last-child adding 24px padding-bottom
+    const created_at = this.created_at()
+
 		return (
 			<div className="ArticleCard">
 				<Card className={classes.card} raised>
@@ -182,6 +217,12 @@ class ArticleLI extends React.Component {
 			  				<Icon className={classes.moreIcon} fontSize="large">{show_more ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
 		  				</IconButton>
 	  				</div>
+
+            <div hidden={!show_date}>
+              <Typography className={classes.createdDate} component='div' color="textSecondary">
+                {created_at}
+              </Typography>
+            </div>
 
 	  				<div id="details" hidden={!show_more}>
 	  					<Typography className={classes.abstract}><TruncatedText text={article.abstract} maxLength={540} fontSize={12} /></Typography>
