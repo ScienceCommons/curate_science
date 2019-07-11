@@ -1,28 +1,23 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { concat, includes, xor } from 'lodash'
+import { concat } from 'lodash'
 
 import {
   Button,
-  Checkbox,
-  Chip,
   CircularProgress,
   ClickAwayListener,
-  FormControlLabel,
-  FormGroup,
   Grid,
   Icon,
   MenuItem,
   MenuList,
   Paper,
-  Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import ArticleList from '../components/ArticleList.jsx';
+import HomePageFilter from '../components/HomePageFilter.jsx';
 import Loader from '../components/shared/Loader.jsx';
-import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 const styles = theme => ({
   menuRoot: {
@@ -33,23 +28,7 @@ const styles = theme => ({
     top: '4rem',
     left: 0,
     zIndex: 10,
-    width: 'auto',
   },
-  menuTitle: {
-    fontSize: 16,
-  },
-  transparencyGroup: {
-    padding: 2*theme.spacing.unit,
-  },
-  filterChips: {
-    paddingTop: theme.spacing.unit,
-  },
-  filterCheckbox: {
-    paddingLeft: theme.spacing.unit
-  },
-  transparencyIcon: {
-    paddingHorizontal: theme.spacing.unit
-  }
 })
 
 class Home extends React.PureComponent {
@@ -58,7 +37,8 @@ class Home extends React.PureComponent {
     this.state = {
       articles: [],
       articles_loading: true,
-      filters: ['open_code', 'open_data', 'open_materials'],
+      content_filter: null,
+      transparency_filters: ['open_code', 'open_data', 'open_materials'],
       sort_by: 'created',
       more_articles: true,
       current_page: 1,
@@ -77,22 +57,27 @@ class Home extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.sort_by !== this.state.sort_by || prevState.filters !== this.state.filters) {
+    const url_fields = ['sort_by', 'transparency_filters', 'content_filter']
+    const changed = url_fields.some(field => prevState[field] !== this.state[field])
+    if (changed) {
       this.fetch_articles()
     }
   }
 
   articles_url() {
     let url = '/api/articles/'
-    const { filters, sort_by } = this.state
+    const { content_filter, transparency_filters, sort_by } = this.state
 
     url += `?ordering=${sort_by}&page_size=${this.PAGE_SIZE}`
 
-    if (filters.length) {
-      const filter_string = filters.map(filter => `filter=${filter}`).join('&')
+    if (transparency_filters.length) {
+      const filter_string = transparency_filters.map(filter => `transparency=${filter}`).join('&')
       url += `&${filter_string}`
     }
 
+    if (content_filter) {
+      url += `&content=${content_filter}`
+    }
     return url
   }
 
@@ -134,8 +119,8 @@ class Home extends React.PureComponent {
       })
   }
 
-  set_filters(filters) {
-    this.setState({ filters: filters })
+  set_filters({ transparency_filters, content_filter }) {
+    this.setState({ transparency_filters, content_filter })
   }
 
   set_sort_by(value) {
@@ -147,28 +132,37 @@ class Home extends React.PureComponent {
   }
 
   render() {
-    let { articles, articles_loading, filters, more_articles, sort_by } = this.state
-    let { classes } = this.props
+    const { articles, articles_loading, content_filter, transparency_filters, more_articles, sort_by } = this.state
+    const { classes } = this.props
 
     return (
       <Grid container justify="center">
         <Grid className="HomeArticleList">
           <Grid container justify="space-between">
-            <FilterButton filters={filters} onFilterUpdate={this.set_filters}/>
+            <HomePageFilter
+              transparency_filters={transparency_filters}
+              content_filter={content_filter}
+              onFilterUpdate={this.set_filters}
+            />
             <SortByButton sort_by={sort_by} onSortByUpdate={this.set_sort_by}/>
           </Grid>
 
             { articles_loading ?
                 <Loader /> :
                 <div>
+                  { articles.length === 0 ? <p><em>There are no articles matching the given filters</em></p> : null }
                   <ArticleList
                     articles={articles}
                     onArticlesUpdated={this.update_articles}
                     user_session={this.props.user_session}
                   />
-                  <Grid container justify="center">
-                    <LoadMoreButton more_articles={more_articles} fetch_more_articles={this.fetch_more_articles}/>
-                  </Grid>
+
+                  { articles.length === 0 ? null :
+                    <Grid container justify="center">
+                      <LoadMoreButton more_articles={more_articles} fetch_more_articles={this.fetch_more_articles}/>
+                    </Grid>
+                  }
+
                 </div>
             }
 
@@ -216,128 +210,6 @@ class LoadMoreButton extends React.PureComponent {
   }
 }
 
-class Filter extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menu_open: false,
-      menu_filters: [],
-    };
-
-    this.filter_options = [
-      { field: 'registered_report', icon: 'prereg', label: 'Registered Report'},
-      { field: 'open_materials', icon: 'materials', label: 'Public study materials'},
-      { field: 'open_data', icon: 'data', label: 'Public data'},
-      { field: 'open_code', icon: 'code', label: 'Public code'},
-      { field: 'reporting_standards', icon: 'repstd', label: 'Reporting standard compliance'},
-    ]
-
-    this.close_menu = this.close_menu.bind(this)
-    this.delete_filter = this.delete_filter.bind(this)
-    this.filter_checked = this.filter_checked.bind(this)
-    this.handle_menu_click = this.handle_menu_click.bind(this)
-    this.update_filters = this.update_filters.bind(this)
-    this.set_filters = this.set_filters.bind(this)
-  }
-
-  open_menu() {
-    const { filters } = this.props
-    this.setState({ menu_open: true, menu_filters: filters })
-  }
-
-  close_menu() {
-    this.setState({ menu_open: false })
-  }
-
-  delete_filter(filter_field) {
-    let { filters, onFilterUpdate } = this.props
-    onFilterUpdate(filters.filter(field => field !== filter_field))
-  }
-
-  filter_checked(field) {
-    return includes(this.state.menu_filters, field)
-  }
-
-  update_filters(field) {
-    let { menu_filters } = this.state
-    this.setState({ menu_filters: xor(menu_filters, [field]) })
-  }
-
-  set_filters(field, event) {
-    const { onFilterUpdate }  = this.props
-    onFilterUpdate(this.state.menu_filters)
-    this.close_menu()
-  }
-
-  handle_menu_click() {
-    if (this.state.menu_open) {
-      this.close_menu()
-    } else {
-      this.open_menu()
-    }
-  }
-
-  render() {
-    let { menu_open } = this.state
-    let { classes, filters } = this.props
-
-    return (
-      <Grid className={classes.menuRoot}>
-        <ClickAwayListener onClickAway={this.close_menu}>
-          <div>
-            <Button
-              onClick={this.handle_menu_click}
-              size="large"
-            >
-              <Icon>filter_list</Icon>
-                Filter
-            </Button>
-              { menu_open ? (
-                <Paper className={classes.menu}>
-                  <div className={classes.transparencyGroup}>
-                    <Typography className={classes.menuTitle}>Transparency</Typography>
-                    <FormGroup>
-                        { this.filter_options.map(filter =>
-                          <div key={filter.field}>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={this.filter_checked(filter.field)}
-                                  onChange={this.update_filters.bind(this, filter.field)}
-                                  value={filter.field}/>
-                              }
-                                  label={
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
-                                      <TransparencyIcon tt={{icon: filter.icon}} size={25} />
-                                      <span className={classes.filterCheckbox}>{filter.label}</span>
-                                    </div>
-                                  }
-                                    />
-                                    </div>
-                        ) }
-                                  </FormGroup>
-                                </div>
-                                <Button variant="contained" onClick={this.set_filters} style={{float: 'right', margin: '1rem'}}>Apply</Button>
-                              </Paper>
-              ) : null}
-          </div>
-        </ClickAwayListener>
-        <div className={classes.filterChips}>
-            { this.filter_options.map(filter => {
-                if (includes(filters, filter.field)) {
-                  return <Chip
-                          label={<TransparencyIcon tt={{icon: filter.icon}} size={25}/>}
-                          key={filter.field}
-                          onDelete={this.delete_filter.bind(this, filter.field)}
-                        />
-                }
-            })
-            }
-        </div>
-      </Grid>
-    )
-  }
-}
 
 class SortBy extends React.PureComponent {
   constructor(props) {
@@ -377,7 +249,7 @@ class SortBy extends React.PureComponent {
 
   render() {
     let { menu_open } = this.state
-    let { classes, filters } = this.props
+    let { classes } = this.props
     const sorted_by = this.sorted_by()
 
     return (
@@ -411,6 +283,5 @@ class SortBy extends React.PureComponent {
   }
 }
 
-const FilterButton = withStyles(styles)(Filter)
 const SortByButton = withStyles(styles)(SortBy)
 export default withRouter(withStyles(styles)(Home));

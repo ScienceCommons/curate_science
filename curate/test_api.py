@@ -691,7 +691,7 @@ class TestAPIViews(TestCase):
         new_article = models.Article.objects.create(title='new article')
 
         def get_filtered_article_ids(filters):
-            filter_query = '&'.join([f'filter={filter}' for filter in filters])
+            filter_query = '&'.join([f'transparency={filter}' for filter in filters])
             base_url = reverse('api-list-articles')
             url = f'{base_url}?{filter_query}'
             r = self.client.get(url)
@@ -779,3 +779,41 @@ class TestAPIViews(TestCase):
         url += f'&page={last_page + 1}'
         r = self.client.get(url)
         assert r.status_code == 404
+
+    def test_api_list_content_filtering(self):
+        new_article = models.Article.objects.create(title='article')
+
+        def get_filtered_article_ids(filter):
+            base_url = reverse('api-list-articles')
+            url = f'{base_url}?content={filter}'
+            r = self.client.get(url)
+            d = json.loads(r.content.decode('utf-8'))
+            return [article['id'] for article in d]
+
+        # Original
+        self.assertTrue(new_article.id not in get_filtered_article_ids(models.Article.ORIGINAL))
+        new_article.article_type = models.Article.ORIGINAL
+        new_article.save()
+        self.assertTrue(new_article.id in get_filtered_article_ids(models.Article.ORIGINAL))
+
+        # Replication
+        self.assertTrue(new_article.id not in get_filtered_article_ids(models.Article.REPLICATION))
+        new_article.article_type = models.Article.REPLICATION
+        new_article.save()
+        self.assertTrue(new_article.id in get_filtered_article_ids(models.Article.REPLICATION))
+
+        # Reproducibility
+        self.assertTrue(new_article.id not in get_filtered_article_ids(models.Article.REPRODUCIBILITY))
+        new_article.article_type = models.Article.REPRODUCIBILITY
+        new_article.save()
+        self.assertTrue(new_article.id in get_filtered_article_ids(models.Article.REPRODUCIBILITY))
+
+        # Meta-analysis
+        self.assertTrue(new_article.id not in get_filtered_article_ids(models.Article.META_ANALYSIS))
+        new_article.article_type = models.Article.META_ANALYSIS
+        new_article.save()
+        self.assertTrue(new_article.id in get_filtered_article_ids(models.Article.META_ANALYSIS))
+
+        # Invalid filter
+        number_of_articles = models.Article.objects.count()
+        self.assertEqual(number_of_articles, len(get_filtered_article_ids('nonsense')))

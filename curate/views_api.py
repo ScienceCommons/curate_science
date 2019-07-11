@@ -180,8 +180,8 @@ def list_articles(request):
         impact = sum(map(F, impact_fields))
         queryset = Article.objects.annotate(impact=impact).order_by('-impact')
 
-    # Filters
-    filters = request.query_params.getlist('filter')
+    # Transparency ilters
+    transparency_filters = request.query_params.getlist('transparency')
 
     # A dict where the key is the expected query parameter and the value is a
     # queryset filter that will return the appropriate articles
@@ -195,10 +195,16 @@ def list_articles(request):
     }
 
     # Remove any invalid filters
-    valid_filters = [filter for filter in filters if filter in filter_expressions.keys()]
+    valid_filters = [filter for filter in transparency_filters if filter in filter_expressions.keys()]
 
     for filter in valid_filters:
         queryset = queryset.filter(filter_expressions[filter])
+
+    # Content type filter
+    content_type = request.query_params.get('content')
+    valid_content_types = ['ORIGINAL', 'REPLICATION', 'REPRODUCIBILITY', 'META_ANALYSIS']
+    if content_type and content_type in valid_content_types:
+        queryset = queryset.filter(article_type=getattr(Article, content_type))
 
     queryset = queryset.prefetch_related('commentaries', 'authors')
 
