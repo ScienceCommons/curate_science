@@ -29,7 +29,7 @@ textarea {
 }
 
 .HomeArticleList {
-	min-width: 650px;
+	width: 650px;
 }
 
 .CenteredContent {

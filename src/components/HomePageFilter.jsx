@@ -5,7 +5,6 @@ import { filter, includes, xor } from 'lodash'
 import {
   Button,
   Checkbox,
-  Chip,
   ClickAwayListener,
   FormControlLabel,
   FormGroup,
@@ -36,9 +35,6 @@ const styles = theme => ({
   transparencyGroup: {
     padding: 2*theme.spacing.unit,
     whiteSpace: 'nowrap',
-  },
-  filterChips: {
-    paddingTop: theme.spacing.unit,
   },
   filterCheckbox: {
     paddingLeft: theme.spacing.unit
@@ -195,8 +191,13 @@ class HomePageFilter extends React.PureComponent {
                       <Grid item xs={6} style={{marginLeft: '4rem'}}>
                         <Typography className={classes.menuTitle}>Content Type</Typography>
                         <FormGroup>
-                            { this.content_filter_options.map(filter =>
-                              <div key={filter.id}>
+                            { this.content_filter_options.map((filter) => {
+                              let style = { padding: '0.25rem 0.5rem', borderRadius: '0.4rem' }
+                              if (filter.id !== 'ORIGINAL') {
+                                style.backgroundColor = filter.color
+                                style.color = '#eeeeee'
+                              }
+                              return <div key={filter.id}>
                                 <FormControlLabel
                                   control={
                                     <Checkbox
@@ -205,10 +206,12 @@ class HomePageFilter extends React.PureComponent {
                                       value={filter.id}
                                     />
                                   }
-                                  label={filter.label}
+                                  label={
+                                    <span style={style}>{filter.label}</span>
+                                  }
                                 />
                               </div>
-                            ) }
+                            } ) }
                         </FormGroup>
                       </Grid>
                     </Grid>
@@ -223,24 +226,6 @@ class HomePageFilter extends React.PureComponent {
               ) : null}
           </div>
         </ClickAwayListener>
-        <div className={classes.filterChips}>
-            { this.selected_transparency_filters().map(filter => {
-                return <Chip
-                        label={<TransparencyIcon tt={{icon: filter.icon}} size={25}/>}
-                        key={filter.field}
-                        onDelete={this.delete_filter.bind(this, filter.field)}
-                      />
-              })
-            }
-            { this.selected_content_filters().map(filter => {
-                return <Chip
-                        label={filter.label}
-                        key={filter.id}
-                        onDelete={this.delete_content_filter.bind(this, filter.id)}
-                      />
-              })
-            }
-        </div>
       </Grid>
     )
   }

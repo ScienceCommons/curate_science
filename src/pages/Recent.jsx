@@ -16,6 +16,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import ArticleList from '../components/ArticleList.jsx';
+import FilterChips from '../components/FilterChips.jsx';
 import HomePageFilter from '../components/HomePageFilter.jsx';
 import Loader from '../components/shared/Loader.jsx';
 
@@ -148,25 +149,34 @@ class Home extends React.PureComponent {
             <SortByButton sort_by={sort_by} onSortByUpdate={this.set_sort_by}/>
           </Grid>
 
-            { articles_loading ?
-                <Loader /> :
-                <div>
-                  { articles.length === 0 ? <p><em>There are no articles matching the given filters</em></p> : null }
-                  <ArticleList
-                    articles={articles}
-                    onArticlesUpdated={this.update_articles}
-                    user_session={this.props.user_session}
-                    show_date={true}
-                  />
+          {(transparency_filters.length + content_filters.length) ?
+            <FilterChips
+              transparency_filters={transparency_filters}
+              content_filters={content_filters}
+              onFilterUpdate={this.set_filters}
+            />
+            : null
+          }
 
-                  { articles.length === 0 ? null :
-                    <Grid container justify="center">
-                      <LoadMoreButton more_articles={more_articles} fetch_more_articles={this.fetch_more_articles}/>
-                    </Grid>
-                  }
+          { articles_loading ?
+              <Loader /> :
+              <div>
+                { articles.length === 0 ? <p><em>There are no articles matching the given filters</em></p> : null }
+                <ArticleList
+                  articles={articles}
+                  onArticlesUpdated={this.update_articles}
+                  user_session={this.props.user_session}
+                  show_date={true}
+                />
 
-                </div>
-            }
+                { articles.length === 0 ? null :
+                  <Grid container justify="center">
+                    <LoadMoreButton more_articles={more_articles} fetch_more_articles={this.fetch_more_articles}/>
+                  </Grid>
+                }
+
+              </div>
+          }
 
           </Grid>
         </Grid>

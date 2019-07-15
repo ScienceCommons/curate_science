@@ -1,0 +1,105 @@
+import React from 'react';
+
+import { filter, includes } from 'lodash'
+
+import { Chip } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
+import C from '../constants/constants';
+
+import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
+
+const styles = theme => ({
+  contentFilterChipLabel: {
+    backgroundColor: 'white',
+    border: 'solid 1px',
+    padding: '0.1rem 0.25rem',
+    borderRadius: '0.2rem' 
+  },
+  filterChip: {
+    marginRight: 0.5*theme.spacing.unit,
+    marginBottom: 0.5*theme.spacing.unit,
+  },
+  filterChips: {
+    paddingTop: theme.spacing.unit,
+  },
+  filtersLabel: {
+    opacity: 0.4,
+    marginRight: 0.5*theme.spacing.unit,
+  },
+})
+
+class FilterChips extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.filter_options = [
+      { field: 'registered_report', icon: 'prereg', label: 'Registered Report'},
+      { field: 'open_materials', icon: 'materials', label: 'Public study materials'},
+      { field: 'open_data', icon: 'data', label: 'Public data'},
+      { field: 'open_code', icon: 'code', label: 'Public code'},
+      { field: 'reporting_standards', icon: 'repstd', label: 'Reporting standard compliance'},
+    ]
+
+    const content_filter_ids = ['ORIGINAL', 'REPLICATION', 'REPRODUCIBILITY', 'META_ANALYSIS']
+    this.content_filter_options = filter(C.ARTICLE_TYPES, type => includes(content_filter_ids, type.id))
+
+    this.delete_filter = this.delete_filter.bind(this)
+    this.delete_content_filter = this.delete_content_filter.bind(this)
+  }
+
+  selected_transparency_filters() {
+    return this.filter_options.filter(filter => {
+      return includes(this.props.transparency_filters, filter.field)
+    })
+  }
+
+  selected_content_filters() {
+    return this.content_filter_options.filter(filter => {
+      return includes(this.props.content_filters, filter.id)
+    })
+  }
+
+  delete_filter(filter_field) {
+    let { content_filters, transparency_filters, onFilterUpdate } = this.props
+    onFilterUpdate({ transparency_filters: transparency_filters.filter(field => field !== filter_field), content_filters })
+  }
+
+  delete_content_filter(filter_field) {
+    let { content_filters, transparency_filters, onFilterUpdate } = this.props
+    onFilterUpdate({
+      transparency_filters,
+      content_filters: content_filters.filter(field => field !== filter_field)
+    })
+  }
+
+  render() {
+    let { classes } = this.props
+
+    return (
+      <div className={classes.filterChips}>
+        <span className={classes.filtersLabel}>Filters: </span>
+        { this.selected_transparency_filters().map(filter => {
+            return <Chip
+                    className={classes.filterChip}
+                    label={<TransparencyIcon tt={{icon: filter.icon}} size={25}/>}
+                    key={filter.field}
+                    onDelete={this.delete_filter.bind(this, filter.field)}
+                  />
+          })
+        }
+        { this.selected_content_filters().map(filter => {
+            return <Chip
+                    className={classes.filterChip}
+                    label={<span className={classes.contentFilterChipLabel} style={{ color: filter.color }}>{filter.label}</span>}
+                    key={filter.id}
+                    onDelete={this.delete_content_filter.bind(this, filter.id)}
+                  />
+          })
+        }
+      </div>
+    )
+  }
+}
+
+export default withStyles(styles)(FilterChips)
