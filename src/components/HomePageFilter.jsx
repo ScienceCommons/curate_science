@@ -50,13 +50,7 @@ class HomePageFilter extends React.PureComponent {
       menu_transparency_filters: [],
     };
 
-    this.filter_options = [
-      { field: 'registered_report', icon: 'prereg', label: 'Registered Report'},
-      { field: 'open_materials', icon: 'materials', label: 'Public study materials'},
-      { field: 'open_data', icon: 'data', label: 'Public data'},
-      { field: 'open_code', icon: 'code', label: 'Public code'},
-      { field: 'reporting_standards', icon: 'repstd', label: 'Reporting standard compliance'},
-    ]
+    this.filter_options = C.TRANSPARENCY_FILTER_OPTIONS
 
     const content_filter_ids = ['ORIGINAL', 'REPLICATION', 'REPRODUCIBILITY', 'META_ANALYSIS']
     this.content_filter_options = filter(C.ARTICLE_TYPES, type => includes(content_filter_ids, type.id))

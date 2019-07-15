@@ -127,6 +127,14 @@ var C = {
 			color: '#7ED321'
 		}
 	],
+  TRANSPARENCY_FILTER_OPTIONS: [
+    { field: 'registered_report', icon: 'preregplus', label: 'Registered Report format' },
+    { field: 'registered_design_analysis', icon: 'preregplus', label: 'Registered design + analysis'},
+    { field: 'open_materials', icon: 'materials', label: 'Public study materials'},
+    { field: 'open_data', icon: 'data', label: 'Public data'},
+    { field: 'open_code', icon: 'code', label: 'Public code'},
+    { field: 'reporting_standards', icon: 'repstd', label: 'Reporting standard compliance'},
+  ],
 	REPORTING_STANDARDS_TYPES: [
 		{
 			value: '',

@@ -722,22 +722,6 @@ class TestAPIViews(TestCase):
 
         assert new_article.id in get_filtered_article_ids(['open_materials'])
 
-        # Registered design analysis
-        assert new_article.id not in get_filtered_article_ids(['registered_design_analysis'])
-
-        new_article.prereg_protocol_type = models.Article.PREREG_STUDY_DESIGN_ANALYSIS
-        new_article.save()
-
-        assert new_article.id in get_filtered_article_ids(['registered_design_analysis'])
-
-        # Registered report
-        assert new_article.id not in get_filtered_article_ids(['registered_report'])
-
-        new_article.prereg_protocol_type = models.Article.REGISTERED_REPORT
-        new_article.save()
-
-        assert new_article.id in get_filtered_article_ids(['registered_report'])
-
         # Reporting standards
         assert new_article.id not in get_filtered_article_ids(['reporting_standards'])
 
@@ -754,6 +738,36 @@ class TestAPIViews(TestCase):
         assert open_code_data_article.id in get_filtered_article_ids(['open_code'])
         assert open_code_data_article.id in get_filtered_article_ids(['open_code', 'open_data'])
         assert open_code_data_article.id not in get_filtered_article_ids(['open_code', 'open_data', 'open_materials'])
+
+    def test_prereg_filtering(self):
+        def get_filtered_article_ids(filters):
+            filter_query = '&'.join([f'transparency={filter}' for filter in filters])
+            base_url = reverse('api-list-articles')
+            url = f'{base_url}?{filter_query}'
+            r = self.client.get(url)
+            d = json.loads(r.content.decode('utf-8'))
+            return [article['id'] for article in d]
+
+        new_article = models.Article.objects.create(title='article')
+
+        # Registered design analysis
+        assert new_article.id not in get_filtered_article_ids(['registered_design_analysis'])
+
+        new_article.prereg_protocol_type = models.Article.PREREG_STUDY_DESIGN_ANALYSIS
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['registered_design_analysis'])
+
+        # Multiple values should combine like OR
+        assert new_article.id in get_filtered_article_ids(['registered_design_analysis', 'registered_report'])
+
+        # Registered report
+        assert new_article.id not in get_filtered_article_ids(['registered_report'])
+
+        new_article.prereg_protocol_type = models.Article.REGISTERED_REPORT
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['registered_report'])
 
     def test_api_list_pagination(self):
         # Create 11 new articles

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { filter, includes } from 'lodash'
 
-import { Chip } from '@material-ui/core';
+import { Chip, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import C from '../constants/constants';
@@ -26,6 +26,7 @@ const styles = theme => ({
   filtersLabel: {
     opacity: 0.4,
     marginRight: 0.5*theme.spacing.unit,
+    paddingTop: 0.6*theme.spacing.unit,
   },
 })
 
@@ -33,13 +34,7 @@ class FilterChips extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.filter_options = [
-      { field: 'registered_report', icon: 'prereg', label: 'Registered Report'},
-      { field: 'open_materials', icon: 'materials', label: 'Public study materials'},
-      { field: 'open_data', icon: 'data', label: 'Public data'},
-      { field: 'open_code', icon: 'code', label: 'Public code'},
-      { field: 'reporting_standards', icon: 'repstd', label: 'Reporting standard compliance'},
-    ]
+    this.filter_options = C.TRANSPARENCY_FILTER_OPTIONS
 
     const content_filter_ids = ['ORIGINAL', 'REPLICATION', 'REPRODUCIBILITY', 'META_ANALYSIS']
     this.content_filter_options = filter(C.ARTICLE_TYPES, type => includes(content_filter_ids, type.id))
@@ -77,27 +72,31 @@ class FilterChips extends React.PureComponent {
     let { classes } = this.props
 
     return (
-      <div className={classes.filterChips}>
-        <span className={classes.filtersLabel}>Filters: </span>
-        { this.selected_transparency_filters().map(filter => {
-            return <Chip
-                    className={classes.filterChip}
-                    label={<TransparencyIcon tt={{icon: filter.icon}} size={25}/>}
-                    key={filter.field}
-                    onDelete={this.delete_filter.bind(this, filter.field)}
-                  />
-          })
-        }
-        { this.selected_content_filters().map(filter => {
-            return <Chip
-                    className={classes.filterChip}
-                    label={<span className={classes.contentFilterChipLabel} style={{ color: filter.color }}>{filter.label}</span>}
-                    key={filter.id}
-                    onDelete={this.delete_content_filter.bind(this, filter.id)}
-                  />
-          })
-        }
-      </div>
+      <Grid container wrap="nowrap" className={classes.filterChips}>
+        <div className={classes.filtersLabel}>Filters: </div>
+        <div>
+          { this.selected_transparency_filters().map(filter => {
+              return <Chip
+                      className={classes.filterChip}
+                      title={filter.label}
+                      label={<TransparencyIcon tt={{icon: filter.icon}} size={25}/>}
+                      key={filter.field}
+                      onDelete={this.delete_filter.bind(this, filter.field)}
+                    />
+            })
+          }
+          { this.selected_content_filters().map(filter => {
+              return <Chip
+                      className={classes.filterChip}
+                      title={filter.label}
+                      label={<span className={classes.contentFilterChipLabel} style={{ color: filter.color }}>{filter.label}</span>}
+                      key={filter.id}
+                      onDelete={this.delete_content_filter.bind(this, filter.id)}
+                    />
+            })
+          }
+        </div>
+      </Grid>
     )
   }
 }
