@@ -218,12 +218,6 @@ class ArticleLI extends React.Component {
 		  				</IconButton>
 	  				</div>
 
-            <div hidden={!show_date}>
-              <Typography className={classes.createdDate} component='div' color="textSecondary">
-                {created_at}
-              </Typography>
-            </div>
-
 	  				<div id="details" hidden={!show_more}>
 	  					<Typography className={classes.abstract}><TruncatedText text={article.abstract} maxLength={540} fontSize={12} /></Typography>
 	  					<ArticleKeywords keywords={article.keywords} />
@@ -260,6 +254,13 @@ class ArticleLI extends React.Component {
                 </span>
               </Typography>
 	  				</div>
+
+            <div hidden={!show_date}>
+              <Typography className={classes.createdDate} component='div' color="textSecondary">
+                {created_at}
+              </Typography>
+            </div>
+
 	  			</CardContent>
 				</Card>
 			</div>
