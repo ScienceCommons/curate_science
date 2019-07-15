@@ -37,7 +37,7 @@ class Home extends React.PureComponent {
     this.state = {
       articles: [],
       articles_loading: true,
-      content_filter: null,
+      content_filters: [],
       transparency_filters: ['open_code', 'open_data', 'open_materials'],
       sort_by: 'created',
       more_articles: true,
@@ -57,7 +57,7 @@ class Home extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const url_fields = ['sort_by', 'transparency_filters', 'content_filter']
+    const url_fields = ['sort_by', 'transparency_filters', 'content_filters']
     const changed = url_fields.some(field => prevState[field] !== this.state[field])
     if (changed) {
       this.fetch_articles()
@@ -66,7 +66,7 @@ class Home extends React.PureComponent {
 
   articles_url() {
     let url = '/api/articles/'
-    const { content_filter, transparency_filters, sort_by } = this.state
+    const { content_filters, transparency_filters, sort_by } = this.state
 
     url += `?ordering=${sort_by}&page_size=${this.PAGE_SIZE}`
 
@@ -75,8 +75,9 @@ class Home extends React.PureComponent {
       url += `&${filter_string}`
     }
 
-    if (content_filter) {
-      url += `&content=${content_filter}`
+    if (content_filters.length) {
+      const content_filter_string = content_filters.map( filter => `content=${filter}`).join('&')
+      url += `&${content_filter_string}`
     }
     return url
   }
@@ -119,8 +120,8 @@ class Home extends React.PureComponent {
       })
   }
 
-  set_filters({ transparency_filters, content_filter }) {
-    this.setState({ transparency_filters, content_filter })
+  set_filters({ transparency_filters, content_filters }) {
+    this.setState({ transparency_filters, content_filters })
   }
 
   set_sort_by(value) {
@@ -132,7 +133,7 @@ class Home extends React.PureComponent {
   }
 
   render() {
-    const { articles, articles_loading, content_filter, transparency_filters, more_articles, sort_by } = this.state
+    const { articles, articles_loading, content_filters, transparency_filters, more_articles, sort_by } = this.state
     const { classes } = this.props
 
     return (
@@ -141,7 +142,7 @@ class Home extends React.PureComponent {
           <Grid container justify="space-between">
             <HomePageFilter
               transparency_filters={transparency_filters}
-              content_filter={content_filter}
+              content_filters={content_filters}
               onFilterUpdate={this.set_filters}
             />
             <SortByButton sort_by={sort_by} onSortByUpdate={this.set_sort_by}/>

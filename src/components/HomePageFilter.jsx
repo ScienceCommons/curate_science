@@ -50,7 +50,7 @@ class HomePageFilter extends React.PureComponent {
     super(props);
     this.state = {
       menu_open: false,
-      menu_content_filter: null,
+      menu_content_filters: [],
       menu_transparency_filters: [],
     };
 
@@ -72,13 +72,13 @@ class HomePageFilter extends React.PureComponent {
     this.handle_menu_click = this.handle_menu_click.bind(this)
     this.clear_all_filters = this.clear_all_filters.bind(this)
     this.update_filters = this.update_filters.bind(this)
-    this.update_content_filter = this.update_content_filter.bind(this)
+    this.update_content_filters = this.update_content_filters.bind(this)
     this.set_filters = this.set_filters.bind(this)
   }
 
   open_menu() {
-    const { content_filter, transparency_filters } = this.props
-    this.setState({ menu_open: true, menu_transparency_filters: transparency_filters, menu_content_filter: content_filter })
+    const { content_filters, transparency_filters } = this.props
+    this.setState({ menu_open: true, menu_transparency_filters: transparency_filters, menu_content_filters: content_filters })
   }
 
   close_menu() {
@@ -86,12 +86,12 @@ class HomePageFilter extends React.PureComponent {
   }
 
   clear_all_filters() {
-    this.setState({ menu_transparency_filters: [], menu_content_filter: null })
+    this.setState({ menu_transparency_filters: [], menu_content_filters: [] })
   }
 
   delete_filter(filter_field) {
-    let { content_filter, transparency_filters, onFilterUpdate } = this.props
-    onFilterUpdate({ transparency_filters: transparency_filters.filter(field => field !== filter_field), content_filter })
+    let { content_filters, transparency_filters, onFilterUpdate } = this.props
+    onFilterUpdate({ transparency_filters: transparency_filters.filter(field => field !== filter_field), content_filters })
   }
 
   filter_checked(field) {
@@ -99,28 +99,24 @@ class HomePageFilter extends React.PureComponent {
   }
 
   content_filter_checked(field) {
-    return this.state.menu_content_filter === field
+    return includes(this.state.menu_content_filters, field)
   }
 
   update_filters(field) {
-    let { menu_transparency_filters } = this.state
+    const { menu_transparency_filters } = this.state
     this.setState({ menu_transparency_filters: xor(menu_transparency_filters, [field]) })
   }
 
-  update_content_filter(menu_content_filter) {
-    if (this.state.menu_content_filter === menu_content_filter) {
-      // Clear the checkbox
-      this.setState({ menu_content_filter: null })
-    } else {
-      this.setState({ menu_content_filter })
-    }
+  update_content_filters(field) {
+    const { menu_content_filters } = this.state
+    this.setState({ menu_content_filters: xor(menu_content_filters, [field]) })
   }
 
   set_filters(field, event) {
     const { onFilterUpdate }  = this.props
     onFilterUpdate({
       transparency_filters: this.state.menu_transparency_filters,
-      content_filter: this.state.menu_content_filter
+      content_filters: this.state.menu_content_filters
     })
     this.close_menu()
   }
@@ -185,7 +181,7 @@ class HomePageFilter extends React.PureComponent {
                                   control={
                                     <Checkbox
                                       checked={this.content_filter_checked(filter.id)}
-                                      onChange={this.update_content_filter.bind(this, filter.id)}
+                                      onChange={this.update_content_filters.bind(this, filter.id)}
                                       value={filter.id}
                                     />
                                   }

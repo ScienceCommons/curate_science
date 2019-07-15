@@ -201,10 +201,12 @@ def list_articles(request):
         queryset = queryset.filter(filter_expressions[filter])
 
     # Content type filter
-    content_type = request.query_params.get('content')
+    content_filters = request.query_params.getlist('content')
     valid_content_types = ['ORIGINAL', 'REPLICATION', 'REPRODUCIBILITY', 'META_ANALYSIS']
-    if content_type and content_type in valid_content_types:
-        queryset = queryset.filter(article_type=getattr(Article, content_type))
+    valid_content_filters = [filter for filter in content_filters if filter in valid_content_types]
+    if valid_content_filters:
+        article_types = [getattr(Article, content_type) for content_type in valid_content_filters]
+        queryset = queryset.filter(article_type__in=article_types)
 
     queryset = queryset.prefetch_related('commentaries', 'authors')
 
