@@ -12,6 +12,7 @@ import {
   MenuItem,
   MenuList,
   Paper,
+  Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -140,6 +141,11 @@ class Home extends React.PureComponent {
     return (
       <Grid container justify="center">
         <Grid className="HomeArticleList">
+
+          <Typography variant="h5" component="h2" style={{ marginTop: '1rem', textAlign: 'center' }}>
+              Recently Added
+          </Typography>
+
           <Grid container justify="space-between">
             <HomePageFilter
               transparency_filters={transparency_filters}
