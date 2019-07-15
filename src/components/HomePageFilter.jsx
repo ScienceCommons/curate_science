@@ -67,6 +67,7 @@ class HomePageFilter extends React.PureComponent {
 
     this.close_menu = this.close_menu.bind(this)
     this.delete_filter = this.delete_filter.bind(this)
+    this.delete_content_filter = this.delete_content_filter.bind(this)
     this.filter_checked = this.filter_checked.bind(this)
     this.content_filter_checked = this.content_filter_checked.bind(this)
     this.handle_menu_click = this.handle_menu_click.bind(this)
@@ -74,6 +75,18 @@ class HomePageFilter extends React.PureComponent {
     this.update_filters = this.update_filters.bind(this)
     this.update_content_filters = this.update_content_filters.bind(this)
     this.set_filters = this.set_filters.bind(this)
+  }
+
+  selected_transparency_filters() {
+    return this.filter_options.filter(filter => {
+      return includes(this.props.transparency_filters, filter.field)
+    })
+  }
+
+  selected_content_filters() {
+    return this.content_filter_options.filter(filter => {
+      return includes(this.props.content_filters, filter.id)
+    })
   }
 
   open_menu() {
@@ -94,6 +107,13 @@ class HomePageFilter extends React.PureComponent {
     onFilterUpdate({ transparency_filters: transparency_filters.filter(field => field !== filter_field), content_filters })
   }
 
+  delete_content_filter(filter_field) {
+    let { content_filters, transparency_filters, onFilterUpdate } = this.props
+    onFilterUpdate({
+      transparency_filters,
+      content_filters: content_filters.filter(field => field !== filter_field)
+    })
+  }
   filter_checked(field) {
     return includes(this.state.menu_transparency_filters, field)
   }
@@ -204,15 +224,21 @@ class HomePageFilter extends React.PureComponent {
           </div>
         </ClickAwayListener>
         <div className={classes.filterChips}>
-            { this.filter_options.map(filter => {
-                if (includes(transparency_filters, filter.field)) {
-                  return <Chip
-                          label={<TransparencyIcon tt={{icon: filter.icon}} size={25}/>}
-                          key={filter.field}
-                          onDelete={this.delete_filter.bind(this, filter.field)}
-                        />
-                }
-            })
+            { this.selected_transparency_filters().map(filter => {
+                return <Chip
+                        label={<TransparencyIcon tt={{icon: filter.icon}} size={25}/>}
+                        key={filter.field}
+                        onDelete={this.delete_filter.bind(this, filter.field)}
+                      />
+              })
+            }
+            { this.selected_content_filters().map(filter => {
+                return <Chip
+                        label={filter.label}
+                        key={filter.id}
+                        onDelete={this.delete_content_filter.bind(this, filter.id)}
+                      />
+              })
             }
         </div>
       </Grid>
