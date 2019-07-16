@@ -7,15 +7,10 @@ import { withStyles } from '@material-ui/core/styles';
 
 import C from '../constants/constants';
 
+import ArticleType from './ArticleType.jsx';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 const styles = theme => ({
-  contentFilterChipLabel: {
-    backgroundColor: 'white',
-    border: 'solid 1px',
-    padding: '0.1rem 0.25rem',
-    borderRadius: '0.2rem' 
-  },
   filterChip: {
     marginRight: 0.5*theme.spacing.unit,
     marginBottom: 0.5*theme.spacing.unit,
@@ -79,7 +74,14 @@ class FilterChips extends React.PureComponent {
               return <Chip
                       className={classes.filterChip}
                       title={filter.label}
-                      label={<TransparencyIcon tt={{icon: filter.icon}} size={25}/>}
+                      label={
+                        (filter.field === 'registered_report') ?
+                        <span className="ArticleBadgeWithCount" style={{ border: 'solid 1px', color: C.REGISTERED_REPORT_COLOR, opacity: 0.6, margin: 0 }}>
+                          {filter.label}
+                        </span>
+                        :
+                        <TransparencyIcon tt={{icon: filter.icon}} size={25}/>
+                      }
                       key={filter.field}
                       onDelete={this.delete_filter.bind(this, filter.field)}
                     />
@@ -89,7 +91,9 @@ class FilterChips extends React.PureComponent {
               return <Chip
                       className={classes.filterChip}
                       title={filter.label}
-                      label={<span className={classes.contentFilterChipLabel} style={{ color: filter.color }}>{filter.label}</span>}
+                      label={
+                        <ArticleType type={filter.id} label_styles={{ opacity: 0.8, margin: 0 }} />
+                      }
                       key={filter.id}
                       onDelete={this.delete_content_filter.bind(this, filter.id)}
                     />

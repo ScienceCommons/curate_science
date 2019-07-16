@@ -4,6 +4,7 @@ var C = {
 	COL_WIDTH: 1100,
 	DIALOG_WIDTH: 1175,
 	CARD_COL_WIDTH: 650,
+  REGISTERED_REPORT_COLOR: '#E65950',
   ARTICLE_TYPES: [
     {
       id: "ORIGINAL",
@@ -16,7 +17,8 @@ var C = {
       id: "REPLICATION",
       label: "Replication",
       relevant_sections: ['replication', 'studies'],
-      color: '#996633'
+      color: '#996633',
+      description: "Article reports a replication of a previously published result"
     },
     {
       id: "REPRODUCIBILITY",
@@ -128,8 +130,8 @@ var C = {
 		}
 	],
   TRANSPARENCY_FILTER_OPTIONS: [
-    { field: 'registered_report', icon: 'preregplus', label: 'Registered Report format' },
-    { field: 'registered_design_analysis', icon: 'preregplus', label: 'Registered design + analysis'},
+    { field: 'registered_design_analysis', icon: 'preregplus', label: 'Preregistered design + analysis'},
+    { field: 'registered_report', icon: 'preregplus', label: 'Registered Report' },
     { field: 'open_materials', icon: 'materials', label: 'Public study materials'},
     { field: 'open_data', icon: 'data', label: 'Public data'},
     { field: 'open_code', icon: 'code', label: 'Public code'},

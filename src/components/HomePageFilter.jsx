@@ -17,6 +17,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import C from '../constants/constants';
 
+import ArticleType from './ArticleType.jsx';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 const styles = theme => ({
@@ -162,7 +163,7 @@ class HomePageFilter extends React.PureComponent {
                         <Typography className={classes.menuTitle}>Transparency</Typography>
                         <FormGroup>
                             { this.filter_options.map(filter =>
-                              <div key={filter.field}>
+                              <div key={filter.field} style={{marginLeft: filter.field === 'registered_report' ? 35 : null }}>
                                 <FormControlLabel
                                   control={
                                     <Checkbox
@@ -171,11 +172,21 @@ class HomePageFilter extends React.PureComponent {
                                       value={filter.field}/>
                                   }
                                   label={
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
-                                      <TransparencyIcon tt={{icon: filter.icon}} size={25} />
-                                      <span className={classes.filterCheckbox}>{filter.label}</span>
-                                    </div>
-                                  }
+                                      <div style={{display: 'flex', alignItems: 'center'}}>
+                                        <TransparencyIcon tt={{icon: filter.icon}} size={25} />
+                                          {
+                                          (filter.field === 'registered_report') ?
+                                            <span className={classes.filterCheckbox} style={{ display: 'flex', alignItems: 'center' }}>
+                                              <span className="ArticleBadgeWithCount" color="inherit" style={{ border: 'solid 1px', color: C.REGISTERED_REPORT_COLOR, opacity: 0.6 }}>
+                                                  {filter.label}
+                                              </span>
+                                              format
+                                            </span>
+                                          : <span className={classes.filterCheckbox}>{filter.label}</span>
+                                          }
+                                      </div>
+                                    }
+                                  
                                 />
                               </div>
                             ) }
@@ -186,11 +197,6 @@ class HomePageFilter extends React.PureComponent {
                         <Typography className={classes.menuTitle}>Content Type</Typography>
                         <FormGroup>
                             { this.content_filter_options.map((filter) => {
-                              let style = { padding: '0.25rem 0.5rem', borderRadius: '0.4rem' }
-                              if (filter.id !== 'ORIGINAL') {
-                                style.backgroundColor = filter.color
-                                style.color = '#eeeeee'
-                              }
                               return <div key={filter.id}>
                                 <FormControlLabel
                                   control={
@@ -201,7 +207,7 @@ class HomePageFilter extends React.PureComponent {
                                     />
                                   }
                                   label={
-                                    <span style={style}>{filter.label}</span>
+                                    <ArticleType type={filter.id} label_styles={{ opacity: 0.8, margin: 0 }} />
                                   }
                                 />
                               </div>
