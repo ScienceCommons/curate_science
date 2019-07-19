@@ -14,6 +14,7 @@ import Help from './pages/Help.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Recent from './pages/Recent.jsx';
 import Replications from './pages/Replications.jsx';
+import ArticlePage from './pages/ArticlePage.jsx';
 import AuthorPage from './pages/AuthorPage.jsx';
 import AuthorPageCreator from './pages/AuthorPageCreator.jsx';
 import AdminManage from './pages/AdminManage.jsx';
@@ -110,6 +111,7 @@ class App extends React.Component {
                                 <Route path="/help" component={Help} />
                                 <Route path="/privacy" component={Privacy} />
                                 <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
+                                <Route path="/article/:id" component={() => <ArticlePage user_session={user_session} />} />
                                 <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
                                 <Route path="/admin/manage" component={AdminManage} />
                                 <Route path="/admin/invite" component={AdminInvite} />
