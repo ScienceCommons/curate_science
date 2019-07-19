@@ -6,6 +6,7 @@ import { Button, Grid, Icon, IconButton } from '@material-ui/core';
 
 import { get, includes } from 'lodash'
 
+import ArticleActions from '../components/ArticleActions.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
 import Loader from '../components/shared/Loader.jsx';
@@ -58,14 +59,9 @@ class ArticleList extends React.Component {
   }
 
   handle_delete(a) {
-    let pk = a.id
-    let {articles, cookies} = this.props
-    simple_api_req('DELETE', `/api/articles/${pk}/delete/`, {}, cookies.get('csrftoken'), () => {
-      articles = articles.filter(article => article.id != a.id)
-      this.props.onArticlesUpdated(articles)
-    }, (err) => {
-      console.error(err)
-    })
+    let articles = this.props.articles
+    articles = articles.filter(article => article.id != a.id)
+    this.props.onArticlesUpdated(articles)
   }
 
   handle_edit(a) {
@@ -177,9 +173,7 @@ class ArticleWithActions extends React.Component {
     this.edit = this.edit.bind(this)
     this.delete = this.delete.bind(this)
     this.show_figure = this.show_figure.bind(this)
-    this.user_is_author = this.user_is_author.bind(this)
     this.got_article_details = this.got_article_details.bind(this)
-    this.toggle_link = this.toggle_link.bind(this)
   }
 
   edit() {
@@ -192,33 +186,6 @@ class ArticleWithActions extends React.Component {
     this.props.onDelete(article)
   }
 
-  update_linkage(linked) {
-    let { article, cookies, user_session } = this.props
-    const author_slug = get(user_session, 'author.slug')
-    if (author_slug != null) {
-      // Update author to remove article_id from articles member
-      let data = [
-        {
-          article: article.id,
-          linked: linked
-        }
-      ]
-      json_api_req('POST', `/api/authors/${author_slug}/articles/linkage/`, data, cookies.get('csrftoken'), () => {
-        json_api_req('GET', `/api/articles/${article.id}/`, {}, null, (res) => {
-          this.props.onUpdate(res)
-        })
-      })
-    }
-  }
-
-  toggle_link() {
-    if (this.user_is_author()) {
-      this.update_linkage(false)
-    } else {
-      this.update_linkage(true)
-    }
-  }
-
   show_figure(figures, index) {
     this.props.onFigureClick(figures, index)
   }
@@ -227,42 +194,17 @@ class ArticleWithActions extends React.Component {
     this.props.onFetchedArticleDetails(id, figures, commentaries)
   }
 
-  user_has_associated_author() {
-    let { user_session } = this.props
-    return (typeof user_session.author !== 'undefined')
-  }
-
-  user_is_author() {
-    let { article, user_session } = this.props
-    const user_author_id = get(user_session, 'author.id')
-    return includes(article.authors, user_author_id)
-  }
-
-  editable() {
-    // Show edit function if the user is an admin or the user is one of the authors
-    return this.props.user_session.admin || this.user_is_author()
-  }
-
   render() {
-    let { article, classes, show_date } = this.props
-    const admin = this.props.user_session.admin
-    const editable = this.editable()
-    const user_has_associated_author = this.user_has_associated_author()
-    const user_is_author = this.user_is_author()
+    let { article, classes, is_article_page, show_date } = this.props
 
-    const ST = {
-      marginRight: 10
-    }
-    const DELETE_ST = {
-      borderColor: 'red',
-      color: 'red'
-    }
     let article_ui_id = article.doi || article.id
+
     return (
       <div key={article.id} className="ArticleWithActions" id={article_ui_id}>
         <div className="Article">
           <ArticleLI article={article}
             admin={false}
+            is_article_page={is_article_page}
             onFetchedArticleDetails={this.got_article_details}
             onFigureClick={this.show_figure}
             show_date={show_date}
@@ -275,37 +217,21 @@ class ArticleWithActions extends React.Component {
             </IconButton>
           </span>
         </div>
-        <div className="ArticleActions">
-          <span hidden={!editable}>
-            <span className="ActionButton">
-              <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
-                <Icon className={classes.leftIcon}>edit</Icon>
-                  Edit
-              </Button>
-            </span>
-          </span>
-          <span hidden={!user_has_associated_author}>
-            <span className="ActionButton">
-              <Button variant="outlined" size="small" color="secondary" onClick={this.toggle_link} style={ST}>
-                <Icon className={classes.leftIcon}>{user_is_author ? 'link_off' : 'link'}</Icon>
-                  {user_is_author ? 'Unlink' : 'Link'}
-              </Button>
-            </span>
-          </span>
-          <span hidden={!admin}>
-            <span className="ActionButton">
-              <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
-                <Icon color="inherit" className={classes.leftIcon}>delete</Icon>
-                  Delete
-              </Button>
-            </span>
-          </span>
-        </div>
+
+        <ArticleActions
+          article={article}
+          user_session={user_session}
+          onDelete={this.delete}
+          onEdit={this.edit}
+          onUpdate={this.props.onUpdate}
+        />
+
       </div>
     )
   }
 }
 
 const StyledArticleWithActions = withCookies(withStyles(styles)(ArticleWithActions))
+export { StyledArticleWithActions }
 
 export default withRouter(withCookies(withStyles(styles)(ArticleList)));
