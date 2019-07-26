@@ -2,12 +2,26 @@ Curate Science
 ==============
 [![Build Status](https://travis-ci.org/ScienceCommons/curate_science.svg?branch=master)](https://travis-ci.org/ScienceCommons/curate_science)
 
-*Transparency Labels for Science*
+*Transparency Compliance for Science*
 
-Code base of **[Curate Science](http://CurateScience.org)**, a platform that provides <i>transparency labels for scientific articles</i>. **Science requires transparency**, however, no platform currently exists to look up the transparency of published papers. Curate Science aims to solve this problem by developing a platform for researchers to _label_ and _link_ the transparency **and** replication of published findings. Such a transparency compliance system has immense potential to accelerate scientific progress by allowing funders, universities, journals, and researchers ensure that scientific articles comply with appropriate transparency standards (for more details, see [our white paper](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf), which outlines the meta-scientific principles that inform our approach).
+Code base of **[Curate Science](https://CurateScience.org)**, a next-generation *transparency compliance and accountability system* for scientific articles. A central problem in research is determining whether reported evidence can be trusted. In science, evidence can only be trusted if it is transparently reported and has survived scrutiny from peers via follow-up replications/re-analyses. No platform, however, currently exists to verify (and track) the transparency and replication of research. 
 
-![alt text](https://github.com/ScienceCommons/science-commons/blob/master/logos/carousel-png1.png)
+To solve this problem, we are developing curation tools that will allow researchers, journals, universities, and funders ensure that scientific articles (1) comply with the appropriate transparency standards and (2) are accountable to follow-up replication studies and re-analyses. This will create immense value for all research stakeholders (see [list](https://etiennelebel.com/logos/value-created-for-stakeholders.png)), which has large potential to accelerate scientific progress and applied innovations. 
 
+For more details about the platform, see:
+1.	[Falsifiability-informed framework](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf) that guides the design and implementation of our platform/tools.
+2.	[Current functionalities/features](https://etiennelebel.com/documents/generalized-grant-proposal.pdf) being designed and developed.
+3.	[Upcoming features and platform roadmap](https://github.com/ScienceCommons/curate_science/issues/52).
+
+![alt text](https://etiennelebel.com/logos/carousel-png1_updated.png)
+
+*Figure 1*: Basic layout of Curate Science’s article card displaying information about an article’s 
+transparency and follow-up commentaries, replications, and re-analyses. 
+
+![alt text](https://etiennelebel.com/logos/accountability-system-multistakeholder.png)
+
+*Figure 2*: Curate Science transparency compliance and accountability system: An article’s transparency, result 
+reproducibility, and effect replicability are curated/veriﬁed over time (findings that survive scrutiny are treated as credible proportional to the extent of scrutiny achieved over that time period). 
 
 ## Contributing
 
