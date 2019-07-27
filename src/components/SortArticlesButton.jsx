@@ -20,9 +20,12 @@ import Loader from '../components/shared/Loader.jsx';
 
 
 const styles = theme => ({
+<<<<<<< c0cc858d087fb4b35852cca34e2c9cd02a21b71d
   leftIcon: {
     marginRight: theme.spacing.unit
   },
+=======
+>>>>>>> Adds the search page component and an API route for searching authors and articles in the same query — issue #55
   menuRoot: {
     position: 'relative'
   },

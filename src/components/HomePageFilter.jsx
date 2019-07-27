@@ -153,8 +153,6 @@ class HomePageFilter extends React.PureComponent {
       menu_styles = {left: 0}
     }
 
-    const { menu_content_filters, menu_transparency_filters } = this.state
-
     return (
       <Grid className={classes.menuRoot}>
         <ClickAwayListener onClickAway={this.close_menu}>

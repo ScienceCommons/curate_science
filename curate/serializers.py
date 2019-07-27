@@ -15,6 +15,22 @@ from curate.models import (
 import re
 
 
+class AuthorSearchResultSerializer(serializers.ModelSerializer):
+    number_of_articles = serializers.IntegerField(source='articles.count')
+    search_result_type = serializers.ReadOnlyField(default='AUTHOR')
+
+    class Meta:
+        model = Author
+        fields = (
+            'id',
+            'name',
+            'affiliations',
+            'number_of_articles',
+            'slug',
+            'search_result_type',
+        )
+
+
 class AuthorSerializer(serializers.ModelSerializer):
     account = serializers.SlugRelatedField(
         slug_field='username',
@@ -81,6 +97,11 @@ class ArticleListSerializer(serializers.ModelSerializer):
                 'required': False,
             },
         }
+
+
+class ArticleSearchResultSerializer(ArticleListSerializer):
+    search_result_type = serializers.ReadOnlyField(default='ARTICLE')
+
 
 class ArticleSerializerNested(WritableNestedModelSerializer):
     key_figures = KeyFigureSerializer(many=True, required=False, allow_null=True)

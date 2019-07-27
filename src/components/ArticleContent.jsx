@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -31,6 +32,11 @@ const styles = {
     paddingTop: 0,
     marginTop: 0,
     marginBottom: 3
+  },
+  titleLink: {
+    '&:hover': {
+      textDecoration: 'underline'
+    }
   },
   authors: {
     color: "#009933",
@@ -193,12 +199,25 @@ class ArticleContent extends React.PureComponent {
     ])
 
     const created_at = this.created_at()
+    const title = (
+          <Typography className={classes.title} variant="h2" color="textPrimary">
+              {article.title}
+          </Typography>
+    )
 
 		return (
 			<div>
         <ArticleFullTextLinks {...content_links} />
 
-        <Typography className={classes.title} variant="h2" color="textPrimary">{article.title}</Typography>
+        {
+          is_article_page ?
+          <span>{title}</span>
+          :
+          <Link to={`/article/${article.id}`} className={classes.titleLink}>
+            {title}
+          </Link>
+        }
+
         <Typography className={classes.authors} color="textSecondary" gutterBottom>
           <AuthorList author_list={article.author_list} year={article.year} in_press={article.in_press} />
         </Typography>

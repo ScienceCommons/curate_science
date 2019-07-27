@@ -61,4 +61,5 @@ urlpatterns += [
     path('api/commentaries/<int:pk>/', api.view_commentary, name='api-view-commentary'),
     path('api/commentaries/<int:pk>/update/', api.update_commentary, name='api-update-commentary'),
     path('api/commentaries/<int:pk>/delete/', api.delete_commentary, name='api-delete-commentary'),
+    path('api/search/', api.search_articles_and_authors, name='api-search-articles-and-authors'),
 ]
