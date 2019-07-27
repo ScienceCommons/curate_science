@@ -27,7 +27,6 @@ const styles = theme => ({
   menu: {
     position: 'absolute',
     top: '4rem',
-    left: 0,
     zIndex: 10,
   },
   menuTitle: {
@@ -142,7 +141,14 @@ class HomePageFilter extends React.PureComponent {
 
   render() {
     let { menu_open } = this.state
-    let { classes, transparency_filters } = this.props
+    let { align_right, classes, transparency_filters } = this.props
+
+    let menu_styles
+    if (align_right) {
+      menu_styles = {right: 0}
+    } else {
+      menu_styles = {left: 0}
+    }
 
     return (
       <Grid className={classes.menuRoot}>
@@ -156,7 +162,7 @@ class HomePageFilter extends React.PureComponent {
                 Filter
             </Button>
               { menu_open ? (
-                <Paper className={classes.menu}>
+                <Paper className={classes.menu} style={menu_styles}>
                   <div className={classes.transparencyGroup}>
                     <Grid container wrap="nowrap">
                       <Grid item xs={6}>

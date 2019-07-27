@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import TopBar from './components/TopBar.jsx';
+import Footer from './components/Footer.jsx';
 
 import Splash from './pages/Splash.jsx';
 import About from './pages/About.jsx';
@@ -19,7 +20,7 @@ import AuthorPage from './pages/AuthorPage.jsx';
 import AuthorPageCreator from './pages/AuthorPageCreator.jsx';
 import AdminManage from './pages/AdminManage.jsx';
 import AdminInvite from './pages/AdminInvite.jsx';
-import Footer from './components/Footer.jsx';
+import SearchResults from './pages/SearchResults.jsx';
 
 // UI components
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -113,6 +114,7 @@ class App extends React.Component {
                                 <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
                                 <Route path="/article/:id" component={() => <ArticlePage user_session={user_session} />} />
                                 <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
+                                <Route path="/search" component={() => <SearchResults/>} />
                                 <Route path="/admin/manage" component={AdminManage} />
                                 <Route path="/admin/invite" component={AdminInvite} />
                             </Switch>

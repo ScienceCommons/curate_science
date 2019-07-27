@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.shortcuts import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,8 +26,10 @@ from curate.models import (
     KeyFigure,
 )
 from curate.serializers import (
+    AuthorSearchResultSerializer,
     AuthorSerializer,
     AuthorArticleSerializer,
+    ArticleSearchResultSerializer,
     ArticleSerializerNested,
     ArticleListSerializer,
     CommentarySerializer,
@@ -154,20 +158,16 @@ def delete_author(request, slug):
     author.delete()
     return Response(status=status.HTTP_200_OK)
 
-# Article views
-@api_view(('GET', ))
-def list_articles(request):
-    '''
-    Return a list of all existing articles.
-    '''
-    # Only show live articles
-    queryset = Article.objects.filter(is_live=True)
-
+def filter_and_sort_articles(request):
+    """ Parses transparency filters, content filters and ordering query parameters
+        from the request and return the appropriate Article queryset.
+    """
     # Sort the results by created or impact
     ordering = request.query_params.get('ordering')
     if ordering not in ['created', 'impact']:
-        ordering = 'created'
+        ordering = None
 
+    queryset = Article.objects.all()
     if ordering == 'created':
         queryset = queryset.order_by('-created')
     elif ordering == 'impact':
@@ -183,7 +183,10 @@ def list_articles(request):
         impact = sum(map(F, impact_fields))
         queryset = queryset.annotate(impact=impact).order_by('-impact')
 
-    # Transparency ilters
+    # Transparency filters
+    # There are two types of transparency filters
+    #     - Preregistration
+    #     - Openness
     transparency_filters = request.query_params.getlist('transparency')
 
     # Preregistration options
@@ -196,6 +199,8 @@ def list_articles(request):
     ]
 
     if prereg_values:
+        # The preregistration values are combined with an OR so any articles
+        # matching at least one of the filters are returned
         queryset = queryset.filter(prereg_protocol_type__in=prereg_values)
 
     # A dict where the key is the expected query parameter and the value is a
@@ -221,6 +226,18 @@ def list_articles(request):
         article_types = [getattr(Article, content_type) for content_type in valid_content_filters]
         queryset = queryset.filter(article_type__in=article_types)
 
+    queryset = queryset.prefetch_related('commentaries', 'authors')
+
+    return queryset
+
+# Article views
+@api_view(('GET', ))
+def list_articles(request):
+    '''
+    Return a list of all existing articles.
+    '''
+    queryset = filter_and_sort_articles(request)
+    queryset = queryset.filter(is_live=True)
     queryset = queryset.prefetch_related('commentaries', 'authors')
 
     serializer = ArticleListSerializer(instance=queryset, many=True)
@@ -435,6 +452,55 @@ def search_articles(request):
     result_page = paginator.paginate_queryset(queryset, request)
     serializer=ArticleListSerializer(instance=result_page, many=True)
     return Response(serializer.data)
+
+@api_view(('GET', ))
+def search_articles_and_authors(request):
+    q = request.GET.get('q', '')
+    page_size = int(request.GET.get('page_size', 10))
+    if q:
+        logger.warning('Query: %s' % q)
+
+        article_queryset = filter_and_sort_articles(request)
+        article_queryset = (
+            article_queryset
+            .prefetch_related('authors', 'commentaries')
+            .filter(
+                Q(authors__name__icontains=q) |
+                Q(title__icontains=q) |
+                Q(author_list__icontains=q)
+            )
+            .distinct()
+        )
+
+        author_queryset = (
+            Author
+            .objects
+            .prefetch_related('articles')
+            .filter(
+                Q(name__icontains=q) |
+                Q(affiliations__icontains=q)
+            )
+        )
+    else:
+        author_queryset = Author.objects.order_by('name')
+        article_queryset = Article.objects.order_by('updated')
+
+    results = list(chain(author_queryset, article_queryset))
+    paginator = PageNumberPagination()
+    paginator.page_size = page_size
+    paginated_results = paginator.paginate_queryset(results, request)
+
+    data = []
+    # Loop through results and use the appropriate serializer
+    authors = [result for result in paginated_results if type(result) is Author]
+    articles = [result for result in paginated_results if type(result) is Article]
+
+    data = {
+        'authors': AuthorSearchResultSerializer(authors, many=True).data,
+        'articles': ArticleSearchResultSerializer(articles, many=True).data,
+    }
+    return Response(data)
+
 
 class ImageUploadView(APIView):
     permission_classes = (IsAuthenticated,)

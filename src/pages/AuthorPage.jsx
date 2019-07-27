@@ -1,8 +1,6 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
-
-import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 import {Grid, Button, Icon, IconButton,
