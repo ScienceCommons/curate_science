@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Typography, Button} from '@material-ui/core';
 import MouseOverPopover from '../components/shared/MouseOverPopover.jsx';
-import {find} from 'lodash'
+import { find, isEmpty } from 'lodash'
 import C from '../constants/constants';
 
 class ArticleType extends React.Component {
@@ -11,7 +11,7 @@ class ArticleType extends React.Component {
     }
 
 	render_article_type_label() {
-		let {type, replication_data} = this.props
+		let { label_styles, type, replication_data } = this.props
 		let at = find(C.ARTICLE_TYPES, {id: type.toUpperCase()})
 		let count
 		let label = at != null ? at.label : "Unknown"
@@ -20,15 +20,15 @@ class ArticleType extends React.Component {
 			color: color,
 			border: `1px solid ${color}`
 		}
-		if (type == 'REPLICATION') {
+		if (type == 'REPLICATION' && !isEmpty(replication_data)) {
 			count = <span className="Count">{replication_data.number_of_reps}</span>
 		}
 		let type_label = (
-			<span className="ArticleBadgeWithCount ArticleType" style={st} title={at.description}>
+			<span className="ArticleBadgeWithCount ArticleType" style={{...st, ...label_styles}} title={at.description}>
 				{ label }{ count }
 			</span>
 		)
-		if (type == 'REPLICATION') {
+		if (type == 'REPLICATION' && !isEmpty(replication_data)) {
 			return (
 				<MouseOverPopover target={type_label} key='rep_popover'>
 					<div style={{padding: 10}}>
@@ -47,10 +47,10 @@ class ArticleType extends React.Component {
 		let {registered_report} = this.props
 		let type_label = this.render_article_type_label()
 		let rr
-		const rr_color = '#E65950'
+		const rr_color = C.REGISTERED_REPORT_COLOR
 		const st = {
 			color: rr_color,
-			border: `1px solid ${rr_color}`,
+			border: `1px solid`,
 		}
 		if (registered_report) rr = (
 			<span className="ArticleBadgeWithCount ArticleType" style={st}>

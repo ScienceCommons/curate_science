@@ -2,28 +2,24 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 
-import qs from 'query-string';
-
 import { Link } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
-import {List, Grid, Button, Icon, IconButton,
+import {Grid, Button, Icon, IconButton,
         Popover, Snackbar, Tooltip} from '@material-ui/core';
 
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
+import ArticleList from '../components/ArticleList.jsx';
 import Loader from '../components/shared/Loader.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
+import { includes, merge } from 'lodash'
 
-import {merge} from 'lodash'
-
-import {json_api_req, simple_api_req, randomId} from '../util/util.jsx'
+import {json_api_req, randomId} from '../util/util.jsx'
 
 import C from '../constants/constants';
 
@@ -36,9 +32,6 @@ const styles = theme => ({
     },
     cardColumn: {
         maxWidth: C.CARD_COL_WIDTH + 'px'
-    },
-    articleList: {
-        marginTop: '10px'
     },
     authorEditButton: {
         position: 'absolute',
@@ -81,12 +74,6 @@ class AuthorPage extends React.Component {
             editing_article_id: null,
             popperAnchorEl: null,
             author_creator_showing: false,
-            view_figure_thumb: null,
-            view_figure_full: null,
-            // Lightbox / gallery state
-            gallery_images: [],
-            gallery_showing: false,
-            gallery_index: 0,
             snack_message: null
         }
 
@@ -96,17 +83,14 @@ class AuthorPage extends React.Component {
         this.close_article_editor = this.toggle_article_editor.bind(this, false)
         this.author_updated = this.author_updated.bind(this)
         this.handle_edit = this.handle_edit.bind(this)
-        this.handle_delete = this.handle_delete.bind(this)
-        this.unlink = this.unlink.bind(this)
         this.create_new_article = this.create_new_article.bind(this)
         this.link_existing_article = this.link_existing_article.bind(this)
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
         this.article_updated = this.article_updated.bind(this)
-        this.show_figure = this.show_figure.bind(this)
-        this.got_article_details = this.got_article_details.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
+        this.update_articles = this.update_articles.bind(this)
     }
 
     componentDidMount() {
@@ -165,18 +149,6 @@ class AuthorPage extends React.Component {
         })
     }
 
-    handle_delete(a) {
-        let pk = a.id
-        let {cookies} = this.props
-        let {articles} = this.state
-        simple_api_req('DELETE', `/api/articles/${pk}/delete/`, {}, cookies.get('csrftoken'), () => {
-            articles = articles.filter(article => article.id != a.id)
-            this.setState({articles: articles})
-        }, (err) => {
-            console.error(err)
-        })
-    }
-
     handle_edit(a) {
         this.setState({editing_article_id: a.id, edit_article_modal_open: true, loading: false})
     }
@@ -208,10 +180,6 @@ class AuthorPage extends React.Component {
                 }
             })
         }
-    }
-
-    unlink(a) {
-        this.update_linkage(a, false)
     }
 
     link_existing_article(a) {
@@ -269,18 +237,6 @@ class AuthorPage extends React.Component {
         this.setState({articles, edit_article_modal_open: false, editing_article_id: null})
     }
 
-    got_article_details(id, figures, commentaries) {
-        let {articles} = this.state
-        for (let i=0; i<articles.length; i++) {
-            if (articles[i].id == id) {
-                // Replace with updated object
-                articles[i].key_figures = figures
-                articles[i].commentaries = commentaries
-            }
-        }
-        this.setState({articles})
-    }
-
     toggle_author_editor(open) {
         this.setState({edit_author_modal_open: open})
     }
@@ -303,11 +259,6 @@ class AuthorPage extends React.Component {
         });
     };
 
-    show_figure(figures, index) {
-        // Currently shows only one at a time
-        this.setState({gallery_images: figures.map((fig) => fig.image), gallery_index: index, gallery_showing: true})
-    }
-
     sorted_visible_articles() {
         let {articles} = this.state
         let sorted_visible = articles.filter(a => a.is_live)
@@ -328,36 +279,24 @@ class AuthorPage extends React.Component {
         return position
     }
 
+    update_articles(articles) {
+        let { author } = this.state
+        // Remove any articles that have been unlinked from the author
+        articles = articles.filter(article => includes(article.authors, author.id))
+        this.setState({ articles: articles })
+    }
+
 	render() {
         let {classes, user_session} = this.props
-		let {articles, author, edit_author_modal_open, edit_article_modal_open,
+        let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
-            view_figure_thumb, view_figure_full, articles_loading, gallery_showing,
-            gallery_images, gallery_index, snack_message, loading} = this.state
+            articles_loading,
+            snack_message, loading} = this.state
         if (author == null) return <Loader />
         else if (!author.is_activated) return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
         let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
         let editable = this.editable()
-        let gallery
-        if (gallery_showing && gallery_images.length > 0) gallery = (
-            <Lightbox
-                mainSrc={gallery_images[gallery_index]}
-                nextSrc={gallery_images[(gallery_index + 1) % gallery_images.length]}
-                prevSrc={gallery_images[(gallery_index + gallery_images.length - 1) % gallery_images.length]}
-                onCloseRequest={() => this.setState({ gallery_showing: false })}
-                onMovePrevRequest={() =>
-                  this.setState({
-                    gallery_index: (gallery_index + gallery_images.length - 1) % gallery_images.length,
-                  })
-                }
-                onMoveNextRequest={() =>
-                  this.setState({
-                    gallery_index: (gallery_index + 1) % gallery_images.length,
-                  })
-                }
-              />
-        )
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" className="AuthorPage">
@@ -419,28 +358,21 @@ class AuthorPage extends React.Component {
                             </div>
                         </div>
 
-                        <div className={classes.articleList}>
-                            { articles_loading ? <Loader /> : null }
-                            { this.sorted_visible_articles().map(a => <StyledArticleWithActions key={a.id}
-                                                    article={a}
-                                                    editable={editable}
-                                                    onEdit={this.handle_edit}
-                                                    onDelete={this.handle_delete}
-                                                    onUnlink={this.unlink}
-                                                    onFigureClick={this.show_figure}
-                                                    onFetchedArticleDetails={this.got_article_details}
-                                                    admin={user_session.admin} />) }
-                        </div>
+                        <ArticleList
+                          articles={this.sorted_visible_articles()}
+                          onArticlesUpdated={this.update_articles}
+                          user_session={this.props.user_session}
+                        />
                     </Grid>
     			</Grid>
 
-                { gallery }
 
                 <AuthorEditor author={author}
                               open={edit_author_modal_open}
                               onClose={this.close_author_editor}
                               onAuthorUpdate={this.author_updated}
                               onShowSnack={this.show_snack} />
+
                 <ArticleEditor article_id={editing_article_id}
                         open={edit_article_modal_open}
                         onUpdate={this.article_updated}
@@ -460,99 +392,5 @@ class AuthorPage extends React.Component {
 		)
 	}
 }
-
-class ArticleWithActions extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.edit = this.edit.bind(this)
-        this.unlink = this.unlink.bind(this)
-        this.delete = this.delete.bind(this)
-        this.show_figure = this.show_figure.bind(this)
-        this.got_article_details = this.got_article_details.bind(this)
-    }
-
-    edit() {
-        let {article} = this.props
-        this.props.onEdit(article)
-    }
-
-    delete() {
-        let {article} = this.props
-        this.props.onDelete(article)
-    }
-
-    unlink() {
-        let {article} = this.props
-        this.props.onUnlink(article)
-    }
-
-    show_figure(figures, index) {
-        this.props.onFigureClick(figures, index)
-    }
-
-    got_article_details(id, figures, commentaries) {
-        this.props.onFetchedArticleDetails(id, figures, commentaries)
-    }
-
-    render() {
-        let {article, admin, editable, classes} = this.props
-        const ST = {
-            marginRight: 10
-        }
-        const DELETE_ST = {
-            borderColor: 'red',
-            color: 'red'
-        }
-        let article_ui_id = article.doi || article.id
-        return (
-            <div key={article.id} className="ArticleWithActions" id={article_ui_id}>
-                <div className="Article">
-                    <ArticleLI article={article}
-                               admin={false}
-                               onFetchedArticleDetails={this.got_article_details}
-                               onFigureClick={this.show_figure} />
-                </div>
-                <div className="ArticleLeftActions">
-                    <span className="ActionButton">
-                        <IconButton href={`#${article_ui_id}`} size="small" style={{color: 'gray'}}>
-                            <Icon>link</Icon>
-                        </IconButton>
-                    </span>
-                </div>
-                <div className="ArticleActions">
-                    <span hidden={!editable}>
-                        <span className="ActionButton">
-                            <Button variant="outlined" size="small" color="secondary" onClick={this.edit} style={ST}>
-                                <Icon className={classes.leftIcon}>edit</Icon>
-                                Edit
-                            </Button>
-                        </span>
-                        <span className="ActionButton">
-                            <Button variant="outlined" size="small" color="secondary" onClick={this.unlink} style={ST}>
-                                <Icon className={classes.leftIcon}>link_off</Icon>
-                                Unlink
-                            </Button>
-                        </span>
-                    </span>
-                    <span hidden={!admin}>
-                        <span className="ActionButton">
-                            <Button variant="outlined" size="small" onClick={this.delete} style={DELETE_ST}>
-                                <Icon color="inherit" className={classes.leftIcon}>delete</Icon>
-                                Delete
-                            </Button>
-                        </span>
-                    </span>
-                </div>
-            </div>
-        )
-    }
-}
-
-ArticleWithActions.defaultProps = {
-    editable: false
-}
-
-const StyledArticleWithActions = withStyles(styles)(ArticleWithActions)
 
 export default withRouter(withCookies(withStyles(styles)(AuthorPage)));

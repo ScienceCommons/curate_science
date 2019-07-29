@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.db.models import F, Q
 from django.contrib.postgres.search import SearchVector, SearchRank
 import logging
 from django.contrib.auth.forms import UserCreationForm
@@ -160,8 +160,75 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
-    queryset=Article.objects.all().prefetch_related('commentaries')
-    serializer=ArticleListSerializer(instance=queryset, many=True)
+    # Sort the results by created or impact
+    ordering = request.query_params.get('ordering')
+    if ordering not in ['created', 'impact']:
+        ordering = 'created'
+
+    if ordering == 'created':
+        queryset = Article.objects.order_by('-created')
+    elif ordering == 'impact':
+        # Caculate the impact value by adding all view, citations and downloads
+        impact_fields = [
+            'pdf_citations',
+            'pdf_downloads',
+            'pdf_views',
+            'html_views',
+            'preprint_downloads',
+            'preprint_views',
+        ]
+        impact = sum(map(F, impact_fields))
+        queryset = Article.objects.annotate(impact=impact).order_by('-impact')
+
+    # Transparency ilters
+    transparency_filters = request.query_params.getlist('transparency')
+
+    # Preregistration options
+    prereg_filter_expressions = {
+        'registered_design_analysis': Article.PREREG_STUDY_DESIGN_ANALYSIS,
+        'registered_report': Article.REGISTERED_REPORT,
+    }
+    prereg_values = [
+        prereg_type for (filter, prereg_type) in prereg_filter_expressions.items() if filter in transparency_filters
+    ]
+
+    if prereg_values:
+        queryset = queryset.filter(prereg_protocol_type__in=prereg_values)
+
+    # A dict where the key is the expected query parameter and the value is a
+    # queryset filter that will return the appropriate articles
+    filter_expressions = {
+        'open_code': Q(public_code_url__isnull=False) & ~Q(public_code_url=''),
+        'open_data': Q(public_data_url__isnull=False) & ~Q(public_data_url=''),
+        'open_materials': Q(public_study_materials_url__isnull=False) & ~Q(public_study_materials_url=''),
+        'reporting_standards': Q(reporting_standards_type__isnull=False),
+    }
+
+    # Remove any invalid filters
+    valid_filters = [filter for filter in transparency_filters if filter in filter_expressions.keys()]
+
+    for filter in valid_filters:
+        queryset = queryset.filter(filter_expressions[filter])
+
+    # Content type filter
+    content_filters = request.query_params.getlist('content')
+    valid_content_types = ['ORIGINAL', 'REPLICATION', 'REPRODUCIBILITY', 'META_ANALYSIS']
+    valid_content_filters = [filter for filter in content_filters if filter in valid_content_types]
+    if valid_content_filters:
+        article_types = [getattr(Article, content_type) for content_type in valid_content_filters]
+        queryset = queryset.filter(article_type__in=article_types)
+
+    queryset = queryset.prefetch_related('commentaries', 'authors')
+
+    serializer = ArticleListSerializer(instance=queryset, many=True)
+
+    paginator = PageNumberPagination()
+    paginator.page_size = int(request.GET.get('page_size', 10))
+
+    result_page = paginator.paginate_queryset(queryset, request)
+
+    serializer = ArticleListSerializer(instance=result_page, many=True)
+
     return Response(serializer.data)
 
 # Article views

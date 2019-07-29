@@ -95,8 +95,14 @@ class App extends React.Component {
                         <TopBar user_session={user_session} />
                         <div className="AppContent">
                             <Switch>
-                                <Route exact path="/" component={Recent} />
-                                <Route exact path="/recent" component={Recent} />
+                                <Route
+                                    exact path="/"
+                                    component={() => <Recent user_session={user_session} />}
+                                />
+                                <Route
+                                    exact path="/recent"
+                                    component={() => <Recent user_session={user_session} />}
+                                />
                                 <Route exact path="/replications" component={Replications} />
                                 <Route path="/about" component={About} />
                                 <Route path="/faq" component={FAQ} />

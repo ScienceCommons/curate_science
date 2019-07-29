@@ -656,3 +656,189 @@ class TestAPIViews(TestCase):
     #     d = json.loads(r.content.decode('utf-8'))
     #     assert r.status_code == 200
     #     assert len(d) == 2
+
+    def test_api_ordering_by_created(self):
+        new_article = models.Article.objects.create(title='new article')
+
+        url = '{base_url}?ordering=created'.format(base_url=reverse('api-list-articles'))
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+
+        assert d[0]['id'] == new_article.id
+
+        created = d[0]['created']
+        for article in d[1:]:
+            assert article['created'] <= created
+            created = article['created']
+
+    def test_api_ordering_by_impact(self):
+        article_impact_100 = models.Article.objects.create(title='100 views', pdf_views=100)
+        article_impact_10 = models.Article.objects.create(title='10 views', pdf_views=10)
+        article_impact_5000 = models.Article.objects.create(title='5000 views', pdf_views=5000)
+
+        url = '{base_url}?ordering=impact'.format(base_url=reverse('api-list-articles'))
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        article_ids = [article['id'] for article in d]
+
+        assert (
+            article_ids.index(article_impact_10.id) >
+            article_ids.index(article_impact_100.id) >
+            article_ids.index(article_impact_5000.id)
+        )
+
+    def test_api_list_filtering(self):
+        new_article = models.Article.objects.create(title='new article')
+
+        def get_filtered_article_ids(filters):
+            filter_query = '&'.join([f'transparency={filter}' for filter in filters])
+            base_url = reverse('api-list-articles')
+            url = f'{base_url}?{filter_query}'
+            r = self.client.get(url)
+            d = json.loads(r.content.decode('utf-8'))
+            return [article['id'] for article in d]
+
+        # Open code
+        assert new_article.id not in get_filtered_article_ids(['open_code'])
+
+        new_article.public_code_url = 'http://example.com'
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['open_code'])
+
+        # Open data
+        assert new_article.id not in get_filtered_article_ids(['open_data'])
+
+        new_article.public_data_url = 'http://example.com'
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['open_data'])
+
+        # Open materials
+        assert new_article.id not in get_filtered_article_ids(['open_materials'])
+
+        new_article.public_study_materials_url = 'http://example.com'
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['open_materials'])
+
+        # Reporting standards
+        assert new_article.id not in get_filtered_article_ids(['reporting_standards'])
+
+        new_article.reporting_standards_type = models.Article.BASIC_4_AT_SUBMISSION
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['reporting_standards'])
+
+        # Combined filter
+        open_code_data_article = models.Article.objects.create(
+            title='open code & data', public_code_url='code.com', public_data_url='data.net'
+        )
+
+        assert open_code_data_article.id in get_filtered_article_ids(['open_code'])
+        assert open_code_data_article.id in get_filtered_article_ids(['open_code', 'open_data'])
+        assert open_code_data_article.id not in get_filtered_article_ids(['open_code', 'open_data', 'open_materials'])
+
+    def test_prereg_filtering(self):
+        def get_filtered_article_ids(filters):
+            filter_query = '&'.join([f'transparency={filter}' for filter in filters])
+            base_url = reverse('api-list-articles')
+            url = f'{base_url}?{filter_query}'
+            r = self.client.get(url)
+            d = json.loads(r.content.decode('utf-8'))
+            return [article['id'] for article in d]
+
+        new_article = models.Article.objects.create(title='article')
+
+        # Registered design analysis
+        assert new_article.id not in get_filtered_article_ids(['registered_design_analysis'])
+
+        new_article.prereg_protocol_type = models.Article.PREREG_STUDY_DESIGN_ANALYSIS
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['registered_design_analysis'])
+
+        # Multiple values should combine like OR
+        assert new_article.id in get_filtered_article_ids(['registered_design_analysis', 'registered_report'])
+
+        # Registered report
+        assert new_article.id not in get_filtered_article_ids(['registered_report'])
+
+        new_article.prereg_protocol_type = models.Article.REGISTERED_REPORT
+        new_article.save()
+
+        assert new_article.id in get_filtered_article_ids(['registered_report'])
+
+    def test_api_list_pagination(self):
+        # Create 11 new articles
+        models.Article.objects.bulk_create([models.Article(title=f'Article {i}') for i in range(11)])
+
+        # First page should return `page_size` articles
+        base_url = reverse('api-list-articles')
+        page_size = 10
+        url = f'{base_url}?page_size={page_size}'
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert len(d) == page_size
+
+        # Last page should have the remainder of the articles (e.g. 2 if page_size=10, number_of_articles=12)
+        number_of_articles = models.Article.objects.count()
+        last_page = (number_of_articles // page_size) + 1
+        url += f'&page={last_page}'
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        assert len(d) == number_of_articles % page_size
+
+        # Requests for invalid pages should return a 404
+        url += f'&page={last_page + 1}'
+        r = self.client.get(url)
+        assert r.status_code == 404
+
+    def test_api_list_content_filtering(self):
+        new_article = models.Article.objects.create(title='article')
+
+        def get_filtered_article_ids(filters):
+            base_url = reverse('api-list-articles')
+            query_string = '&content='.join(filters)
+            url = f'{base_url}?content={query_string}'
+            r = self.client.get(url)
+            d = json.loads(r.content.decode('utf-8'))
+            return [article['id'] for article in d]
+
+        # Original
+        self.assertTrue(new_article.id not in get_filtered_article_ids([models.Article.ORIGINAL]))
+        new_article.article_type = models.Article.ORIGINAL
+        new_article.save()
+        self.assertTrue(new_article.id in get_filtered_article_ids([models.Article.ORIGINAL]))
+
+        # Replication
+        self.assertTrue(new_article.id not in get_filtered_article_ids([models.Article.REPLICATION]))
+        new_article.article_type = models.Article.REPLICATION
+        new_article.save()
+        self.assertTrue(new_article.id in get_filtered_article_ids([models.Article.REPLICATION]))
+
+        # Reproducibility
+        self.assertTrue(new_article.id not in get_filtered_article_ids([models.Article.REPRODUCIBILITY]))
+        new_article.article_type = models.Article.REPRODUCIBILITY
+        new_article.save()
+        self.assertTrue(new_article.id in get_filtered_article_ids([models.Article.REPRODUCIBILITY]))
+
+        # Meta-analysis
+        self.assertTrue(new_article.id not in get_filtered_article_ids([models.Article.META_ANALYSIS]))
+        new_article.article_type = models.Article.META_ANALYSIS
+        new_article.save()
+        self.assertTrue(new_article.id in get_filtered_article_ids([models.Article.META_ANALYSIS]))
+
+        # Invalid filter
+        number_of_articles = models.Article.objects.count()
+        self.assertEqual(number_of_articles, len(get_filtered_article_ids('nonsense')))
+
+        # Multiple filters
+        new_article.article_type = models.Article.REPRODUCIBILITY
+        new_article.save()
+        self.assertTrue(
+            new_article.id in get_filtered_article_ids([models.Article.META_ANALYSIS, models.Article.REPRODUCIBILITY])
+        )
+        self.assertTrue(
+            new_article.id not in get_filtered_article_ids([models.Article.META_ANALYSIS, models.Article.REPLICATION])
+        )

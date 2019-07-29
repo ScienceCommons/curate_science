@@ -4,55 +4,60 @@ var C = {
 	COL_WIDTH: 1100,
 	DIALOG_WIDTH: 1175,
 	CARD_COL_WIDTH: 650,
-	ARTICLE_TYPES: [
-        {
-			id: "ORIGINAL",
-			label: "Original",
-			relevant_sections: ['studies'],
-			color: '#000000',
-			description: "Article reports original empirical observations (not directly comparable to previous research)"
-		},
-	    {
-			id: "REPLICATION",
-			label: "Replication",
-			relevant_sections: ['replication', 'studies'],
-			color: '#996633'
-		},
-        {
-			id: "REPRODUCIBILITY",
-			label: "Reanalysis - Reproducibility/Robustness",
-			relevant_sections: ['reanalysis'],
-			description: "Article reports a reproducibility/robustness reanalysis of a previously published result"
-		},
-        {
-			id: "META_ANALYSIS",
-			label: "Reanalysis - Meta-analysis",
-			relevant_sections: ['reanalysis'],
-			description: "Article reports a (traditional) meta-analysis of a target effect/phenomenon"
-		},
-        {
-			id: "META_RESEARCH",
-			label: "Reanalysis - Meta-research",
-			relevant_sections: ['reanalysis'],
-			description: "Article reports a reanalysis of results from previously published studies (meta-research)"
-		},
-        {
-			id: "COMMENTARY",
-			label: "Commentary",
-			relevant_sections: ['commentary'],
-			color: '#5F5F5F',
-			transparencies_bonus: true,
-			description: "Article is a commentary on previous research"
-		},
-        {
-			id: "CONCEPTUAL",
-			label: "Conceptual",
-			color: '#008080',
-			relevant_sections: ['studies'],
-			transparencies_bonus: true,
-			description: "Article involves a conceptual/theoretical contribution"
-		}
-	],
+  REGISTERED_REPORT_COLOR: '#E65950',
+  ARTICLE_TYPES: [
+    {
+      id: "ORIGINAL",
+      label: "Original",
+      relevant_sections: ['studies'],
+      color: '#000000',
+      description: "Article reports original empirical observations (not directly comparable to previous research)"
+    },
+    {
+      id: "REPLICATION",
+      label: "Replication",
+      relevant_sections: ['replication', 'studies'],
+      color: '#996633',
+      description: "Article reports a replication of a previously published result"
+    },
+    {
+      id: "REPRODUCIBILITY",
+      label: "Reanalysis - Reproducibility/Robustness",
+      relevant_sections: ['reanalysis'],
+      description: "Article reports a reproducibility/robustness reanalysis of a previously published result",
+      color: '#492311',
+    },
+    {
+      id: "META_ANALYSIS",
+      label: "Reanalysis - Meta-analysis",
+      relevant_sections: ['reanalysis'],
+      description: "Article reports a (traditional) meta-analysis of a target effect/phenomenon",
+      color: '#492311',
+    },
+    {
+      id: "META_RESEARCH",
+      label: "Reanalysis - Meta-research",
+      relevant_sections: ['reanalysis'],
+      description: "Article reports a reanalysis of results from previously published studies (meta-research)",
+      color: '#492311',
+    },
+    {
+      id: "COMMENTARY",
+      label: "Commentary",
+      relevant_sections: ['commentary'],
+      color: '#5F5F5F',
+      transparencies_bonus: true,
+      description: "Article is a commentary on previous research"
+    },
+    {
+      id: "CONCEPTUAL",
+      label: "Conceptual",
+      color: '#008080',
+      relevant_sections: ['studies'],
+      transparencies_bonus: true,
+      description: "Article involves a conceptual/theoretical contribution"
+    }
+  ],
 	RESEARCH_AREAS: [
 		{
 			id: "SOCIAL_SCIENCE",
@@ -124,6 +129,14 @@ var C = {
 			color: '#7ED321'
 		}
 	],
+  TRANSPARENCY_FILTER_OPTIONS: [
+    { field: 'registered_design_analysis', icon: 'preregplus', label: 'Preregistered design + analysis'},
+    { field: 'registered_report', icon: 'preregplus', label: 'Registered Report' },
+    { field: 'open_materials', icon: 'materials', label: 'Public study materials'},
+    { field: 'open_data', icon: 'data', label: 'Public data'},
+    { field: 'open_code', icon: 'code', label: 'Public code'},
+    { field: 'reporting_standards', icon: 'repstd', label: 'Reporting standard compliance'},
+  ],
 	REPORTING_STANDARDS_TYPES: [
 		{
 			value: '',

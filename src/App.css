@@ -28,6 +28,10 @@ textarea {
 	min-height: 600px;
 }
 
+.HomeArticleList {
+	width: 650px;
+}
+
 .CenteredContent {
 	display: block;
 	margin: 0 auto;
