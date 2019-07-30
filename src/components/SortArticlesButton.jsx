@@ -82,14 +82,9 @@ class SortBy extends React.PureComponent {
             <Button
               onClick={this.handle_menu_click}
               size="large"
-<<<<<<< 8b2a71d97928c2cad5d58bda04f5e5c940c49f31
               style={{color: "#999"}}
             >
               <Icon className={classes.leftIcon}>sort</Icon>
-=======
-            >
-              <Icon>sort</Icon>
->>>>>>> Adds the search page component and an API route for searching authors and articles in the same query — issue #55
               Sort by { sorted_by ? <span>: { sorted_by }</span> : null }
             </Button>
               { menu_open ? (
