@@ -21,6 +21,9 @@ import ArticleType from './ArticleType.jsx';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 const styles = theme => ({
+  leftIcon: {
+    marginRight: theme.spacing.unit
+  },
   menuRoot: {
     position: 'relative'
   },
@@ -159,7 +162,7 @@ class HomePageFilter extends React.PureComponent {
               size="large"
               style={{color: "#999"}}
             >
-              <Icon>filter_list</Icon>
+              <Icon className={classes.leftIcon}>filter_list</Icon>
                 Filter
             </Button>
               { menu_open ? (

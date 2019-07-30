@@ -20,6 +20,9 @@ import Loader from '../components/shared/Loader.jsx';
 
 
 const styles = theme => ({
+  leftIcon: {
+    marginRight: theme.spacing.unit
+  },
   menuRoot: {
     position: 'relative'
   },
@@ -81,7 +84,7 @@ class SortBy extends React.PureComponent {
               size="large"
               style={{color: "#999"}}
             >
-              <Icon>sort</Icon>
+              <Icon className={classes.leftIcon}>sort</Icon>
               Sort by { sorted_by ? <span>: { sorted_by }</span> : null }
             </Button>
               { menu_open ? (
