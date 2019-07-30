@@ -79,6 +79,7 @@ class SortBy extends React.PureComponent {
             <Button
               onClick={this.handle_menu_click}
               size="large"
+              style={{color: "#999"}}
             >
               <Icon>sort</Icon>
               Sort by { sorted_by ? <span>: { sorted_by }</span> : null }

@@ -157,6 +157,7 @@ class HomePageFilter extends React.PureComponent {
             <Button
               onClick={this.handle_menu_click}
               size="large"
+              style={{color: "#999"}}
             >
               <Icon>filter_list</Icon>
                 Filter
