@@ -19,6 +19,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
 import C from '../constants/constants';
 
+import SearchBox from './shared/SearchBox.jsx';
+
 import {json_api_req, summarize_api_errors, unspecified} from '../util/util.jsx'
 
 const TOPBAR_HEIGHT = 56
@@ -39,6 +41,8 @@ const styles = theme => ({
         height: TOPBAR_HEIGHT,
         minHeight: TOPBAR_HEIGHT,
         width: C.COL_WIDTH + 'px',
+        display: 'flex',
+        justifyContent: 'space-between',
     },
     centeredCol: {
         position: 'relative',
@@ -207,6 +211,7 @@ class TopBar extends React.Component {
                 <AppBar position="static" className={classes.appBar}>
                     <div className={classes.centeredCol}>
                         <Toolbar className={classes.toolbar} disableGutters>
+                          <div style={{display: 'flex', alignItems: 'center'}}>
                             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                                 <MenuIcon />
                             </IconButton>
@@ -215,8 +220,9 @@ class TopBar extends React.Component {
                                   <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME} <sup><span style={{fontSize: '9px', marginLeft: '-2px'}}>BETA</span></sup>
                                 </Typography>
                             </a>
+                          </div>
 
-                            <div className={classes.grow} key="grow" />
+                          <SearchBox/>
 
                             <div className={classes.rightSide} key="right">
 
