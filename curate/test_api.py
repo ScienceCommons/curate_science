@@ -842,3 +842,50 @@ class TestAPIViews(TestCase):
         self.assertTrue(
             new_article.id not in get_filtered_article_ids([models.Article.META_ANALYSIS, models.Article.REPLICATION])
         )
+
+    def test_api_search_article_title(self):
+        self.client = Client()
+        url = reverse('api-search-articles-and-authors')
+        article = models.Article.objects.create(title='Test Search Article')
+        r = self.client.get(f'{url}?q=test')
+        d = json.loads(r.content.decode('utf-8'))
+        article_ids = [article['id'] for article in d['articles']]
+        self.assertTrue(article.id in article_ids)
+
+    def test_api_search_article_author_list(self):
+        self.client = Client()
+        url = reverse('api-search-articles-and-authors')
+        article = models.Article.objects.create(title='Article', author_list='Matt, John')
+        r = self.client.get(f'{url}?q=matt')
+        d = json.loads(r.content.decode('utf-8'))
+        article_ids = [article['id'] for article in d['articles']]
+        self.assertTrue(article.id in article_ids)
+
+    def test_api_search_article_author(self):
+        self.client = Client()
+        url = reverse('api-search-articles-and-authors')
+        author = models.Author.objects.create(name='Charles Dickens')
+        article = models.Article.objects.create(title='Article')
+        article.authors.add(author)
+        r = self.client.get(f'{url}?q=dickens')
+        d = json.loads(r.content.decode('utf-8'))
+        article_ids = [article['id'] for article in d['articles']]
+        self.assertTrue(article.id in article_ids)
+
+    def test_api_search_author_name(self):
+        self.client = Client()
+        url = reverse('api-search-articles-and-authors')
+        author = models.Author.objects.create(name='Nick Bus')
+        r = self.client.get(f'{url}?q=bus')
+        d = json.loads(r.content.decode('utf-8'))
+        author_ids = [author['id'] for author in d['authors']]
+        self.assertTrue(author.id in author_ids)
+
+    def test_api_search_author_affiliations(self):
+        self.client = Client()
+        url = reverse('api-search-articles-and-authors')
+        author = models.Author.objects.create(name='Nick', affiliations='UCC')
+        r = self.client.get(f'{url}?q=UCC')
+        d = json.loads(r.content.decode('utf-8'))
+        author_ids = [author['id'] for author in d['authors']]
+        self.assertTrue(author.id in author_ids)
