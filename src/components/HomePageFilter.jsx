@@ -153,6 +153,9 @@ class HomePageFilter extends React.PureComponent {
       menu_styles = {left: 0}
     }
 
+    const { menu_content_filters, menu_transparency_filters } = this.state
+    const showClearFiltersButton = (menu_content_filters.length + menu_transparency_filters.length) > 1
+
     return (
       <Grid className={classes.menuRoot}>
         <ClickAwayListener onClickAway={this.close_menu}>
@@ -228,7 +231,9 @@ class HomePageFilter extends React.PureComponent {
                   </div>
 
                   <Grid container justify="flex-end">
-                    <Button onClick={this.clear_all_filters}>Clear All Filters</Button>
+                    <Button onClick={this.clear_all_filters} style={{ visibility: showClearFiltersButton ? 'visible' : 'hidden' }}>
+                        Clear All Filters
+                    </Button>
                     <Button variant="contained" onClick={this.set_filters} style={{float: 'right', margin: '1rem'}}>Apply</Button>
                   </Grid>
 
