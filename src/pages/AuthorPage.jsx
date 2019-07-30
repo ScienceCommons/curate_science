@@ -356,11 +356,15 @@ class AuthorPage extends React.Component {
                             </div>
                         </div>
 
-                        <ArticleList
-                          articles={this.sorted_visible_articles()}
-                          onArticlesUpdated={this.update_articles}
-                          user_session={this.props.user_session}
-                        />
+                        {
+                          articles_loading ?
+                          <Loader/> :
+                          <ArticleList
+                            articles={this.sorted_visible_articles()}
+                            onArticlesUpdated={this.update_articles}
+                            user_session={this.props.user_session}
+                          />
+                        }
                     </Grid>
     			</Grid>
 
