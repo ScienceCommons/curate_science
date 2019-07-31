@@ -160,13 +160,16 @@ def list_articles(request):
     '''
     Return a list of all existing articles.
     '''
+    # Only show live articles
+    queryset = Article.objects.filter(is_live=True)
+
     # Sort the results by created or impact
     ordering = request.query_params.get('ordering')
     if ordering not in ['created', 'impact']:
         ordering = 'created'
 
     if ordering == 'created':
-        queryset = Article.objects.order_by('-created')
+        queryset = queryset.order_by('-created')
     elif ordering == 'impact':
         # Caculate the impact value by adding all view, citations and downloads
         impact_fields = [
@@ -178,7 +181,7 @@ def list_articles(request):
             'preprint_views',
         ]
         impact = sum(map(F, impact_fields))
-        queryset = Article.objects.annotate(impact=impact).order_by('-impact')
+        queryset = queryset.annotate(impact=impact).order_by('-impact')
 
     # Transparency ilters
     transparency_filters = request.query_params.getlist('transparency')
