@@ -52,6 +52,20 @@ class TestAPIViews(TestCase):
         assert(len(d) == article_count)
         assert r.status_code == 200
 
+    def test_only_live_articles_are_listed(self):
+        self.client = Client()
+        url = reverse('api-list-articles')
+
+        live_article = models.Article.objects.create(title='live', is_live=True)
+        not_live_article = models.Article.objects.create(title='not live', is_live=False)
+
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        article_ids = [article['id'] for article in d]
+
+        self.assertTrue(live_article.id in article_ids)
+        self.assertTrue(not_live_article.id not in article_ids)
+
     def list_articles_for_author(self):
         self.client = Client()
         a = Author.objects.first()
