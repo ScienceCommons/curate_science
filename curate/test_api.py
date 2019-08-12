@@ -701,57 +701,66 @@ class TestAPIViews(TestCase):
             article_ids.index(article_impact_5000.id)
         )
 
-    def test_api_list_filtering(self):
+    def _get_filtered_article_ids(self, filters):
+        filter_query = '&'.join([f'transparency={filter}' for filter in filters])
+        base_url = reverse('api-list-articles')
+        url = f'{base_url}?{filter_query}'
+        r = self.client.get(url)
+        d = json.loads(r.content.decode('utf-8'))
+        return [article['id'] for article in d]
+
+    def test_api_list_filtering_open_code(self):
         new_article = models.Article.objects.create(title='new article')
 
-        def get_filtered_article_ids(filters):
-            filter_query = '&'.join([f'transparency={filter}' for filter in filters])
-            base_url = reverse('api-list-articles')
-            url = f'{base_url}?{filter_query}'
-            r = self.client.get(url)
-            d = json.loads(r.content.decode('utf-8'))
-            return [article['id'] for article in d]
+        assert new_article.id not in self._get_filtered_article_ids(['open_code'])
 
-        # Open code
-        assert new_article.id not in get_filtered_article_ids(['open_code'])
+        models.TransparencyURL.objects.create(
+            article=new_article, transparency_type=models.TransparencyURL.CODE, url='http://example.com'
+        )
 
-        new_article.public_code_url = 'http://example.com'
-        new_article.save()
+        assert new_article.id in self._get_filtered_article_ids(['open_code'])
 
-        assert new_article.id in get_filtered_article_ids(['open_code'])
+    def test_api_list_filtering_open_data(self):
+        new_article = models.Article.objects.create(title='new article')
+        assert new_article.id not in self._get_filtered_article_ids(['open_data'])
 
-        # Open data
-        assert new_article.id not in get_filtered_article_ids(['open_data'])
+        models.TransparencyURL.objects.create(
+            article=new_article, transparency_type=models.TransparencyURL.DATA, url='http://example.com/data'
+        )
 
-        new_article.public_data_url = 'http://example.com'
-        new_article.save()
+        assert new_article.id in self._get_filtered_article_ids(['open_data'])
 
-        assert new_article.id in get_filtered_article_ids(['open_data'])
+    def test_api_list_filtering_open_materials(self):
+        new_article = models.Article.objects.create(title='new article')
+        assert new_article.id not in self._get_filtered_article_ids(['open_materials'])
 
-        # Open materials
-        assert new_article.id not in get_filtered_article_ids(['open_materials'])
+        models.TransparencyURL.objects.create(
+            article=new_article, transparency_type=models.TransparencyURL.MATERIALS, url='http://example.com/materials'
+        )
 
-        new_article.public_study_materials_url = 'http://example.com'
-        new_article.save()
+        assert new_article.id in self._get_filtered_article_ids(['open_materials'])
 
-        assert new_article.id in get_filtered_article_ids(['open_materials'])
-
-        # Reporting standards
-        assert new_article.id not in get_filtered_article_ids(['reporting_standards'])
+    def test_api_list_filtering_reporting_standards(self):
+        new_article = models.Article.objects.create(title='new article')
+        assert new_article.id not in self._get_filtered_article_ids(['reporting_standards'])
 
         new_article.reporting_standards_type = models.Article.BASIC_4_AT_SUBMISSION
         new_article.save()
 
-        assert new_article.id in get_filtered_article_ids(['reporting_standards'])
+        assert new_article.id in self._get_filtered_article_ids(['reporting_standards'])
 
-        # Combined filter
-        open_code_data_article = models.Article.objects.create(
-            title='open code & data', public_code_url='code.com', public_data_url='data.net'
-        )
+    def test_api_list_filtering_combined_filter(self):
+        new_article = models.Article.objects.create(title='new article')
+        open_code_data_article = models.Article.objects.create(title='open code & data')
 
-        assert open_code_data_article.id in get_filtered_article_ids(['open_code'])
-        assert open_code_data_article.id in get_filtered_article_ids(['open_code', 'open_data'])
-        assert open_code_data_article.id not in get_filtered_article_ids(['open_code', 'open_data', 'open_materials'])
+        models.TransparencyURL.objects.bulk_create([
+            models.TransparencyURL(article=open_code_data_article, transparency_type=models.TransparencyURL.CODE, url='http://example.com/code'),
+            models.TransparencyURL(article=open_code_data_article, transparency_type=models.TransparencyURL.DATA, url='http://example.com/data'),
+        ])
+
+        assert open_code_data_article.id in self._get_filtered_article_ids(['open_code'])
+        assert open_code_data_article.id in self._get_filtered_article_ids(['open_code', 'open_data'])
+        assert open_code_data_article.id not in self._get_filtered_article_ids(['open_code', 'open_data', 'open_materials'])
 
     def test_prereg_filtering(self):
         def get_filtered_article_ids(filters):

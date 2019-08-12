@@ -152,11 +152,7 @@ class Article(models.Model):
     original_study = models.CharField(max_length=255, null=True, blank=True)
     target_effects = models.CharField(max_length=255, null=True, blank=True)
     original_article_url = models.URLField(null=True, blank=True, max_length=1000)
-    prereg_protocol_url = models.URLField(null=True, blank=True, max_length=1000)
     prereg_protocol_type = models.CharField(max_length=255, choices=prereg_choices, null=True, blank=True)
-    public_study_materials_url = models.URLField(null=True, blank=True, max_length=1000)
-    public_data_url = models.URLField(null=True, blank=True, max_length=1000)
-    public_code_url = models.URLField(null=True, blank=True, max_length=1000)
     pdf_url = models.URLField(null=True, blank=True, max_length=1000)
     html_url = models.URLField(null=True, blank=True, max_length=1000)
     preprint_url = models.URLField(null=True, blank=True, max_length=1000)
@@ -193,6 +189,40 @@ class Article(models.Model):
 
     class Meta:
         unique_together=('title', 'year')
+
+
+class TransparencyURL(models.Model):
+    DATA = 'DATA'
+    CODE = 'CODE'
+    MATERIALS = 'MATERIALS'
+    PREREG = 'PREREGISTRATION'
+
+    transparency_type_choices = (
+        (DATA, 'Data'),
+        (CODE, 'Code'),
+        (MATERIALS, 'Materials'),
+        (PREREG, 'Preregistration'),
+    )
+
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='transparency_urls',
+        null=True,
+        blank=True
+    )
+    transparency_type = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        choices=transparency_type_choices
+    )
+    protected_access = models.BooleanField(default=False)
+    url = models.URLField(blank=True, max_length=1000)
+
+    def __str__(self):
+        protected_string = ' - PROTECTED' if self.protected_access else ''
+        return f'{self.transparency_type}: {self.url}{protected_string}'
 
 
 class KeyFigure(models.Model):
