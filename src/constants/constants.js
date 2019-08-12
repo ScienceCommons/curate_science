@@ -90,7 +90,7 @@ var C = {
 			icon: "preregplus",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#C60018',
-			url_prop: 'prereg_protocol_url'
+			url_prop: 'PREREGISTRATION'
 		},
 		{
 			id: "MATERIALS",
@@ -99,7 +99,7 @@ var C = {
 			icon: "materials",
 			article_types: ['ORIGINAL', 'REPLICATION', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#F5A623',
-			url_prop: 'public_study_materials_url'
+			url_prop: 'MATERIALS'
 		},
 		{
 			id: "DATA",
@@ -108,7 +108,7 @@ var C = {
 			icon: "data",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#2D96E8',
-			url_prop: 'public_data_url'
+			url_prop: 'DATA'
 		},
 		{
 			id: "CODE",
@@ -117,7 +117,7 @@ var C = {
 			icon: "code",
 			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
 			color: '#50E3C2',
-			url_prop: 'public_code_url'
+			url_prop: 'CODE'
 		},
 		{
 			id: "REPSTD",

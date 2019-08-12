@@ -229,7 +229,7 @@ def filter_and_sort_articles(request):
 
     queryset = queryset.prefetch_related('commentaries', 'authors')
 
-    return queryset
+    return queryset.distinct()
 
 # Article views
 @api_view(('GET', ))
