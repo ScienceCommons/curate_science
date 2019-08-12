@@ -24,6 +24,7 @@ from curate.models import (
     Article,
     Commentary,
     KeyFigure,
+    TransparencyURL,
 )
 from curate.serializers import (
     AuthorSearchResultSerializer,
@@ -206,9 +207,9 @@ def filter_and_sort_articles(request):
     # A dict where the key is the expected query parameter and the value is a
     # queryset filter that will return the appropriate articles
     filter_expressions = {
-        'open_code': Q(public_code_url__isnull=False) & ~Q(public_code_url=''),
-        'open_data': Q(public_data_url__isnull=False) & ~Q(public_data_url=''),
-        'open_materials': Q(public_study_materials_url__isnull=False) & ~Q(public_study_materials_url=''),
+        'open_code': Q(transparency_urls__transparency_type=TransparencyURL.CODE),
+        'open_data': Q(transparency_urls__transparency_type=TransparencyURL.DATA),
+        'open_materials': Q(transparency_urls__transparency_type=TransparencyURL.MATERIALS),
         'reporting_standards': Q(reporting_standards_type__isnull=False),
     }
 
