@@ -878,7 +878,7 @@ class TestAPIViews(TestCase):
     def test_api_search_article_author(self):
         self.client = Client()
         url = reverse('api-search-articles-and-authors')
-        author = models.Author.objects.create(name='Charles Dickens')
+        author = models.Author.objects.create(name='Charles Dickens', is_activated=True)
         article = models.Article.objects.create(title='Article')
         article.authors.add(author)
         r = self.client.get(f'{url}?q=dickens')
@@ -889,7 +889,7 @@ class TestAPIViews(TestCase):
     def test_api_search_author_name(self):
         self.client = Client()
         url = reverse('api-search-articles-and-authors')
-        author = models.Author.objects.create(name='Nick Bus')
+        author = models.Author.objects.create(name='Nick Bus', is_activated=True)
         r = self.client.get(f'{url}?q=bus')
         d = json.loads(r.content.decode('utf-8'))
         author_ids = [author['id'] for author in d['authors']]
@@ -898,8 +898,32 @@ class TestAPIViews(TestCase):
     def test_api_search_author_affiliations(self):
         self.client = Client()
         url = reverse('api-search-articles-and-authors')
-        author = models.Author.objects.create(name='Nick', affiliations='UCC')
+        author = models.Author.objects.create(name='Nick', affiliations='UCC', is_activated=True)
         r = self.client.get(f'{url}?q=UCC')
         d = json.loads(r.content.decode('utf-8'))
         author_ids = [author['id'] for author in d['authors']]
         self.assertTrue(author.id in author_ids)
+
+    def test_api_returns_only_live_articles(self):
+        live_article = models.Article.objects.create(title='Live Article', author_list='Matt, John', is_live=True)
+        not_live_article = models.Article.objects.create(title='Test Article', author_list='Matt, John', is_live=False)
+
+        url = reverse('api-search-articles-and-authors')
+        r = self.client.get(f'{url}?q=matt')
+        d = json.loads(r.content.decode('utf-8'))
+
+        article_ids = [article['id'] for article in d['articles']]
+        self.assertTrue(live_article.id in article_ids)
+        self.assertTrue(not_live_article.id not in article_ids)
+
+    def test_api_returns_only_activated_authors(self):
+        activated_author = models.Author.objects.create(name='Nick Bus', is_activated=True)
+        not_activated_author = models.Author.objects.create(name='Nick Not Active', is_activated=False)
+
+        url = reverse('api-search-articles-and-authors')
+        r = self.client.get(f'{url}?q=nick')
+        d = json.loads(r.content.decode('utf-8'))
+
+        author_ids = [author['id'] for author in d['authors']]
+        self.assertTrue(activated_author.id in author_ids)
+        self.assertTrue(not_activated_author.id not in author_ids)

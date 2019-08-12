@@ -463,6 +463,7 @@ def search_articles_and_authors(request):
         article_queryset = filter_and_sort_articles(request)
         article_queryset = (
             article_queryset
+            .filter(is_live=True)
             .prefetch_related('authors', 'commentaries')
             .filter(
                 Q(authors__name__icontains=q) |
@@ -476,6 +477,7 @@ def search_articles_and_authors(request):
             Author
             .objects
             .prefetch_related('articles')
+            .filter(is_activated=True)
             .filter(
                 Q(name__icontains=q) |
                 Q(affiliations__icontains=q)
