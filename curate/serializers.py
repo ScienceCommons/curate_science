@@ -11,6 +11,7 @@ from curate.models import (
     Article,
     Commentary,
     KeyFigure,
+    TransparencyURL,
 )
 import re
 
@@ -57,9 +58,17 @@ class CommentarySerializer(serializers.ModelSerializer):
         model=Commentary
         fields='__all__'
 
+
+class TransparencyURLSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransparencyURL
+        exclude = ('article',)
+
+
 class ArticleListSerializer(serializers.ModelSerializer):
     commentaries = CommentarySerializer(many=True, required=False, allow_null=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+    transparency_urls = TransparencyURLSerializer(many=True)
 
     class Meta:
         model=Article

@@ -180,13 +180,10 @@ class ArticleContent extends React.PureComponent {
 
     const transparency_data = pick(article, [
       'article_type',
-      'prereg_protocol_url',
       'prereg_protocol_type',
-      'public_study_materials_url',
-      'public_data_url',
-      'public_code_url',
       'reporting_standards_type',
-      'commentaries'
+      'commentaries',
+      'transparency_urls',
     ])
 
     const show_figures = article.key_figures || []
