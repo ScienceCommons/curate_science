@@ -225,6 +225,20 @@ class TransparencyURL(models.Model):
         return f'{self.transparency_type}: {self.url}{protected_string}'
 
 
+class MediaCoverage(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='media_coverage',
+    )
+    media_source_name = models.CharField(max_length=255)
+    url = models.URLField(null=True, blank=True, max_length=1000)
+
+    def __str__(self):
+        url = self.url or 'No URL'
+        return f'{self.media_source_name} ({url})'
+
+
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article,
                                 on_delete=models.CASCADE,
