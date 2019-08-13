@@ -11,6 +11,7 @@ from curate.models import (
     Article,
     Commentary,
     KeyFigure,
+    MediaCoverage,
     TransparencyURL,
 )
 import re
@@ -112,10 +113,17 @@ class ArticleSearchResultSerializer(ArticleListSerializer):
     search_result_type = serializers.ReadOnlyField(default='ARTICLE')
 
 
+class MediaCoverageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MediaCoverage
+        exclude = ('article',)
+
+
 class ArticleSerializerNested(WritableNestedModelSerializer):
     key_figures = KeyFigureSerializer(many=True, required=False, allow_null=True)
     commentaries = CommentarySerializer(many=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+    media_coverage = MediaCoverageSerializer(many=True, required=False, allow_null=True)
 
     def validate_doi(self, value):
         if value:
