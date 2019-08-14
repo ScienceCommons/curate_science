@@ -577,6 +577,40 @@ class TestAPIViews(TestCase):
         r = client.delete(url)
         assert r.status_code == 403
 
+    def test_authenticated_user_can_add_media_coverage(self):
+        self.client.login(email='new_user@curatescience.org', password='password1')
+
+        article = models.Article.objects.create(title='test article')
+        user = User.objects.get(email='new_user@curatescience.org')
+
+        article.authors.add(user.author)
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        coverage = {
+            "media_source_name": "New York Times",
+            "url": "https://nyt.com",
+        }
+
+        r = self.client.patch(
+                url,
+                {
+                    "id": article.id,
+                    "media_coverage": [coverage]
+                },
+                content_type="application/json"
+            )
+
+        self.assertEqual(r.status_code, 200)
+
+        d = json.loads(r.content.decode('utf-8'))
+        self.assertEqual(d['media_coverage'][0]['media_source_name'], coverage['media_source_name'])
+        self.assertEqual(d['media_coverage'][0]['url'], coverage['url'])
+
+        article.refresh_from_db()
+        media_coverage = article.media_coverage.all()
+        self.assertEqual(len(media_coverage), 1)
+        self.assertEqual(media_coverage[0].media_source_name, 'New York Times')
+        self.assertEqual(media_coverage[0].url, 'https://nyt.com')
+
     def test_create_invitation(self):
         client = APIClient()
         client.login(email='admin@curatescience.org', password='password')
