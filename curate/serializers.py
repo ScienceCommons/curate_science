@@ -12,7 +12,10 @@ from curate.models import (
     Commentary,
     KeyFigure,
     MediaCoverage,
+    Presentation,
+    SupplementalMaterials,
     TransparencyURL,
+    Video,
 )
 import re
 
@@ -119,11 +122,32 @@ class MediaCoverageSerializer(serializers.ModelSerializer):
         exclude = ('article',)
 
 
+class VideosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        exclude = ('article',)
+
+
+class PresentationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Presentation
+        exclude = ('article',)
+
+
+class SupplementalMaterialsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SupplementalMaterials
+        exclude = ('article',)
+
+
 class ArticleSerializerNested(WritableNestedModelSerializer):
     key_figures = KeyFigureSerializer(many=True, required=False, allow_null=True)
     commentaries = CommentarySerializer(many=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     media_coverage = MediaCoverageSerializer(many=True, required=False, allow_null=True)
+    videos = VideosSerializer(many=True, required=False, allow_null=True)
+    presentations = PresentationsSerializer(many=True, required=False, allow_null=True)
+    supplemental_materials = SupplementalMaterialsSerializer(many=True, required=False, allow_null=True)
 
     def validate_doi(self, value):
         if value:

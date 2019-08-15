@@ -611,6 +611,99 @@ class TestAPIViews(TestCase):
         self.assertEqual(media_coverage[0].media_source_name, 'New York Times')
         self.assertEqual(media_coverage[0].url, 'https://nyt.com')
 
+    def test_authenticated_user_can_add_video_to_article(self):
+        self.client.login(email='new_user@curatescience.org', password='password1')
+
+        article = models.Article.objects.create(title='test article')
+        user = User.objects.get(email='new_user@curatescience.org')
+
+        article.authors.add(user.author)
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        video = {
+            "url": "https://youtube.com",
+        }
+
+        r = self.client.patch(
+                url,
+                {
+                    "id": article.id,
+                    "videos": [video]
+                },
+                content_type="application/json"
+            )
+
+        self.assertEqual(r.status_code, 200)
+
+        d = json.loads(r.content.decode('utf-8'))
+        self.assertEqual(d['videos'][0]['url'], video['url'])
+
+        article.refresh_from_db()
+        videos = article.videos.all()
+        self.assertEqual(len(videos), 1)
+        self.assertEqual(videos[0].url, video['url'])
+
+    def test_authenticated_user_can_add_presentation_to_article(self):
+        self.client.login(email='new_user@curatescience.org', password='password1')
+
+        article = models.Article.objects.create(title='test article')
+        user = User.objects.get(email='new_user@curatescience.org')
+
+        article.authors.add(user.author)
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        presentation = {
+            "url": "https://presentation.com",
+        }
+
+        r = self.client.patch(
+                url,
+                {
+                    "id": article.id,
+                    "presentations": [presentation]
+                },
+                content_type="application/json"
+            )
+
+        self.assertEqual(r.status_code, 200)
+
+        d = json.loads(r.content.decode('utf-8'))
+        self.assertEqual(d['presentations'][0]['url'], presentation['url'])
+
+        article.refresh_from_db()
+        presentations = article.presentations.all()
+        self.assertEqual(len(presentations), 1)
+        self.assertEqual(presentations[0].url, presentation['url'])
+
+    def test_authenticated_user_can_add_supplemental_materials_to_article(self):
+        self.client.login(email='new_user@curatescience.org', password='password1')
+
+        article = models.Article.objects.create(title='test article')
+        user = User.objects.get(email='new_user@curatescience.org')
+
+        article.authors.add(user.author)
+        url = reverse('api-update-article', kwargs={'pk': article.id})
+        supplemental_materials = {
+            "url": "https://supplementalmaterials.com",
+        }
+
+        r = self.client.patch(
+                url,
+                {
+                    "id": article.id,
+                    "supplemental_materials": [supplemental_materials]
+                },
+                content_type="application/json"
+            )
+
+        self.assertEqual(r.status_code, 200)
+
+        d = json.loads(r.content.decode('utf-8'))
+        self.assertEqual(d['supplemental_materials'][0]['url'], supplemental_materials['url'])
+
+        article.refresh_from_db()
+        article_supplemental_materials = article.supplemental_materials.all()
+        self.assertEqual(len(article_supplemental_materials), 1)
+        self.assertEqual(article_supplemental_materials[0].url, supplemental_materials['url'])
+
     def test_create_invitation(self):
         client = APIClient()
         client.login(email='admin@curatescience.org', password='password')
