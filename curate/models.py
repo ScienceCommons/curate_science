@@ -121,6 +121,13 @@ class Article(models.Model):
         (REGISTERED_REPORT, "Registered report"),
     )
 
+    PROPRIETARY = 'PROP'
+    ETHICAL = 'ETHI'
+    nontransparency_reason_choices = (
+        (PROPRIETARY, 'Proprietary/IP'),
+        (ETHICAL, 'Ethical reasons'),
+    )
+
     doi = models.CharField(max_length=255, null=True, blank=True, unique=True)
     journal = models.CharField(max_length=255, null=True, blank=True)
     author_list = models.CharField(max_length=255, null=True, blank=True)
@@ -176,6 +183,46 @@ class Article(models.Model):
     peer_reviewers = models.CharField(max_length=255, null=True, blank=True)
     peer_review_url = models.URLField(null=True, blank=True, max_length=1000)
     is_live = models.BooleanField(default=True)
+
+    under_peer_review = models.BooleanField(default=False)
+
+    reproducibility_original_study = models.CharField(max_length=255, null=True, blank=True)
+    reproducibility_original_study_url = models.URLField(null=True, blank=True, max_length=1000)
+
+    commentary_target = models.CharField(max_length=255, null=True, blank=True)
+    commentary_target_url = models.URLField(null=True, blank=True, max_length=1000)
+
+    excluded_data = models.TextField(null=True, blank=True)
+    excluded_data_all_details_reported = models.BooleanField(default=False)
+
+    conditions = models.TextField(null=True, blank=True)
+    conditions_all_details_reported = models.BooleanField(default=False)
+
+    sample_size = models.TextField(null=True, blank=True)
+    sample_size_all_details_reported = models.BooleanField(default=False)
+
+    analyses = models.TextField(null=True, blank=True)
+    analyses_all_details_reported = models.BooleanField(default=False)
+
+    unreported_studies = models.TextField(null=True, blank=True)
+    unreported_studies_all_details_reported = models.BooleanField(default=False)
+
+    other_disclosures = models.TextField(null=True, blank=True)
+    other_disclosures_all_details_reported = models.BooleanField(default=False)
+    disclosure_date = models.DateTimeField(null=True, blank=True)
+
+    materials_nontransparency_reason = models.CharField(
+        max_length=4,
+        choices=nontransparency_reason_choices,
+        null=True,
+        blank=True
+    )
+    data_nontransparency_reason = models.CharField(
+        max_length=4,
+        choices=nontransparency_reason_choices,
+        null=True,
+        blank=True
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
