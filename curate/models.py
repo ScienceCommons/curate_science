@@ -239,6 +239,42 @@ class MediaCoverage(models.Model):
         return f'{self.media_source_name} ({url})'
 
 
+class Video(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='videos',
+    )
+    url = models.URLField(max_length=1000)
+
+    def __str__(self):
+        return self.url
+
+
+class Presentation(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='presentations',
+    )
+    url = models.URLField(max_length=1000)
+
+    def __str__(self):
+        return self.url
+
+
+class SupplementalMaterials(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='supplemental_materials',
+    )
+    url = models.URLField(max_length=1000)
+
+    def __str__(self):
+        return self.url
+
+
 class KeyFigure(models.Model):
     article = models.ForeignKey(Article,
                                 on_delete=models.CASCADE,
