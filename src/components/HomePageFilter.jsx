@@ -230,6 +230,7 @@ class HomePageFilter extends React.PureComponent {
                   </div>
 
                   <Grid container justify="flex-end">
+                    <Button onClick={this.clear_all_filters}>Clear All Filters</Button>
                     <Button variant="contained" onClick={this.set_filters} style={{float: 'right', margin: '1rem'}}>Apply</Button>
                   </Grid>
 
