@@ -2,7 +2,7 @@ import React from 'react';
 
 import { filter, includes } from 'lodash'
 
-import { Chip, Grid } from '@material-ui/core';
+import { Button, Chip, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import C from '../constants/constants';
@@ -34,6 +34,7 @@ class FilterChips extends React.PureComponent {
     const content_filter_ids = ['ORIGINAL', 'REPLICATION', 'REPRODUCIBILITY', 'META_ANALYSIS']
     this.content_filter_options = filter(C.ARTICLE_TYPES, type => includes(content_filter_ids, type.id))
 
+    this.clear_all_filters = this.clear_all_filters.bind(this)
     this.delete_filter = this.delete_filter.bind(this)
     this.delete_content_filter = this.delete_content_filter.bind(this)
   }
@@ -48,6 +49,10 @@ class FilterChips extends React.PureComponent {
     return this.content_filter_options.filter(filter => {
       return includes(this.props.content_filters, filter.id)
     })
+  }
+
+  clear_all_filters() {
+    this.props.onFilterUpdate({ transparency_filters: [], content_filters: [] })
   }
 
   delete_filter(filter_field) {
@@ -65,6 +70,8 @@ class FilterChips extends React.PureComponent {
 
   render() {
     let { classes } = this.props
+    const number_filters = this.props.transparency_filters.length + this.props.content_filters.length
+    const show_clear_filters_button = number_filters > 1
 
     return (
       <Grid container wrap="nowrap" className={classes.filterChips}>
@@ -76,9 +83,12 @@ class FilterChips extends React.PureComponent {
                       title={filter.label}
                       label={
                         (filter.field === 'registered_report') ?
-                        <span className="ArticleBadgeWithCount" style={{ border: 'solid 1px', color: C.REGISTERED_REPORT_COLOR, opacity: 0.6, margin: 0 }}>
-                          {filter.label}
-                        </span>
+                        <div style={{display: 'flex', alignItems: 'center'}}>
+                          <TransparencyIcon tt={{icon: filter.icon}} size={25} style={{marginRight: 4}}/>
+                          <span className="ArticleBadgeWithCount" style={{ border: 'solid 1px', color: C.REGISTERED_REPORT_COLOR, opacity: 0.6, margin: 0 }}>
+                            {filter.label}
+                          </span>
+                        </div>
                         :
                         <TransparencyIcon tt={{icon: filter.icon}} size={25}/>
                       }
@@ -99,6 +109,13 @@ class FilterChips extends React.PureComponent {
                     />
             })
           }
+
+          <Button
+            onClick={this.clear_all_filters}
+            style={{ color: '#999', visibility: show_clear_filters_button ? 'visible' : 'hidden' }}
+          >
+            Clear All
+          </Button>
         </div>
       </Grid>
     )
