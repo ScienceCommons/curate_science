@@ -21,13 +21,15 @@ import ArticleType from './ArticleType.jsx';
 import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 const styles = theme => ({
+  leftIcon: {
+    marginRight: theme.spacing.unit
+  },
   menuRoot: {
     position: 'relative'
   },
   menu: {
     position: 'absolute',
     top: '4rem',
-    left: 0,
     zIndex: 10,
   },
   menuTitle: {
@@ -142,7 +144,16 @@ class HomePageFilter extends React.PureComponent {
 
   render() {
     let { menu_open } = this.state
-    let { classes, transparency_filters } = this.props
+    let { align_right, classes, transparency_filters } = this.props
+
+    let menu_styles
+    if (align_right) {
+      menu_styles = {right: 0}
+    } else {
+      menu_styles = {left: 0}
+    }
+
+    const { menu_content_filters, menu_transparency_filters } = this.state
 
     return (
       <Grid className={classes.menuRoot}>
@@ -151,12 +162,13 @@ class HomePageFilter extends React.PureComponent {
             <Button
               onClick={this.handle_menu_click}
               size="large"
+              style={{color: "#999"}}
             >
-              <Icon>filter_list</Icon>
+              <Icon className={classes.leftIcon}>filter_list</Icon>
                 Filter
             </Button>
               { menu_open ? (
-                <Paper className={classes.menu}>
+                <Paper className={classes.menu} style={menu_styles}>
                   <div className={classes.transparencyGroup}>
                     <Grid container wrap="nowrap">
                       <Grid item xs={6}>

@@ -4,14 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { concat } from 'lodash'
 
 import {
-  Button,
-  CircularProgress,
-  ClickAwayListener,
   Grid,
-  Icon,
-  MenuItem,
-  MenuList,
-  Paper,
   Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -20,18 +13,9 @@ import ArticleList from '../components/ArticleList.jsx';
 import FilterChips from '../components/FilterChips.jsx';
 import HomePageFilter from '../components/HomePageFilter.jsx';
 import Loader from '../components/shared/Loader.jsx';
+import LoadMoreButton from '../components/LoadMoreButton.jsx';
+import SortArticlesButton from '../components/SortArticlesButton.jsx';
 
-const styles = theme => ({
-  menuRoot: {
-    position: 'relative'
-  },
-  menu: {
-    position: 'absolute',
-    top: '4rem',
-    left: 0,
-    zIndex: 10,
-  },
-})
 
 class Home extends React.PureComponent {
   constructor(props) {
@@ -152,7 +136,7 @@ class Home extends React.PureComponent {
               content_filters={content_filters}
               onFilterUpdate={this.set_filters}
             />
-            <SortByButton sort_by={sort_by} onSortByUpdate={this.set_sort_by}/>
+            <SortArticlesButton sort_by={sort_by} onSortByUpdate={this.set_sort_by}/>
           </Grid>
 
           {(transparency_filters.length + content_filters.length) ?
@@ -177,7 +161,11 @@ class Home extends React.PureComponent {
 
                 { articles.length === 0 ? null :
                   <Grid container justify="center">
-                    <LoadMoreButton more_articles={more_articles} fetch_more_articles={this.fetch_more_articles}/>
+                    <LoadMoreButton
+                      all_loaded_text="All articles loaded"
+                      load_more={this.fetch_more_articles}
+                      more_available={more_articles}
+                    />
                   </Grid>
                 }
 
@@ -190,116 +178,4 @@ class Home extends React.PureComponent {
   }
 }
 
-class LoadMoreButton extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-    };
-    this.load_more = this.load_more.bind(this)
-  }
-
-  load_more() {
-    this.setState({ loading: true })
-    this.props.fetch_more_articles()
-      .then(() => {
-        this.setState({ loading: false })
-      })
-  }
-
-  render() {
-    const loading = this.state.loading
-    if (this.props.more_articles) {
-      return (
-        <Button onClick={this.load_more} disabled={loading} style={{position: 'relative'}}>
-          <Icon>keyboard_arrow_down</Icon>
-          Show More
-          {
-            loading &&
-            <CircularProgress
-              size={24}
-              style={{position: 'absolute', top: '50%', left: '50%', marginTop: -12, marginLeft: -12}}
-            />
-          }
-        </Button>
-      )
-    } 
-    return <Button disabled>All articles loaded</Button>
-  }
-}
-
-
-class SortBy extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menu_open: false,
-    };
-
-    this.sort_by_options = {
-      created: 'Newest first',
-      impact: 'Impact',
-    }
-
-    this.close_menu = this.close_menu.bind(this)
-    this.handle_menu_click = this.handle_menu_click.bind(this)
-    this.set_sort_by = this.set_sort_by.bind(this)
-  }
-
-  close_menu() {
-    this.setState({ menu_open: false })
-  }
-
-  set_sort_by(value) {
-    const { onSortByUpdate }  = this.props
-    onSortByUpdate(value)
-    this.close_menu()
-  }
-
-  handle_menu_click() {
-    this.setState({ menu_open: !this.state.menu_open })
-  }
-
-  sorted_by() {
-    const { sort_by } = this.props
-    return this.sort_by_options[sort_by]
-  }
-
-  render() {
-    let { menu_open } = this.state
-    let { classes } = this.props
-    const sorted_by = this.sorted_by()
-
-    return (
-      <div className={classes.menuRoot}>
-        <ClickAwayListener onClickAway={this.close_menu}>
-          <div>
-            <Button
-              onClick={this.handle_menu_click}
-              size="large"
-            >
-              <Icon>sort</Icon>
-                Sort by: { sorted_by }
-            </Button>
-              { menu_open ? (
-                <Paper className={classes.menu}>
-                  <MenuList>
-                      {
-                        Object.keys(this.sort_by_options).map(value => 
-                          <MenuItem onClick={this.set_sort_by.bind(this, value)} key={value}>
-                              {this.sort_by_options[value]}
-                          </MenuItem>
-                        )
-                      }
-                  </MenuList>
-                </Paper>
-              ) : null}
-          </div>
-        </ClickAwayListener>
-      </div>
-    )
-  }
-}
-
-const SortByButton = withStyles(styles)(SortBy)
-export default withRouter(withStyles(styles)(Home));
+export default withRouter(Home);
