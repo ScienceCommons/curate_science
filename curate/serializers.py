@@ -144,6 +144,7 @@ class ArticleSerializerNested(WritableNestedModelSerializer):
     key_figures = KeyFigureSerializer(many=True, required=False, allow_null=True)
     commentaries = CommentarySerializer(many=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+    transparency_urls = TransparencyURLSerializer(many=True)
     media_coverage = MediaCoverageSerializer(many=True, required=False, allow_null=True)
     videos = VideosSerializer(many=True, required=False, allow_null=True)
     presentations = PresentationsSerializer(many=True, required=False, allow_null=True)
