@@ -83,6 +83,7 @@ class Article(models.Model):
     META_RESEARCH = 'META_RESEARCH'
     COMMENTARY = 'COMMENTARY'
 
+    BASIC_4_7_RETROACTIVE = 'BASIC_4_7_RETROACTIVE'
     BASIC_4_AT_SUBMISSION = 'BASIC_4_AT_SUBMISSION'
     BASIC_4_RETROACTIVE = 'BASIC_4_RETROACTIVE'
     CONSORT_SPI = 'CONSORT_SPI'
@@ -98,6 +99,7 @@ class Article(models.Model):
     SOCIAL_SCIENCE = 'SOCIAL_SCIENCE'
     MEDICAL_LIFE_SCIENCE = 'MEDICAL_LIFE_SCIENCE'
     standards_choices = (
+            (BASIC_4_7_RETROACTIVE, "Basic 4/Basic 7 (retroactive)"),
             (BASIC_4_AT_SUBMISSION, "Basic-4 (at submission; PSCI, 2014)"),
             (BASIC_4_RETROACTIVE, "Basic-4 (retroactive; 2012)"),
             (CONSORT_SPI, "CONSORT-SPI (2018)"),

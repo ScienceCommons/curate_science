@@ -143,6 +143,11 @@ var C = {
 			label: "None"
 		},
 		{
+			value: 'BASIC_4_7_RETROACTIVE',
+			label: "Basic 4/Basic 7 (retroactive)",
+			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
+		},
+		{
 			value: 'BASIC_4_AT_SUBMISSION',
 			label: "Basic-4 (at submission; PSCI, 2014)",
 			html_detail: ""
@@ -196,7 +201,7 @@ var C = {
 			value: 'PRISMA_P',
 			label: "PRISMA-P (2015)",
 			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
-		}
+		},
     ],
     // Sync with fields in Article()
     PREREG_PROTOCOL_TYPES: [
