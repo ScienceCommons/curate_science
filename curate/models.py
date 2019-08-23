@@ -200,6 +200,9 @@ class Article(models.Model):
     conditions = models.TextField(null=True, blank=True)
     conditions_all_details_reported = models.BooleanField(default=False)
 
+    outcomes = models.TextField(null=True, blank=True)
+    outcomes_all_details_reported = models.BooleanField(default=False)
+
     sample_size = models.TextField(null=True, blank=True)
     sample_size_all_details_reported = models.BooleanField(default=False)
 
