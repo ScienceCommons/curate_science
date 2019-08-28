@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import Async from 'react-select/lib/Async';
+import Async from 'react-select/async';
 
 import Grid from '@material-ui/core/Grid';
 import Icon from '@material-ui/core/Icon';
