@@ -21,7 +21,7 @@ import Loader from '../components/shared/Loader.jsx';
 
 const styles = theme => ({
   leftIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
   menuRoot: {
     position: 'relative'

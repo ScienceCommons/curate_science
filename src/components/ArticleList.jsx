@@ -28,7 +28,7 @@ const styles = theme => ({
     marginTop: '10px'
   },
   leftIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
 })
 

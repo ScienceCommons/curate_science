@@ -22,7 +22,7 @@ import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 const styles = theme => ({
   leftIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
   menuRoot: {
     position: 'relative'
@@ -36,11 +36,11 @@ const styles = theme => ({
     fontSize: 16,
   },
   transparencyGroup: {
-    padding: 2*theme.spacing.unit,
+    padding: 2*theme.spacing(1),
     whiteSpace: 'nowrap',
   },
   filterCheckbox: {
-    paddingLeft: theme.spacing.unit
+    paddingLeft: theme.spacing(1)
   },
 })
 

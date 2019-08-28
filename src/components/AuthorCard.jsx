@@ -11,7 +11,7 @@ import Icon from '@material-ui/core/Icon';
 
 const styles = theme => ({
   authorDetails: {
-    '& p': { marginBottom: theme.spacing.unit, marginTop: 0 },
+    '& p': { marginBottom: theme.spacing(1), marginTop: 0 },
     color: theme.typography.body1.color
   },
   card: {

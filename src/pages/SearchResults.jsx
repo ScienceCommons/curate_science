@@ -33,7 +33,7 @@ const styles = theme => ({
   },
   header: {
     borderBottom: 'solid 1px #999999',
-    marginBottom: 2*theme.spacing.unit,
+    marginBottom: theme.spacing(2),
   }
 })
 

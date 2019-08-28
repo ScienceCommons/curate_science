@@ -12,16 +12,16 @@ import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 
 const styles = theme => ({
   filterChip: {
-    marginRight: 0.5*theme.spacing.unit,
-    marginBottom: 0.5*theme.spacing.unit,
+    marginRight: theme.spacing(0.5),
+    marginBottom: theme.spacing(0.5),
   },
   filterChips: {
-    paddingTop: theme.spacing.unit,
+    paddingTop: theme.spacing(1),
   },
   filtersLabel: {
     opacity: 0.4,
-    marginRight: 0.5*theme.spacing.unit,
-    paddingTop: 0.6*theme.spacing.unit,
+    marginRight: theme.spacing(0.5),
+    paddingTop: theme.spacing(0.6),
   },
 })
 

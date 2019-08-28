@@ -37,10 +37,10 @@ const styles = theme => ({
         right: 0
     },
     box: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
     },
     leftIcon: {
-        marginRight: theme.spacing.unit
+        marginRight: theme.spacing(1)
     },
     subtitle: {
         textAlign: 'center',

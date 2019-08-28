@@ -12,7 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   leftIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
 })
 
