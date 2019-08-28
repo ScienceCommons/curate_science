@@ -261,7 +261,7 @@ class ArticleContent extends React.PureComponent {
               <span className={classes.grayedDetails}><TruncatedText text={ article.funding_sources } maxLength={85} /></span>
             </Typography>
           </div>
-          <Typography component="span" inline>
+          <Typography component="span" display="inline">
             <span hidden={this.empty(article.peer_review_editor)}>
               <span className={classes.grayedTitle}>Editor:</span>
               <span className={classes.reviewers}>{ article.peer_review_editor || '--' }</span>
