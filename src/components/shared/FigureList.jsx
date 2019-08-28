@@ -19,7 +19,6 @@ const styles = {
         width: 80,
         height: 80,
         marginRight: 10,
-        marginTop: 10,
         border: '1px solid gray',
         backgroundSize: 'cover',
         backgroundPosition: '50% 50%',
@@ -68,16 +67,16 @@ class FigureList extends React.Component {
                   style={{backgroundImage: `url(${kf.image})`}} />
         )
         let tooltip = showDelete ? "Delete figure" : "Enlarge figure"
-        return <Tooltip title={tooltip} key={i}><a key={i} href="javascript:void(0)" onClick={this.figure_click.bind(this, i)}>{ img }</a></Tooltip>
+        return <Tooltip title={tooltip} key={i}><a key={i} href="#" onClick={this.figure_click.bind(this, i)}>{ img }</a></Tooltip>
     }
 
 	render() {
 		let {classes, figures, showAdd, loading} = this.props
         let addButton, spinner
         if (figures == null) figures = []
-        if (showAdd) addButton = <a href="javascript:void(0)" onClick={this.handle_add} className={classes.thumbnail}>
+        if (showAdd) addButton = <a href="#" onClick={this.handle_add} className={classes.thumbnail}>
             <span className={classes.add}>
-                <Icon fontSize='large'>add</Icon> <Typography>Add</Typography>
+                <Icon fontSize='large'>add</Icon> <Typography variant="body2">Add</Typography>
             </span>
         </a>
         if (loading) spinner = <Loader size="25" />

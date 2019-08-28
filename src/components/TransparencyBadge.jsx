@@ -73,7 +73,7 @@ class TransparencyBadge extends React.Component {
     if (repstd) {
       let rep_std_type = find(C.REPORTING_STANDARDS_TYPES, {value: reporting_standards_type})
       let rep_std_label = rep_std_type == null ? '?' : rep_std_type.label
-      popover_content = <Typography>{ rep_std_label }</Typography>
+      popover_content = <Typography variant="body2">{ rep_std_label }</Typography>
     } else {
 
       if (urls.length) {
@@ -86,7 +86,7 @@ class TransparencyBadge extends React.Component {
         })
 
         popover_content = urls.map(url =>
-          <Typography key={`transparency-url-${url.id}`}>
+          <Typography variant="body2" key={`transparency-url-${url.id}`}>
             { url.source_icon }
             <a href={url.url} target="_blank">{ truncate(url.url, 15) } <Icon fontSize="inherit">open_in_new</Icon></a>
           </Typography>
@@ -124,7 +124,7 @@ class TransparencyBadge extends React.Component {
 		return (
 			<ul>
 			{ this.props.commentaries.map((comm, i) => {
-				return <li key={i}><Typography><a href={comm.commentary_url} target="_blank">{ comm.authors_year }</a></Typography></li>
+				return <li key={i}><Typography variant="body2"><a href={comm.commentary_url} target="_blank">{ comm.authors_year }</a></Typography></li>
 			}) }
 			</ul>
 		)

@@ -67,6 +67,7 @@ function NoOptionsMessage(props) {
   let text = "Start typing to search..."
   return (
     <Typography
+      variant="body2"
       color="textSecondary"
       className={props.selectProps.classes.noOptionsMessage}
       {...props.innerProps}
@@ -118,6 +119,7 @@ function Option(props) {
 function Placeholder(props) {
   return (
     <Typography
+      variant="body2"
       color="textSecondary"
       className={props.selectProps.classes.placeholder}
       {...props.innerProps}
@@ -129,7 +131,7 @@ function Placeholder(props) {
 
 function SingleValue(props) {
   return (
-    <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
+    <Typography variant="body2" className={props.selectProps.classes.singleValue} {...props.innerProps}>
       {props.children}
     </Typography>
   );

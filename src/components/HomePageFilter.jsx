@@ -172,7 +172,7 @@ class HomePageFilter extends React.PureComponent {
                   <div className={classes.transparencyGroup}>
                     <Grid container wrap="nowrap">
                       <Grid item xs={6}>
-                        <Typography className={classes.menuTitle}>Transparency</Typography>
+                        <Typography variant="body2" className={classes.menuTitle}>Transparency</Typography>
                         <FormGroup>
                             { this.filter_options.map(filter =>
                               <div key={filter.field} style={{marginLeft: filter.field === 'registered_report' ? 35 : null }}>
@@ -206,7 +206,7 @@ class HomePageFilter extends React.PureComponent {
                       </Grid>
 
                       <Grid item xs={6} style={{marginLeft: '4rem'}}>
-                        <Typography className={classes.menuTitle}>Content Type</Typography>
+                        <Typography variant="body2" className={classes.menuTitle}>Content Type</Typography>
                         <FormGroup>
                             { this.content_filter_options.map((filter) => {
                               return <div key={filter.id}>

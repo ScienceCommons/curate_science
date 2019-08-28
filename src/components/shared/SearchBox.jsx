@@ -68,6 +68,7 @@ function NoOptionsMessage(props) {
 
   return (
     <Typography
+      variant="body2"
       color="textSecondary"
       className={props.selectProps.classes.noOptionsMessage}
       {...props.innerProps}
@@ -114,7 +115,7 @@ function Option(props) {
     content = (
       <div style={{whiteSpace: 'normal'}}>
         <p style={{margin: 0, fontSize: 14}}>{article.title}</p>
-        <Typography style={{ color: '#009933'}} >
+        <Typography style={{ color: '#009933'}} variant="body2">
           {authors} <b>({year})</b>
         </Typography>
       </div>
@@ -156,6 +157,7 @@ function Option(props) {
 function Placeholder(props) {
   return (
     <Typography
+      variant="body2"
       color="textSecondary"
       className={props.selectProps.classes.placeholder}
       {...props.innerProps}
@@ -167,7 +169,7 @@ function Placeholder(props) {
 
 function SingleValue(props) {
   return (
-    <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
+    <Typography variant="body2" className={props.selectProps.classes.singleValue} {...props.innerProps}>
       {props.children}
     </Typography>
   );

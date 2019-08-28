@@ -215,11 +215,11 @@ class ArticleContent extends React.PureComponent {
           </Link>
         }
 
-        <Typography className={classes.authors} color="textSecondary" gutterBottom>
+        <Typography className={classes.authors} color="textSecondary" gutterBottom variant="body2">
           <AuthorList author_list={article.author_list} year={article.year} in_press={article.in_press} />
         </Typography>
 
-        <Typography className={classes.journal} color="textSecondary" gutterBottom>
+        <Typography className={classes.journal} color="textSecondary" gutterBottom variant="body2">
           <JournalDOIBadge journal={article.journal} doi={article.doi} />
         </Typography>
 
@@ -234,7 +234,7 @@ class ArticleContent extends React.PureComponent {
         </div>
 
         <div id="details" hidden={!is_expanded}>
-          <Typography className={classes.abstract}>
+          <Typography className={classes.abstract} variant="body2">
             { is_article_page ?
               <span>{article.abstract}</span>
               :
@@ -244,24 +244,24 @@ class ArticleContent extends React.PureComponent {
           <ArticleKeywords keywords={article.keywords} />
           <FigureList figures={show_figures} loading={loading} onFigureClick={this.handle_figure_click} />
           <div hidden={this.empty(article.author_contributions)}>
-            <Typography component="span">
+            <Typography component="span" variant="body2">
               <span className={classes.grayedTitle}>Author contributions:</span>
               <span className={classes.grayedDetails}><TruncatedText text={ article.author_contributions } maxLength={85} /></span>
             </Typography>
           </div>
           <div hidden={this.empty(article.competing_interests)}>
-            <Typography component="span">
+            <Typography component="span" variant="body2">
               <span className={classes.grayedTitle}>Competing interests:</span>
               <span className={classes.grayedDetails}><TruncatedText text={ article.competing_interests } maxLength={85} /></span>
             </Typography>
           </div>
           <div hidden={this.empty(article.funding_sources)}>
-            <Typography component="span">
+            <Typography component="span" variant="body2">
               <span className={classes.grayedTitle}>Funding sources:</span>
               <span className={classes.grayedDetails}><TruncatedText text={ article.funding_sources } maxLength={85} /></span>
             </Typography>
           </div>
-          <Typography component="span" display="inline">
+          <Typography component="span" variant="body2" display="inline">
             <span hidden={this.empty(article.peer_review_editor)}>
               <span className={classes.grayedTitle}>Editor:</span>
               <span className={classes.reviewers}>{ article.peer_review_editor || '--' }</span>
@@ -277,7 +277,7 @@ class ArticleContent extends React.PureComponent {
         </div>
 
         <div hidden={!show_date}>
-          <Typography className={classes.createdDate} component='div' color="textSecondary">
+          <Typography className={classes.createdDate} component='div' color="textSecondary" variant="body2">
             {created_at}
           </Typography>
         </div>

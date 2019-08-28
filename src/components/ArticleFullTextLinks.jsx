@@ -103,7 +103,7 @@ class ArticleFullTextLinks extends React.Component {
 		let cite_title = `${link_label} has been cited ${this.number(cites)} times (as of ${update_date}; Google Scholar)`
 		return (
 			<div key={lt}>
-				<Typography className="ContentLink" style={{marginBottom: 4}}>
+				<Typography variant="body2" className="ContentLink" style={{marginBottom: 4}}>
 					<span className="ContentLinkCounts">
 						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={CITE_COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
 						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }

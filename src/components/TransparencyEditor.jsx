@@ -172,7 +172,7 @@ class TransparencyEditor extends React.Component {
 		return (
 			<div id="rs1">
 				<TransparencyHeader badge={REP_STD} />
-				<Typography>Compliance to relevant reporting standard:</Typography>
+				<Typography variant="body2">Compliance to relevant reporting standard:</Typography>
 				<br/>
 				<Select
 					value={reporting_standards_type || ''}

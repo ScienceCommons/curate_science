@@ -54,7 +54,7 @@ class ArticleType extends React.Component {
 		}
 		if (registered_report) rr = (
 			<span className="ArticleBadgeWithCount ArticleType" style={st}>
-				<Typography color="inherit">Registered Report</Typography>
+				<Typography variant="body2" color="inherit">Registered Report</Typography>
 			</span>
 		)
 		return (

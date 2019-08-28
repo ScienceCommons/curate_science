@@ -17,7 +17,7 @@ class ArticleKeywords extends React.Component {
 
         }
 		return (
-			<Typography>
+			<Typography variant="body2">
 			{ keywords_arr.map((kw, i) => {
 				return <span className="ArticleKeyword" key={i} style={st}>{ kw }</span>
 			}) }
