@@ -868,7 +868,7 @@ class TestAPIViews(TestCase):
         assert new_article.id in self._get_filtered_article_ids(['open_materials'])
 
     def test_api_list_filtering_reporting_standards(self):
-        new_article = models.Article.objects.create(title='new article')
+        new_article = models.Article.objects.create(title='new article', reporting_standards_type=None)
         assert new_article.id not in self._get_filtered_article_ids(['reporting_standards'])
 
         new_article.reporting_standards_type = models.Article.BASIC_4_AT_SUBMISSION
