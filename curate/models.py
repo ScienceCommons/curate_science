@@ -81,6 +81,7 @@ class Article(models.Model):
     REPRODUCIBILITY = 'REPRODUCIBILITY'
     META_ANALYSIS = 'META_ANALYSIS'
     META_RESEARCH = 'META_RESEARCH'
+    ORIGINAL_META_RESEARCH = 'ORIGINAL_META_RESEARCH'
     COMMENTARY = 'COMMENTARY'
 
     BASIC_4_7_RETROACTIVE = 'BASIC_4_7_RETROACTIVE'
@@ -147,6 +148,7 @@ class Article(models.Model):
             (REPRODUCIBILITY, 'reanalysis - reproducibility'),
             (META_ANALYSIS, 'reanalysis - meta-analysis'),
             (META_RESEARCH, 'reanalysis - meta-research'),
+            (ORIGINAL_META_RESEARCH, 'original - meta-research'),
             (COMMENTARY, 'commentary'),
         ),
         default='original'
