@@ -215,7 +215,7 @@ class Article(models.Model):
 
     other_disclosures = models.TextField(null=True, blank=True)
     other_disclosures_all_details_reported = models.BooleanField(default=False)
-    disclosure_date = models.DateTimeField(null=True, blank=True)
+    disclosure_date = models.DateField(null=True, blank=True, auto_now_add=True)
 
     materials_nontransparency_reason = models.CharField(
         max_length=4,
