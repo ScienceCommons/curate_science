@@ -162,6 +162,15 @@ textarea {
 	margin-right: 5px;
 }
 
+.ArticleEditorHalf {
+  width: 50%;
+}
+@media (max-width: 1900px) {
+  .ArticleEditorHalf {
+    width: 100%;
+  }
+}
+
 .StaticPages p {
 
 }

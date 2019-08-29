@@ -42,6 +42,13 @@ var C = {
       color: '#492311',
     },
     {
+      id: "ORIGINAL_META_RESEARCH",
+      label: "Original - Meta-research",
+      relevant_sections: ['reanalysis'],
+      description: "Article reports new observations regarding a meta-research question",
+      color: '#492311',
+    },
+    {
       id: "COMMENTARY",
       label: "Commentary",
       relevant_sections: ['commentary'],
@@ -88,7 +95,7 @@ var C = {
 			label: "Preregistration",
 			label_long: "Preregistration information",
 			icon: "preregplus",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL', 'ORIGINAL_META_RESEARCH'],
 			color: '#C60018',
 			url_prop: 'PREREGISTRATION'
 		},
@@ -97,7 +104,7 @@ var C = {
 			label: "Public Materials",
 			label_long: "Open/public study materials information",
 			icon: "materials",
-			article_types: ['ORIGINAL', 'REPLICATION', 'COMMENTARY', 'CONCEPTUAL'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'COMMENTARY', 'CONCEPTUAL', 'ORIGINAL_META_RESEARCH'],
 			color: '#F5A623',
 			url_prop: 'MATERIALS'
 		},
@@ -106,7 +113,7 @@ var C = {
 			label: "Public Data",
 			label_long: "Open/public data information",
 			icon: "data",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL', 'ORIGINAL_META_RESEARCH'],
 			color: '#2D96E8',
 			url_prop: 'DATA'
 		},
@@ -115,7 +122,7 @@ var C = {
 			label: "Public Code",
 			label_long: "Open/public code information",
 			icon: "code",
-			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL'],
+			article_types: ['ORIGINAL', 'REPLICATION', 'META_ANALYSIS', 'META_RESEARCH', 'REPRODUCIBILITY', 'COMMENTARY', 'CONCEPTUAL', 'ORIGINAL_META_RESEARCH'],
 			color: '#50E3C2',
 			url_prop: 'CODE'
 		},
@@ -137,6 +144,20 @@ var C = {
     { field: 'open_code', icon: 'code', label: 'Public code'},
     { field: 'reporting_standards', icon: 'repstd', label: 'Reporting standard compliance'},
   ],
+  NONTRANSPARENCY_REASONS: [
+		{
+			value: null,
+			label: 'Choose a reason'
+		},
+    {
+      value: 'PROP',
+      label: 'Proprietary/IP',
+    },
+    {
+      value: 'ETHI',
+      label: 'Ethical reasons',
+    },
+  ],
 	REPORTING_STANDARDS_TYPES: [
 		{
 			value: '',
@@ -145,7 +166,7 @@ var C = {
 		{
 			value: 'BASIC_4_7_RETROACTIVE',
 			label: "Basic 4/Basic 7 (retroactive)",
-			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
+			//html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
 		},
 		{
 			value: 'BASIC_4_AT_SUBMISSION',
@@ -205,9 +226,9 @@ var C = {
     ],
     // Sync with fields in Article()
     PREREG_PROTOCOL_TYPES: [
-    	{ value: "PREREG_STUDY_DESIGN_ANALYSIS", label: "Preregistered study design + analysis"},
-    	{ value: "PREREG_STUDY_DESIGN", label: "Preregistered study design"},
-    	{ value: "REGISTERED_REPORT", label: "Registered report", label_detail: "Peer-reviewed preregistered study design + analyses"}
+    	{ value: "PREREG_STUDY_DESIGN_ANALYSIS", label: "Preregistered design + analysis"},
+    	{ value: "PREREG_STUDY_DESIGN", label: "Preregistered design"},
+    	{ value: "REGISTERED_REPORT", label: "Registered report", label_detail: "Peer-reviewed preregistered design + analyses"}
 	],
     AUTHOR_LINKS: [
 	    {
