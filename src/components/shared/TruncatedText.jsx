@@ -16,7 +16,8 @@ class TruncatedText extends React.Component {
         this.toggle_expand = this.toggle_expand.bind(this)
     }
 
-    toggle_expand() {
+    toggle_expand(event) {
+        event.preventDefault()
         this.setState({expanded: !this.state.expanded})
     }
 
@@ -30,7 +31,7 @@ class TruncatedText extends React.Component {
 		return (
 			<span style={st}>
 				{ text }&nbsp;
-                <span hidden={!long}><a href="javascript:void(0)" onClick={this.toggle_expand}>{ expanded ? "Less" : "More" }</a></span>
+                <span hidden={!long}><a href="#" onClick={this.toggle_expand}>{ expanded ? "Less" : "More" }</a></span>
             </span>
         )
 	}
