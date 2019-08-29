@@ -155,7 +155,8 @@ class Article(models.Model):
         max_length=255,
         null=True,
         blank=True,
-        choices=standards_choices
+        choices=standards_choices,
+        default=BASIC_4_7_RETROACTIVE,
     )
     number_of_reps = models.PositiveIntegerField(default=0)
     original_study = models.CharField(max_length=255, null=True, blank=True)
