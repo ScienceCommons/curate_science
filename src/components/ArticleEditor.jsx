@@ -822,6 +822,7 @@ class ArticleEditor extends React.Component {
         const data = res.data
         form.title = data.title[0]
         form.author_list = data.author.map((author) => author.family).join(', ')
+        form.journal = get(data, ['container-title', 0])
         form.year = get(data, ['published-print', 'date-parts', 0, 0])
         this.setState({form})
       })
