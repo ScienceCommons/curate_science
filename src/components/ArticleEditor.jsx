@@ -988,7 +988,7 @@ class ArticleEditor extends React.Component {
 
   render_commentaries() {
     let {form} = this.state
-    let commentary_rows = form.commentaries.map((comm, idx) => {
+    let commentary_rows = form.commentaries.map((comm, idx, commentaries) => {
       let id_author = `commentaries.${idx}.authors_year`
       let id_url = `commentaries.${idx}.commentary_url`
       let spec_pubyear = {
@@ -1003,6 +1003,9 @@ class ArticleEditor extends React.Component {
         adornment: 'link',
         fullWidth: true
       }
+
+      const is_last_row = idx === commentaries.length - 1
+
       return (
         <Grid container spacing={1} key={idx}>
           <Grid item xs={5}>
@@ -1011,16 +1014,18 @@ class ArticleEditor extends React.Component {
           <Grid item xs={5}>
             <StyledCSTextField id={id_url} value={comm.commentary_url} specs={spec_url} onChange={this.handle_change} />
           </Grid>
-          <Grid item xs={2}>
-            <IconButton style={{margin: 8}} onClick={this.delete_commentary.bind(this, idx)}><Icon>delete</Icon></IconButton>
+          <Grid item xs={2} style={{alignSelf: 'center'}}>
+            <IconButton onClick={this.delete_commentary.bind(this, idx)}><Icon>delete</Icon></IconButton>
+            <span hidden={!is_last_row}>
+              <IconButton onClick={this.add_commentary}><Icon>add</Icon></IconButton>
+            </span>
           </Grid>
         </Grid>
       )
     })
     return (
       <div>
-          { commentary_rows }
-        <Button onClick={this.add_commentary}><Icon fontSize="inherit">add</Icon> Add commentary</Button>
+        { commentary_rows }
       </div>
     )
   }
@@ -1040,10 +1045,11 @@ class ArticleEditor extends React.Component {
       fullWidth: true
     }
 
-    const coverage_rows = form.media_coverage.map((coverage, idx) => {
+    const coverage_rows = form.media_coverage.map((coverage, idx, media_coverage) => {
       const { id, media_source_name, url } = coverage
       const source_id = `media_coverage.${idx}.media_source_name`
       const url_id = `media_coverage.${idx}.url`
+      const is_last_row = idx === media_coverage.length - 1
       return (
         <Grid container spacing={1} key={idx}>
           <Grid item xs={5}>
@@ -1062,13 +1068,13 @@ class ArticleEditor extends React.Component {
               onChange={this.handle_change}
             />
           </Grid>
-          <Grid item xs={2}>
-            <IconButton
-              style={{margin: 8}}
-              onClick={this.delete_media_coverage.bind(this, idx)}
-            >
+          <Grid item xs={2} style={{alignSelf: 'center'}}>
+            <IconButton onClick={this.delete_media_coverage.bind(this, idx)}>
               <Icon>delete</Icon>
             </IconButton>
+            <span hidden={!is_last_row}>
+              <IconButton onClick={this.add_media_coverage}><Icon>add</Icon></IconButton>
+            </span>
           </Grid>
         </Grid>
       )
@@ -1076,9 +1082,6 @@ class ArticleEditor extends React.Component {
     return (
       <div>
         { coverage_rows }
-        <Button onClick={this.add_media_coverage} variant="outlined">
-          <Icon fontSize="inherit">add</Icon>Add media coverage
-        </Button>
       </div>
     )
   }
