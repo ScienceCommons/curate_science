@@ -149,7 +149,7 @@ class ArticleSerializerNested(WritableNestedModelSerializer):
     videos = VideosSerializer(many=True, required=False, allow_null=True)
     presentations = PresentationsSerializer(many=True, required=False, allow_null=True)
     supplemental_materials = SupplementalMaterialsSerializer(many=True, required=False, allow_null=True)
-    disclosure_date = serializers.DateField(input_formats=['%Y-%m-%d'])
+    disclosure_date = serializers.DateField(input_formats=['%Y-%m-%d'], required=False, allow_null=True)
 
     def validate_doi(self, value):
         if value:
