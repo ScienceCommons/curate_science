@@ -382,6 +382,21 @@ const INPUT_SPECS = {
     is_secondary: true,
     fullWidth: true
   },
+  // Reproducibility fields
+  'reproducibility_original_study': {
+    label: "Original article/study",
+    type: 'text',
+    placeholder: 'e.g. Smith et al. (1989)',
+    adornment: 'link',
+    fullWidth: true
+  },
+  'reproducibility_original_study_url': {
+    label: "Original article URL",
+    type: 'url',
+    placeholder: 'http://...',
+    adornment: 'link',
+    fullWidth: true
+  },
   // Disclosure fields
   'excluded_data': {
     label: '1. Excluded data (subjects/observations)',
@@ -1095,7 +1110,10 @@ class ArticleEditor extends React.Component {
     let {classes, article_id, open} = this.props
     let { doi_loading, form, snack_message, loading } = this.state
     let content = <Loader />
-    let replication = form.article_type == 'REPLICATION'
+
+    const replication = form.article_type === 'REPLICATION'
+    const reproducibility = form.article_type === 'REPRODUCIBILITY'
+
     let visible_transparencies = this.get_relevant_transparency_badges()
     let dialog_title = form.is_live ? "Edit Article" : "New Article"
     const is_basic_4_7 = form.reporting_standards_type === 'BASIC_4_7_RETROACTIVE'
@@ -1223,6 +1241,20 @@ class ArticleEditor extends React.Component {
                           </Grid>
                         </Grid>
                         <Typography variant="body2" color="textSecondary">'Close', 'Very close', or 'Exact' replications only. See <a href="/sitestatic/legacy/logos/replication-taxonomy-v4_small.png" target="_blank">replication taxonomy</a> for details.</Typography>
+                      </Grid>
+                      : null
+                  }
+                  {
+                    reproducibility ?
+                      <Grid item xs={9}>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                              { this.render_field('reproducibility_original_study') }
+                          </Grid>
+                          <Grid item xs={6}>
+                              { this.render_field('reproducibility_original_study_url') }
+                          </Grid>
+                        </Grid>
                       </Grid>
                       : null
                   }
