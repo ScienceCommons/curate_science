@@ -13,7 +13,7 @@
             <g id="data_dis" transform="translate(272.000000, 0.000000)">
                 <g id="Polygon">
                     <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-                    <use fill="#ADADAD" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    <use fill="#F0F0F0" fill-rule="evenodd" xlink:href="#path-1"></use>
                 </g>
                 <g id="Open-Data-Icon" transform="translate(27.000000, 25.000000)" fill="#FFFFFF">
                     <g id="Rectangle">
