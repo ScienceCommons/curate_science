@@ -112,10 +112,7 @@ class ArticleContent extends React.PureComponent {
     console.log("Fetching article details...")
     this.setState({loading: true}, () => {
       json_api_req('GET', `/api/articles/${article.id}/`, {}, null, (res) => {
-        if (res.key_figures != null) figures = res.key_figures
-        if (res.commentaries != null) commentaries = res.commentaries
-        console.log(res)
-        this.props.onFetchedArticleDetails(article.id, figures, commentaries)
+        this.props.onFetchedArticleDetails(res)
         this.setState({loading: false})
       }, (err) => {
         this.setState({loading: false})

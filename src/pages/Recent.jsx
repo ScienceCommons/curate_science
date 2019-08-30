@@ -115,7 +115,7 @@ class Home extends React.PureComponent {
   }
 
   update_articles(articles) {
-    this.setState({ articles: articles })
+    this.setState({ articles })
   }
 
   render() {

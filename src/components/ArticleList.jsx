@@ -79,16 +79,17 @@ class ArticleList extends React.Component {
     this.props.onArticlesUpdated(articles)
   }
 
-  got_article_details(id, figures, commentaries) {
-    let {articles} = this.props
-    for (let i=0; i<articles.length; i++) {
-      if (articles[i].id == id) {
-        // Replace with updated object
-        articles[i].key_figures = figures
-        articles[i].commentaries = commentaries
+  got_article_details(article) {
+    const { articles } = this.props
+
+    // Replace the updated article
+    const new_articles = articles.map(a => {
+      if (a.id === article.id) {
+        return article
       }
-    }
-    this.props.onArticlesUpdated(articles)
+      return a
+    })
+    this.props.onArticlesUpdated(new_articles)
   }
 
   toggle_article_editor(open) {
@@ -189,8 +190,8 @@ class ArticleWithActions extends React.Component {
     this.props.onFigureClick(figures, index)
   }
 
-  got_article_details(id, figures, commentaries) {
-    this.props.onFetchedArticleDetails(id, figures, commentaries)
+  got_article_details(article) {
+    this.props.onFetchedArticleDetails(article)
   }
 
   render() {
