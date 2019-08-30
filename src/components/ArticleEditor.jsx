@@ -690,7 +690,18 @@ class ArticleEditor extends React.Component {
           console.log(form)
           // delete form.key_figures
           if (form.title.startsWith(C.PLACEHOLDER_TITLE_PREFIX)) form.title = ""
+
           this.setState({form: form, unsaved: false, loading: false})
+
+          // Add a default empty media coverage if none exists
+          if (!(form.media_coverage && form.media_coverage.length)) {
+            this.add_media_coverage()
+          }
+
+          // Add a default empty commentary if none exists
+          if (!(form.commentaries && form.commentaries.length)) {
+            this.add_commentary()
+          }
         })
       })
     }
