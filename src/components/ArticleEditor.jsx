@@ -81,7 +81,8 @@ const styles = theme => ({
   },
   content: {
     padding: 8,
-    minHeight: 300
+    minHeight: 300,
+    overflowX: 'hidden',
   },
   dialogRoot: {
     width: C.DIALOG_WIDTH + 'px'
@@ -1481,7 +1482,7 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
       </AppBar>
 
       <DialogContent className={classes.content}>
-          { content }
+        { content }
       </DialogContent>
     </Dialog>
     <Snackbar
