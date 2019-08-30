@@ -757,7 +757,6 @@ class ArticleEditor extends React.Component {
   update_data(key, value) {
     const { form } = this.state
     set(form, key, value)
-    console.log('set', key, value)
     this.setState({form: form, unsaved: true})
   }
 
@@ -775,7 +774,7 @@ class ArticleEditor extends React.Component {
   }
 
   lookup_article_by_doi() {
-    const form = this.state.form
+    const { form } = this.state
     const doi = form.doi
 
     if (!doi) return
@@ -1513,9 +1512,24 @@ class CSTextField extends React.PureComponent {
     this.handle_change = this.handle_change.bind(this)
     this.debounced_change = debounce(this.props.onChange, 300)
 
+    // We store an internal representation of the input value
+    // so it's updated immediately and the global update is debounced
     this.state = {
-      input_value: props.value
+      input_value: props.value,
+      original_prop_value: props.value
     }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    // Update the internal `input_value` only if the value passed in the prop
+    // has changed from the original one
+    if (props.value !== state.original_prop_value) {
+      return {
+        input_value: props.value,
+        original_prop_value: props.value
+      };
+    }
+    return null;
   }
 
   handle_change(e) {
