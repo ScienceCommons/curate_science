@@ -938,15 +938,8 @@ class ArticleEditor extends React.Component {
     if (specs.type == 'checkbox') return this.render_checkbox(id, value, specs)
     else if (specs.type == 'radio') return this.render_radio_group(id, value, specs)
     else if (specs.type == 'select') {
-      let disabled
-      if (id === 'data_nontransparency_reason') {
-        disabled = !this.urls_protected('DATA')
-      } else if (id === 'materials_nontransparency_reason') {
-        disabled = !this.urls_protected('MATERIALS')
-      }
-
       const label_style = specs.is_secondary ? null : { color: '#000' }
-      return <OutlinedSelect id={id} value={value} specs={specs} onChange={this.handle_change} disabled={disabled} border_class={border_class} label_style={label_style}/>
+      return <OutlinedSelect id={id} value={value} specs={specs} onChange={this.handle_change} border_class={border_class} label_style={label_style}/>
     }
     else if (specs.type === 'transparency_url_list') {
       return (
