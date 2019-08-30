@@ -59,6 +59,9 @@ const styles = {
   grayedDetails: {
     color: '#BBB'
   },
+  secondaryLink: {
+    opacity: 0.5
+  },
   reviewers: {
     color: "#009933",
     marginRight: 4
@@ -271,6 +274,27 @@ class ArticleContent extends React.PureComponent {
               <a href={article.peer_review_url} target="_blank"><Icon fontSize="inherit">link</Icon> Open peer review <Icon fontSize="inherit">open_in_new</Icon></a>
             </span>
           </Typography>
+          {
+            article.media_coverage && article.media_coverage.length ?
+            (
+              <Typography variant="body2">
+                <span className={classes.grayedTitle}>News coverage:</span>
+                {
+                  article.media_coverage.map((coverage, idx, arr) =>
+                    <span key={`coverage-${coverage.id}`}>
+                      <a href={coverage.url} className={classes.secondaryLink}>
+                        {coverage.media_source_name}
+                      </a>
+                      <span hidden={idx === arr.length - 1} style={{marginLeft: 2, marginRight: 2}}>
+                        &#8226;
+                      </span>
+                    </span>
+                  )
+                }
+              </Typography>
+            )
+            : null
+          }
         </div>
 
         <div hidden={!show_date}>
