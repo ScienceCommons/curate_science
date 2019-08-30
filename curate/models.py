@@ -86,7 +86,6 @@ class Article(models.Model):
 
     BASIC_4_7_RETROACTIVE = 'BASIC_4_7_RETROACTIVE'
     BASIC_4_AT_SUBMISSION = 'BASIC_4_AT_SUBMISSION'
-    BASIC_4_RETROACTIVE = 'BASIC_4_RETROACTIVE'
     CONSORT_SPI = 'CONSORT_SPI'
     CONSORT = 'CONSORT'
     JARS = 'JARS'
@@ -102,7 +101,6 @@ class Article(models.Model):
     standards_choices = (
             (BASIC_4_7_RETROACTIVE, "Basic 4/Basic 7 (retroactive)"),
             (BASIC_4_AT_SUBMISSION, "Basic-4 (at submission; PSCI, 2014)"),
-            (BASIC_4_RETROACTIVE, "Basic-4 (retroactive; 2012)"),
             (CONSORT_SPI, "CONSORT-SPI (2018)"),
             (CONSORT, "CONSORT (2010)"),
             (JARS, "JARS (2018)"),
