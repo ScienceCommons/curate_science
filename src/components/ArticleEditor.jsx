@@ -526,13 +526,13 @@ function OutlinedSelect(props) {
 }
 
 function TransparencyURLList(props) {
-  const { border_class, id, onChange, urls, specs } = props
+  const { border_class, id, is_protected, onChange, urls, specs } = props
   const field_urls = urls
     .filter(url => { return url.transparency_type === specs.url_type })
     .map(url => truncate(url.url, { length: 20 }))
 
   function add_url(url) {
-    urls.push({ url: url, transparency_type: specs.url_type })
+    urls.push({ url: url, transparency_type: specs.url_type, protected_access: is_protected(specs.url_type) })
     return onChange('transparency_urls', urls)
   }
 
@@ -957,6 +957,7 @@ class ArticleEditor extends React.Component {
           onChange={this.update_data}
           specs={specs}
           border_class={border_class}
+          is_protected={this.urls_protected}
         />
       )
     }
