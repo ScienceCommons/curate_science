@@ -397,6 +397,21 @@ const INPUT_SPECS = {
     adornment: 'link',
     fullWidth: true
   },
+  // Commentary fields
+  'commentary_target': {
+    label: "Target article",
+    type: 'text',
+    placeholder: 'e.g. Smith et al. (1989)',
+    adornment: 'link',
+    fullWidth: true
+  },
+  'commentary_target_url': {
+    label: "Target article URL",
+    type: 'url',
+    placeholder: 'http://...',
+    adornment: 'link',
+    fullWidth: true
+  },
   // Disclosure fields
   'excluded_data': {
     label: '1. Excluded data (subjects/observations)',
@@ -1113,6 +1128,7 @@ class ArticleEditor extends React.Component {
 
     const replication = form.article_type === 'REPLICATION'
     const reproducibility = form.article_type === 'REPRODUCIBILITY'
+    const commentary = form.article_type === 'COMMENTARY'
 
     let visible_transparencies = this.get_relevant_transparency_badges()
     let dialog_title = form.is_live ? "Edit Article" : "New Article"
@@ -1253,6 +1269,20 @@ class ArticleEditor extends React.Component {
                           </Grid>
                           <Grid item xs={6}>
                               { this.render_field('reproducibility_original_study_url') }
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      : null
+                  }
+                  {
+                    commentary ?
+                      <Grid item xs={9}>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                              { this.render_field('commentary_target') }
+                          </Grid>
+                          <Grid item xs={6}>
+                              { this.render_field('commentary_target_url') }
                           </Grid>
                         </Grid>
                       </Grid>
