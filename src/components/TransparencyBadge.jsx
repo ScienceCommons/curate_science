@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import C from '../constants/constants';
 import {truncate, get_link_source_icon} from '../util/util.jsx'
-import {find} from 'lodash'
+import { find, get } from 'lodash'
 
 import MouseOverPopover from '../components/shared/MouseOverPopover.jsx';
 
@@ -26,7 +26,7 @@ class TransparencyBadge extends React.Component {
     }
 
 	render_feature(f, i) {
-    let {icon_size, reporting_standards_type, prereg_protocol_type, classes, article_type} = this.props
+    let {article, icon_size, reporting_standards_type, prereg_protocol_type, classes, article_type} = this.props
     let repstd = f.id == 'REPSTD'
     let urls, subtitle
     let enabled = false
@@ -48,25 +48,48 @@ class TransparencyBadge extends React.Component {
     }
     let label = ''
     let icon = f.icon
+
+    const protected_materials = (
+      f.url_prop === 'MATERIALS' && urls.every(url => url.protected_access)
+    )
+    const protected_data = (
+      f.url_prop === 'DATA' && urls.every(url => url.protected_access)
+    )
+
     if (!enabled) {
       label = `${f.label_long} is not (yet) available`
       icon += "_dis"
+    } else if (protected_materials || protected_data) {
+      label = `${f.label} is not available`
+      const protected_reason = get(article, `${f.url_prop.toLowerCase()}_nontransparency_reason`)
+      if (protected_reason) {
+        const nontransparency_obj = find(C.NONTRANSPARENCY_REASONS, ['value', protected_reason])
+        if (nontransparency_obj) {
+          label += ` (${nontransparency_obj.label})`
+        }
+      }
+      icon += "_protected"
     }
-    let badge_icon = (
-      <img
-        key={`badgeicon-${i}`}
-        src={`/sitestatic/icons/${icon}.svg`}
-        title={label}
-        width={icon_size}
-        height={icon_size}
-        type="image/svg+xml"
-      />
-    )
+
+    // Define a function that returns the badge icon
+    // We set a title only if there is no popover, otherwise the popover handles that info
+    function badge_icon(title) {
+      return (
+        <img
+          key={`badgeicon-${i}`}
+          src={`/sitestatic/icons/${icon}.svg`}
+          title={title}
+          width={icon_size}
+          height={icon_size}
+          type="image/svg+xml"
+        />
+      )
+    }
 
 		if (!enabled) {
 			// If article type calls for transparencies to be bonuses, dont render disabled badges
 			let tbonus = find(C.ARTICLE_TYPES, {id: article_type}).transparencies_bonus
-			return tbonus ? null : badge_icon
+			return tbonus ? null : badge_icon(label)
 		}
 
     let popover_content
@@ -103,7 +126,7 @@ class TransparencyBadge extends React.Component {
       }
 
       return (
-        <MouseOverPopover target={badge_icon} key={`mouseover-${i}`}>
+        <MouseOverPopover target={badge_icon()} key={`mouseover-${i}`}>
           <div style={{padding: 10}}>
             <Typography variant="h5">{ f.label }</Typography>
             { subtitle }
@@ -173,6 +196,7 @@ TransparencyBadge.propTypes = {
 
 
 TransparencyBadge.defaultProps = {
+  article: {},
   reporting_standards_type: null,
   article_type: "ORIGINAL",
   icon_size: 30,

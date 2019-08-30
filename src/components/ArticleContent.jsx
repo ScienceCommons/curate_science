@@ -233,7 +233,7 @@ class ArticleContent extends React.PureComponent {
           article={article}
         />
 
-        <TransparencyBadge {...transparency_data} />
+        <TransparencyBadge {...transparency_data} article={article}/>
 
         <div className={classes.moreIconHolder} hidden={is_article_page}>
           <IconButton onClick={this.toggle_show_more} className={classes.moreIconButton}>
