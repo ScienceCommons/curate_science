@@ -86,9 +86,10 @@ class TransparencyBadge extends React.Component {
         })
 
         popover_content = urls.map(url =>
-          <Typography variant="body2" key={`transparency-url-${url.id}`}>
+          <Typography variant="body2" key={`transparency-url-${url.id}`} style={{ whiteSpace: 'nowrap' }}>
             { url.source_icon }
             <a href={url.url} target="_blank">{ truncate(url.url, 15) } <Icon fontSize="inherit">open_in_new</Icon></a>
+            { url.protected_access ? ' (protected access; login required)' : null }
           </Typography>
         )
 
