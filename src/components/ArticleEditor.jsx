@@ -1481,11 +1481,6 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
       <DialogContent className={classes.content}>
           { content }
       </DialogContent>
-
-      <DialogActions>
-        <Button variant="contained" color="primary" onClick={this.save} disabled={loading}>save</Button>
-        <Button variant="text" onClick={this.maybe_confirm_close}>cancel</Button>
-      </DialogActions>
     </Dialog>
     <Snackbar
       anchorOrigin={{
