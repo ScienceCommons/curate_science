@@ -13,7 +13,7 @@
             <g id="pr_dis" transform="translate(90.000000, 0.000000)">
                 <g id="Polygon">
                     <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-                    <use fill="#ADADAD" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    <use fill="#F0F0F0" fill-rule="evenodd" xlink:href="#path-1"></use>
                 </g>
                 <g id="Prereg-Icon" transform="translate(22.000000, 29.000000)" fill="#FFFFFF">
                     <polygon id="Path" points="0 20.4566182 18 34.2788976 45.5526853 6.11216438 37.7082607 0 18 21.4566182 5.91997455 12.3836238"></polygon>
