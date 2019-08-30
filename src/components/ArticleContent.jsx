@@ -226,7 +226,12 @@ class ArticleContent extends React.PureComponent {
           <JournalDOIBadge journal={article.journal} doi={article.doi} />
         </Typography>
 
-        <ArticleType type={article.article_type} replication_data={rd} registered_report={article.prereg_protocol_type == 'REGISTERED_REPORT'} />
+        <ArticleType
+          type={article.article_type}
+          replication_data={rd}
+          registered_report={article.prereg_protocol_type == 'REGISTERED_REPORT'}
+          article={article}
+        />
 
         <TransparencyBadge {...transparency_data} />
 

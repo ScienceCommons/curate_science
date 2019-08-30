@@ -11,7 +11,7 @@ class ArticleType extends React.Component {
     }
 
 	render_article_type_label() {
-		let { label_styles, type, replication_data } = this.props
+		let { article, label_styles, type, replication_data } = this.props
 		let at = find(C.ARTICLE_TYPES, {id: type.toUpperCase()})
 		let count
 		let label = at != null ? at.label : "Unknown"
@@ -23,11 +23,14 @@ class ArticleType extends React.Component {
 		if (type == 'REPLICATION' && !isEmpty(replication_data)) {
 			count = <span className="Count">{replication_data.number_of_reps}</span>
 		}
+
 		let type_label = (
 			<span className="ArticleBadgeWithCount ArticleType" style={{...st, ...label_styles}} title={at.description}>
 				{ label }{ count }
 			</span>
 		)
+    const has_reproducibility_data = article.reproducibility_original_study && article.reproducibility_original_study_url
+
 		if (type == 'REPLICATION' && !isEmpty(replication_data)) {
 			return (
 				<MouseOverPopover target={type_label} key='rep_popover'>
@@ -37,6 +40,16 @@ class ArticleType extends React.Component {
 							A replication is a study that uses a methodology that is
 							'close' or 'very close' to a previous study (see <a href="/sitestatic/legacy/logos/replication-taxonomy-v4_small.png" target="_blank">replication taxonomy</a> for details).
 						</Typography>
+					</div>
+				</MouseOverPopover>
+			)
+		} else if (type === 'REPRODUCIBILITY' && has_reproducibility_data) {
+			return (
+				<MouseOverPopover target={type_label} key='rep_popover'>
+					<div style={{padding: 10}}>
+            <Typography variant="body1">
+              Article reports a reproducibility/robustness reanalysis of <a href={article.reproducibility_original_study_url}>{article.reproducibility_original_study}</a>.
+            </Typography>
 					</div>
 				</MouseOverPopover>
 			)
@@ -67,6 +80,7 @@ class ArticleType extends React.Component {
 }
 
 ArticleType.defaultProps = {
+  article: {},
 	type: 'original',
 	replication_data: {},
 	registered_report: false
