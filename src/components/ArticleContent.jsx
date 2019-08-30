@@ -283,7 +283,7 @@ class ArticleContent extends React.PureComponent {
             (
               <Typography variant="body2" style={{display: 'flex', alignItems: 'center'}} className={classes.secondaryLink}>
                 { article.videos.map(video =>
-                  <a href={video.url} key={`video-${video.id}`} className={classes.additionalLink}>
+                  <a href={video.url} key={`video-${video.id}`} className={classes.additionalLink} style={{color: '#000'}}>
                     <Icon title={`Video: ${video.url}`}>videocam</Icon>
                   </a>
                 )}
