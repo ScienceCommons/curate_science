@@ -33,6 +33,7 @@ class ArticleType extends React.Component {
     }
 
     const has_reproducibility_data = article.reproducibility_original_study && article.reproducibility_original_study_url
+    const has_commentary_data = article.commentary_target && article.commentary_target_url
 
     if (type == 'REPLICATION' && !isEmpty(replication_data)) {
       return (
@@ -52,6 +53,16 @@ class ArticleType extends React.Component {
           <div style={{padding: 10}}>
             <Typography variant="body1">
                 Article reports a reproducibility/robustness reanalysis of <a href={article.reproducibility_original_study_url}>{article.reproducibility_original_study}</a>.
+              </Typography>
+            </div>
+          </MouseOverPopover>
+      )
+    } else if (type === 'COMMENTARY' && has_commentary_data) {
+      return (
+        <MouseOverPopover target={render_type_label()} key='rep_popover'>
+          <div style={{padding: 10}}>
+            <Typography variant="body1">
+                Article is a commentary on <a href={article.commentary_target_url}>{article.commentary_target}</a>.
               </Typography>
             </div>
           </MouseOverPopover>
