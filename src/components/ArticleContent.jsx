@@ -20,7 +20,7 @@ import TruncatedText from './shared/TruncatedText.jsx';
 
 import { json_api_req } from '../util/util.jsx'
 
-const styles = {
+const styles = theme => ({
   createdDate: {
     fontStyle: 'italic',
     textAlign: 'right',
@@ -83,8 +83,11 @@ const styles = {
   },
   moreIcon: {
     fontSizeLarge: 32
-  }
-};
+  },
+  additionalLink: {
+    marginRight: theme.spacing(1)
+  },
+});
 
 class ArticleContent extends React.PureComponent {
   constructor(props) {
@@ -274,15 +277,42 @@ class ArticleContent extends React.PureComponent {
               <a href={article.peer_review_url} target="_blank"><Icon fontSize="inherit">link</Icon> Open peer review <Icon fontSize="inherit">open_in_new</Icon></a>
             </span>
           </Typography>
+
+          {
+            (article.videos || []).length + (article.presentations || []).length + (article.supplemental_materials || []).length > 0 ?
+            (
+              <Typography variant="body2" style={{display: 'flex', alignItems: 'center'}} className={classes.secondaryLink}>
+                { article.videos.map(video =>
+                  <a href={video.url} key={`video-${video.id}`} className={classes.additionalLink}>
+                    <Icon title={`Video: ${video.url}`}>videocam</Icon>
+                  </a>
+                )}
+                { article.presentations.map(presentation =>
+                  <a href={presentation.url} key={`presentation-${presentation.id}`} className={classes.additionalLink}>
+                    <Icon title={`Presentation: ${presentation.url}`}>
+                      <img src="/sitestatic/icons/slide_icon.png" style={{ width: '1em' }}/>
+                    </Icon>
+                  </a>
+                )}
+                { article.supplemental_materials.map((material, idx) =>
+                  <a href={material.url} key={`material-${material.id}`} className={classes.additionalLink}>
+                    {`Suppl. materials #${idx + 1}`}
+                  </a>
+                )}
+              </Typography>
+            )
+            : null
+          }
+
           {
             article.media_coverage && article.media_coverage.length ?
             (
-              <Typography variant="body2">
+              <Typography variant="body2" className={classes.secondaryLink}>
                 <span className={classes.grayedTitle}>News coverage:</span>
                 {
                   article.media_coverage.map((coverage, idx, arr) =>
                     <span key={`coverage-${coverage.id}`}>
-                      <a href={coverage.url} className={classes.secondaryLink}>
+                      <a href={coverage.url}>
                         {coverage.media_source_name}
                       </a>
                       <span hidden={idx === arr.length - 1} style={{marginLeft: 2, marginRight: 2}}>
