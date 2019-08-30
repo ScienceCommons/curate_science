@@ -97,6 +97,9 @@ const styles = theme => ({
   radioButton: {
     padding: 4
   },
+  commentaryRow: {
+    marginBottom: theme.spacing(1),
+  },
   formRow: {
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(1),
@@ -988,6 +991,7 @@ class ArticleEditor extends React.Component {
 
   render_commentaries() {
     let {form} = this.state
+    const { classes } = this.props
     let commentary_rows = form.commentaries.map((comm, idx, commentaries) => {
       let id_author = `commentaries.${idx}.authors_year`
       let id_url = `commentaries.${idx}.commentary_url`
@@ -1007,7 +1011,7 @@ class ArticleEditor extends React.Component {
       const is_last_row = idx === commentaries.length - 1
 
       return (
-        <Grid container spacing={1} key={idx}>
+        <Grid container spacing={1} key={idx} className={classes.commentaryRow}>
           <Grid item xs={5}>
             <StyledCSTextField id={id_author} value={comm.authors_year} specs={spec_pubyear} onChange={this.handle_change} />
           </Grid>
@@ -1032,6 +1036,7 @@ class ArticleEditor extends React.Component {
 
   render_media_coverage() {
     const { form } = this.state
+    const { classes } = this.props
 
     const spec_media_source_name = {
       label: 'Media source name',
@@ -1051,7 +1056,7 @@ class ArticleEditor extends React.Component {
       const url_id = `media_coverage.${idx}.url`
       const is_last_row = idx === media_coverage.length - 1
       return (
-        <Grid container spacing={1} key={idx}>
+        <Grid container spacing={1} key={idx} className={classes.commentaryRow}>
           <Grid item xs={5}>
             <StyledCSTextField
               id={source_id}
