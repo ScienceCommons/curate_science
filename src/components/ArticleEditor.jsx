@@ -650,6 +650,7 @@ class ArticleEditor extends React.Component {
       doi_loading: false,
     }
 
+    this.clean_data = this.clean_data.bind(this)
     this.maybe_confirm_close = this.maybe_confirm_close.bind(this)
     this.handle_close = this.handle_close.bind(this)
     this.save = this.save.bind(this)
@@ -859,12 +860,23 @@ class ArticleEditor extends React.Component {
     }
   }
 
+  clean_data(form) {
+    // Remove empty media coverage entries
+    form.media_coverage = form.media_coverage.filter(coverage => coverage.media_source_name)
+    // Remove empty commentaries
+    form.commentaries = form.commentaries.filter(commentary => commentary.authors_year)
+    return form
+  }
+
   save() {
     let {cookies} = this.props
     let {form} = this.state
     let pk = this.props.article_id
     let data = clone(form)
     let {valid, message} = this.validate(data)
+
+    data = this.clean_data(data)
+
     let key_figures = []
     if (!valid) this.show_snack(message)
     else {
