@@ -305,7 +305,6 @@ const INPUT_SPECS = {
     label: "Prereg. prot. URLs",
     type: 'transparency_url_list',
     url_type: 'PREREGISTRATION',
-    placeholder: 'http://...',
     adornment: 'link',
     fullWidth: true,
   },
@@ -318,7 +317,6 @@ const INPUT_SPECS = {
     label: "Public study materials URLs",
     type: 'transparency_url_list',
     url_type: 'MATERIALS',
-    placeholder: 'http://...',
     adornment: 'link',
     fullWidth: true,
   },
@@ -599,7 +597,7 @@ function TransparencyURLList(props) {
           paddingLeft: 8,
         }
       }}
-      placeholder="http://..."
+      placeholder="Insert URL & hit ENTER"
       fullWidth={specs.fullWidth}
       fullWidthInput
     />
@@ -638,7 +636,7 @@ function URLList(props) {
           paddingLeft: 8,
         }
       }}
-      placeholder="http://..."
+      placeholder="Insert URL & hit ENTER"
       fullWidth={specs.fullWidth}
       fullWidthInput
     />
