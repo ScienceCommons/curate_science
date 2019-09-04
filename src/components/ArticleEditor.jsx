@@ -1418,7 +1418,7 @@ class ArticleEditor extends React.Component {
                 <Grid container alignItems="flex-start" spacing={1} className={classes.formRow}>
                   <Grid item xs={6}>
                     <div style={{display: 'flex'}}>
-                      <div className={classes.transparencyIcon}>
+                      <div className={classes.transparencyIcon} style={{display: 'flex', padding: 0}}>
                         <TransparencyIcon tt={{icon: 'repstd'}} />
                       </div>
                       { this.render_field('reporting_standards_type') }
