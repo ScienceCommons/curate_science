@@ -146,8 +146,9 @@ var C = {
   ],
   NONTRANSPARENCY_REASONS: [
 		{
-			value: null,
-			label: 'Choose a reason'
+			value: '',
+      label: 'Non-transparency exemption:',
+      disabled: true,
 		},
     {
       value: 'PROP',

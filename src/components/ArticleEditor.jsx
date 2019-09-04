@@ -557,7 +557,7 @@ function OutlinedSelect(props) {
           <OutlinedInput labelWidth={labelWidth} name={id} id={id} classes={{notchedOutline: border_class, input: input_class}}/>
         }
       >
-        { specs.options.map((op) => <MenuItem value={op.value} key={op.value}>{op.label}</MenuItem>) }
+        { specs.options.map((op) => <MenuItem value={op.value} key={op.value} disabled={op.disabled}>{op.label}</MenuItem>) }
       </Select>
     </FormControl>
   )
