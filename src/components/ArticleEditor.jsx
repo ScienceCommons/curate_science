@@ -122,6 +122,9 @@ const styles = theme => ({
   input: {
     padding: theme.spacing(1),
   },
+  iconButton: {
+    padding: theme.spacing(0.5)
+  }
 })
 
 const INPUT_SPECS = {
@@ -1078,9 +1081,9 @@ class ArticleEditor extends React.Component {
             <StyledCSTextField id={id_url} value={comm.commentary_url} specs={spec_url} onChange={this.handle_change} />
           </Grid>
           <Grid item xs={2} style={{alignSelf: 'center'}}>
-            <IconButton onClick={this.delete_commentary.bind(this, idx)}><Icon>delete</Icon></IconButton>
+            <IconButton onClick={this.delete_commentary.bind(this, idx)} className={classes.iconButton}><Icon>delete</Icon></IconButton>
             <span hidden={!is_last_row}>
-              <IconButton onClick={this.add_commentary}><Icon>add</Icon></IconButton>
+              <IconButton onClick={this.add_commentary} className={classes.iconButton}><Icon>add</Icon></IconButton>
             </span>
           </Grid>
         </Grid>
@@ -1133,11 +1136,11 @@ class ArticleEditor extends React.Component {
             />
           </Grid>
           <Grid item xs={2} style={{alignSelf: 'center'}}>
-            <IconButton onClick={this.delete_media_coverage.bind(this, idx)}>
+            <IconButton onClick={this.delete_media_coverage.bind(this, idx)} className={classes.iconButton}>
               <Icon>delete</Icon>
             </IconButton>
             <span hidden={!is_last_row}>
-              <IconButton onClick={this.add_media_coverage}><Icon>add</Icon></IconButton>
+              <IconButton onClick={this.add_media_coverage} className={classes.iconButton}><Icon>add</Icon></IconButton>
             </span>
           </Grid>
         </Grid>
