@@ -587,6 +587,7 @@ function TransparencyURLList(props) {
       id={id}
       onAdd={add_url}
       onDelete={delete_url}
+      blurBehavior="add"
       value={field_urls}
       variant="outlined"
       label={specs.label}
@@ -626,6 +627,7 @@ function URLList(props) {
       id={id}
       onAdd={add_url}
       onDelete={delete_url}
+      blurBehavior="add"
       value={urls}
       variant="outlined"
       label={specs.label}
