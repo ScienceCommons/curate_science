@@ -1324,11 +1324,6 @@ class ArticleEditor extends React.Component {
                 <Grid item xs={9}>
                   <Typography variant="h4">PRIMARY TRANSPARENCY</Typography>
                 </Grid>
-                <Grid item xs={3}>
-                  <Typography variant="subtitle2" align="center">
-                    Reasons for Non-transparency
-                  </Typography>
-                </Grid>
               </Grid>
 
               <Grid container spacing={1} className={classes.formRow}>
@@ -1338,11 +1333,8 @@ class ArticleEditor extends React.Component {
                   </div>
                   { this.render_field('prereg_protocol_url') }
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6}>
                   { this.render_field('prereg_protocol_type') }
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography variant="body2" align="center">&mdash;</Typography>
                 </Grid>
               </Grid>
 
