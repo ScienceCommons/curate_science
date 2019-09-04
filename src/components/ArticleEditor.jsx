@@ -96,7 +96,8 @@ const styles = theme => ({
     paddingLeft: 10
   },
   radioButton: {
-    padding: 4
+    paddingBottom: 0,
+    paddingTop: 0,
   },
   commentaryRow: {
     marginBottom: theme.spacing(1),
