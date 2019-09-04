@@ -145,11 +145,11 @@ var C = {
     { field: 'reporting_standards', icon: 'repstd', label: 'Reporting standard compliance'},
   ],
   NONTRANSPARENCY_REASONS: [
-		{
-			value: '',
+    {
+      value: '',
       label: 'Non-transparency exemption:',
       disabled: true,
-		},
+    },
     {
       value: 'PROP',
       label: 'Proprietary/IP',

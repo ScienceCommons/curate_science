@@ -1254,13 +1254,10 @@ class ArticleEditor extends React.Component {
               </Grid>
 
               <Grid container spacing={1} className={classes.formRow}>
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                     { this.render_field('abstract') }
                 </Grid>
-              </Grid>
-
-              <Grid container spacing={1} className={classes.formRow}>
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                     { this.render_field('keywords') }
                 </Grid>
               </Grid>
