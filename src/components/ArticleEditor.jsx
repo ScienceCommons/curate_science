@@ -118,6 +118,9 @@ const styles = theme => ({
   secondaryBorder: {
     borderColor: 'rgba(0, 0, 0, 0.23)'
   },
+  input: {
+    padding: theme.spacing(1),
+  },
 })
 
 const INPUT_SPECS = {
@@ -530,7 +533,7 @@ function initialFormState() {
 }
 
 function OutlinedSelect(props) {
-  const { border_class, disabled, id, label_style, onChange, value, specs } = props
+  const { border_class, disabled, id, input_class, label_style, onChange, value, specs } = props
 
   // Create reference and state to track the select label and set the
   // label width dynamically so it fits properly
@@ -550,7 +553,7 @@ function OutlinedSelect(props) {
         onChange={onChange}
         displayEmpty
         input={
-          <OutlinedInput labelWidth={labelWidth} name={id} id={id} classes={{notchedOutline: border_class}}/>
+          <OutlinedInput labelWidth={labelWidth} name={id} id={id} classes={{notchedOutline: border_class, input: input_class}}/>
         }
       >
         { specs.options.map((op) => <MenuItem value={op.value} key={op.value}>{op.label}</MenuItem>) }
@@ -591,7 +594,8 @@ function TransparencyURLList(props) {
           notchedOutline: border_class
         },
         style: {
-          paddingTop: 14
+          paddingTop: 8,
+          paddingLeft: 8,
         }
       }}
       placeholder="http://..."
@@ -629,7 +633,8 @@ function URLList(props) {
           notchedOutline: border_class
         },
         style: {
-          paddingTop: 14
+          paddingTop: 8,
+          paddingLeft: 8,
         }
       }}
       placeholder="http://..."
@@ -996,7 +1001,7 @@ class ArticleEditor extends React.Component {
     else if (specs.type == 'radio') return this.render_radio_group(id, value, specs)
     else if (specs.type == 'select') {
       const label_style = specs.is_secondary ? null : { color: '#000' }
-      return <OutlinedSelect id={id} value={value} specs={specs} onChange={this.handle_change} border_class={border_class} label_style={label_style}/>
+      return <OutlinedSelect id={id} value={value} specs={specs} onChange={this.handle_change} border_class={border_class} label_style={label_style} input_class={classes.input}/>
     }
     else if (specs.type === 'transparency_url_list') {
       return (
@@ -1231,7 +1236,7 @@ class ArticleEditor extends React.Component {
             <Grid item xs={4}>
                 { this.render_field('doi') }
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <Button variant="outlined" onClick={this.lookup_article_by_doi} disabled={doi_loading} style={{ height: '100%' }}>
                   {
                     doi_loading &&
@@ -1659,7 +1664,8 @@ class CSTextField extends React.PureComponent {
       }}
       InputProps={{
         classes: {
-          notchedOutline: border_class
+          notchedOutline: border_class,
+          input: classes.input
         }
       }}
     />
