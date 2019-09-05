@@ -1085,7 +1085,7 @@ class ArticleEditor extends React.Component {
         label: "Authors/publication year",
         placeholder: "e.g., Smith & Smith (2019)",
         fullWidth: true,
-        autoFocus: commentaries.length > 1 // autofocus if it's not the initial commentary
+        autoFocus: (commentaries.length > 1) && comm.authors_year.length === 0 // autofocus if it's not the initial commentary
       }
       let spec_url = {
         label: "Commentary URL",
@@ -1125,11 +1125,10 @@ class ArticleEditor extends React.Component {
     const { form } = this.state
     const { classes } = this.props
 
-    const spec_media_source_name = {
+    let spec_media_source_name = {
       label: 'Media source name',
       placeholder: 'e.g. NYT',
       fullWidth: true,
-      autoFocus: form.media_coverage.length > 1 // autofocus if it's not the initial coverage
     }
 
     const spec_media_url = {
@@ -1143,6 +1142,10 @@ class ArticleEditor extends React.Component {
       const source_id = `media_coverage.${idx}.media_source_name`
       const url_id = `media_coverage.${idx}.url`
       const is_last_row = idx === media_coverage.length - 1
+
+      // Autofocus if it's a new entry
+      spec_media_source_name.autoFocus = (form.media_coverage.length > 1) && media_source_name.length === 0
+
       return (
         <Grid container spacing={1} key={idx} className={classes.commentaryRow}>
           <Grid item xs={5}>
