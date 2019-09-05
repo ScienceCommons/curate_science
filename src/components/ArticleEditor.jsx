@@ -1084,7 +1084,8 @@ class ArticleEditor extends React.Component {
       let spec_pubyear = {
         label: "Authors/publication year",
         placeholder: "e.g., Smith & Smith (2019)",
-        fullWidth: true
+        fullWidth: true,
+        autoFocus: commentaries.length > 1 // autofocus if it's not the initial commentary
       }
       let spec_url = {
         label: "Commentary URL",
@@ -1127,7 +1128,8 @@ class ArticleEditor extends React.Component {
     const spec_media_source_name = {
       label: 'Media source name',
       placeholder: 'e.g. NYT',
-      fullWidth: true
+      fullWidth: true,
+      autoFocus: form.media_coverage.length > 1 // autofocus if it's not the initial coverage
     }
 
     const spec_media_url = {
