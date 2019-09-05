@@ -39,6 +39,7 @@ import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
 import FigureSelector from './FigureSelector.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import Loader from '../components/shared/Loader.jsx';
+import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { clone, debounce, get, includes, set, truncate } from 'lodash'
 import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
@@ -564,8 +565,16 @@ function OutlinedSelect(props) {
   )
 }
 
+const useStyles = makeStyles(theme => ({
+  chip: {
+    height: theme.spacing(3),
+  },
+}))
+
 function TransparencyURLList(props) {
   const { border_class, id, is_protected, onChange, urls, specs } = props
+  const classes = useStyles()
+
   const field_urls = urls
     .filter(url => { return url.transparency_type === specs.url_type })
     .map(url => truncate(url.url, { length: 20 }))
@@ -607,12 +616,16 @@ function TransparencyURLList(props) {
       placeholder="Insert URL & hit ENTER"
       fullWidth={specs.fullWidth}
       fullWidthInput
+      classes={{
+        chip: classes.chip,
+      }}
     />
   )
 }
 
 function URLList(props) {
   const { border_class, id, onChange, specs, value } = props
+  const classes = useStyles()
 
   let urls = (value || []).map(url => truncate(url.url, { length: 20 }))
 
@@ -650,6 +663,9 @@ function URLList(props) {
       placeholder="Insert URL & hit ENTER"
       fullWidth={specs.fullWidth}
       fullWidthInput
+      classes={{
+        chip: classes.chip,
+      }}
     />
   )
 }
