@@ -571,6 +571,9 @@ function TransparencyURLList(props) {
     .map(url => truncate(url.url, { length: 20 }))
 
   function add_url(url) {
+    if (urls.filter(u => u.url === url).length) {
+      return
+    }
     urls.push({ url: url, transparency_type: specs.url_type, protected_access: is_protected(specs.url_type) })
     return onChange('transparency_urls', urls)
   }
@@ -614,6 +617,9 @@ function URLList(props) {
   let urls = (value || []).map(url => truncate(url.url, { length: 20 }))
 
   function add_url(url) {
+    if (value.filter(value => value.url === url).length) {
+      return
+    }
     value.push({ url })
     onChange(id, value)
   }
