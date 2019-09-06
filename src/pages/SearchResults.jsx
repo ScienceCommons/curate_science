@@ -124,7 +124,8 @@ class SearchResultsPage extends React.Component {
         this.setState({
           searching: false,
         })
-        this.update_results(results)
+        const { articles, authors } = results
+        this.setState({ articles, authors })
       },
       (err) => {
         this.show_snack('Error searching')
