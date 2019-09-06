@@ -38,7 +38,7 @@ const styles = theme => ({
 })
 
 
-class SearchResultsPage extends React.PureComponent {
+class SearchResultsPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
