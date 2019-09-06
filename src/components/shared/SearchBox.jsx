@@ -7,6 +7,8 @@ import Async from 'react-select/async';
 
 import Grid from '@material-ui/core/Grid';
 import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -26,7 +28,7 @@ const styles = theme => ({
     display: 'flex',
     padding: 10,
     backgroundColor: 'white',
-    borderRadius: 4,
+    borderRadius: '4px 0 0 4px',
   },
   valueContainer: {
     display: 'flex',
@@ -53,9 +55,17 @@ const styles = theme => ({
     left: 0,
     right: 0,
   },
-  divider: {
-    height: theme.spacing(2),
+  searchBox: {
+    paddingRight: 0,
   },
+  searchButton: {
+    backgroundColor: 'white',
+    borderRadius: '0 4px 4px 0',
+    padding: theme.spacing(1),
+    '&:hover': {
+      backgroundColor: 'white',
+    }
+  }
 });
 
 function NoOptionsMessage(props) {
@@ -83,14 +93,24 @@ function inputComponent({ inputRef, ...props }) {
 }
 
 function Control(props) {
+  const classes = props.selectProps.classes
+
+  const searchButton = (
+    <IconButton type="submit" className={classes.searchButton} onClick={props.selectProps.goToSearchPage}>
+      <Icon>search</Icon>
+    </IconButton>
+  )
+
   return (
     <TextField
       fullWidth
       variant="outlined"
       InputProps={{
+        classes: {adornedEnd: classes.searchBox},
+        endAdornment: searchButton,
         inputComponent,
         inputProps: {
-          className: props.selectProps.classes.input,
+          className: classes.input,
           inputRef: props.innerRef,
           children: props.children,
           ...props.innerProps,
@@ -106,8 +126,13 @@ function Option(props) {
 
   let content
 
+  if (data.search_result_type === 'SEARCH') {
+     content = (
+       <p>View all search results for: <em>{data.value}</em></p>
+     )
+  }
   // Layout for article result
-  if (data.search_result_type === 'ARTICLE') {
+  else if (data.search_result_type === 'ARTICLE') {
     const article = data
     const authors = article.author_list || '--'
     const year = article.in_press ? 'In Press' : article.year
@@ -203,10 +228,12 @@ class SearchBox extends React.PureComponent {
     super(props);
 
     this.state = {
-      query: ''
+      query: '',
+      stored_query: ''
     };
 
     this.goToPage = this.goToPage.bind(this)
+    this.goToSearchPage = this.goToSearchPage.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.loadOptions = debounce(this.loadOptions.bind(this), 400)
@@ -220,10 +247,33 @@ class SearchBox extends React.PureComponent {
 
   handleInputChange(value, action) {
     this.setState({query: value})
+
+    // `stored_query` is used as a workaround so that we have access to the input value when clicking on the
+    // search button.
+    // The input is cleared on blur (none of the workarounds worked - https://github.com/JedWatson/react-select/issues/805)
+    // So instead we store the value whenever the action is an 'input-change' i.e. a user typing and it
+    // doesn't get cleared on blur. This means clicking the search button works but also if the user clicks
+    // somewhere else and then later clicks the search button they'll be taken to the search page for that last query
+    // even though the search box is empty.
+    if (action.action === 'input-change') {
+      this.setState({stored_query: value})
+    }
+  }
+
+  goToSearchPage() {
+    const clean_query = this.state.stored_query.trim()
+    if (!clean_query.length) {
+      return
+    }
+    const query = encodeURIComponent(clean_query)
+    this.props.history.push(`/search/?q=${query}`)
   }
 
   goToPage(data) {
-    if (data.search_result_type === 'ARTICLE') {
+    if (data.search_result_type === 'SEARCH') {
+      this.props.history.push(`/search/?q=${data.value}`)
+    }
+    else if (data.search_result_type === 'ARTICLE') {
       this.props.history.push(`/article/${data.id}`)
     } else if (data.search_result_type === 'AUTHOR') {
       this.props.history.push(`/author/${data.slug}`)
@@ -234,13 +284,17 @@ class SearchBox extends React.PureComponent {
     const searchURL = '/api/search'
     this.setState({loading: true}, () => {
       let query = encodeURIComponent(inputValue)
-      return fetch(`${searchURL}?q=${query}`)
+      return fetch(`${searchURL}/?q=${query}`)
         .then((res) => {
           return res.json()
         })
         .then((json) => {
           this.setState({loading: false})
-          const res = concat(json.authors, json.articles)
+          let res = concat(json.authors, json.articles)
+          if (res.length) {
+            const searchPageResult = {search_result_type: 'SEARCH', value: inputValue}
+            res.unshift(searchPageResult)
+          }
           cb(res)
         })
       })
@@ -289,6 +343,7 @@ class SearchBox extends React.PureComponent {
           loadOptions={this.loadOptions}
           autoFocus={autoFocus}
           query={query}
+          goToSearchPage={this.goToSearchPage}
           {...params}
         />
       </div>
