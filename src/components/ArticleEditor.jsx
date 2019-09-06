@@ -1427,9 +1427,9 @@ class ArticleEditor extends React.Component {
                   <Grid item xs={6}></Grid>
                   <Grid item container xs={6}>
                     <Grid item xs={9}></Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={3} hidden={!is_basic_4_7}>
                       <Typography variant="subtitle2" style={{textAlign: 'center'}}>
-                        All details reported in article <sup>&dagger;</sup> (for all studies)
+                        All details reported in article <sup>&dagger;</sup>
                       </Typography>
                     </Grid>
                   </Grid>
@@ -1459,8 +1459,8 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
                         (<a href="https://medium.com/@IGDORE/retroactive-disclosure-statements-make-the-past-more-useful-c1b2e73f4bae">details</a>).
                       </Typography>
                       <Typography variant="body2" style={{ marginTop: 10 }}>
-                        &dagger; or reported in (public/non-paywalled) preregistration protocol or supplementary
-                        materials linked herein (URLs to these linked materials must be provided in the relevant fields).
+                        &dagger; All details reported in article (for all studies) or reported in a public/non-paywalled preregistration protocol
+                        or supplementary materials linked herein (URLs to these linked materials must be provided in the relevant fields).
                       </Typography>
                     </div>
                   </Grid>
