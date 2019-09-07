@@ -20,6 +20,19 @@ class TransparencyBadge extends React.Component {
         this.render_feature = this.render_feature.bind(this)
     }
 
+  rep_std_popover_content(reporting_standards_type) {
+    const rep_std_type = find(C.REPORTING_STANDARDS_TYPES, {value: reporting_standards_type})
+    const rep_std_label = rep_std_type == null ? '?' : rep_std_type.label
+    const rep_std_link = <a href={rep_std_type.url}>{rep_std_label}</a>
+    const subtitle = (
+      <Typography variant="body2" style={{color: 'gray'}}>
+        Article complies with the {rep_std_link} reporting standard:
+      </Typography>
+    )
+    const popover_content = <Typography variant="body2" dangerouslySetInnerHTML={{ __html: rep_std_type.html_detail }}/>
+    return { subtitle, popover_content}
+  }
+
 	render_feature(f, i) {
     let {article, icon_size, reporting_standards_type, prereg_protocol_type, classes, article_type} = this.props
     let repstd = f.id == 'REPSTD'
@@ -89,9 +102,9 @@ class TransparencyBadge extends React.Component {
 
     let popover_content
     if (repstd) {
-      let rep_std_type = find(C.REPORTING_STANDARDS_TYPES, {value: reporting_standards_type})
-      let rep_std_label = rep_std_type == null ? '?' : rep_std_type.label
-      popover_content = <Typography variant="body2">{ rep_std_label }</Typography>
+      const popover_details = this.rep_std_popover_content(reporting_standards_type)
+      subtitle = popover_details.subtitle
+      popover_content = popover_details.popover_content
     } else {
 
       if (urls.length) {
@@ -119,17 +132,17 @@ class TransparencyBadge extends React.Component {
           }
         }
       }
-
-      return (
-        <MouseOverPopover target={badge_icon()} key={`mouseover-${i}`}>
-          <div style={{padding: 10}}>
-            <Typography variant="h5">{ f.label }</Typography>
-            { subtitle }
-            { popover_content }
-          </div>
-        </MouseOverPopover>
-      )
     }
+
+    return (
+      <MouseOverPopover target={badge_icon()} key={`mouseover-${i}`}>
+        <div style={{padding: 10}}>
+          <Typography variant="h5">{ f.label }</Typography>
+          { subtitle }
+          { popover_content }
+        </div>
+      </MouseOverPopover>
+    )
   }
 
 	relevant_badges() {
