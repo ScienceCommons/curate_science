@@ -167,7 +167,7 @@ var C = {
 		{
 			value: 'BASIC_4_7_RETROACTIVE',
 			label: "Basic 4/Basic 7 (retroactive)",
-			//html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
+      //html_detail: "<ul><li><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</li></ul>"
 		},
 		{
 			value: 'BASIC_4_AT_SUBMISSION',
@@ -177,47 +177,56 @@ var C = {
 		{
 			value: 'CONSORT_SPI',
 			label: "CONSORT-SPI (2018)",
-			html_detail: "<br/><a href='https://trialsjournal.biomedcentral.com/track/pdf/10.1186/s13063-018-2733-1' target='_blank'>Randomized trials of social and psychological interventions (CONSORT-SPI 2018; 26 items)</a> "
+      html_detail: "<ul><li><a href='https://trialsjournal.biomedcentral.com/track/pdf/10.1186/s13063-018-2733-1' target='_blank'>Randomized trials of social and psychological interventions (CONSORT-SPI 2018; 26 items)</li></ul> ",
+      url: 'https://trialsjournal.biomedcentral.com/track/pdf/10.1186/s13063-018-2733-1',
 		},
 		{
 			value: 'CONSORT',
 			label: "CONSORT (2010)",
-			html_detail: "<br/><a href='http://www.consort-statement.org/media/default/downloads/consort%202010%20checklist.pdf' target='_blank'>Parallel-group RCTs reporting checklist (CONSORT 2010; 25 items)</a>"
+      html_detail: "<ul><li><a href='http://www.consort-statement.org/media/default/downloads/consort%202010%20checklist.pdf' target='_blank'>Parallel-group RCTs reporting checklist (CONSORT 2010; 25 items)</li></ul>",
+      url: 'http://www.consort-statement.org/media/default/downloads/consort%202010%20checklist.pdf'
 		},
 		{
 			value: 'JARS',
 			label: "JARS (2018)",
-			html_detail: "<br/><a href='http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf' target='_blank'>Journal article reporting standards for articles reporting new data (APA's JARS; see Table 1)</a>"
+      html_detail: "<ul><li><a href='http://www.apa.org/pubs/journals/releases/lim</ul>p-amp0000191.pdf' target='_blank'>Journal article reporting standards for articles reporting new data (APA's JARS; see Table 1)</a>",
+      url: 'http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf',
 		},
 		{
 			value: 'STROBE',
 			label: "STROBE (2007)",
-			html_detail: "<br/><a href='https://www.strobe-statement.org/fileadmin/Strobe/uploads/checklists/STROBE_checklist_v4_combined.pdf' target='_blank'>Observational/correlational studies reporting checklist (STROBE 2007; 22 items)</a>"
+      html_detail: "<ul><li><a href='https://www.strobe-statement.org/fileadmin/Strobe/uploads/checklists/STROBE_checklist_v4_combined.pdf' target='_blank'>Observational/correlational studies reporting checklist (STROBE 2007; 22 items)</li></ul>",
+      url: 'https://www.strobe-statement.org/fileadmin/Strobe/uploads/checklists/STROBE_checklist_v4_combined.pdf',
 		},
 		{
 			value: 'ARRIVE',
 			label: "ARRIVE (2010)",
-			html_detail: "<br/><a href='https://www.nc3rs.org.uk/sites/default/files/documents/Guidelines/NC3Rs%20ARRIVE%20Guidelines%20Checklist%20%28fillable%29.pdf' target='_blank'>Animal research reporting checklist (ARRIVE 2010; 20 items)</a>"
+      html_detail: "<ul><li><a href='https://www.nc3rs.org.uk/sites/default/files/documents/Guidelines/NC3Rs%20ARRIVE%20Guidelines%20Checklist%20%28fillable%29.pdf' target='_blank'>Animal research reporting checklist (ARRIVE 2010; 20 items)</li></ul>",
+      url: 'https://www.nc3rs.org.uk/sites/default/files/documents/Guidelines/NC3Rs%20ARRIVE%20Guidelines%20Checklist%20%28fillable%29.pdf',
 		},
 		{
 			value: 'NATURE_NEUROSCIENCE',
 			label: "Nature Neuroscience (2015)",
-			html_detail: "<br/><a href='https://www.nature.com/authors/policies/reporting.pdf' target='_blank'>Life Science research checklist (Nature Neuroscience, 2015)</a>"
+      html_detail: "<ul><li><a href='https://www.nature.com/liu</ul>thors/policies/reporting.pdf' target='_blank'>Life Science research checklist (Nature Neuroscience, 2015)</a>",
+      url: 'https://www.nature.com/authors/policies/reporting.pdf'
 		},
 		{
 			value: 'MARS',
 			label: "MARS (2018)",
-			html_detail: "<br/><a href='http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf' target='_blank'>Meta-Analysis Reporting Standards (APA's MARS; see Table 9)</a>"
+      html_detail: "<ul><li><a href='http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf' target='_blank'>Meta-Analysis Reporting Standards (APA's MARS; see Table 9)</li></ul>",
+      url: 'http://www.apa.org/pubs/journals/releases/amp-amp0000191.pdf'
 		},
 		{
 			value: 'PRISMA',
 			label: "PRISMA (2009)",
-			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA%202009%20checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (PRISMA 2009; 27 items)</a>"
+      html_detail: "<ul><li><a href='http://prisma-statement.org/documents/PRISMA%202009%20checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (PRISMA 2009; 27 items)</li></ul>",
+      url: 'http://prisma-statement.org/documents/PRISMA%202009%20checklist.pdf'
 		},
 		{
 			value: 'PRISMA_P',
 			label: "PRISMA-P (2015)",
-			html_detail: "<br/><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</a>"
+      html_detail: "<ul><li><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</li></ul>",
+      url: 'http://prisma-statement.org/documents/PRISMA-P-checklist.pdf'
 		},
     ],
     // Sync with fields in Article()
