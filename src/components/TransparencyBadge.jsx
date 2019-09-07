@@ -49,26 +49,26 @@ class TransparencyBadge extends React.Component {
     let label = ''
     let icon = f.icon
 
-    const protected_materials = (
-      f.url_prop === 'MATERIALS' && urls.every(url => url.protected_access)
+    const nontransparent_materials = (
+      f.url_prop === 'MATERIALS' && article.materials_nontransparency_reason
     )
-    const protected_data = (
-      f.url_prop === 'DATA' && urls.every(url => url.protected_access)
+    const nontransparent_data = (
+      f.url_prop === 'DATA' && article.data_nontransparency_reason
     )
 
     if (!enabled) {
       label = `${f.label_long} is not (yet) available`
       icon += "_dis"
-    } else if (protected_materials || protected_data) {
-      label = `${f.label} is not available`
-      const protected_reason = get(article, `${f.url_prop.toLowerCase()}_nontransparency_reason`)
-      if (protected_reason) {
-        const nontransparency_obj = find(C.NONTRANSPARENCY_REASONS, ['value', protected_reason])
+    } else if (nontransparent_materials || nontransparent_data) {
+      label = `${f.label} not available`
+      const nontransparent_reason = get(article, `${f.url_prop.toLowerCase()}_nontransparency_reason`)
+      if (nontransparent_reason) {
+        const nontransparency_obj = find(C.NONTRANSPARENCY_REASONS, ['value', nontransparent_reason])
         if (nontransparency_obj) {
-          label += ` (${nontransparency_obj.label})`
+          label += `: ${nontransparency_obj.label}`
         }
       }
-      icon += "_protected"
+      icon += "_nontransparent"
     }
 
     // Define a function that returns the badge icon
@@ -86,11 +86,11 @@ class TransparencyBadge extends React.Component {
       )
     }
 
-		if (!enabled) {
-			// If article type calls for transparencies to be bonuses, dont render disabled badges
-			let tbonus = find(C.ARTICLE_TYPES, {id: article_type}).transparencies_bonus
-			return tbonus ? null : badge_icon(label)
-		}
+    if (!enabled || nontransparent_data || nontransparent_materials) {
+      // If article type calls for transparencies to be bonuses, dont render disabled badges
+      let tbonus = find(C.ARTICLE_TYPES, {id: article_type}).transparencies_bonus
+      return tbonus ? null : badge_icon(label)
+    }
 
     let popover_content
     if (repstd) {
