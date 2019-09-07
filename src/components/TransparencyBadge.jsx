@@ -8,13 +8,8 @@ import { find, get } from 'lodash'
 
 import MouseOverPopover from '../components/shared/MouseOverPopover.jsx';
 
-import { withStyles } from '@material-ui/core/styles';
-
 import {Icon, Typography, Menu} from '@material-ui/core';
 
-const styles = theme => ({
-
-})
 
 class TransparencyBadge extends React.Component {
 	constructor(props) {
@@ -206,4 +201,4 @@ TransparencyBadge.defaultProps = {
   transparency_urls: [],
 };
 
-export default withStyles(styles)(TransparencyBadge);
+export default TransparencyBadge;
