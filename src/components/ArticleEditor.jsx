@@ -1429,7 +1429,7 @@ class ArticleEditor extends React.Component {
                     <Grid item xs={9}></Grid>
                     <Grid item xs={3} hidden={!is_basic_4_7}>
                       <Typography variant="subtitle2" style={{textAlign: 'center'}}>
-                        All details reported in article <sup>&dagger;</sup>
+                        All details reported <sup>&dagger;</sup>
                       </Typography>
                     </Grid>
                   </Grid>
