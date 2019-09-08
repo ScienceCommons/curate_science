@@ -205,6 +205,13 @@ class ArticleContent extends React.PureComponent {
           </Typography>
     )
 
+    let journal
+    if (article.under_peer_review) {
+      journal = 'Under peer review'
+    } else {
+      journal = article.journal
+    }
+
 		return (
 			<div>
         <ArticleFullTextLinks {...content_links} />
@@ -223,7 +230,7 @@ class ArticleContent extends React.PureComponent {
         </Typography>
 
         <Typography className={classes.journal} color="textSecondary" gutterBottom variant="body2">
-          <JournalDOIBadge journal={article.journal} doi={article.doi} />
+          <JournalDOIBadge journal={journal} doi={article.doi} />
         </Typography>
 
         <ArticleType
