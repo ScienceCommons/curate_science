@@ -73,6 +73,8 @@ class ArticleListSerializer(serializers.ModelSerializer):
     commentaries = CommentarySerializer(many=True, required=False, allow_null=True)
     authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
     transparency_urls = TransparencyURLSerializer(many=True)
+    is_basic_4_retroactive = serializers.BooleanField(read_only=True)
+    is_basic_7_retroactive = serializers.BooleanField(read_only=True)
 
     class Meta:
         model=Article
@@ -150,6 +152,8 @@ class ArticleSerializerNested(WritableNestedModelSerializer):
     presentations = PresentationsSerializer(many=True, required=False, allow_null=True)
     supplemental_materials = SupplementalMaterialsSerializer(many=True, required=False, allow_null=True)
     disclosure_date = serializers.DateField(input_formats=['%Y-%m-%d'], required=False, allow_null=True)
+    is_basic_4_retroactive = serializers.BooleanField(read_only=True)
+    is_basic_7_retroactive = serializers.BooleanField(read_only=True)
 
     def validate_doi(self, value):
         if value:

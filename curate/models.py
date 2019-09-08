@@ -243,6 +243,41 @@ class Article(models.Model):
     class Meta:
         unique_together=('title', 'year')
 
+    def _check_basic_7_fields(self):
+        BASIC_7_FIELDS = [
+            ('excluded_data', 'excluded_data_all_details_reported'),
+            ('conditions', 'conditions_all_details_reported'),
+            ('outcomes', 'outcomes_all_details_reported'),
+            ('sample_size', 'sample_size_all_details_reported'),
+            ('analyses', 'analyses_all_details_reported'),
+            ('unreported_studies', 'unreported_studies_all_details_reported'),
+            ('other_disclosures', 'other_disclosures_all_details_reported'),
+        ]
+
+        def check_field_pair(field_pair):
+            # If either field is truthy (non-empty text field or True boolean) we return True
+            (text_field, bool_field) = field_pair
+            if getattr(self, text_field):
+                return True
+            return getattr(self, bool_field) is True
+        return [check_field_pair(field_pair) for field_pair in BASIC_7_FIELDS]
+
+    @property
+    def is_basic_4_retroactive(self):
+        if self.reporting_standards_type != self.BASIC_4_7_RETROACTIVE:
+            return False
+
+        fields_done = self._check_basic_7_fields()
+        return all(fields_done[:4]) and not all(fields_done)
+
+    @property
+    def is_basic_7_retroactive(self):
+        if self.reporting_standards_type != self.BASIC_4_7_RETROACTIVE:
+            return False
+
+        fields_done = self._check_basic_7_fields()
+        return all(fields_done)
+
 
 class TransparencyURL(models.Model):
     DATA = 'DATA'
