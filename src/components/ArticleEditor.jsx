@@ -41,7 +41,7 @@ import LabeledBox from '../components/shared/LabeledBox.jsx';
 import Loader from '../components/shared/Loader.jsx';
 import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/core/styles';
-import { clone, debounce, get, includes, set, truncate } from 'lodash'
+import { clone, debounce, find, get, includes, set, truncate } from 'lodash'
 import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
 
 const Transition = React.forwardRef((props, ref) => {
@@ -1207,6 +1207,8 @@ class ArticleEditor extends React.Component {
     let visible_transparencies = this.get_relevant_transparency_badges()
     let dialog_title = form.is_live ? "Edit Article" : "New Article"
     const is_basic_4_7 = form.reporting_standards_type === 'BASIC_4_7_RETROACTIVE'
+    const is_basic_4_at_submission = form.reporting_standards_type === 'BASIC_4_AT_SUBMISSION'
+    const rep_std_details = find(C.REPORTING_STANDARDS_TYPES, {value: form.reporting_standards_type})
 
     if (!loading && article_id != null) content = (
       <Grid container spacing={3}>
@@ -1495,6 +1497,22 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
                           )
                         ) : null
                     }
+
+                    <Typography variant="body1" hidden={!is_basic_4_at_submission}>
+                      All (1) excluded data (subjects/observations), (2) tested experimental conditions, (3) assessed outcome measures/dependent variables, and (4) the sample size determination (& data collection stopping rule) have been reported in the article (for all studies). Since January 2014, all authors submitting to the journal <a href="https://us.sagepub.com/en-us/nam/journal/psychological-science#description">Psychological Science</a> have affirmed compliance to this reporting standard (see <a href="https://www.psychologicalscience.org/publications/psychological_science/ps-submissions#DISC">details at the journal website</a>)
+                    </Typography>
+
+                    {
+                      rep_std_details ? 
+                      <Typography
+                        hidden={is_basic_4_7 || is_basic_4_at_submission}
+                        variant="body1"
+                      >
+                        <a href={rep_std_details.url}>{rep_std_details.description}</a>
+                      </Typography>
+                      : null
+                    }
+
                     <Grid item xs={12} hidden={!is_basic_4_7}>
                       { this.render_field('disclosure_date') }
                     </Grid>
