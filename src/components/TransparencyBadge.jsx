@@ -126,7 +126,11 @@ class TransparencyBadge extends React.Component {
       <ol style={{paddingLeft: 16}}>
         {
           fields.map(field => {
-            return (<li><strong>{field}:</strong> Full details reported in article.</li>)
+            return (
+              <li key={`basic_4_at_submission_${field}`}>
+                <strong>{field}:</strong> Full details reported in article.
+              </li>
+            )
           })
         }
       </ol>
@@ -173,7 +177,13 @@ class TransparencyBadge extends React.Component {
     } else if (reporting_standards_type === 'BASIC_4_AT_SUBMISSION') {
       details = this.basic_4_at_submission_text()
     } else {
-      details = <div dangerouslySetInnerHTML={{ __html: rep_std_type.html_detail }}/>
+      details = (
+        <ul style={{paddingLeft: 16}}>
+          <li>
+            <a href={rep_std_type.url}>{rep_std_type.description}</a>
+          </li>
+        </ul>
+      )
     }
     const popover_content = <Typography variant="body2" component="div">{details}</Typography>
     return { subtitle, popover_content }
