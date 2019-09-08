@@ -192,10 +192,7 @@ class TransparencyBadge extends React.Component {
       f.url_prop === 'DATA' && article.data_nontransparency_reason
     )
 
-    if (!enabled) {
-      label = `${f.label_long} is not (yet) available`
-      icon += "_dis"
-    } else if (nontransparent_materials || nontransparent_data) {
+    if (nontransparent_materials || nontransparent_data) {
       label = `${f.label} not available`
       const nontransparent_reason = get(article, `${f.url_prop.toLowerCase()}_nontransparency_reason`)
       if (nontransparent_reason) {
@@ -205,6 +202,9 @@ class TransparencyBadge extends React.Component {
         }
       }
       icon += "_nontransparent"
+    } else if (!enabled) {
+      label = `${f.label_long} is not (yet) available`
+      icon += "_dis"
     }
 
     // Define a function that returns the badge icon
