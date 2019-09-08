@@ -1070,6 +1070,8 @@ class ArticleEditor extends React.Component {
     else {
       let disabled = id == 'year' && form.in_press === true
 
+      if (id === 'journal') disabled = form.under_peer_review
+
       // Disable the Basic 4/7 text input if "All details reported in article" is checked
       if (includes(BASIC_7_FIELDS, id)) {
         disabled = form[`${id}_all_details_reported`]
