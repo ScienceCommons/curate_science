@@ -167,7 +167,14 @@ var C = {
 		{
 			value: 'BASIC_4_7_RETROACTIVE',
 			label: "Basic 4/Basic 7 (retroactive)",
-      //html_detail: "<ul><li><a href='http://prisma-statement.org/documents/PRISMA-P-checklist.pdf' target='_blank'>Systematic reviews/meta-analyses reporting checklist (<b>Updated</b> PRISMA-P 2015; 17 items)</li></ul>"
+      basic_4: {
+        label: 'Basic 4 (retroactive)',
+        url: 'https://psychdisclosure.org/',
+      },
+      basic_7: {
+        label: 'Basic 7 (retroactive)',
+        url: 'https://medium.com/@IGDORE/retroactive-disclosure-statements-make-the-past-more-useful-c1b2e73f4bae',
+      },
 		},
 		{
 			value: 'BASIC_4_AT_SUBMISSION',

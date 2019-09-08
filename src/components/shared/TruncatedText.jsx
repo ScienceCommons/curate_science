@@ -39,7 +39,7 @@ class TruncatedText extends React.Component {
 
 TruncatedText.propTypes = {
     text: PropTypes.string,
-    fontSize: PropTypes.number,
+    fontSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     style: PropTypes.object
 }
 

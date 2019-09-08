@@ -10,7 +10,8 @@ const styles = theme => ({
   tooltip: {
     backgroundColor: 'white',
     color: 'black',
-    boxShadow: theme.shadows[1]
+    boxShadow: theme.shadows[1],
+    maxWidth: '80vw',
   },
   popper: {
     opacity: 1.0

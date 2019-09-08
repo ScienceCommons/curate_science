@@ -7,6 +7,7 @@ import {truncate, get_link_source_icon} from '../util/util.jsx'
 import { find, get } from 'lodash'
 
 import MouseOverPopover from '../components/shared/MouseOverPopover.jsx';
+import TruncatedText from './shared/TruncatedText.jsx';
 
 import {Icon, Typography, Menu} from '@material-ui/core';
 
@@ -20,17 +21,140 @@ class TransparencyBadge extends React.Component {
         this.render_feature = this.render_feature.bind(this)
     }
 
+  _basic_4_7_text(number_fields) {
+    const { article } = this.props
+
+    const basic_4_7_fields = [
+      {
+        title: 'Excluded data (subjects/observations)',
+        text_field: 'excluded_data',
+        in_article: 'excluded_data_all_details_reported',
+      },
+      {
+        title: 'Experimental conditions',
+        text_field: 'conditions',
+        in_article: 'conditions_all_details_reported',
+      },
+      {
+        title: 'Outcome measures',
+        text_field: 'outcomes',
+        in_article: 'outcomes_all_details_reported',
+      },
+      {
+        title: 'Sample size determination',
+        text_field: 'sample_size',
+        in_article: 'sample_size_all_details_reported',
+      },
+      {
+        title: 'Unreported analyses/Anayltic plans',
+        text_field: 'analyses',
+        in_article: 'analyses_all_details_reported',
+      },
+      {
+        title: 'Unreported related studies',
+        text_field: 'unreported_studies',
+        in_article: 'unreported_studies_all_details_reported',
+      },
+      {
+        title: 'Other disclosures',
+        text_field: 'other_disclosures',
+        in_article: 'other_disclosures_all_details_reported',
+      },
+    ]
+
+    const fields = basic_4_7_fields.slice(0, number_fields)
+
+    const text_rows = (
+        fields.map(field => {
+          return (
+            <li key={field.text_field}>
+              <strong>{field.title}: </strong>
+              {
+                article[field.in_article] ?
+                'Full details reported in article.' :
+                <TruncatedText text={article[field.text_field]} maxLength={160} fontSize={'0.75rem'}/>
+              }
+            </li>
+          )
+        })
+    )
+
+    const [year, month, day] = article.disclosure_date.split('-')
+    const months = {
+      1: 'January',
+      2: 'February',
+      3: 'March',
+      4: 'April',
+      5: 'May',
+      6: 'June',
+      7: 'July',
+      8: 'August',
+      9: 'September',
+      10: 'October',
+      11: 'November',
+      12: 'December'
+    }
+    const date = `${months[Number(month)]} ${day}, ${year}`
+
+    return (
+      <div>
+        <ol style={{paddingLeft: 16}}>
+          {text_rows}
+        </ol>
+        <p style={{color: 'red'}}>Date of retroactive disclosure: {date}</p>
+      </div>
+    )
+  }
+
+  basic_4_text() {
+    return this._basic_4_7_text(4)
+  }
+
+  basic_7_text() {
+    return this._basic_4_7_text(7)
+  }
+
   rep_std_popover_content(reporting_standards_type) {
-    const rep_std_type = find(C.REPORTING_STANDARDS_TYPES, {value: reporting_standards_type})
+    const { article } = this.props
+
+    let rep_std_type = find(C.REPORTING_STANDARDS_TYPES, {value: reporting_standards_type})
+
+    if (article.is_basic_4_retroactive) {
+      rep_std_type = rep_std_type['basic_4']
+    } else if (article.is_basic_7_retroactive) {
+      rep_std_type = rep_std_type['basic_7']
+    }
+
     const rep_std_label = rep_std_type == null ? '?' : rep_std_type.label
     const rep_std_link = <a href={rep_std_type.url}>{rep_std_label}</a>
+    const rep_std_icon = (
+      <img
+        src={`/sitestatic/icons/repstd.svg`}
+        width={25}
+        height={25}
+        style={{paddingLeft: 2, paddingRight: 2}}
+        type="image/svg+xml"
+      />
+    )
     const subtitle = (
-      <Typography variant="body2" style={{color: 'gray'}}>
-        Article complies with the {rep_std_link} reporting standard:
+      <Typography variant="body1" style={{color: 'gray', display: 'flex', alignItem: 'center'}}>
+        Article complies with the&nbsp;
+        {rep_std_link}
+        {rep_std_icon}
+        reporting standard:
       </Typography>
     )
-    const popover_content = <Typography variant="body2" dangerouslySetInnerHTML={{ __html: rep_std_type.html_detail }}/>
-    return { subtitle, popover_content}
+
+    let details
+    if (article.is_basic_4_retroactive) {
+      details = this.basic_4_text()
+    } else if (article.is_basic_7_retroactive) {
+      details = this.basic_7_text()
+    } else {
+      details = <div dangerouslySetInnerHTML={{ __html: rep_std_type.html_detail }}/>
+    }
+    const popover_content = <Typography variant="body2" component="div">{details}</Typography>
+    return { subtitle, popover_content }
   }
 
 	render_feature(f, i) {
@@ -50,7 +174,11 @@ class TransparencyBadge extends React.Component {
     // Collect this feature's transparencies across all studies
     let n = 0
     if (repstd) {
-      enabled = reporting_standards_type != null
+      if (reporting_standards_type === 'BASIC_4_7_RETROACTIVE') {
+        enabled = article.is_basic_4_retroactive || article.is_basic_7_retroactive
+      } else {
+        enabled = reporting_standards_type != null
+      }
     } else {
       enabled = urls.length > 0
     }
