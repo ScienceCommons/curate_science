@@ -834,6 +834,18 @@ class ArticleEditor extends React.Component {
   update_data(key, value) {
     const { form } = this.state
     set(form, key, value)
+
+    // If a non-transparency exemption is set for materials or data, clear the associated URLS
+    if (key === 'data_nontransparency_reason' && value) {
+      // Clear data transparency URLs
+      form.transparency_urls = form.transparency_urls.filter(url => url.transparency_type !== 'DATA')
+    }
+
+    if (key === 'materials_nontransparency_reason' && value) {
+      // Clear materials transparency URLs
+      form.transparency_urls = form.transparency_urls.filter(url => url.transparency_type !== 'MATERIALS')
+    }
+
     this.setState({form: form, unsaved: true})
   }
 
