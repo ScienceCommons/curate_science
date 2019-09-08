@@ -114,6 +114,26 @@ class TransparencyBadge extends React.Component {
     return this._basic_4_7_text(7)
   }
 
+  basic_4_at_submission_text() {
+    const { article } = this.props
+    const fields = [
+      'Excluded data (subjects/observations)',
+      'Experimental conditions',
+      'Outcome measures',
+      'Sample size determination',
+    ]
+    return (
+      <ol style={{paddingLeft: 16}}>
+        {
+          fields.map(field => {
+            return (<li><strong>{field}:</strong> Full details reported in article.</li>)
+          })
+        }
+      </ol>
+    )
+
+  }
+
   rep_std_popover_content(reporting_standards_type) {
     const { article } = this.props
 
@@ -150,6 +170,8 @@ class TransparencyBadge extends React.Component {
       details = this.basic_4_text()
     } else if (article.is_basic_7_retroactive) {
       details = this.basic_7_text()
+    } else if (reporting_standards_type === 'BASIC_4_AT_SUBMISSION') {
+      details = this.basic_4_at_submission_text()
     } else {
       details = <div dangerouslySetInnerHTML={{ __html: rep_std_type.html_detail }}/>
     }

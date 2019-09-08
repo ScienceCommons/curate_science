@@ -179,7 +179,6 @@ var C = {
 		{
 			value: 'BASIC_4_AT_SUBMISSION',
 			label: "Basic-4 (at submission; PSCI, 2014)",
-			html_detail: ""
 		},
 		{
 			value: 'CONSORT_SPI',
