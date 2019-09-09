@@ -32,6 +32,7 @@ import {
   Snackbar,
   TextField,
   Toolbar,
+  Tooltip,
 } from '@material-ui/core';
 import ChipInput from 'material-ui-chip-input'
 import C from '../constants/constants';
@@ -1213,8 +1214,22 @@ class ArticleEditor extends React.Component {
     if (!loading && article_id != null) content = (
       <Grid container spacing={3}>
         <Grid item className="ArticleEditorHalf">
-          <Grid item xs={12}>
-            <Typography variant="h4">BASIC METADATA</Typography>
+          <Grid container>
+            <Grid item xs={6}>
+              <Typography variant="h4" color="textPrimary">BASIC METADATA</Typography>
+            </Grid>
+            <Grid item xs={6} style={{display: 'flex', justifyContent: 'end'}}>
+              <Typography variant="h4" color="textSecondary" align="right" component="span">
+                IMPACT METRICS & FULL-TEXT URLs
+              </Typography>
+              <Typography variant="h4" color="textSecondary" align="right" component="span" style={{paddingLeft: 4, paddingRight: 4}}>
+                <Tooltip
+                  title="Non-paywalled article full-text URLs only. 'HTML URL' means a URL to an HTML page of a full-text article, not a URL to the publisher's website (which is automatically linked in the DOI field). Impact metrics should be curated from the content provider if available. Citation values should be taken from Google Scholar."
+                >
+                  <Icon fontSize="inherit">info</Icon>
+                </Tooltip>
+              </Typography>
+            </Grid>
           </Grid>
           <Grid container spacing={1} className={classes.formRow}>
             <Grid item xs={6}>
