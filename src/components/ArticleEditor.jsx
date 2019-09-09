@@ -1199,6 +1199,19 @@ class ArticleEditor extends React.Component {
       </div>
     )
   }
+
+  render_transparency_info_icon(title) {
+    return (
+      <Typography variant="h4" color="textSecondary" align="right" component="span" style={{position: 'absolute', left: 8, paddingLeft: 4, paddingRight: 4, marginTop: 5}}>
+        <Tooltip
+          title={title}
+        >
+          <Icon fontSize="inherit">info</Icon>
+        </Tooltip>
+      </Typography>
+    )
+  }
+
   render() {
     let {classes, article_id, open} = this.props
     let { doi_loading, form, snack_message, loading } = this.state
@@ -1398,6 +1411,7 @@ class ArticleEditor extends React.Component {
                 <Grid item xs={6} style={{display: 'flex'}}>
                   <div className={classes.transparencyIcon}>
                     <TransparencyIcon tt={{icon: 'preregplus'}}/>
+                    { this.render_transparency_info_icon("A 'pregistration protocol' is the study protocol (methods protocol) that was preregistered prior to data collection.'") }
                   </div>
                   { this.render_field('prereg_protocol_url') }
                 </Grid>
@@ -1413,6 +1427,7 @@ class ArticleEditor extends React.Component {
                     <Grid item xs={6} style={{display: 'flex'}}>
                       <div className={classes.transparencyIcon}>
                         <TransparencyIcon tt={{icon: 'materials'}}/>
+                        { this.render_transparency_info_icon("'Study materials' are all materials (e.g., questionnaires, stimuli, experimental files, etc.) that would be needed for an independent researcher to conduct a replication of a study (in open/open-source or proprietary file formats).") }
                       </div>
                       { this.render_field('public_study_materials_url') }
                     </Grid>
@@ -1433,6 +1448,7 @@ class ArticleEditor extends React.Component {
                   <Grid item xs={6} style={{display: 'flex'}}>
                     <div className={classes.transparencyIcon}>
                       <TransparencyIcon tt={{icon: 'data'}}/>
+                      { this.render_transparency_info_icon("'Data' are the minimal data set file(s), in raw or processed form, that are needed to reproduce an article's primary results.") }
                     </div>
                     { this.render_field('public_data_url') }
                   </Grid>
@@ -1453,6 +1469,7 @@ class ArticleEditor extends React.Component {
                   <Grid item xs={6} style={{display: 'flex'}}>
                     <div className={classes.transparencyIcon}>
                       <TransparencyIcon tt={{icon: 'code'}}/>
+                      { this.render_transparency_info_icon("'Code' means any statistical analyses syntax files and/or code files that were used to conduct the statistical analyses and/or to generate figures or tables.") }
                     </div>
                     { this.render_field('public_code_url') }
                   </Grid>
@@ -1481,6 +1498,7 @@ class ArticleEditor extends React.Component {
                     <div style={{display: 'flex'}}>
                       <div className={classes.transparencyIcon} style={{display: 'flex', padding: 0}}>
                         <TransparencyIcon tt={{icon: 'repstd'}} />
+                        { this.render_transparency_info_icon("Choose the specific reporting checklist that you followed in reporting your study/studies (these are checklists of specific details that need to be reported for the type of study you conducted). For example, if you've conducted an animal study and reported the 20 items of the ARRIVE (2010) checklist, then you would select 'ARRIVE (2010)'. For psychology studies, you can retroactively affirm reporting standards compliance by choosing 'Basic 4/Basic 7 (retroactive)' and providing the information for the 4 (or 7) items (or by ticking the relevant check boxes to indicate that the item-specific information was reported in your article).") }
                       </div>
                       { this.render_field('reporting_standards_type') }
                     </div>
