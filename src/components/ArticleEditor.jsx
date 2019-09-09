@@ -82,7 +82,10 @@ const styles = theme => ({
     flex: 1
   },
   content: {
-    padding: 8,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
     minHeight: 300,
     overflowX: 'hidden',
   },
@@ -1326,6 +1329,13 @@ class ArticleEditor extends React.Component {
               <Grid container spacing={1} className={classes.formRow}>
                 <Grid item xs={3}>
                     { this.render_field('article_type') }
+                    <Typography variant="h4" color="textSecondary" align="right" component="span" style={{position: 'absolute', left: 8, paddingLeft: 4, paddingRight: 4, marginTop: 8}}>
+                      <Tooltip
+                        title="The 'Original' article type can also include articles that report a mixture of original and so-called 'conceptual replications', which are considered 'Far' or 'Very Far' replications according to our replication taxonomy. The 'Replication' article type also includes articles that report a mixture of original and replication studies (i.e., 'Close', 'Very Close', or 'Exact' replications according to our replication taxonomy)."
+                      >
+                        <Icon fontSize="inherit">info</Icon>
+                      </Tooltip>
+                    </Typography>
                 </Grid>
                   {
                     replication ?
