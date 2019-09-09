@@ -150,7 +150,7 @@ class TransparencyBadge extends React.Component {
     }
 
     const rep_std_label = rep_std_type == null ? '?' : rep_std_type.label
-    const rep_std_link = <a href={rep_std_type.url}>{rep_std_label}</a>
+    const rep_std_link = <a href={rep_std_type.url} target="_blank">{rep_std_label}</a>
     const rep_std_icon = (
       <img
         src={`/sitestatic/icons/repstd.svg`}
@@ -180,7 +180,7 @@ class TransparencyBadge extends React.Component {
       details = (
         <ul style={{paddingLeft: 16}}>
           <li>
-            <a href={rep_std_type.url}>{rep_std_type.description}</a>
+            <a href={rep_std_type.url} target="_blank">{rep_std_type.description}</a>
           </li>
         </ul>
       )

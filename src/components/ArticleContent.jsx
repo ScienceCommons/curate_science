@@ -295,19 +295,19 @@ class ArticleContent extends React.PureComponent {
             (
               <Typography variant="body2" style={{display: 'flex', alignItems: 'center'}} className={classes.secondaryLink}>
                 { article.videos.map(video =>
-                  <a href={video.url} key={`video-${video.id}`} className={classes.additionalLink} style={{color: '#000'}}>
+                  <a href={video.url} target="_blank" key={`video-${video.id}`} className={classes.additionalLink} style={{color: '#000'}}>
                     <Icon title={`Video: ${video.url}`}>videocam</Icon>
                   </a>
                 )}
                 { article.presentations.map(presentation =>
-                  <a href={presentation.url} key={`presentation-${presentation.id}`} className={classes.additionalLink}>
+                  <a href={presentation.url} target="_blank" key={`presentation-${presentation.id}`} className={classes.additionalLink}>
                     <Icon title={`Presentation: ${presentation.url}`}>
                       <img src="/sitestatic/icons/slide_icon.png" style={{ width: '1em' }}/>
                     </Icon>
                   </a>
                 )}
                 { article.supplemental_materials.map((material, idx) =>
-                  <a href={material.url} key={`material-${material.id}`} className={classes.additionalLink}>
+                  <a href={material.url} target="_blank" key={`material-${material.id}`} className={classes.additionalLink}>
                     {`Suppl. materials #${idx + 1}`}
                   </a>
                 )}
@@ -324,7 +324,7 @@ class ArticleContent extends React.PureComponent {
                 {
                   article.media_coverage.map((coverage, idx, arr) =>
                     <span key={`coverage-${coverage.id}`}>
-                      <a href={coverage.url}>
+                      <a href={coverage.url} target="_blank">
                         {coverage.media_source_name}
                       </a>
                       <span hidden={idx === arr.length - 1} style={{marginLeft: 2, marginRight: 2}}>

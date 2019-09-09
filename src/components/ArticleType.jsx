@@ -52,7 +52,7 @@ class ArticleType extends React.Component {
         <MouseOverPopover target={render_type_label()} key='rep_popover'>
           <div style={{padding: 10}}>
             <Typography variant="body1">
-                Article reports a reproducibility/robustness reanalysis of <a href={article.reproducibility_original_study_url}>{article.reproducibility_original_study}</a>.
+                Article reports a reproducibility/robustness reanalysis of <a href={article.reproducibility_original_study_url} target="_blank">{article.reproducibility_original_study}</a>.
               </Typography>
             </div>
           </MouseOverPopover>
@@ -62,7 +62,7 @@ class ArticleType extends React.Component {
         <MouseOverPopover target={render_type_label()} key='rep_popover'>
           <div style={{padding: 10}}>
             <Typography variant="body1">
-                Article is a commentary on <a href={article.commentary_target_url}>{article.commentary_target}</a>.
+                Article is a commentary on <a href={article.commentary_target_url} target="_blank">{article.commentary_target}</a>.
               </Typography>
             </div>
           </MouseOverPopover>

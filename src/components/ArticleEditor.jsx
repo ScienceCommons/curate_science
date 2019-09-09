@@ -1470,9 +1470,9 @@ class ArticleEditor extends React.Component {
                       </Typography>
                       <Typography variant="body2" style={{ marginTop: 10 }}>
                         Completing first 4 earns you "Basic 4 (retroactive)" compliance
-                        (<a href="https://psychdisclosure.org/">details</a>).
+                        (<a href="https://psychdisclosure.org/" target="_blank">details</a>).
 Completing all 7 earns you "Basic 7 (retroactive)" compliance
-                        (<a href="https://medium.com/@IGDORE/retroactive-disclosure-statements-make-the-past-more-useful-c1b2e73f4bae">details</a>).
+                        (<a href="https://medium.com/@IGDORE/retroactive-disclosure-statements-make-the-past-more-useful-c1b2e73f4bae" target="_blank">details</a>).
                       </Typography>
                       <Typography variant="body2" style={{ marginTop: 10 }}>
                         &dagger; All details reported in article (for all studies) or reported in a public/non-paywalled preregistration protocol
@@ -1499,7 +1499,7 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
                     }
 
                     <Typography variant="body1" hidden={!is_basic_4_at_submission}>
-                      All (1) excluded data (subjects/observations), (2) tested experimental conditions, (3) assessed outcome measures/dependent variables, and (4) the sample size determination (& data collection stopping rule) have been reported in the article (for all studies). Since January 2014, all authors submitting to the journal <a href="https://us.sagepub.com/en-us/nam/journal/psychological-science#description">Psychological Science</a> have affirmed compliance to this reporting standard (see <a href="https://www.psychologicalscience.org/publications/psychological_science/ps-submissions#DISC">details at the journal website</a>)
+                      All (1) excluded data (subjects/observations), (2) tested experimental conditions, (3) assessed outcome measures/dependent variables, and (4) the sample size determination (& data collection stopping rule) have been reported in the article (for all studies). Since January 2014, all authors submitting to the journal <a href="https://us.sagepub.com/en-us/nam/journal/psychological-science#description" target="_blank">Psychological Science</a> have affirmed compliance to this reporting standard (see <a href="https://www.psychologicalscience.org/publications/psychological_science/ps-submissions#DISC" target="_blank">details at the journal website</a>)
                     </Typography>
 
                     {
@@ -1508,7 +1508,7 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
                         hidden={is_basic_4_7 || is_basic_4_at_submission}
                         variant="body1"
                       >
-                        <a href={rep_std_details.url}>{rep_std_details.description}</a>
+                        <a href={rep_std_details.url} target="_blank">{rep_std_details.description}</a>
                       </Typography>
                       : null
                     }
