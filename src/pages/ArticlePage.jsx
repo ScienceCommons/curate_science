@@ -14,6 +14,8 @@ import 'react-image-lightbox/style.css';
 
 import { json_api_req, simple_api_req } from '../util/util.jsx'
 
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
 
 
@@ -22,6 +24,12 @@ const styles = theme => ({
     paddingTop: 20,
     width: C.COL_WIDTH,
     margin: '0 auto',
+  },
+  card: {
+    marginBottom: theme.spacing(1)
+  },
+  cardContent: {
+    padding: theme.spacing(1.5)
   },
 })
 
@@ -125,38 +133,43 @@ class ArticlePage extends React.PureComponent {
 
     return (
       <div className={classes.root}>
-            { loading ?
-              <Loader />
-              :
-              <div className="ArticleWithActions">
-                <div className="Article">
-                  <ArticleContent
-                    article={article}
-                    onFigureClick={this.show_figure}
-                    is_article_page={true}
-                  />
-                </div>
+        { loading ?
+        <Loader />
+          :
+            <div className="ArticleWithActions">
+              <div className="Article">
 
-                <ArticleActions
-                  article={article}
-                  user_session={user_session}
-                  onDelete={this.handle_delete}
-                  onEdit={this.handle_edit}
-                  onUpdate={this.article_updated}
-                />
-
-                { gallery }
-
-                <ArticleEditor
-                  article_id={editing_article_id}
-                  open={edit_article_modal_open}
-                  onUpdate={this.article_updated}
-                  onClose={this.close_article_editor}
-                />
+                <Card className={classes.card}>
+                  <CardContent className={classes.cardContent}>
+                    <ArticleContent
+                      article={article}
+                      onFigureClick={this.show_figure}
+                      is_article_page={true}
+                    />
+                  </CardContent>
+                </Card>
               </div>
 
-            }
-        </div>
+              <ArticleActions
+                article={article}
+                user_session={user_session}
+                onDelete={this.handle_delete}
+                onEdit={this.handle_edit}
+                onUpdate={this.article_updated}
+              />
+
+              { gallery }
+
+              <ArticleEditor
+                article_id={editing_article_id}
+                open={edit_article_modal_open}
+                onUpdate={this.article_updated}
+                onClose={this.close_article_editor}
+              />
+            </div>
+
+        }
+      </div>
     )
   }
 }
