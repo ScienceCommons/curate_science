@@ -11,7 +11,7 @@ const styles = theme => ({
     backgroundColor: 'white',
     color: 'black',
     boxShadow: theme.shadows[1],
-    maxWidth: '80vw',
+    maxWidth: 450,
   },
   popper: {
     opacity: 1.0

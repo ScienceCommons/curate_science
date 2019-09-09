@@ -156,12 +156,12 @@ class TransparencyBadge extends React.Component {
         src={`/sitestatic/icons/repstd.svg`}
         width={25}
         height={25}
-        style={{paddingLeft: 2, paddingRight: 2}}
+        style={{paddingLeft: 2, paddingRight: 2, marginBottom: -8}}
         type="image/svg+xml"
       />
     )
     const subtitle = (
-      <Typography variant="body1" style={{color: 'gray', display: 'flex', alignItem: 'center'}}>
+      <Typography variant="body1" style={{color: 'gray'}}>
         Article complies with the&nbsp;
         {rep_std_link}
         {rep_std_icon}
