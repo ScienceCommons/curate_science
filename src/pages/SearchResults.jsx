@@ -59,6 +59,7 @@ class SearchResultsPage extends React.Component {
     this.search = this.search.bind(this)
     this.set_filters = this.set_filters.bind(this)
     this.set_sort_by = this.set_sort_by.bind(this)
+    this.update_articles = this.update_articles.bind(this)
   }
 
   componentDidMount() {
@@ -133,6 +134,10 @@ class SearchResultsPage extends React.Component {
         console.error(err)
       }
     )
+  }
+
+  update_articles(articles) {
+    this.setState({ articles })
   }
 
   fetch_next_page() {
@@ -220,7 +225,7 @@ class SearchResultsPage extends React.Component {
               <ArticleList
                 style={{paddingTop: 0}}
                 articles={articles}
-                onArticlesUpdated={() => {}}
+                onArticlesUpdated={this.update_articles}
                 user_session={this.props.user_session}
                 show_date={true}
               />
