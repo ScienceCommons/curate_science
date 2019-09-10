@@ -117,7 +117,13 @@ export const summarize_api_errors = (res) => {
     // Ex: {"account":["Object with username=blah does not exist."]}
     let messages = []
     Object.keys(res).forEach((key) => {
-        messages = messages.concat(res[key])
+        let message
+        if (typeof res[key] === 'object') {
+            message = summarize_api_errors(res[key])
+        } else {
+            message = res[key]
+        }
+        messages = messages.concat(message)
     })
     return messages.join(' ')
 }
