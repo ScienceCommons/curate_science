@@ -116,7 +116,8 @@ const styles = theme => ({
   },
   transparencyIcon: {
     paddingTop: 10,
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
+    position: 'relative',
   },
   primaryBorder: {
     borderColor: '#000'
@@ -1202,7 +1203,12 @@ class ArticleEditor extends React.Component {
 
   render_transparency_info_icon(title) {
     return (
-      <Typography variant="h4" color="textSecondary" align="right" component="span" style={{position: 'absolute', left: 8, paddingLeft: 4, paddingRight: 4, marginTop: 5}}>
+      <Typography
+        variant="h4"
+        color="textSecondary"
+        component="span"
+        style={{position: 'absolute', left: -24, paddingLeft: 4, paddingRight: 4, marginTop: 5}}
+      >
         <Tooltip
           title={title}
         >
@@ -1340,9 +1346,14 @@ class ArticleEditor extends React.Component {
               </Grid>
 
               <Grid container spacing={1} className={classes.formRow}>
-                <Grid item xs={3}>
+                <Grid item xs={3} style={{position: 'relative'}}>
                     { this.render_field('article_type') }
-                    <Typography variant="h4" color="textSecondary" align="right" component="span" style={{position: 'absolute', left: 8, paddingLeft: 4, paddingRight: 4, marginTop: 8}}>
+                    <Typography
+                      variant="h4"
+                      color="textSecondary"
+                      component="span"
+                      style={{position: 'absolute', left: -20, paddingLeft: 4, paddingRight: 4, marginTop: 8}}
+                    >
                       <Tooltip
                         title="The 'Original' article type can also include articles that report a mixture of original and so-called 'conceptual replications', which are considered 'Far' or 'Very Far' replications according to our replication taxonomy. The 'Replication' article type also includes articles that report a mixture of original and replication studies (i.e., 'Close', 'Very Close', or 'Exact' replications according to our replication taxonomy)."
                       >
