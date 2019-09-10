@@ -574,6 +574,9 @@ const useStyles = makeStyles(theme => ({
   chip: {
     height: theme.spacing(3),
   },
+  input: {
+    width: '50%'
+  }
 }))
 
 function TransparencyURLList(props) {
@@ -611,11 +614,13 @@ function TransparencyURLList(props) {
       InputLabelProps={{shrink: true, style: {color: '#000'}}}
       InputProps={{
         classes: {
-          notchedOutline: border_class
+          notchedOutline: border_class,
+          input: classes.input,
         },
         style: {
           paddingTop: 8,
           paddingLeft: 8,
+          flexWrap: 'wrap',
         }
       }}
       placeholder="Insert URL & hit ENTER"
@@ -658,11 +663,13 @@ function URLList(props) {
       InputLabelProps={{shrink: true, style: {color: '#000'}}}
       InputProps={{
         classes: {
-          notchedOutline: border_class
+          notchedOutline: border_class,
+          input: classes.input,
         },
         style: {
           paddingTop: 8,
           paddingLeft: 8,
+          flexWrap: 'wrap',
         }
       }}
       placeholder="Insert URL & hit ENTER"
