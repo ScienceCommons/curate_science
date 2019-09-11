@@ -99,6 +99,19 @@ yarn start
 App should be running at `localhost:8000`.
 Django admin should be available at `localhost:8000/admin`.
 
+
+### DB migration instructions:
+For staging:  `export GOOGLE_CLOUD_PROJECT=curate-science-staging-2`
+
+For production: `export GOOGLE_CLOUD_PROJECT=curate`
+
+Then run `python manage.py migrate`
+
+Then don’t forget to reset the env var: `export GOOGLE_CLOUD_PROJECT=`
+
+(DB_NAME is set conditionally, based on the value of GOOGLE_CLOUD_PROJECT, [here]( https://github.com/ScienceCommons/curate_science/blob/177da9bba83b0eea75086749d883acd2c9c39b48/curate_science/settings.py#L31))
+
+
 ### Core UI Regression Tests
 
 1. Create a new article
