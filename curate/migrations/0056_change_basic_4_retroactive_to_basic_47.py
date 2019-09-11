@@ -4,6 +4,7 @@ from django.db import migrations
 
 
 def update_reporting_standard(apps, schema_editor):
+    # Change any existing BASIC_4_7_RETROACTIVE articles to the new BASIC_4_7_RETROACTIVE
     Article = apps.get_model('curate', 'Article')
     for article in Article.objects.filter(reporting_standards_type='BASIC_4_RETROACTIVE'):
         article.reporting_standards_type = 'BASIC_4_7_RETROACTIVE'
