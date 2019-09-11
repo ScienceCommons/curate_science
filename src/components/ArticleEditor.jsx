@@ -575,7 +575,10 @@ const useStyles = makeStyles(theme => ({
     height: theme.spacing(3),
   },
   input: {
-    width: '50%'
+    width: '0%',
+    '&:focus': {
+      width: '100%'
+    }
   }
 }))
 
