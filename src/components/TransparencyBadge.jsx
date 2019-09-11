@@ -149,8 +149,13 @@ class TransparencyBadge extends React.Component {
       rep_std_type = rep_std_type['basic_7']
     }
 
-    const rep_std_label = rep_std_type == null ? '?' : rep_std_type.label
-    const rep_std_link = <a href={rep_std_type.url} target="_blank">{rep_std_label}</a>
+    let rep_std_link
+    if (rep_std_type) {
+      const rep_std_label = rep_std_type.label
+      rep_std_link = <a href={rep_std_type.url} target="_blank">{rep_std_label}</a>
+    } else {
+      rep_std_link = '?'
+    }
     const rep_std_icon = (
       <img
         src={`/sitestatic/icons/repstd.svg`}
@@ -176,7 +181,7 @@ class TransparencyBadge extends React.Component {
       details = this.basic_7_text()
     } else if (reporting_standards_type === 'BASIC_4_AT_SUBMISSION') {
       details = this.basic_4_at_submission_text()
-    } else {
+    } else if (rep_std_type) {
       details = (
         <ul style={{paddingLeft: 16}}>
           <li>
@@ -184,7 +189,10 @@ class TransparencyBadge extends React.Component {
           </li>
         </ul>
       )
+    } else {
+      details = '?'
     }
+
     const popover_content = <Typography variant="body2" component="div">{details}</Typography>
     return { subtitle, popover_content }
   }
