@@ -144,4 +144,111 @@ DOILookup.defaultProps = {
     value: ''
 };
 
+
+
+
+
+
+export function retrieve_authors(author) {
+
+	Array.prototype.last = function() {
+	 return this[this.length - 1];
+	};
+
+	String.prototype.last = function() {
+	 return this[this.length - 1];
+	}
+
+
+
+
+
+  const authors = author;
+  // retrieve list of authors
+           const authorsLen = authors.length;
+          let authorList = []
+          for (var i = 0; i < authorsLen; i++) {
+            let authConcat = authors[i]['given'] + " " + authors[i]['family']
+            authorList.push(authConcat)
+          };
+           var fullCitation = ''
+
+//Formatting for author loop
+				var beginning = ""
+				 	var end = ""
+					  function authorFormatting(auth, fullCitation, beginning, end){
+
+					  if (auth.split(" ").length == 1) {
+					 	 fullCitation += beginning +
+					 		auth.split(" ").last() + end
+					  } else if (auth.split(" ").length == 2) {
+					 	 fullCitation += beginning +
+					 		auth.split(" ")[0][0] +
+					 		 " " + auth.split(" ").last() +
+					 			end
+					  } else if (auth.split(" ").length == 3) {
+					 	 fullCitation += beginning +
+					 		auth.split(" ")[0][0] +
+					 			auth.split(" ")[1][0] +
+					 			 " " + auth.split(" ").last() +
+					 				end
+					  } else if (auth.split(" ").length == 4) {
+					 	 fullCitation += beginning + auth.split(" ")[0][0] +
+					 		 auth.split(" ")[1][0] +
+					 		 auth.split(" ")[2][0] +
+					 		 " " +  auth.split(" ").last()  +
+					 			end
+					  } else if (auth.split(" ").length == 5) {
+					 	 fullCitation += beginning +  auth.split(" ")[0][0] +
+					 		auth.split()[1][0] +
+					 		 auth.split(" ")[2][0] +
+					 			auth.split(" ")[3][0] +
+					 			" " + auth.split(" ").last() +
+					 			 end
+					  }
+
+					  return fullCitation
+
+					};
+
+					// Loop to get author names prettied up
+           for (var i = 0; i < authorList.length; i++) {
+             let aut = authorList[i]
+
+
+             // Logic for article with more than 7 authors (per APA format)
+               // this section applies to the 6th author (adds "..." at the end of 6th author; [a1, a2, a3, a4, a5, a6 ... alast])
+             if (authorList.length > 7 && authorList[5] == aut) {
+               // logic to properly place initials depending on how many the author has
+							fullCitation = authorFormatting(aut, fullCitation, beginning = "", end = ", ... , & ");
+
+							fullCitation = authorFormatting(authorList.last(), fullCitation,  beginning = "", end = "");
+							i = authorList.length
+								break;
+
+               // logic below applies if
+                 // citation has < 7 authors and current author is not final author in loop...
+                 // OR if citation has only one author
+               // formats the last name and initials for each author
+               //
+             } else if (authorList.last() != aut || authorList.length == 1) {
+							 fullCitation = authorFormatting(aut, fullCitation, beginning = "", end = "");
+
+
+               // If citation has only one author, add a space intead of a comma
+               if (authorList.length == 1) {
+                 fullCitation += ' '
+               } else {
+                 fullCitation += ', '
+               }
+               // logic below applies to last author in citation (for < 7 authors)
+             } else {
+							 fullCitation = authorFormatting(aut, fullCitation, beginning = "& ", end = "");
+
+             }
+           };
+           return fullCitation;
+
+};
+
 export default withStyles(styles)(DOILookup);
