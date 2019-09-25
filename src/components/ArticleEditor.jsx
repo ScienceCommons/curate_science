@@ -900,7 +900,7 @@ class ArticleEditor extends React.Component {
         if (doi.includes("osf.io")) {
           form.preprint_url = data['URL']
         }
-        if (form.year === ""){
+        if (form.year === null || form.year === undefined || form.year == ""){
           form.year = get(data, ['issued', 'date-parts', 0, 0])
         }
         this.setState({form})
