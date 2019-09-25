@@ -44,13 +44,13 @@ import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { clone, debounce, find, get, includes, set, truncate } from 'lodash'
 import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
-
+import {retrieve_authors,authorFormatting} from '../components/curateform/DOILookup.jsx'
 const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" {...props} ref={ref}/>;
 })
 
 function doi_lookup(doi) {
-  return fetch(`https://api.crossref.org/v1/works/http://dx.doi.org/${doi}`)
+  return fetch(`https://api.crossref.org/v1/works/http://dx.doi.org/${doi}?mailto=curatescience@gmail.com`)
     .then(res => res.json())
     .then((res) => {
       const success = res.status == 'ok'
@@ -66,6 +66,7 @@ function doi_lookup(doi) {
       }
     })
 }
+
 
 const styles = theme => ({
   root: {
@@ -888,12 +889,20 @@ class ArticleEditor extends React.Component {
     return doi_lookup(doi)
       .then(res => {
         this.setState({ doi_loading: false })
+
         if (!res.success) return
         const data = res.data
         form.title = data.title[0]
-        form.author_list = data.author.map((author) => author.family).join(', ')
+        form.author_list = retrieve_authors(data.author)
+        form.pdf_citations = data['is-referenced-by-count']
         form.journal = get(data, ['container-title', 0])
         form.year = get(data, ['published-print', 'date-parts', 0, 0])
+        if (doi.includes("osf.io")) {
+          form.preprint_url = data['URL']
+        }
+        if (form.year === null || form.year === undefined || form.year == ""){
+          form.year = get(data, ['issued', 'date-parts', 0, 0])
+        }
         this.setState({form})
       })
   }
@@ -1442,7 +1451,7 @@ class ArticleEditor extends React.Component {
               </Grid>
 
               {
-                visible_transparencies.MATERIALS ? 
+                visible_transparencies.MATERIALS ?
                 (
                   <Grid container alignItems="center" spacing={1} className={classes.formRow}>
                     <Grid item xs={6} style={{display: 'flex'}}>
@@ -1567,7 +1576,7 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
                     </Typography>
 
                     {
-                      rep_std_details ? 
+                      rep_std_details ?
                       <Typography
                         hidden={is_basic_4_7 || is_basic_4_at_submission}
                         variant="body1"
