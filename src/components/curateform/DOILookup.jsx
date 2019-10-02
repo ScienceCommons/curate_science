@@ -231,7 +231,7 @@ export function retrieve_title(title, subtitle) {
 
         let fullTitle = ''
         if (subtitle === null || subtitle === undefined || subtitle === "" ||
-            fullTitle.includes(":")) {
+            title.includes(":")) {
             fullTitle = upperFirst(title.toLowerCase());
 
         } else {
