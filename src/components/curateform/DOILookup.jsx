@@ -144,8 +144,8 @@ DOILookup.defaultProps = {
     value: ''
 };
 export function retrieve_authors(authors) {
-		// number of authors
-	  const authorsLen = authors.length;
+    // number of authors
+    const authorsLen = authors.length;
 
 
     function countUpperCase(name) {
@@ -192,7 +192,7 @@ export function retrieve_authors(authors) {
     let lastAuthor = authors.slice(-1)[0] // last author
 
     let fullAuthString = ""
-		// conditional formatting for instances in which there is
+    // conditional formatting for instances in which there is
     if (authorsLen == 1) {
         fullAuthString = formattedAuthor(lastAuthor)
     } else if (authorsLen == 2) {
@@ -218,32 +218,35 @@ export function retrieve_authors(authors) {
 
 export function retrieve_title(title, subtitle) {
 
-    function removePeriods(title) {
+    function periodColonFormatting(title) {
         // replace '.:' with '.'
-        let newTitle = title.replace(/\.:/g, '.')
+        let newTitle = title
+            .replace(/\.:/g, '.') // replace ".:" with "."
+            .replace(/[:]\ [a-z]/g, upper => upper.toUpperCase()) //replace ": x" with uppercase ": X"
 
-        // if '.' is at end, remove last character of title
-        return (newTitle.slice(-1) === "." ? newTitle.slice(0, -1) : newTitle)
-    }
+                // if '.' is at end, remove last character of title
+                return (newTitle.slice(-1) === "." ? newTitle.slice(0, -1) :
+                    newTitle)
+            }
 
-    let fullTitle = ''
-    if (subtitle === null || subtitle === undefined || subtitle === "") {
-        fullTitle = upperFirst(title.toLowerCase());
-    } else {
-        fullTitle =
-            `${upperFirst(title.toLowerCase())}: ${upperFirst(subtitle.toLowerCase())}`;
-    }
+        let fullTitle = ''
+        if (subtitle === null || subtitle === undefined || subtitle === "" ||
+            fullTitle.includes(":")) {
+            fullTitle = upperFirst(title.toLowerCase());
 
-    return removePeriods(fullTitle)
-};
+        } else {
+            fullTitle =
+                `${upperFirst(title.toLowerCase())}: ${upperFirst(subtitle.toLowerCase())}`;
+        }
 
-
-
-export function retrieve_abstract(abstract) {
-    let abstractHtml = document.createElement('html');
-    abstractHtml.innerHTML = abstract
-    return abstractHtml.textContent.trim() || abstractHtml.innerText.trim()
-};
+        return periodColonFormatting(fullTitle)
+    };
 
 
+
+    export function retrieve_abstract(abstract) {
+        let abstractHtml = document.createElement('html');
+        abstractHtml.innerHTML = abstract
+        return abstractHtml.textContent.trim() || abstractHtml.innerText.trim()
+    };
 export default withStyles(styles)(DOILookup);
