@@ -1,7 +1,8 @@
 # [START django_app]
 runtime: python37
 entrypoint: gunicorn --bind :$PORT curate_science.wsgi:application --log-level debug
-
+automatic_scaling:
+  min_instances: 1
 handlers:
 - url: /favicon.ico
   static_files: sitestatic/favicon.ico
