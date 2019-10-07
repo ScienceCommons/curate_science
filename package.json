@@ -23,7 +23,7 @@
     "path": "^0.12.7",
     "query-string": "^6.2.0",
     "react": "^16.9.0",
-    "react-cookie": "^3.0.4",
+    "react-cookie": "^4.0.1",
     "react-debounce-input": "^3.2.0",
     "react-dom": "^16.9.0",
     "react-image-lightbox": "^5.1.0",
