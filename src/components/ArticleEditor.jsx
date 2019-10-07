@@ -35,16 +35,19 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import ChipInput from 'material-ui-chip-input'
-import C from '../constants/constants';
-import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
-import FigureSelector from './FigureSelector.jsx';
-import LabeledBox from '../components/shared/LabeledBox.jsx';
-import Loader from '../components/shared/Loader.jsx';
+
 import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { clone, debounce, find, get, includes, set, truncate } from 'lodash'
 import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
+
 import {retrieve_authors,retrieve_title, retrieve_abstract} from '../components/curateform/DOILookup.jsx'
+import C from '../constants/constants';
+import KeyFigureUploader from './KeyFigureUploader.jsx';
+import LabeledBox from '../components/shared/LabeledBox.jsx';
+import Loader from '../components/shared/Loader.jsx';
+import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
+
 const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" {...props} ref={ref}/>;
 })
@@ -1641,9 +1644,10 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
         <Typography variant="overline">Key Figures</Typography>
         <Grid container>
           <Grid item xs={12}>
-            <FigureSelector article_id={article_id}
-              onChange={this.update_figures}
-              figures={form.key_figures} />
+              <KeyFigureUploader
+                  article_id={article_id}
+                  figures={form.key_figures}
+              />
           </Grid>
         </Grid>
       </Grid>
