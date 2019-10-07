@@ -44,7 +44,7 @@ import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { clone, debounce, find, get, includes, set, truncate } from 'lodash'
 import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
-import {retrieve_authors,authorFormatting} from '../components/curateform/DOILookup.jsx'
+import {retrieve_authors,retrieve_title, retrieve_abstract} from '../components/curateform/DOILookup.jsx'
 const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" {...props} ref={ref}/>;
 })
@@ -892,7 +892,7 @@ class ArticleEditor extends React.Component {
 
         if (!res.success) return
         const data = res.data
-        form.title = data.title[0]
+        form.title = retrieve_title(data.title[0], data.subtitle[0])
         form.author_list = retrieve_authors(data.author)
         form.pdf_citations = data['is-referenced-by-count']
         form.journal = get(data, ['container-title', 0])
@@ -902,6 +902,9 @@ class ArticleEditor extends React.Component {
         }
         if (form.year === null || form.year === undefined || form.year == ""){
           form.year = get(data, ['issued', 'date-parts', 0, 0])
+        }
+        if (data['abstract'] !== null && data['abstract'] !== undefined  && data['abstract'] !== "") {
+          form.abstract = retrieve_abstract(data['abstract'])
         }
         this.setState({form})
       })

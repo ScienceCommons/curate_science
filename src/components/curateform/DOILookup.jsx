@@ -1,10 +1,10 @@
 import React from 'react';
-
 import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 	FormControl, Select, OutlinedInput, InputBase} from '@material-ui/core';
-
+import { upperFirst } from 'lodash';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
+
 
 const styles = theme => ({
     error: {
@@ -143,112 +143,110 @@ DOILookup.defaultProps = {
     canLookup: true,
     value: ''
 };
+export function retrieve_authors(authors) {
+    // number of authors
+    const authorsLen = authors.length;
 
 
+    function countUpperCase(name) {
+        let capitalCount = 0;
+        name.split("")
+            .forEach(function(letter) {
+                if (letter === letter.toUpperCase() && letter !== letter.toLowerCase()) {
+                    capitalCount += 1;
+                }
+            })
+        return capitalCount;
 
+    }
+    // creating formatted list of authors (first initials + " " + last name)
+    function formattedAuthor(authorName) {
+        // family name and given name are not available
+        if (authorName['family'] === undefined && authorName['given'] ===
+            undefined) {
+            // return 'name' field if not missing, otherwise throw error
+            if (authorName['name'] !== undefined) {
+                return upperFirst(authorName['name'])
+            } else {
+                throw "Error: Cannot extract author information"
+            }
+            // if family name or given name are available
+        } else {
+            let authInitials = authorName['given'].split(' ')
+                .map(name => upperFirst(name[0]))
+                .join("");
+            let authorFamilyName = authorName['family'];
 
+            // Reformat if family name is all capital OR if there's no capitals in the family name
+            if (countUpperCase(authorFamilyName) === 0 || countUpperCase(
+                    authorFamilyName) === authorFamilyName.length) {
+                authorFamilyName = upperFirst(authorFamilyName.toLowerCase())
+            }
+            return `${authInitials} ${authorFamilyName}`
+        }
+    }
 
+    // creating author string (1 author, 2 authors, >2 authors)
+    let authorsExceptLast = authors.slice(0, -1)
+        .slice(0, 6) // all authors except last (max 6)
+    let lastAuthor = authors.slice(-1)[0] // last author
 
-export function retrieve_authors(author) {
+    let fullAuthString = ""
+    // conditional formatting for instances in which there is
+    if (authorsLen == 1) {
+        fullAuthString = formattedAuthor(lastAuthor)
+    } else if (authorsLen == 2) {
+        fullAuthString =
+            `${formattedAuthor(authorsExceptLast[0])} & ${formattedAuthor(lastAuthor)}`
+    } else {
+        authorsExceptLast.forEach(function(author) {
+            fullAuthString += `${formattedAuthor(author)}, `
 
-	Array.prototype.last = function() {
-	 return this[this.length - 1];
-	};
+        })
 
-	String.prototype.last = function() {
-	 return this[this.length - 1];
-	}
+        if (authorsLen > 7) {
+            fullAuthString += `... , `
+        }
 
+        fullAuthString += `& ${formattedAuthor(lastAuthor)}`
+    }
 
-
-
-
-  const authors = author;
-  // retrieve list of authors
-           const authorsLen = authors.length;
-          let authorList = []
-          for (var i = 0; i < authorsLen; i++) {
-            let authConcat = authors[i]['given'] + " " + authors[i]['family']
-            authorList.push(authConcat)
-          };
-           var fullCitation = ''
-
-//Formatting for author loop
-				var beginning = ""
-				 	var end = ""
-					  function authorFormatting(auth, fullCitation, beginning, end){
-
-					  if (auth.split(" ").length == 1) {
-					 	 fullCitation += beginning +
-					 		auth.split(" ").last() + end
-					  } else if (auth.split(" ").length == 2) {
-					 	 fullCitation += beginning +
-					 		auth.split(" ")[0][0] +
-					 		 " " + auth.split(" ").last() +
-					 			end
-					  } else if (auth.split(" ").length == 3) {
-					 	 fullCitation += beginning +
-					 		auth.split(" ")[0][0] +
-					 			auth.split(" ")[1][0] +
-					 			 " " + auth.split(" ").last() +
-					 				end
-					  } else if (auth.split(" ").length == 4) {
-					 	 fullCitation += beginning + auth.split(" ")[0][0] +
-					 		 auth.split(" ")[1][0] +
-					 		 auth.split(" ")[2][0] +
-					 		 " " +  auth.split(" ").last()  +
-					 			end
-					  } else if (auth.split(" ").length == 5) {
-					 	 fullCitation += beginning +  auth.split(" ")[0][0] +
-					 		auth.split()[1][0] +
-					 		 auth.split(" ")[2][0] +
-					 			auth.split(" ")[3][0] +
-					 			" " + auth.split(" ").last() +
-					 			 end
-					  }
-
-					  return fullCitation
-
-					};
-
-					// Loop to get author names prettied up
-           for (var i = 0; i < authorList.length; i++) {
-             let aut = authorList[i]
-
-
-             // Logic for article with more than 7 authors (per APA format)
-               // this section applies to the 6th author (adds "..." at the end of 6th author; [a1, a2, a3, a4, a5, a6 ... alast])
-             if (authorList.length > 7 && authorList[5] == aut) {
-               // logic to properly place initials depending on how many the author has
-							fullCitation = authorFormatting(aut, fullCitation, beginning = "", end = ", ... , & ");
-
-							fullCitation = authorFormatting(authorList.last(), fullCitation,  beginning = "", end = "");
-							i = authorList.length
-								break;
-
-               // logic below applies if
-                 // citation has < 7 authors and current author is not final author in loop...
-                 // OR if citation has only one author
-               // formats the last name and initials for each author
-               //
-             } else if (authorList.last() != aut || authorList.length == 1) {
-							 fullCitation = authorFormatting(aut, fullCitation, beginning = "", end = "");
-
-
-               // If citation has only one author, add a space intead of a comma
-               if (authorList.length == 1) {
-                 fullCitation += ' '
-               } else {
-                 fullCitation += ', '
-               }
-               // logic below applies to last author in citation (for < 7 authors)
-             } else {
-							 fullCitation = authorFormatting(aut, fullCitation, beginning = "& ", end = "");
-
-             }
-           };
-           return fullCitation;
+    return fullAuthString
 
 };
 
+
+export function retrieve_title(title, subtitle) {
+
+    function periodColonFormatting(title) {
+        // replace '.:' with '.'
+        let newTitle = title
+            .replace(/\.:/g, '.') // replace ".:" with "."
+            .replace(/[:]\ [a-z]/g, upper => upper.toUpperCase()) //replace ": x" with uppercase ": X"
+
+                // if '.' is at end, remove last character of title
+                return (newTitle.slice(-1) === "." ? newTitle.slice(0, -1) :
+                    newTitle)
+            }
+
+        let fullTitle = ''
+        if (subtitle === null || subtitle === undefined || subtitle === "" ||
+            title.includes(":")) {
+            fullTitle = upperFirst(title.toLowerCase());
+
+        } else {
+            fullTitle =
+                `${upperFirst(title.toLowerCase())}: ${upperFirst(subtitle.toLowerCase())}`;
+        }
+
+        return periodColonFormatting(fullTitle)
+    };
+
+
+
+    export function retrieve_abstract(abstract) {
+        let abstractHtml = document.createElement('html');
+        abstractHtml.innerHTML = abstract
+        return abstractHtml.textContent.trim() || abstractHtml.innerText.trim()
+    };
 export default withStyles(styles)(DOILookup);
