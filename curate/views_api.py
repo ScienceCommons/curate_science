@@ -512,18 +512,25 @@ class ImageUploadView(APIView):
     def put(self, request, **kwargs):
         if 'file' not in request.data:
             raise ParseError("Empty content")
-        f = request.data['file']
-        article = get_object_or_404(Article, id=self.kwargs['article_pk'])
 
-        try:
-            img = Image.open(f)
-            img.verify()
-        except:
-            raise ParseError("File is not in a supported image format")
-        kf = KeyFigure()
-        kf.article = article
-        kf.image.save(f.name, f, save=True)
-        serializer=KeyFigureSerializer(instance=kf)
+        files = request.data.getlist('file')
+        article = get_object_or_404(Article.objects.prefetch_related('key_figures'), id=self.kwargs['article_pk'])
+
+        original_figures = list(article.key_figures.all())
+
+        new_figures = []
+
+        for file in files:
+            try:
+                img = Image.open(file)
+                img.verify()
+            except:
+                raise ParseError("File is not in a supported image format")
+            new_figures.append(KeyFigure.objects.create(article=article, image=file))
+
+        all_figures = original_figures + new_figures
+        serializer = KeyFigureSerializer(all_figures, many=True)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 # Autocomplete views
