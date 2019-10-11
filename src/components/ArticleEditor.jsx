@@ -1645,6 +1645,7 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
         <Grid container>
           <Grid item xs={12}>
               <KeyFigureUploader
+                  onChange={this.update_figures}
                   article_id={article_id}
                   figures={form.key_figures}
               />
