@@ -403,7 +403,6 @@ class KeyFigure(models.Model):
             return False
 
         image.thumbnail(settings.THUMB_SIZE, Image.ANTIALIAS)
-        fh.close()
 
         # Path to save to, name, and extension
         thumb_name, thumb_extension = os.path.splitext(self.image.name)
@@ -425,6 +424,8 @@ class KeyFigure(models.Model):
         temp_thumb = BytesIO()
         image.save(temp_thumb, FTYPE)
         temp_thumb.seek(0)
+
+        fh.close()
 
         # Load a ContentFile into the thumbnail field so it gets saved
         self.thumbnail.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
