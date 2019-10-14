@@ -9,7 +9,7 @@ import FigureList from './shared/FigureList.jsx';
 import Loader from './shared/Loader.jsx';
 
 
-export default function KeyFigureUploader({ article_id, figures, onChange }) {
+export default function KeyFigureUploader({ article_id, dragging_files, figures, onChange }) {
     const [cookies] = useCookies()
     const [number_images_loading, set_number_images_loading] = useState(0)
 
@@ -45,7 +45,7 @@ export default function KeyFigureUploader({ article_id, figures, onChange }) {
                 {...getRootProps()}
                 style={
                     {
-                        backgroundColor: isDragActive ? 'rgba(0,255,0,0.05)' : null,
+                        backgroundColor: (isDragActive || dragging_files) ? 'rgba(0,255,0,0.05)' : null,
                         width: '100%',
                         height: '8rem',
                         borderRadius: 8,

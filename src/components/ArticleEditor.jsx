@@ -541,6 +541,7 @@ function initialFormState() {
     commentaries: [],
     media_coverage: [],
     transparency_urls: [],
+    dragging_files: false,
   }
 }
 
@@ -1245,7 +1246,7 @@ class ArticleEditor extends React.Component {
 
   render() {
     let {classes, article_id, open} = this.props
-    let { doi_loading, form, snack_message, loading } = this.state
+    let { doi_loading, dragging_files, form, snack_message, loading } = this.state
     let content = <Loader />
 
     const replication = form.article_type === 'REPLICATION'
@@ -1259,7 +1260,14 @@ class ArticleEditor extends React.Component {
     const rep_std_details = find(C.REPORTING_STANDARDS_TYPES, {value: form.reporting_standards_type})
 
     if (!loading && article_id != null) content = (
-      <Grid container spacing={3}>
+      <Grid
+          container
+          spacing={3}
+          onDragEnter={() => this.setState({ dragging_files: true })}
+          onDragEnd={ () => this.setState({ dragging_files: false }) }
+          onDragExit={ () => this.setState({ dragging_files: false }) }
+          onDrop={ () => this.setState({ dragging_files: false }) }
+      >
         <Grid item className="ArticleEditorHalf">
           <Grid container>
             <Grid item xs={6}>
@@ -1645,6 +1653,7 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
         <Grid container>
           <Grid item xs={12}>
               <KeyFigureUploader
+                  dragging_files={dragging_files}
                   onChange={this.update_figures}
                   article_id={article_id}
                   figures={form.key_figures}
