@@ -87,6 +87,9 @@ const styles = theme => ({
   additionalLink: {
     marginRight: theme.spacing(1)
   },
+  figureList: {
+    paddingTop: theme.spacing(1),
+  }
 });
 
 class ArticleContent extends React.PureComponent {
@@ -257,7 +260,9 @@ class ArticleContent extends React.PureComponent {
             }
           </Typography>
           <ArticleKeywords keywords={article.keywords} />
-          <FigureList figures={show_figures} loading={loading} onFigureClick={this.handle_figure_click} />
+          <div className={classes.figureList}>
+              <FigureList figures={show_figures} loading={loading} onFigureClick={this.handle_figure_click} />
+          </div>
           <div hidden={this.empty(article.author_contributions)}>
             <Typography component="span" variant="body2">
               <span className={classes.grayedTitle}>Author contributions:</span>
