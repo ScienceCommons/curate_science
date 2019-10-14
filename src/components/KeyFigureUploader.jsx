@@ -73,7 +73,7 @@ export default function KeyFigureUploader({ article_id, figures, onChange }) {
                                 </Typography>
                             </Typography>
                             <Typography align="center" color="textSecondary">or</Typography>
-                            <Button variant="contained">
+                            <Button variant="outlined">
                                 Browse to select image files
                             </Button>
                         </div>
