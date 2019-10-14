@@ -3,13 +3,21 @@ import {useDropzone} from 'react-dropzone'
 import { useCookies } from 'react-cookie';
 
 import { concat } from 'lodash'
+import { makeStyles } from '@material-ui/styles';
 import { Button, Icon, Typography } from '@material-ui/core';
 
 import FigureList from './shared/FigureList.jsx';
 import Loader from './shared/Loader.jsx';
 
 
+const useStyles = makeStyles(theme => ({
+  figurelist: {
+    paddingTop: theme.spacing(1),
+  },
+}))
+
 export default function KeyFigureUploader({ article_id, dragging_files, figures, onChange }) {
+    const classes = useStyles()
     const [cookies] = useCookies()
     const [number_images_loading, set_number_images_loading] = useState(0)
 
@@ -80,12 +88,14 @@ export default function KeyFigureUploader({ article_id, dragging_files, figures,
                     </div>
                 }
             </div>
-            <FigureList
-                figures={figures}
-                show_delete={true}
-                number_images_loading={number_images_loading}
-                onChange={onChange}
-            />
+            <div className={classes.figurelist}>
+                <FigureList
+                    figures={figures}
+                    show_delete={true}
+                    number_images_loading={number_images_loading}
+                    onChange={onChange}
+                />
+            </div>
         </div>
     )
 }
