@@ -195,7 +195,7 @@ class ArticleWithActions extends React.Component {
   }
 
   render() {
-    let { article, classes, is_article_page, show_date } = this.props
+    let { article, classes, is_article_page, show_date, user_session } = this.props
 
     let article_ui_id = article.doi || article.id
 

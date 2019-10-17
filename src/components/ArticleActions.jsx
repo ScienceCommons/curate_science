@@ -4,7 +4,7 @@ import { withCookies } from 'react-cookie';
 
 import { Button, Icon } from '@material-ui/core';
 
-import { get, includes } from 'lodash'
+import { get, includes, isEmpty } from 'lodash'
 
 import { json_api_req, simple_api_req } from '../util/util.jsx'
 
@@ -85,6 +85,8 @@ class ArticleActions extends React.PureComponent {
   }
 
   render() {
+    if (isEmpty(this.props.user_session)) return null
+    
     let { article, classes } = this.props
     const admin = this.props.user_session.admin
     const editable = this.editable()

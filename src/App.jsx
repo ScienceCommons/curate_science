@@ -94,32 +94,43 @@ class App extends React.Component {
         	<Router forceRefresh={true} basename="/app">
                 <div style={{backgroundColor: theme.palette.bg}}>
                     <MuiThemeProvider theme={theme}>
-                        <TopBar user_session={user_session} />
-                        <div className="AppContent">
-                            <Switch>
-                                <Route
-                                    exact path="/"
-                                    component={() => <Recent user_session={user_session} />}
-                                />
-                                <Route
-                                    exact path="/recent"
-                                    component={() => <Recent user_session={user_session} />}
-                                />
-                                <Route exact path="/replications" component={Replications} />
-                                <Route path="/about" component={About} />
-                                <Route path="/faq" component={FAQ} />
-                                <Route path="/newsletter" component={Newsletter} />
-                                <Route path="/help" component={Help} />
-                                <Route path="/privacy" component={Privacy} />
-                                <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
-                                <Route path="/article/:id" component={() => <ArticlePage user_session={user_session} />} />
-                                <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
-                                <Route path="/search" component={() => <SearchResults/>} />
-                                <Route path="/admin/manage" component={AdminManage} />
-                                <Route path="/admin/invite" component={AdminInvite} />
-                            </Switch>
-                        </div>
-                        <Footer />
+                        <Switch>
+                            // Author embed page
+                            <Route
+                                path="/author-embed/:slug(.+)"
+                                component={() => <AuthorPage user_session={{}}/>}
+                            />
+
+                            // Rest of the app
+                            <Route>
+                                <TopBar user_session={user_session} />
+                                <div className="AppContent">
+                                    <Switch>
+                                        <Route
+                                            exact path="/"
+                                            component={() => <Recent user_session={user_session} />}
+                                        />
+                                        <Route
+                                            exact path="/recent"
+                                            component={() => <Recent user_session={user_session} />}
+                                        />
+                                        <Route exact path="/replications" component={Replications} />
+                                        <Route path="/about" component={About} />
+                                        <Route path="/faq" component={FAQ} />
+                                        <Route path="/newsletter" component={Newsletter} />
+                                        <Route path="/help" component={Help} />
+                                        <Route path="/privacy" component={Privacy} />
+                                        <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
+                                        <Route path="/article/:id" component={() => <ArticlePage user_session={user_session} />} />
+                                        <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
+                                        <Route path="/search" component={() => <SearchResults/>} />
+                                        <Route path="/admin/manage" component={AdminManage} />
+                                        <Route path="/admin/invite" component={AdminInvite} />
+                                    </Switch>
+                                </div>
+                                <Footer />
+                            </Route>
+                        </Switch>
                     </MuiThemeProvider>
                 </div>
             </Router>

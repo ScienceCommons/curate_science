@@ -112,6 +112,7 @@ class AuthorPage extends React.Component {
         let {author} = this.state
         let admin = user_session.admin
         let me = author != null && user_session.author != null && user_session.author.id == author.id
+        console.log('editable is', admin || me, 'admine', admin, 'me', me)
         return admin || me
     }
 
@@ -393,6 +394,10 @@ class AuthorPage extends React.Component {
             </div>
 		)
 	}
+}
+
+AuthorPage.defaultProps = {
+    user_session: {},
 }
 
 export default withRouter(withCookies(withStyles(styles)(AuthorPage)));
