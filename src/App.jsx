@@ -92,7 +92,7 @@ class App extends React.Component {
         const open = Boolean(anchorEl);
         return (
         	<Router forceRefresh={true} basename="/app">
-                <div style={{backgroundColor: theme.palette.bg}}>
+                <div style={{backgroundColor: theme.palette.bg}} className="CenteredContent">
                     <MuiThemeProvider theme={theme}>
                         <Switch>
                             // Author embed page

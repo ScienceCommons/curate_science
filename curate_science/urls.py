@@ -8,6 +8,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic.base import RedirectView
 import curate.views as views
 import curate.views.api as api
+from curate.views.author_embed import author_embed
 
 
 urlpatterns = [
@@ -62,4 +63,7 @@ urlpatterns += [
     path('api/commentaries/<int:pk>/update/', api.update_commentary, name='api-update-commentary'),
     path('api/commentaries/<int:pk>/delete/', api.delete_commentary, name='api-delete-commentary'),
     path('api/search/', api.search_articles_and_authors, name='api-search-articles-and-authors'),
+
+    # Author embed
+    path('author-embed/<str:slug>.js', author_embed, name='author-embed-script')
 ]
