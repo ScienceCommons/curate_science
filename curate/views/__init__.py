@@ -1,14 +1,16 @@
 from curate.models import Article
 from curate.serializers import AuthorSerializer
 from django.shortcuts import render
-from django.core import serializers
+from django.views.decorators.clickjacking import xframe_options_exempt
 import json
+
 
 def index(request):
     articles = Article.objects.order_by('updated')[:10]
     return render(request, 'index.html', {'articles': articles})
 
 # Endpoint for redesigned pages
+@xframe_options_exempt
 def router_index(request, *args, **kwargs):
     # Get logged in user
     user_session = {

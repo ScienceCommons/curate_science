@@ -7,7 +7,7 @@ from rest_framework.documentation import include_docs_urls
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic.base import RedirectView
 import curate.views as views
-import curate.views_api as api
+import curate.views.api as api
 
 
 urlpatterns = [
