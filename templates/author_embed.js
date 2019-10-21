@@ -24,7 +24,14 @@ var iframe = document.createElement('iframe');
 
 iframe.setAttribute('src', authorURL('{{ slug }}'));
 iframe.setAttribute('width', '100%');
-iframe.setAttribute('height', '1000px');
+iframe.setAttribute('height', '500px');
 
 var thisScript = document.currentScript;
 thisScript.parentNode.insertBefore(iframe, thisScript.nextSibling);
+
+// Resize iframe when postMessage with height received
+window.addEventListener('message', function(event) {
+  var data = event.data
+  if (!data.height) return
+  iframe.setAttribute('height', data.height + 'px')
+}, false)
