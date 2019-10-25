@@ -92,6 +92,10 @@ class AuthorPage extends React.Component {
     }
 
     componentDidMount() {
+        if (this.props.embedded) {
+            document.body.style.overflow = 'hidden'
+        }
+
         this.fetch_author_then_articles()
     }
 
