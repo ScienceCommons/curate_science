@@ -11,7 +11,6 @@ import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
 import ArticleList from '../components/ArticleList.jsx';
 import Loader from '../components/shared/Loader.jsx';
-import AuthorArticleList from '../components/AuthorArticleList.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
@@ -64,8 +63,9 @@ class AuthorPage extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-            new_articles: [],
             author: null,
+            articles: [],
+            articles_loading: false,
             loading: false,
             edit_author_modal_open: false,
             edit_article_modal_open: false,
@@ -88,10 +88,11 @@ class AuthorPage extends React.Component {
         this.article_updated = this.article_updated.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
+        this.update_articles = this.update_articles.bind(this)
     }
 
     componentDidMount() {
-        this.fetch_author()
+        this.fetch_author_then_articles()
     }
 
     componentWillUnmount() {
@@ -122,7 +123,7 @@ class AuthorPage extends React.Component {
     create_new_article() {
         // Create new placeholder article, then open editor
         let {cookies} = this.props
-        let {new_articles, author} = this.state
+        let {articles, author} = this.state
         let now = new Date()
         let data = {
             title: `${C.PLACEHOLDER_TITLE_PREFIX}${randomId(15)}`,
@@ -135,8 +136,8 @@ class AuthorPage extends React.Component {
         }
         this.setState({loading: true}, () => {
             json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
-                new_articles.unshift(res) // Add object to array, though will initially not render since is_live=false
-                this.setState({new_articles}, () => {
+                articles.unshift(res) // Add object to array, though will initially not render since is_live=false
+                this.setState({articles: articles}, () => {
                     this.handle_edit(res)
                 })
             }, (err) => {
@@ -183,15 +184,35 @@ class AuthorPage extends React.Component {
         this.update_linkage(a, true)
     }
 
-    fetch_author() {
+    fetch_author_then_articles() {
         let {cookies} = this.props
         let slug = this.slug()
         if (slug != null) {
             json_api_req('GET', `/api/authors/${slug}`, {}, cookies.get('csrftoken'), (res) => {
                 console.log(res)
-                this.setState({author: res})
+                this.setState({author: res}, this.fetch_articles)
             }, (e) => {
                 window.location.replace('/app/author/create')
+            })
+        }
+    }
+
+    fetch_articles() {
+        let {match, cookies, location} = this.props
+        let {author} = this.state
+        let slug = this.slug()
+        if (slug != null) {
+            this.setState({articles_loading: true}, () => {
+                json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrftoken'), (res) => {
+                    this.setState({articles: res, articles_loading: false}, () => {
+                        // If anchor in URI, scroll here now that we have articles loaded
+                        if (location.hash != null) {
+                            window.location.hash = ''  // Need to change to ensure scroll
+                            window.location.hash = location.hash
+                        }
+                        send_height_to_parent()
+                    })
+                })
             })
         }
     }
@@ -237,6 +258,19 @@ class AuthorPage extends React.Component {
         });
     };
 
+    sorted_visible_articles() {
+        let {articles} = this.state
+        let sorted_visible = articles.filter(a => a.is_live)
+        sorted_visible.sort((a, b) => {
+            let aval = a.in_press ? 3000 : a.year
+            let bval = b.in_press ? 3000 : b.year
+            if (bval > aval) return 1
+            else if (bval < aval) return -1
+            else return 0
+        })
+        return sorted_visible
+    }
+
     render_position() {
         let {author} = this.state
         let position = author.position_title
@@ -244,126 +278,145 @@ class AuthorPage extends React.Component {
         return position
     }
 
+    update_articles(articles) {
+        let { author } = this.state
+        // Remove any articles that have been unlinked from the author
+        articles = articles.filter(article => includes(article.authors, author.id))
+        this.setState({ articles: articles })
+    }
+
 	render() {
-        const {classes, user_session} = this.props
-        const {
-            new_articles,
-            author,
-            edit_author_modal_open,
-            edit_article_modal_open,
-            editing_article_id,
-            popperAnchorEl,
-            author_creator_showing,
+        let {classes, embedded, user_session} = this.props
+        let {articles, author, edit_author_modal_open, edit_article_modal_open,
+            editing_article_id, popperAnchorEl, author_creator_showing,
             articles_loading,
-            snack_message,
-            loading,
-        } = this.state
-
-        if (author == null) {
-            return <Loader />
-        } else if (!author.is_activated) {
-            return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
-        }
-
-        const article_ids = articles.map((a) => a.id)
+            snack_message, loading} = this.state
+        if (author == null) return <Loader />
+        else if (!author.is_activated) return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
+        let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
-        const editable = this.editable()
-        const slug = this.slug()
-
+        let editable = this.editable()
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" className="AuthorPage">
                     <Grid item>
-                        <div className={classes.cardColumn}>
-                            <div style={{position: 'relative'}}>
-                                <span hidden={!editable}>
-                                    <Button variant="outlined" color="secondary"
+                        {
+                            !embedded ?
+                            <div className={classes.cardColumn}>
+                                <div style={{position: 'relative'}}>
+                                    <span hidden={!editable}>
+                                        <Button variant="outlined" color="secondary"
                                             className={classes.authorEditButton}
                                             onClick={this.open_author_editor}>
-                                        <Icon className={classes.leftIcon}>edit</Icon>
-                                        Edit
-                                    </Button>
-                                </span>
-                                <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
-                                <Typography variant="h4" className={classes.subtitle}>
-                                    <span className={classes.title}>{ this.render_position() }</span>
-                                    <span className={classes.affiliation}>{ author.affiliations }</span>
-                                </Typography>
-                                <AuthorLinks links={author.profile_urls} />
-                            </div>
+                                            <Icon className={classes.leftIcon}>edit</Icon>
+                                            Edit
+                                        </Button>
+                                    </span>
+                                    <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
+                                    <Typography variant="h4" className={classes.subtitle}>
+                                        <span className={classes.title}>{ this.render_position() }</span>
+                                        <span className={classes.affiliation}>{ author.affiliations }</span>
+                                    </Typography>
+                                    <AuthorLinks links={author.profile_urls} />
+                                </div>
 
-                            <div id="actions" className={classes.box} hidden={!editable}>
-                                <Button variant="contained" color="secondary" onClick={this.create_new_article} disabled={loading}>
-                                    <Icon className={classes.leftIcon}>add</Icon>
-                                    Add Article
-                                </Button>
-                                <Button variant="outlined"
+                                <div id="actions" className={classes.box} hidden={!editable}>
+                                    <Button variant="contained" color="secondary" onClick={this.create_new_article} disabled={loading}>
+                                        <Icon className={classes.leftIcon}>add</Icon>
+                                        Add Article
+                                    </Button>
+                                    <Button variant="outlined"
                                         color="secondary"
                                         aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
                                         onClick={this.open_preexisting_popper}
                                         style={{marginLeft: 10}}>
-                                    <Icon className={classes.leftIcon}>link</Icon>
-                                    Link Existing Article
-                                </Button>
-                                <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
-                                    <IconButton aria-label="Info" style={{cursor: 'default'}} disableRipple>
-                                        <Icon>info</Icon>
-                                    </IconButton>
-                                </Tooltip>
-                                <Popover
-                                  id="add_preexisting_popper"
-                                  open={add_preexisting_open}
-                                  anchorEl={popperAnchorEl}
-                                  onClose={this.close_preexisting_popper}
-                                  anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                  }}
-                                  transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                  }}
-                                >
-                                    <div style={{width: "400px", height: "250px", padding: 14 }}>
-                                      <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
+                                        <Icon className={classes.leftIcon}>link</Icon>
+                                        Link Existing Article
+                                    </Button>
+                                    <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
+                                        <IconButton aria-label="Info" style={{cursor: 'default'}} disableRipple>
+                                            <Icon>info</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Popover
+                                        id="add_preexisting_popper"
+                                        open={add_preexisting_open}
+                                        anchorEl={popperAnchorEl}
+                                        onClose={this.close_preexisting_popper}
+                                        anchorOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        }}
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'left',
+                                            }}
+                                        >
+                                            <div style={{width: "400px", height: "250px", padding: 14 }}>
+                                                <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
+                                            </div>
+                                        </Popover>
                                     </div>
-                                </Popover>
-                            </div>
-                        </div>
+                                </div>
+                                : 
+                                <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                    <a href="https://curatescience.org/" target="_blank">
+                                        <img
+                                            style={{ width: 65 }}
+                                            src="/sitestatic/icons/powered_by_curate.png"
+                                            alt="Powered by Curate Science"
+                                            title="Powered by Curate Science"
+                                        />
+                                    </a>
+                                </div>
+                        }
 
-                        <AuthorArticleList author={author} slug={slug} new_articles={new_articles}/>
-
+                        {
+                          articles_loading ?
+                          <Loader/> :
+                          <ArticleList
+                            articles={this.sorted_visible_articles()}
+                            onArticlesUpdated={this.update_articles}
+                            user_session={this.props.user_session}
+                          />
+                        }
                     </Grid>
     			</Grid>
 
+                {
+                    !embedded ?
+                    <div>
+                        <AuthorEditor author={author}
+                                      open={edit_author_modal_open}
+                                      onClose={this.close_author_editor}
+                                      onAuthorUpdate={this.author_updated}
+                                      onShowSnack={this.show_snack} />
 
-                <AuthorEditor author={author}
-                              open={edit_author_modal_open}
-                              onClose={this.close_author_editor}
-                              onAuthorUpdate={this.author_updated}
-                              onShowSnack={this.show_snack} />
+                        <ArticleEditor article_id={editing_article_id}
+                                open={edit_article_modal_open}
+                                onUpdate={this.article_updated}
+                                onClose={this.close_article_editor} />
 
-                <ArticleEditor article_id={editing_article_id}
-                        open={edit_article_modal_open}
-                        onUpdate={this.article_updated}
-                        onClose={this.close_article_editor} />
-
-                <Snackbar
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  open={snack_message != null}
-                  autoHideDuration={3000}
-                  onClose={this.close_snack}
-                  message={snack_message}
-                />
+                        <Snackbar
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                          }}
+                          open={snack_message != null}
+                          autoHideDuration={3000}
+                          onClose={this.close_snack}
+                          message={snack_message}
+                        />
+                    </div>
+                    : null
+                }
             </div>
 		)
 	}
 }
 
 AuthorPage.defaultProps = {
+    embedded: false,
     user_session: {},
 }
 

@@ -92,13 +92,13 @@ class App extends React.Component {
         const open = Boolean(anchorEl);
         return (
         	<Router forceRefresh={true} basename="/app">
-                <div style={{backgroundColor: theme.palette.bg}} className="CenteredContent">
+                <div style={{backgroundColor: theme.palette.bg}}>
                     <MuiThemeProvider theme={theme}>
                         <Switch>
                             // Author embed page
                             <Route
                                 path="/author-embed/:slug(.+)"
-                                component={() => <AuthorPage user_session={{}}/>}
+                                component={() => <AuthorPage user_session={{}} embedded={true}/>}
                             />
 
                             // Rest of the app
