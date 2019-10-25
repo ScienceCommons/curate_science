@@ -3,8 +3,17 @@ import { Link, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 
 import Typography from '@material-ui/core/Typography';
-import {Grid, Button, Icon, IconButton,
-        Popover, Snackbar, Tooltip} from '@material-ui/core';
+import {
+    Grid,
+    Button,
+    Icon,
+    IconButton,
+    InputAdornment,
+    Popover,
+    Snackbar,
+    TextField,
+    Tooltip
+} from '@material-ui/core';
 
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
@@ -15,7 +24,7 @@ import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
-import { includes, merge } from 'lodash'
+import { includes, lowerCase, merge, some } from 'lodash'
 
 import { json_api_req, randomId, send_height_to_parent } from '../util/util.jsx'
 
@@ -56,7 +65,11 @@ const styles = theme => ({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 4
-    }
+    },
+    searchFilter: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
 })
 
 class AuthorPage extends React.Component {
@@ -72,7 +85,8 @@ class AuthorPage extends React.Component {
             editing_article_id: null,
             popperAnchorEl: null,
             author_creator_showing: false,
-            snack_message: null
+            snack_message: null,
+            search_filter: '',
         }
 
         this.open_author_editor = this.toggle_author_editor.bind(this, true)
@@ -88,7 +102,8 @@ class AuthorPage extends React.Component {
         this.article_updated = this.article_updated.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
-        this.update_articles = this.update_articles.bind(this)
+        this.filter_articles = this.filter_articles.bind(this)
+        this.update_search_filter = this.update_search_filter.bind(this)
     }
 
     componentDidMount() {
@@ -262,17 +277,37 @@ class AuthorPage extends React.Component {
         });
     };
 
+    update_search_filter(event) {
+        this.setState({ search_filter: event.target.value })
+    }
+
+    filter_articles(articles) {
+        const { search_filter } = this.state
+        if (!search_filter.length) return articles
+
+        const fields_to_search = ['author_list', 'title']
+
+        return articles.filter(article => {
+            const text = fields_to_search.map(field => article[field] || '')
+            console.log('text is', text)
+            return some(text, text => {
+                return lowerCase(text).indexOf(lowerCase(search_filter)) > -1
+            })
+        })
+    }
+
     sorted_visible_articles() {
         let {articles} = this.state
         let sorted_visible = articles.filter(a => a.is_live)
-        sorted_visible.sort((a, b) => {
+        const filtered_articles = this.filter_articles(sorted_visible)
+        filtered_articles.sort((a, b) => {
             let aval = a.in_press ? 3000 : a.year
             let bval = b.in_press ? 3000 : b.year
             if (bval > aval) return 1
             else if (bval < aval) return -1
             else return 0
         })
-        return sorted_visible
+        return filtered_articles
     }
 
     render_position() {
@@ -300,6 +335,24 @@ class AuthorPage extends React.Component {
         let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
         let editable = this.editable()
+
+        const search_filter = (
+            <TextField
+                placeholder="Filter articles"
+                value={this.state.search_filter}
+                onChange={this.update_search_filter}
+                margin="normal"
+                variant="outlined"
+                style={{margin: 0}}
+                InputProps={{
+                    startAdornment: <InputAdornment position="start"><Icon color="disabled">search</Icon></InputAdornment>,
+                    inputProps: {
+                        className: classes.searchFilter,
+                    }
+                }}
+            />
+        )
+
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" className="AuthorPage">
@@ -363,7 +416,8 @@ class AuthorPage extends React.Component {
                                     </div>
                                 </div>
                                 : 
-                                <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                <Grid container alignItems="center" justify="space-between">
+                                    {search_filter}
                                     <a href="https://curatescience.org/" target="_blank">
                                         <img
                                             style={{ width: 65 }}
@@ -372,7 +426,7 @@ class AuthorPage extends React.Component {
                                             title="Powered by Curate Science"
                                         />
                                     </a>
-                                </div>
+                                </Grid>
                         }
 
                         {

@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 
-import { Button, Grid, Icon, IconButton } from '@material-ui/core';
+import { Button, Grid, Icon, IconButton, Typography } from '@material-ui/core';
 
 import { get, includes } from 'lodash'
 
@@ -25,7 +25,8 @@ const styles = theme => ({
     flexGrow: 1
   },
   articleList: {
-    marginTop: '10px'
+    marginTop: '10px',
+    minWidth: 650,
   },
   leftIcon: {
     marginRight: theme.spacing(1)
@@ -140,6 +141,8 @@ class ArticleList extends React.Component {
       <div className={classes.root}>
         <div className={classes.articleList}>
             { articles_loading ? <Loader /> : null }
+
+            { !articles_loading && !articles.length ? <Typography>No articles found</Typography> : null }
 
               { articles.map(a => 
                 <StyledArticleWithActions key={a.id}
