@@ -11,6 +11,7 @@ import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
 import ArticleList from '../components/ArticleList.jsx';
 import Loader from '../components/shared/Loader.jsx';
+import AuthorArticleList from '../components/AuthorArticleList.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
@@ -63,9 +64,8 @@ class AuthorPage extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
+            new_articles: [],
             author: null,
-            articles: [],
-            articles_loading: false,
             loading: false,
             edit_author_modal_open: false,
             edit_article_modal_open: false,
@@ -88,11 +88,10 @@ class AuthorPage extends React.Component {
         this.article_updated = this.article_updated.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
-        this.update_articles = this.update_articles.bind(this)
     }
 
     componentDidMount() {
-        this.fetch_author_then_articles()
+        this.fetch_author()
     }
 
     componentWillUnmount() {
@@ -123,7 +122,7 @@ class AuthorPage extends React.Component {
     create_new_article() {
         // Create new placeholder article, then open editor
         let {cookies} = this.props
-        let {articles, author} = this.state
+        let {new_articles, author} = this.state
         let now = new Date()
         let data = {
             title: `${C.PLACEHOLDER_TITLE_PREFIX}${randomId(15)}`,
@@ -136,8 +135,8 @@ class AuthorPage extends React.Component {
         }
         this.setState({loading: true}, () => {
             json_api_req('POST', `/api/articles/create/`, data, cookies.get('csrftoken'), (res) => {
-                articles.unshift(res) // Add object to array, though will initially not render since is_live=false
-                this.setState({articles: articles}, () => {
+                new_articles.unshift(res) // Add object to array, though will initially not render since is_live=false
+                this.setState({new_articles}, () => {
                     this.handle_edit(res)
                 })
             }, (err) => {
@@ -184,35 +183,15 @@ class AuthorPage extends React.Component {
         this.update_linkage(a, true)
     }
 
-    fetch_author_then_articles() {
+    fetch_author() {
         let {cookies} = this.props
         let slug = this.slug()
         if (slug != null) {
             json_api_req('GET', `/api/authors/${slug}`, {}, cookies.get('csrftoken'), (res) => {
                 console.log(res)
-                this.setState({author: res}, this.fetch_articles)
+                this.setState({author: res})
             }, (e) => {
                 window.location.replace('/app/author/create')
-            })
-        }
-    }
-
-    fetch_articles() {
-        let {match, cookies, location} = this.props
-        let {author} = this.state
-        let slug = this.slug()
-        if (slug != null) {
-            this.setState({articles_loading: true}, () => {
-                json_api_req('GET', `/api/authors/${slug}/articles/`, {}, cookies.get('csrftoken'), (res) => {
-                    this.setState({articles: res, articles_loading: false}, () => {
-                        // If anchor in URI, scroll here now that we have articles loaded
-                        if (location.hash != null) {
-                            window.location.hash = ''  // Need to change to ensure scroll
-                            window.location.hash = location.hash
-                        }
-                        send_height_to_parent()
-                    })
-                })
             })
         }
     }
@@ -258,19 +237,6 @@ class AuthorPage extends React.Component {
         });
     };
 
-    sorted_visible_articles() {
-        let {articles} = this.state
-        let sorted_visible = articles.filter(a => a.is_live)
-        sorted_visible.sort((a, b) => {
-            let aval = a.in_press ? 3000 : a.year
-            let bval = b.in_press ? 3000 : b.year
-            if (bval > aval) return 1
-            else if (bval < aval) return -1
-            else return 0
-        })
-        return sorted_visible
-    }
-
     render_position() {
         let {author} = this.state
         let position = author.position_title
@@ -278,24 +244,32 @@ class AuthorPage extends React.Component {
         return position
     }
 
-    update_articles(articles) {
-        let { author } = this.state
-        // Remove any articles that have been unlinked from the author
-        articles = articles.filter(article => includes(article.authors, author.id))
-        this.setState({ articles: articles })
-    }
-
 	render() {
-        let {classes, user_session} = this.props
-        let {articles, author, edit_author_modal_open, edit_article_modal_open,
-            editing_article_id, popperAnchorEl, author_creator_showing,
+        const {classes, user_session} = this.props
+        const {
+            new_articles,
+            author,
+            edit_author_modal_open,
+            edit_article_modal_open,
+            editing_article_id,
+            popperAnchorEl,
+            author_creator_showing,
             articles_loading,
-            snack_message, loading} = this.state
-        if (author == null) return <Loader />
-        else if (!author.is_activated) return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
-        let article_ids = articles.map((a) => a.id)
+            snack_message,
+            loading,
+        } = this.state
+
+        if (author == null) {
+            return <Loader />
+        } else if (!author.is_activated) {
+            return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
+        }
+
+        const article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
-        let editable = this.editable()
+        const editable = this.editable()
+        const slug = this.slug()
+
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" className="AuthorPage">
@@ -357,15 +331,8 @@ class AuthorPage extends React.Component {
                             </div>
                         </div>
 
-                        {
-                          articles_loading ?
-                          <Loader/> :
-                          <ArticleList
-                            articles={this.sorted_visible_articles()}
-                            onArticlesUpdated={this.update_articles}
-                            user_session={this.props.user_session}
-                          />
-                        }
+                        <AuthorArticleList author={author} slug={slug} new_articles={new_articles}/>
+
                     </Grid>
     			</Grid>
 

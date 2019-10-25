@@ -20,11 +20,12 @@ function authorURL(slug) {
 }
 
 
+// Add Author page in an iframe
 var iframe = document.createElement('iframe');
 
 iframe.setAttribute('src', authorURL('{{ slug }}'));
 iframe.setAttribute('width', '100%');
-iframe.setAttribute('height', '500px');
+iframe.setAttribute('height', '500px');  // This is updated dynamically later
 
 var thisScript = document.currentScript;
 thisScript.parentNode.insertBefore(iframe, thisScript.nextSibling);
