@@ -2,11 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Loader from './Loader.jsx';
+import { withCookies, Cookies } from 'react-cookie';
 
+import { times } from 'lodash'
 import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 	FormControl, Select, OutlinedInput, InputBase, Tooltip} from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
+
+import { simple_api_req } from '../../util/util.jsx'
 
 const styles = {
     container: {
@@ -43,14 +47,26 @@ class FigureList extends React.Component {
         this.handle_add = this.handle_add.bind(this)
     }
 
-    delete_figure = idx => {
-        if (this.props.onDelete != null) this.props.onDelete(idx)
+    delete_figure(idx) {
+    	let {figures, cookies} = this.props
+        let pk = figures[idx].id
+        this.setState({loading: true}, () => {
+            simple_api_req('DELETE', `/api/key_figures/${pk}/delete/`, null, cookies.get('csrftoken'), (res) => {
+                figures.splice(idx, 1)
+                this.setState({loading: false}, () => {
+                    if (this.props.onChange != null) this.props.onChange(figures)
+                })
+            }, (err) => {
+                this.setState({loading: false})
+                console.error(err)
+            })
+        })
     }
 
     figure_click = (idx, event) => {
-        let {figures, showDelete} = this.props
+        let {figures, show_delete} = this.props
         console.log(`figure_click ${idx}`)
-        if (showDelete) this.delete_figure(idx)
+        if (show_delete) this.delete_figure(idx)
         else this.props.onFigureClick(figures, idx)
     }
 
@@ -59,49 +75,57 @@ class FigureList extends React.Component {
     }
 
     render_thumbnail(kf, i) {
-        let {classes, showDelete} = this.props
+        let {classes, show_delete} = this.props
         let kind = kf.is_table ? 'Table' : 'Figure'
         let img = (
             <img key={i}
                   className={classes.thumbnail}
                   style={{backgroundImage: `url(${kf.image})`}} />
         )
-        let tooltip = showDelete ? "Delete figure" : "Enlarge figure"
+        let tooltip = show_delete ? "Delete figure" : "Enlarge figure"
         return <Tooltip title={tooltip} key={i}><a key={i} href="#" onClick={this.figure_click.bind(this, i)}>{ img }</a></Tooltip>
     }
 
 	render() {
-		let {classes, figures, showAdd, loading} = this.props
-        let addButton, spinner
+		let {classes, figures, showAdd, loading, number_images_loading} = this.props
         if (figures == null) figures = []
-        if (showAdd) addButton = <a href="#" onClick={this.handle_add} className={classes.thumbnail}>
-            <span className={classes.add}>
-                <Icon fontSize='large'>add</Icon> <Typography variant="body2">Add</Typography>
-            </span>
-        </a>
+
+        let spinner
         if (loading) spinner = <Loader size="25" />
+
+        let loading_images = []
+        times(number_images_loading, (i) => {
+            loading_images.push(
+                <div className={classes.thumbnail} key={`uploading_image_${i}`} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Loader/>
+                </div>
+            )
+        })
+
 		return (
 			<div className={classes.container}>
 				{ figures.map(this.render_thumbnail) }
-                { addButton }
                 { spinner }
+                { loading_images }
             </div>
         )
 	}
 }
 
 FigureList.propTypes = {
-    onDelete: PropTypes.func,
-    showDelete: PropTypes.bool,
+    onChange: PropTypes.func,
+    show_delete: PropTypes.bool,
     showAdd: PropTypes.bool,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    number_images_loading: PropTypes.number,
 }
 
 FigureList.defaultProps = {
 	figures: [],
-    showDelete: false,
+    show_delete: false,
     showAdd: false,
-    loading: false
+    loading: false,
+    number_images_loading: 0,
 };
 
-export default withStyles(styles)(FigureList);
+export default withCookies(withStyles(styles)(FigureList));

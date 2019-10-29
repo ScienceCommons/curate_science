@@ -35,16 +35,19 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import ChipInput from 'material-ui-chip-input'
-import C from '../constants/constants';
-import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
-import FigureSelector from './FigureSelector.jsx';
-import LabeledBox from '../components/shared/LabeledBox.jsx';
-import Loader from '../components/shared/Loader.jsx';
+
 import { makeStyles } from '@material-ui/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { clone, debounce, find, get, includes, set, truncate } from 'lodash'
 import {json_api_req, simple_api_req, unspecified, summarize_api_errors} from '../util/util.jsx'
+
 import {retrieve_authors,retrieve_title, retrieve_abstract} from '../components/curateform/DOILookup.jsx'
+import C from '../constants/constants';
+import KeyFigureUploader from './KeyFigureUploader.jsx';
+import LabeledBox from '../components/shared/LabeledBox.jsx';
+import Loader from '../components/shared/Loader.jsx';
+import TransparencyIcon from '../components/shared/TransparencyIcon.jsx';
+
 const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" {...props} ref={ref}/>;
 })
@@ -538,6 +541,7 @@ function initialFormState() {
     commentaries: [],
     media_coverage: [],
     transparency_urls: [],
+    dragging_files: false,
   }
 }
 
@@ -1242,7 +1246,7 @@ class ArticleEditor extends React.Component {
 
   render() {
     let {classes, article_id, open} = this.props
-    let { doi_loading, form, snack_message, loading } = this.state
+    let { doi_loading, dragging_files, form, snack_message, loading } = this.state
     let content = <Loader />
 
     const replication = form.article_type === 'REPLICATION'
@@ -1256,7 +1260,14 @@ class ArticleEditor extends React.Component {
     const rep_std_details = find(C.REPORTING_STANDARDS_TYPES, {value: form.reporting_standards_type})
 
     if (!loading && article_id != null) content = (
-      <Grid container spacing={3}>
+      <Grid
+          container
+          spacing={3}
+          onDragEnter={() => this.setState({ dragging_files: true })}
+          onDragEnd={ () => this.setState({ dragging_files: false }) }
+          onDragExit={ () => this.setState({ dragging_files: false }) }
+          onDrop={ () => this.setState({ dragging_files: false }) }
+      >
         <Grid item className="ArticleEditorHalf">
           <Grid container>
             <Grid item xs={6}>
@@ -1641,9 +1652,12 @@ Completing all 7 earns you "Basic 7 (retroactive)" compliance
         <Typography variant="overline">Key Figures</Typography>
         <Grid container>
           <Grid item xs={12}>
-            <FigureSelector article_id={article_id}
-              onChange={this.update_figures}
-              figures={form.key_figures} />
+              <KeyFigureUploader
+                  dragging_files={dragging_files}
+                  onChange={this.update_figures}
+                  article_id={article_id}
+                  figures={form.key_figures}
+              />
           </Grid>
         </Grid>
       </Grid>
