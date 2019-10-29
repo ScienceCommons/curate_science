@@ -102,6 +102,7 @@ class AuthorPage extends React.Component {
         this.article_updated = this.article_updated.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
+        this.update_articles = this.update_articles.bind(this)
         this.filter_articles = this.filter_articles.bind(this)
         this.update_search_filter = this.update_search_filter.bind(this)
     }
