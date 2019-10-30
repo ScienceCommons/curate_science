@@ -46,7 +46,8 @@ const styles = theme => ({
         right: 0
     },
     box: {
-        padding: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+        paddingTop: theme.spacing(2),
     },
     leftIcon: {
         marginRight: theme.spacing(1)
@@ -415,6 +416,7 @@ class AuthorPage extends React.Component {
                                             </div>
                                         </Popover>
                                     </div>
+                                    {search_filter}
                                 </div>
                                 : 
                                 <Grid container alignItems="center" justify="space-between">
