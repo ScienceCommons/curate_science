@@ -24,7 +24,7 @@ import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
-import { includes, lowerCase, merge, some } from 'lodash'
+import { includes, merge } from 'lodash'
 
 import { json_api_req, randomId, send_height_to_parent } from '../util/util.jsx'
 
@@ -104,7 +104,6 @@ class AuthorPage extends React.Component {
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
         this.update_articles = this.update_articles.bind(this)
-        this.filter_articles = this.filter_articles.bind(this)
         this.update_search_filter = this.update_search_filter.bind(this)
     }
 
@@ -283,33 +282,17 @@ class AuthorPage extends React.Component {
         this.setState({ search_filter: event.target.value })
     }
 
-    filter_articles(articles) {
-        const { search_filter } = this.state
-        if (!search_filter.length) return articles
-
-        const fields_to_search = ['author_list', 'title']
-
-        return articles.filter(article => {
-            const text = fields_to_search.map(field => article[field] || '')
-            console.log('text is', text)
-            return some(text, text => {
-                return lowerCase(text).indexOf(lowerCase(search_filter)) > -1
-            })
-        })
-    }
-
     sorted_visible_articles() {
         let {articles} = this.state
         let sorted_visible = articles.filter(a => a.is_live)
-        const filtered_articles = this.filter_articles(sorted_visible)
-        filtered_articles.sort((a, b) => {
+        sorted_visible.sort((a, b) => {
             let aval = a.in_press ? 3000 : a.year
             let bval = b.in_press ? 3000 : b.year
             if (bval > aval) return 1
             else if (bval < aval) return -1
             else return 0
         })
-        return filtered_articles
+        return sorted_visible
     }
 
     render_position() {
@@ -439,6 +422,7 @@ class AuthorPage extends React.Component {
                             articles={this.sorted_visible_articles()}
                             onArticlesUpdated={this.update_articles}
                             user_session={this.props.user_session}
+                            search_filter={this.state.search_filter}
                           />
                         }
                     </Grid>

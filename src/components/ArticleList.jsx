@@ -4,7 +4,7 @@ import { withCookies } from 'react-cookie';
 
 import { Button, Grid, Icon, IconButton, Typography } from '@material-ui/core';
 
-import { get, includes } from 'lodash'
+import { get, includes, lowerCase, some } from 'lodash'
 
 import ArticleActions from '../components/ArticleActions.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
@@ -54,6 +54,7 @@ class ArticleList extends React.Component {
     this.handle_edit = this.handle_edit.bind(this)
     this.handle_delete = this.handle_delete.bind(this)
     this.article_updated = this.article_updated.bind(this)
+    this.show_article = this.show_article.bind(this)
     this.show_figure = this.show_figure.bind(this)
     this.got_article_details = this.got_article_details.bind(this)
   }
@@ -104,8 +105,25 @@ class ArticleList extends React.Component {
     this.setState({gallery_images: figures.map((fig) => fig.image), gallery_index: index, gallery_showing: true})
   }
 
+  show_article(article) {
+      const { search_filter } = this.props
+      if (!(search_filter && search_filter.length)) return true
+
+      const fields_to_search = ['author_list', 'title']
+
+      const text = fields_to_search.map(field => article[field] || '')
+      return some(text, text => {
+          return lowerCase(text).indexOf(lowerCase(search_filter)) > -1
+      })
+  }
+
+  filtered_articles() {
+    return this.props.articles.filter(this.show_article)
+  }
+
   render() {
-    let {articles, classes, show_date, user_session} = this.props
+    let {classes, show_date, user_session} = this.props
+    const filtered_articles = this.filtered_articles()
     let {
       edit_article_modal_open,
       editing_article_id,
@@ -142,11 +160,12 @@ class ArticleList extends React.Component {
         <div className={classes.articleList}>
             { articles_loading ? <Loader /> : null }
 
-            { !articles_loading && !articles.length ? <Typography>No articles found</Typography> : null }
+            { !articles_loading && !filtered_articles.length ? <Typography>No articles found</Typography> : null }
 
-              { articles.map(a => 
+              { filtered_articles.map(a => 
                 <StyledArticleWithActions key={a.id}
                   article={a}
+                  className={this.show_article(a) ? '' : classes.hidden}
                   user_session={user_session}
                   show_date={show_date}
                   onEdit={this.handle_edit}
@@ -232,6 +251,11 @@ class ArticleWithActions extends React.Component {
       </div>
     )
   }
+}
+
+ArticleList.defaultProps = {
+    articles: [],
+    search_filter: '',
 }
 
 const StyledArticleWithActions = withCookies(withStyles(styles)(ArticleWithActions))
