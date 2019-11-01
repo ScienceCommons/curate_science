@@ -18,7 +18,7 @@ import JournalDOIBadge from './JournalDOIBadge.jsx';
 import TransparencyBadge from './TransparencyBadge.jsx';
 import TruncatedText from './shared/TruncatedText.jsx';
 
-import { json_api_req, send_height_to_parent } from '../util/util.jsx'
+import { json_api_req } from '../util/util.jsx'
 
 const styles = theme => ({
   createdDate: {
@@ -164,10 +164,6 @@ class ArticleContent extends React.PureComponent {
     const month = months[date.getMonth()]
     const year = date.getFullYear()
     return `Added ${month} ${day}, ${year}`
-  }
-
-  componentDidUpdate() {
-    send_height_to_parent()
   }
 
 	render() {

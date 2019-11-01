@@ -16,7 +16,7 @@ import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 
-import { json_api_req, simple_api_req } from '../util/util.jsx'
+import { json_api_req, simple_api_req, send_height_to_parent } from '../util/util.jsx'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -119,6 +119,10 @@ class ArticleList extends React.Component {
 
   filtered_articles() {
     return this.props.articles.filter(this.show_article)
+  }
+
+  componentDidUpdate() {
+    send_height_to_parent()
   }
 
   render() {
