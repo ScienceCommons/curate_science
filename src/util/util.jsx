@@ -136,4 +136,4 @@ export const unspecified = (s) => {
 function send_height() {
     window.parent.postMessage({height: document.body.offsetHeight}, '*')
 }
-export const send_height_to_parent = debounce(send_height, 250)
+export const send_height_to_parent = debounce(send_height, 250, { leading: true })
