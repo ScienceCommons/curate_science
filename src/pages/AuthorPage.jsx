@@ -26,7 +26,7 @@ import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
 import { includes, merge } from 'lodash'
 
-import { json_api_req, randomId } from '../util/util.jsx'
+import { json_api_req, randomId, send_height_to_parent } from '../util/util.jsx'
 
 import C from '../constants/constants';
 
@@ -230,6 +230,7 @@ class AuthorPage extends React.Component {
                             window.location.hash = ''  // Need to change to ensure scroll
                             window.location.hash = location.hash
                         }
+                        send_height_to_parent()
                     })
                 })
             })
