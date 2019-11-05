@@ -12,6 +12,7 @@ import About from './pages/About.jsx';
 import FAQ from './pages/FAQ.jsx';
 import Newsletter from './pages/Newsletter.jsx';
 import Help from './pages/Help.jsx';
+import Home from './pages/Home.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Recent from './pages/Recent.jsx';
 import Replications from './pages/Replications.jsx';
@@ -108,7 +109,7 @@ class App extends React.Component {
                                     <Switch>
                                         <Route
                                             exact path="/"
-                                            component={() => <Recent user_session={user_session} />}
+                                            component={() => <Home user_session={user_session} />}
                                         />
                                         <Route
                                             exact path="/recent"
