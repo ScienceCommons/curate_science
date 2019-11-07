@@ -30,6 +30,12 @@ textarea {
   margin: 0 auto;
 }
 
+@media (max-width: 1100px) {
+  .AppContent {
+    margin: 0 1rem;
+  }
+}
+
 .HomeArticleList {
 	width: 650px;
 }

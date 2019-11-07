@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/styles';
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
 
 
+const textColor = '#666666'
+
 const useStyles = makeStyles(theme => ({
     areYou: {
         border: 'solid 1px',
@@ -18,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
     description: {
         fontSize: '1rem',
-        color: '#666666',
+        color: textColor,
     },
     divider: {
         backgroundColor: '#ccc',
@@ -33,13 +35,31 @@ const useStyles = makeStyles(theme => ({
     homepage: {
         color: '#666666',
     },
+    howItWorksDescription: {
+        color: '#666666',
+        fontSize: '1.25rem',
+        paddingBottom: theme.spacing(2.5),
+        paddingLeft: theme.spacing(5),
+        paddingRight: theme.spacing(5),
+    },
     subheading: {
         fontSize: '1.8rem',
         paddingTop: theme.spacing(3),
         paddingBottom: theme.spacing(4),
     },
+    sectionHeading: {
+        fontSize: '2rem',
+        color: 'black',
+        textTransform: 'uppercase',
+    },
     title: {
         fontSize: '1.5rem',
+    },
+    subtitle: {
+        color: textColor,
+        fontSize: '1.2rem',
+        paddingTop: theme.spacing(),
+        paddingBottom: theme.spacing(3),
     },
 }))
 
@@ -66,6 +86,20 @@ function ImageCarousel({ images }) {
 }
 
 
+function HomeButton({ fontSize, href, children }) {
+    fontSize = fontSize || '0.875rem'
+    return (
+        <Button
+            variant="contained"
+            color="secondary"
+            style={{ fontSize }}
+            href={href}
+        >
+            {children}
+        </Button>
+    )
+}
+
 function AreYouCard({title, text, button_text}) {
     const classes = useStyles()
 
@@ -80,9 +114,9 @@ function AreYouCard({title, text, button_text}) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button variant="contained" color="secondary" style={{ marginTop: '1rem' }} className={classes.buttontext}>
+                <HomeButton style={{ marginTop: '1rem' }}>
                     {button_text}
-                </Button>
+                </HomeButton>
             </CardActions>
         </Card>
     )
@@ -96,6 +130,22 @@ export default function Home({}) {
         '/sitestatic/infographics/101-T-standards-LANDING-THUMBNAIL.png',
         '/sitestatic/infographics/102-article-card-ecosys-THUMBNAIL.png',
         '/sitestatic/infographics/103-author-page-LANDING-THUMBNAIL.png',
+    ]
+
+    const for_authors_images = [
+        '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
+        '/sitestatic/infographics/104.5-T-standards-HIW-A-THUMBNAIL.png',
+        '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
+    ]
+
+    const for_replicators_images = [
+        '/sitestatic/infographics/106-article-page-HIW-THUMBNAIL.png',
+        '/sitestatic/infographics/107-COLLECTION-page-HIW-THUMBNAIL.png',
+    ]
+
+    const for_educators_images = [
+        '/sitestatic/infographics/108-educator-DATA-THUMBNAIL.png',
+        '/sitestatic/infographics/109-educator-MATERIALS-THUMBNAIL.png',
     ]
 
     // Props for the 'Are you a ...?' cards
@@ -120,7 +170,7 @@ export default function Home({}) {
     return (
         <Grid container className={classes.homepage}>
             <Grid container item justify="center">
-                <Typography component="h2" className={classes.subheading}>
+                <Typography component="h2" className={classes.subheading} align="center">
                     Transparent and credible scientific evidence.
                 </Typography>
             </Grid>
@@ -142,6 +192,168 @@ export default function Home({}) {
             </Grid>
 
             <hr className={classes.divider}/>
+
+            <Grid container item justify="center" direction="column">
+                <Typography component="h3" className={classes.sectionHeading} align="center">
+                    How it works
+                </Typography>
+                <Typography component="h4" align="center" className={classes.subtitle}>
+                    Problems Curate Science solves
+                </Typography>
+            </Grid>
+
+            <Card>
+                <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <Grid container>
+                        <Grid item xs={6}></Grid>
+                        <Grid item xs={6}>
+                            <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                For authors
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid container style={{ marginTop: '2rem' }}>
+                        <Grid item xs={6}>
+                            <ImageCarousel images={for_authors_images}/>
+                        </Grid>
+                        <Grid item container xs={6} direction="column" alignItems="center">
+                            <Typography className={classes.howItWorksDescription}>
+                                Communicate the transparency and credibility of your research according to recognized transparency standards on your own (externally embeddable) author page.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Organize your publications (full-text URLs, key figures, etc.) and share and disseminate your research.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Increase the discoverability, accessibility, and impact of your research, giving yourself a competitive edge in hiring/grant contexts.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Feel confident inviting the world to both use and scrutinize your work.
+                            </Typography>
+
+                        </Grid>
+                    </Grid>
+
+                    <Grid container>
+                        <Grid item xs={6}/>
+                        <Grid item container xs={6} direction="column" alignItems="center">
+                            <HomeButton
+                                style={{  marginTop: '1rem' }}
+                                fontSize="1rem"
+                                href="/app/create_author"
+                            >
+                                Create Author Page
+                            </HomeButton>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+
+            <Card style={{ marginTop: '5rem' }}>
+                <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                For replicators
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}></Grid>
+                    </Grid>
+                    <Grid container style={{ marginTop: '2rem' }}>
+                        <Grid item container xs={6} direction="column" alignItems="center">
+                            <Typography className={classes.howItWorksDescription}>
+                                Link your replication to the original study to increase its visibility, discoverability, and impact, accelerating scientific self-correction.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Curate replication metadata on its own article page and easily share it.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Create collections of replications across different methods of testing an effect, and meta-analyze and track replication evidence (coming soon).
+                            </Typography>
+
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ImageCarousel images={for_replicators_images}/>
+                        </Grid>
+                    </Grid>
+
+                    <Grid container>
+                        <Grid item container xs={6} direction="column" alignItems="center">
+                            <HomeButton
+                                style={{ marginTop: '1rem' }}
+                                fontSize="1rem"
+                                href="#"
+                            >
+                                Add Replication
+                            </HomeButton>
+                        </Grid>
+                        <Grid item xs={6}/>
+                    </Grid>
+
+                </CardContent>
+            </Card>
+
+            <Card style={{ marginTop: '5rem' }}>
+                <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <Grid container>
+                        <Grid item xs={6}></Grid>
+                        <Grid item xs={6}>
+                            <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                For educators
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid container style={{ marginTop: '2rem' }}>
+                        <Grid item xs={6}>
+                            <ImageCarousel images={for_educators_images}/>
+                        </Grid>
+                        <Grid item container xs={6} direction="column" alignItems="center">
+                            <Typography className={classes.howItWorksDescription}>
+                                Find open data sets and analysis code on specific topics for your courses in statistics, research methodology, or meta-science.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Discover open study materials for course-related replication projects on topics relevant to your students&#700; interests.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Identify transparent and credible research findings to include in your courses.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Curate the transparency and credibility of seminal findings for your graduate seminar classes, organized in article lists re-usable by other instructors (coming soon).
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Curate replication metadata on its own article page and easily share it.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Create collections of replications across different methods of testing an effect, and meta-analyze and track replication evidence (coming soon).
+                            </Typography>
+                        </Grid>
+                    </Grid>
+
+                    <Grid container>
+                        <Grid item xs={6}/>
+                        <Grid item container xs={6} direction="column" alignItems="center">
+                            <HomeButton
+                                style={{ marginTop: '1rem' }}
+                                fontSize="1rem"
+                                href="#"
+                            >
+                                Browse
+                            </HomeButton>
+                        </Grid>
+                    </Grid>
+
+                </CardContent>
+            </Card>
+
         </Grid>
     )
 }
