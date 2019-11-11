@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useCookies } from 'react-cookie';
+import { Link } from 'react-router-dom';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
@@ -86,21 +87,40 @@ function ImageCarousel({ images }) {
 }
 
 
-function HomeButton({ fontSize, href, children }) {
+function HomeButton({ fontSize, href, to, children }) {
+    // `to` is used for links within the React app
+    // `href` is used for links outside the React app (e.g. login/signup currently)
     fontSize = fontSize || '0.875rem'
-    return (
+    const button = (
         <Button
             variant="contained"
             color="secondary"
             style={{ fontSize }}
-            href={href}
         >
             {children}
         </Button>
     )
+
+    if (href) {
+        return (
+            <a href={href}>
+                {button}
+            </a>
+        )
+    }
+
+    if (to) {
+        return (
+            <Link to={to}>
+                {button}
+            </Link>
+        )
+    }
+
+    return null
 }
 
-function AreYouCard({title, text, button_text}) {
+function AreYouCard({title, text, button_text, to, href}) {
     const classes = useStyles()
 
     return (
@@ -114,7 +134,7 @@ function AreYouCard({title, text, button_text}) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <HomeButton style={{ marginTop: '1rem' }}>
+                <HomeButton href={href} to={to} style={{ marginTop: '1rem' }}>
                     {button_text}
                 </HomeButton>
             </CardActions>
@@ -153,17 +173,20 @@ export default function Home({}) {
         {
             title: 'Are you an author?',
             text: 'Be a transparent and credible researcher and accelerate your science with confidence.',
-            button_text: 'Learn more'
+            button_text: 'Learn more',
+            to: '#for-authors',
         },
         {
             title: 'Are you a replicator?',
             text: 'Add your replication to our database to increase its visibility, discoverability, and impact.',
-            button_text: 'Sign up'
+            button_text: 'Sign up',
+            href: '/accounts/signup/',
         },
         {
             title: 'Are you an educator?',
             text: 'Find open data sets and study materials for your courses in statistics, research methodology, or meta-science.',
-            button_text: 'Browse'
+            button_text: 'Browse',
+            to: '/recent',
         },
     ]
 
@@ -202,7 +225,7 @@ export default function Home({}) {
                 </Typography>
             </Grid>
 
-            <Card>
+            <Card id="for-authors">
                 <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
                     <Grid container>
                         <Grid item xs={6}></Grid>
@@ -242,7 +265,7 @@ export default function Home({}) {
                             <HomeButton
                                 style={{  marginTop: '1rem' }}
                                 fontSize="1rem"
-                                href="/app/create_author"
+                                href="/accounts/signup/"
                             >
                                 Create Author Page
                             </HomeButton>
@@ -286,7 +309,7 @@ export default function Home({}) {
                             <HomeButton
                                 style={{ marginTop: '1rem' }}
                                 fontSize="1rem"
-                                href="#"
+                                href="/accounts/signup/"
                             >
                                 Add Replication
                             </HomeButton>
@@ -344,7 +367,7 @@ export default function Home({}) {
                             <HomeButton
                                 style={{ marginTop: '1rem' }}
                                 fontSize="1rem"
-                                href="#"
+                                to="/recent"
                             >
                                 Browse
                             </HomeButton>
