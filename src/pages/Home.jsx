@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react'
-import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 
 import { concat } from 'lodash'
+
 import { makeStyles } from '@material-ui/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
 
 
@@ -42,6 +43,12 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: theme.spacing(2.5),
         paddingLeft: theme.spacing(5),
         paddingRight: theme.spacing(5),
+    },
+    imageCarousel: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginBottom: theme.spacing(3),
+        maxWidth: 700,
     },
     subheading: {
         fontSize: '1.8rem',
@@ -144,7 +151,10 @@ function AreYouCard({title, text, button_text, to, href}) {
 
 export default function Home({}) {
     const classes = useStyles()
-    const [cookies] = useCookies()
+
+    // Media query used to determine if screen size is bigger than `md`
+    // (used to reorder "For replicators" text and images on smaller screens)
+    const biggerThanMD = useMediaQuery(theme => theme.breakpoints.up('md'));
 
     const images = [
         '/sitestatic/infographics/101-T-standards-LANDING-THUMBNAIL.png',
@@ -228,18 +238,18 @@ export default function Home({}) {
             <Card id="for-authors">
                 <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
                     <Grid container>
-                        <Grid item xs={6}></Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={6}></Grid>
+                        <Grid item md={6} xs={12}>
                             <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
                                 For authors
                             </Typography>
                         </Grid>
                     </Grid>
                     <Grid container style={{ marginTop: '2rem' }}>
-                        <Grid item xs={6}>
+                        <Grid item md={6} xs={12} className={classes.imageCarousel}>
                             <ImageCarousel images={for_authors_images}/>
                         </Grid>
-                        <Grid item container xs={6} direction="column" alignItems="center">
+                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
                                 Communicate the transparency and credibility of your research according to recognized transparency standards on your own (externally embeddable) author page.
                             </Typography>
@@ -260,8 +270,8 @@ export default function Home({}) {
                     </Grid>
 
                     <Grid container>
-                        <Grid item xs={6}/>
-                        <Grid item container xs={6} direction="column" alignItems="center">
+                        <Grid item md={6}></Grid>
+                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
                             <HomeButton
                                 style={{  marginTop: '1rem' }}
                                 fontSize="1rem"
@@ -277,15 +287,15 @@ export default function Home({}) {
             <Card style={{ marginTop: '5rem' }}>
                 <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
                     <Grid container>
-                        <Grid item xs={6}>
+                        <Grid item md={6} xs={12}>
                             <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
                                 For replicators
                             </Typography>
                         </Grid>
-                        <Grid item xs={6}></Grid>
+                        <Grid item md={6}></Grid>
                     </Grid>
-                    <Grid container style={{ marginTop: '2rem' }}>
-                        <Grid item container xs={6} direction="column" alignItems="center">
+                    <Grid container style={{ marginTop: '2rem' }} direction={biggerThanMD ? "row" : "column-reverse"}>
+                        <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
                                 Link your replication to the original study to increase its visibility, discoverability, and impact, accelerating scientific self-correction.
                             </Typography>
@@ -299,13 +309,13 @@ export default function Home({}) {
                             </Typography>
 
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={6} xs={12} className={classes.imageCarousel}>
                             <ImageCarousel images={for_replicators_images}/>
                         </Grid>
                     </Grid>
 
                     <Grid container>
-                        <Grid item container xs={6} direction="column" alignItems="center">
+                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
                             <HomeButton
                                 style={{ marginTop: '1rem' }}
                                 fontSize="1rem"
@@ -314,7 +324,7 @@ export default function Home({}) {
                                 Add Replication
                             </HomeButton>
                         </Grid>
-                        <Grid item xs={6}/>
+                        <Grid item md={6}/>
                     </Grid>
 
                 </CardContent>
@@ -323,18 +333,18 @@ export default function Home({}) {
             <Card style={{ marginTop: '5rem' }}>
                 <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
                     <Grid container>
-                        <Grid item xs={6}></Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={6}></Grid>
+                        <Grid item md={6} xs={12}>
                             <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
                                 For educators
                             </Typography>
                         </Grid>
                     </Grid>
                     <Grid container style={{ marginTop: '2rem' }}>
-                        <Grid item xs={6}>
+                        <Grid item md={6} xs={12} className={classes.imageCarousel}>
                             <ImageCarousel images={for_educators_images}/>
                         </Grid>
-                        <Grid item container xs={6} direction="column" alignItems="center">
+                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
                                 Find open data sets and analysis code on specific topics for your courses in statistics, research methodology, or meta-science.
                             </Typography>
@@ -362,8 +372,8 @@ export default function Home({}) {
                     </Grid>
 
                     <Grid container>
-                        <Grid item xs={6}/>
-                        <Grid item container xs={6} direction="column" alignItems="center">
+                        <Grid item md={6}/>
+                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
                             <HomeButton
                                 style={{ marginTop: '1rem' }}
                                 fontSize="1rem"
