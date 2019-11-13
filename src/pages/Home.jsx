@@ -14,8 +14,22 @@ import { Button, Card, CardActions, CardContent, Grid, Typography } from '@mater
 const textColor = '#666666'
 
 const useStyles = makeStyles(theme => ({
+    aboutIcon: {
+        width: '5rem',
+        marginRight: theme.spacing(2),
+    },
+    aboutTitle: {
+        color: '#999999',
+        fontSize: '1.25rem',
+        textTransform: 'uppercase',
+        marginBottom: theme.spacing(2),
+    },
     areYou: {
         border: 'solid 1px',
+    },
+    card: {
+        paddingLeft: theme.spacing(5),
+        paddingRight: theme.spacing(5),
     },
     buttontext: {
         fontSize: '0.875rem',
@@ -41,8 +55,6 @@ const useStyles = makeStyles(theme => ({
         color: '#666666',
         fontSize: '1.25rem',
         paddingBottom: theme.spacing(2.5),
-        paddingLeft: theme.spacing(5),
-        paddingRight: theme.spacing(5),
     },
     imageCarousel: {
         marginLeft: 'auto',
@@ -149,6 +161,99 @@ function AreYouCard({title, text, button_text, to, href}) {
     )
 }
 
+function About({}) {
+    const classes = useStyles()
+
+    return (
+        <div>
+            <Grid container item justify="center" direction="column">
+                <Typography component="h3" className={classes.sectionHeading} align="center">
+                    About
+                </Typography>
+            </Grid>
+
+            <Card className={classes.card} style={{ marginTop: '2rem' }}>
+                <CardContent>
+                    <Grid container spacing={4}>
+                        <Grid item md={6} xs={12}>
+                            <Grid container wrap="nowrap">
+                                <Typography align="center" className={classes.aboutTitle} style={{ flex: 1}}>
+                                    Mission
+                                </Typography>
+                            </Grid>
+                            <Grid container wrap="nowrap">
+                                <div>
+                                    <img className={classes.aboutIcon} src="/sitestatic/icons/mission-icon-180px.png"/>
+                                </div>
+                                <Typography className={classes.description}>
+                                    Accelerate science by developing the best <em>transparency and credibility curation tools</em> for all research stakeholders.
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid item md={6} xs={12}>
+                            <Grid container wrap="nowrap">
+                                <Typography align="center" className={classes.aboutTitle} style={{ flex: 1}}>
+                                    Vision
+                                </Typography>
+                            </Grid>
+                            <Grid container wrap="nowrap">
+                                <div>
+                                    <img className={classes.aboutIcon} src="/sitestatic/icons/vision-icon-180px.png"/>
+                                </div>
+                                <Typography className={classes.description}>
+                                    Create an <em>accountable</em> research world brimming with <em>transparent</em> and <em>credible</em> evidence.
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid item container xs={12} direction="column" alignItems="center" style={{marginTop: '2rem'}}>
+                        <Typography className={classes.howItWorksDescription}>
+                            Every year, millions of people suffer and/or die from serious conditions like cancer, Alzheimer’s, heart disease, anxiety/mood disorders, and suicide.
+                            To make progress on these and other problems, funded scientific research must be, at minimum, <strong>transparent and credible</strong> (credible research is transparent evidence that survives scrutiny from peers).
+                            Transparent and credible evidence can then be built upon, which allows ever more precise theories/hypotheses to be tested (solid cumulative knowledge cannot be built on quicksand).
+                            Sadly, there is a growing body of credible evidence that the majority of (current) academic research is not minimally transparent nor credible 
+                            (<a href="https://pdfs.semanticscholar.org/3813/c9cb1bbbf699998b622fe4c8dbb02c9db482.pdf">1</a>,&nbsp;
+                            <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0200303">2</a>,&nbsp;
+                            <a href="https://www.nature.com/articles/tp2017203">3</a>,&nbsp;
+                            <a href="https://osf.io/preprints/metaarxiv/6uhg5/">4</a>,&nbsp;
+                            <a href="http://bioinformatics.sph.harvard.edu/ngs-workshops/documents/introduction/Nat%20Genet%202009%20Ioannidis.pdf">5</a>,&nbsp;
+                            <a href="https://www.federalreserve.gov/econresdata/feds/2015/files/2015083pap.pdf">6</a>,&nbsp;
+                            <a href="https://tomhardwicke.netlify.com/files/Hardwicke_reproducibility_2018.pdf">7</a>,&nbsp;
+                            <a href="https://psyarxiv.com/fk8vh/">8</a>,&nbsp;
+                            <a href="https://etiennelebel.com/documents/osc(2015,&nbsp;science).pdf">9</a>,
+                            <a href="https://www.nature.com/articles/nrd3439-c1">10</a>,&nbsp;
+                            <a href="https://www.nature.com/articles/483531a">11</a>,&nbsp;
+                            <a href="https://osf.io/8srcd/">12</a>,&nbsp;
+                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165">13</a>).
+                        </Typography>
+
+                        <Typography className={classes.howItWorksDescription}>
+                            Curate Science is a unified curation system and platform to verify that research is <strong>transparent and credible</strong>. It will allow researchers, journals, universities, and funders to ensure:
+                        </Typography>
+
+                        <Typography component="ol" className={classes.howItWorksDescription}>
+                                <li>
+                                    <span style={{borderBottom: 'solid 1px'}}>Transparency</span>:
+                                    Ensure research meets minimum transparency standards appropriate to the article type and employed methodologies.
+                                </li>
+                                <li>
+                                    <span style={{borderBottom: 'solid 1px'}}>Credibility</span>:
+                                    Ensure follow-up scrutiny is linked to its parent paper, including critical commentaries, reproducibility/robustness re-analyses, and new sample replications.
+                                </li>
+                        </Typography>
+
+                        <Typography className={classes.howItWorksDescription}>
+                            By ensuring <strong>transparency and credibility</strong>, research stakeholders are held accountable to the people/groups they serve.
+                        </Typography>
+
+                    </Grid>
+                </CardContent>
+            </Card>
+        </div>
+    )
+}
+
 export default function Home({}) {
     const classes = useStyles()
 
@@ -235,9 +340,9 @@ export default function Home({}) {
                 </Typography>
             </Grid>
 
-            <Card id="for-authors">
-                <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-                    <Grid container>
+            <Card id="for-authors" className={classes.card}>
+                <CardContent>
+                    <Grid container spacing={3}>
                         <Grid item md={6}></Grid>
                         <Grid item md={6} xs={12}>
                             <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
@@ -245,7 +350,7 @@ export default function Home({}) {
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid container style={{ marginTop: '2rem' }}>
+                    <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
                             <ImageCarousel images={for_authors_images}/>
                         </Grid>
@@ -284,9 +389,9 @@ export default function Home({}) {
                 </CardContent>
             </Card>
 
-            <Card style={{ marginTop: '5rem' }}>
-                <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-                    <Grid container>
+            <Card style={{ marginTop: '5rem' }} className={classes.card}>
+                <CardContent>
+                    <Grid container spacing={3}>
                         <Grid item md={6} xs={12}>
                             <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
                                 For replicators
@@ -294,7 +399,7 @@ export default function Home({}) {
                         </Grid>
                         <Grid item md={6}></Grid>
                     </Grid>
-                    <Grid container style={{ marginTop: '2rem' }} direction={biggerThanMD ? "row" : "column-reverse"}>
+                    <Grid container style={{ marginTop: '2rem' }} direction={biggerThanMD ? "row" : "column-reverse"} spacing={3}>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
                                 Link your replication to the original study to increase its visibility, discoverability, and impact, accelerating scientific self-correction.
@@ -330,9 +435,9 @@ export default function Home({}) {
                 </CardContent>
             </Card>
 
-            <Card style={{ marginTop: '5rem' }}>
-                <CardContent style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-                    <Grid container>
+            <Card style={{ marginTop: '5rem' }} className={classes.card}>
+                <CardContent>
+                    <Grid container spacing={3}>
                         <Grid item md={6}></Grid>
                         <Grid item md={6} xs={12}>
                             <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
@@ -340,7 +445,7 @@ export default function Home({}) {
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid container style={{ marginTop: '2rem' }}>
+                    <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
                             <ImageCarousel images={for_educators_images}/>
                         </Grid>
@@ -387,6 +492,10 @@ export default function Home({}) {
                 </CardContent>
             </Card>
 
+            <hr className={classes.divider}/>
+
+            <About/>
         </Grid>
+
     )
 }
