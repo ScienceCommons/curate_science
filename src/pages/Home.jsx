@@ -163,10 +163,12 @@ function AreYouCard({title, text, button_text, to, href}) {
 
 function About({}) {
     const classes = useStyles()
+ 
+    const biggerThanMD = useMediaQuery(theme => theme.breakpoints.up('md'));
 
     return (
         <div>
-            <Grid container item justify="center" direction="column">
+            <Grid container item justify="center">
                 <Typography component="h3" className={classes.sectionHeading} align="center">
                     About
                 </Typography>
@@ -207,7 +209,7 @@ function About({}) {
                         </Grid>
                     </Grid>
 
-                    <Grid item container xs={12} direction="column" alignItems="center" style={{marginTop: '2rem'}}>
+                    <Grid item container xs={12} alignItems="center" style={{marginTop: '2rem'}}>
                         <Typography className={classes.howItWorksDescription}>
                             Every year, millions of people suffer and/or die from serious conditions like cancer, Alzheimer’s, heart disease, anxiety/mood disorders, and suicide.
                             To make progress on these and other problems, funded scientific research must be, at minimum, <strong>transparent and credible</strong> (credible research is transparent evidence that survives scrutiny from peers).
@@ -246,6 +248,159 @@ function About({}) {
                         <Typography className={classes.howItWorksDescription}>
                             By ensuring <strong>transparency and credibility</strong>, research stakeholders are held accountable to the people/groups they serve.
                         </Typography>
+
+                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                            <Grid item xs={12}>
+                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                    Researchers
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container style={{ marginTop: '2rem' }} spacing={3}>
+                            <Grid item md={6} xs={12} className={classes.imageCarousel}>
+                                <ImageCarousel images={[
+                                    '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
+                                    '/sitestatic/infographics/104.5-T-standards-HIW-A-THUMBNAIL.png',
+                                    '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
+                                ]}/>
+                            </Grid>
+                            <Grid item container md={6} xs={12} alignItems="center">
+                                <Typography className={classes.howItWorksDescription}>
+                                    Researchers can ensure their publications meet minimum transparency standards via their own (externally embeddable) author page, in addition to a host of other benefits (see <a href="#how-it-works">HOW IT WORKS section</a>).
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription}>
+                                    This makes researchers accountable to (1) their employer, (2) the government/taxpayer who funds their research (if publicly funded), and (3) the public, given researchers’ societal responsibility as public intellectuals.
+                                </Typography>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                            <Grid item xs={12}>
+                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                    Journals
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container style={{ marginTop: '2rem' }} spacing={3} direction={biggerThanMD ? "row" : "column-reverse"}>
+                            <Grid item container md={6} xs={12} alignItems="center">
+                                <Typography className={classes.howItWorksDescription}>
+                                    Journals can ensure that submitted articles meet a minimum transparency standard of their choice, and ensure that follow-up scrutiny of published papers is automatically linked within their journal issue article lists.
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription}>
+                                    This holds journals accountable to what they publish, making them accountable to (1) the research community they serve, (2) the parent professional society that owns the journal (if applicable), and (3) organizations and public officials who rely on peer-reviewed journal articles for evidence-based decision-making.
+                                </Typography>
+                            </Grid>
+                            <Grid item md={6} xs={12} className={classes.imageCarousel}>
+                                <ImageCarousel images={[
+                                    '/sitestatic/infographics/110-journal-article-list-ABOUT-THUMBNAIL.png',
+                                    '/sitestatic/infographics/111-T-leaderboards-JOURNALS-THUMBNAIL.png',
+                                ]}/>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                            <Grid item xs={12}>
+                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                    Universities / Research Institutes
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container style={{ marginTop: '2rem' }} spacing={3}>
+                            <Grid item md={6} xs={12} className={classes.imageCarousel}>
+                                <ImageCarousel images={[
+                                    '/sitestatic/infographics/112-uni-researcher-list-ABOUT-THUMBNAIL.png',
+                                    '/sitestatic/infographics/113-T-leaderboard-UNIS-THUMBNAIL.png',
+                                ]}/>
+                            </Grid>
+                            <Grid item container md={6} xs={12} alignItems="center">
+                                <Typography className={classes.howItWorksDescription}>
+                                    Universities can ensure that professors&#700; published research meets a specific transparency standard for passing appropriate scrutiny, which can be used for promotion/hiring decisions.
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription}>
+                                    University departments can then be ranked by their transparency track record, which graduate students/job candidates can use to decide at what university to work.
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription}>
+                                    This makes universities accountable to their stakeholders: (1) tuition-fee paying students, (2) the government/taxpayer (for public universities), and/or (3) private/corporate donors.
+                                </Typography>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                            <Grid item xs={12}>
+                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                    Funders / Funding Agencies
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container style={{ marginTop: '2rem' }} spacing={3} direction={biggerThanMD ? "row" : "column-reverse"}>
+                            <Grid item container md={6} xs={12} alignItems="center">
+                                <Typography className={classes.howItWorksDescription}>
+                                    Ensure that grantees&#700; publications meet a minimum transparency standard and survive follow-up scrutiny.
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription}>
+                                    Use researchers&#700;/grantees&#700; transparency track record to inform grant selection and grant renewal decisions.
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription}>
+                                    This makes funders accountable to their stakeholders: (1) the taxpayer (for government funding agencies) and/or (2) the philanthropist donors (for private/non-profit foundations).
+                                </Typography>
+                            </Grid>
+                            <Grid item md={6} xs={12} className={classes.imageCarousel}>
+                                <ImageCarousel images={[
+                                    '/sitestatic/infographics/114-funders-grantee-list-ABOUT-THUMBNAIL.png',
+                                ]}/>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                            <Grid item xs={12}>
+                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                    CURATE SCIENCE ACCOUNTABILITY
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container style={{ marginTop: '2rem' }} spacing={3}>
+                            <Grid item container xs={12} alignItems="center">
+                                <Typography className={classes.howItWorksDescription}>
+                                    Practising what we preach, several transparency and credibility measures have been (or will be) implemented to ensure that we are accountable to our own stakeholders that we serve: (1) our users, (2) the research community, and (3) the public:
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription}>
+                                    <strong>Transparency measures</strong>
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription} component="ul">
+                                    <li>Open-source code base, open ontologies, and open standards.</li>
+                                    <li>Openly-licensed curated content, accessible via an open database/open API, which can be easily re-used/re-posted via embeddable widgets. This enables the scholarly community/users to be in full control of their curated publications/content, unlike other platforms where content is either not flexible or accessible (Google Scholar) or only accessible to logged-in users (like Academia.edu and ResearchGate, who use a lock-in model).</li>
+                                    <li>Transparent logging of all user curation contributions including editors and volunteer/paid curators. All users must use their real name (and be affiliated with a research institute) and will have their own user page displaying all of their contributions/edits.</li>
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription}>
+                                    <strong>Credibility measures</strong>
+                                </Typography>
+
+                                <Typography className={classes.howItWorksDescription} component="ul">
+                                    <li>Flag issues with content (e.g., inaccuracies/discrepancies, incomplete information, broken links) from any article card/article page, even when content is embedded externally.</li>
+                                    <li>Incentivize high quality information that is sensitive to the power/political dynamics in academia:
+                                        <ul>
+                                            <li>
+                                                Communication system to allow users to anonymously request clarification from an author regarding possible limitations/errors in a published work, including revocable confidentiality of information escrow to hold each party accountable.
+                                            </li>
+                                            <li>
+                                                Bug bounty initiative/program that provides financial rewards to those who identify errors/limitations of published research (financial bounties provided by original author and/or outside donors).
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </Typography>
+
+                            </Grid>
+                        </Grid>
+
 
                     </Grid>
                 </CardContent>
@@ -331,7 +486,7 @@ export default function Home({}) {
 
             <hr className={classes.divider}/>
 
-            <Grid container item justify="center" direction="column">
+            <Grid container item justify="center" id="how-it-works">
                 <Typography component="h3" className={classes.sectionHeading} align="center">
                     How it works
                 </Typography>
@@ -354,7 +509,7 @@ export default function Home({}) {
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
                             <ImageCarousel images={for_authors_images}/>
                         </Grid>
-                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
+                        <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
                                 Communicate the transparency and credibility of your research according to recognized transparency standards on your own (externally embeddable) author page.
                             </Typography>
@@ -376,7 +531,7 @@ export default function Home({}) {
 
                     <Grid container>
                         <Grid item md={6}></Grid>
-                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
+                        <Grid item container md={6} xs={12} alignItems="center">
                             <HomeButton
                                 style={{  marginTop: '1rem' }}
                                 fontSize="1rem"
@@ -420,7 +575,7 @@ export default function Home({}) {
                     </Grid>
 
                     <Grid container>
-                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
+                        <Grid item container md={6} xs={12} alignItems="center">
                             <HomeButton
                                 style={{ marginTop: '1rem' }}
                                 fontSize="1rem"
@@ -449,7 +604,7 @@ export default function Home({}) {
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
                             <ImageCarousel images={for_educators_images}/>
                         </Grid>
-                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
+                        <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
                                 Find open data sets and analysis code on specific topics for your courses in statistics, research methodology, or meta-science.
                             </Typography>
@@ -478,7 +633,7 @@ export default function Home({}) {
 
                     <Grid container>
                         <Grid item md={6}/>
-                        <Grid item container md={6} xs={12} direction="column" alignItems="center">
+                        <Grid item container md={6} xs={12} alignItems="center">
                             <HomeButton
                                 style={{ marginTop: '1rem' }}
                                 fontSize="1rem"
