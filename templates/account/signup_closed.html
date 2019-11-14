@@ -7,5 +7,15 @@
 {% block content %}
 <h1>{% trans "Sign Up Currently Limited" %}</h1>
 
-<p>{% trans "We are currently in an early beta phase, hence sign up is currently limited to a small group of researchers. Please sign up to our <a href=\"/app/newsletter\">newsletter</a> to stay updated about our public beta launch." %}</p>
+<p>
+
+  {% trans "We're in an early beta phase, hence sign up is currently limited to a small group of highly motivated researchers who are leading the transparency and replication movement in science. If you are such a researcher, please email us at" %}
+   <a href="mailto:curatescience@gmail.com">curatescience@gmail.com</a>
+  {% trans "and we will promptly invite you to the platform (you can also sign up to our " %}
+  <a href="../../app/newsletter">{% trans "newsletter" %}</a>
+  {% trans " to stay updated about our public beta launch)." %}
+
+
+
+  </p>
 {% endblock %}
