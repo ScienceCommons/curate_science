@@ -315,7 +315,7 @@ const INPUT_SPECS = {
     fullWidth: true
   },
   'prereg_protocol_url': {
-    label: "Prereg. prot. URLs",
+    label: "Preregistration protocol URLs",
     type: 'transparency_url_list',
     url_type: 'PREREGISTRATION',
     adornment: 'link',
@@ -1411,7 +1411,7 @@ class ArticleEditor extends React.Component {
                               { this.render_field('original_article_url') }
                           </Grid>
                         </Grid>
-                        <Typography variant="body2" color="textSecondary">'Close', 'Very close', or 'Exact' replications only. See <a href="/sitestatic/legacy/logos/replication-taxonomy-v4_small.png" target="_blank">replication taxonomy</a> for details.</Typography>
+                        <Typography variant="body2" color="textSecondary">'Close', 'Very close', or 'Exact' replications only. See <a href="/sitestatic/infographics/replication-taxonomy-v0.4.0.png" target="_blank">replication taxonomy</a> for details.</Typography>
                       </Grid>
                       : null
                   }

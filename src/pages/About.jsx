@@ -278,7 +278,7 @@ class About extends React.Component {
 						{ this.MAIN_TEAM.map(this.render_person) }
 					</Grid>
 
-					<Typography variant="h2" className={classes.boxHeader}>Advisory Board (as of April 2019)</Typography>
+					<Typography variant="h2" className={classes.boxHeader}>Advisory Board</Typography>
 
 					<Grid container>
 						{ this.ADVISORS.map(this.render_person) }
