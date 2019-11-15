@@ -38,22 +38,15 @@ const styles = theme => ({
     },
     appBar: {
         background: 'linear-gradient(0deg, #333 70%, #555 100%)',
+        flexDirection: 'row',
     },
     toolbar: {
+        width: '100%',
         boxShadow: 'none',
         height: TOPBAR_HEIGHT,
         minHeight: TOPBAR_HEIGHT,
-        width: C.COL_WIDTH + 'px',
         display: 'flex',
         justifyContent: 'space-between',
-    },
-    centeredCol: {
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        width: C.COL_WIDTH + 'px',
-        height: TOPBAR_HEIGHT,
-        margin: '0px auto'
     },
     sitelogo: {
         height: 20,
@@ -212,7 +205,7 @@ class TopBar extends React.Component {
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.appBar}>
-                    <div className={classes.centeredCol}>
+                    <div className="TopBar">
                         <Toolbar className={classes.toolbar} disableGutters>
                           <div style={{display: 'flex', alignItems: 'center'}}>
                             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
@@ -225,7 +218,9 @@ class TopBar extends React.Component {
                             </a>
                           </div>
 
-                          <SearchBox/>
+                          <div style={{ maxWidth: 400, flex: 1 }}>
+                              <SearchBox/>
+                          </div>
 
                             <div className={classes.rightSide} key="right">
 

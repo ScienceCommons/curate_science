@@ -24,14 +24,23 @@ textarea {
 	height: 18px;
 }
 
+.TopBar {
+  width: 1100px;
+  margin: 0 auto;
+}
+
 .AppContent {
-	min-height: 600px;
   max-width: 1100px;
   margin: 0 auto;
 }
 
 @media (max-width: 1100px) {
   .AppContent {
+    margin: 0 1rem;
+  }
+
+  .TopBar {
+    max-width: 1100px;
     margin: 0 1rem;
   }
 }
