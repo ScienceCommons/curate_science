@@ -205,7 +205,7 @@ class TopBar extends React.Component {
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.appBar}>
-                    <div className="TopBar">
+                    <div className="AppContent">
                         <Toolbar className={classes.toolbar} disableGutters>
                           <div style={{display: 'flex', alignItems: 'center'}}>
                             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
