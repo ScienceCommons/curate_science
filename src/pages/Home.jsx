@@ -49,10 +49,10 @@ const useStyles = makeStyles(theme => ({
         marginRight: -200,
     },
     homepage: {
-        color: '#666666',
+        color: textColor,
     },
     howItWorksDescription: {
-        color: '#666666',
+        color: textColor,
         fontSize: '1.25rem',
         paddingBottom: theme.spacing(2.5),
     },
