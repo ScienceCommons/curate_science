@@ -277,7 +277,7 @@ class TopBar extends React.Component {
                                     { user_dropdown_menu }
                                   </Menu>
                                 </span>
-                              ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login to Curate</Button></a>}
+                              ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login</Button></a>}
                             </div>
                         </Toolbar>
                     </div>
