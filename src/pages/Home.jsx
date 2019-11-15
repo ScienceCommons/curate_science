@@ -486,7 +486,7 @@ export default function Home({}) {
 
             <hr className={classes.divider}/>
 
-            <Grid container item justify="center" id="how-it-works">
+            <Grid container item justify="center" direction="column" id="how-it-works">
                 <Typography component="h3" className={classes.sectionHeading} align="center">
                     How it works
                 </Typography>
