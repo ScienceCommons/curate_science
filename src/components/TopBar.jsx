@@ -218,9 +218,18 @@ class TopBar extends React.Component {
                             </a>
                           </div>
 
-                          <div style={{ maxWidth: 400, flex: 1 }}>
-                              <SearchBox/>
-                          </div>
+                          <Grid container style={{ width: '40%' }}>
+                              <Grid item style={{ maxWidth: 400, flex: 1 }}>
+                                  <SearchBox/>
+                              </Grid>
+                              <Grid item>
+                                  <Link to="/recent">
+                                      <Button variant="text" className={classes.topLink}>
+                                          Browse
+                                      </Button>
+                                  </Link>
+                              </Grid>
+                          </Grid>
 
                             <div className={classes.rightSide} key="right">
 
