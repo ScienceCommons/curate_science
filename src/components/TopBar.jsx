@@ -103,6 +103,19 @@ class TopBar extends React.Component {
         window.location.replace('/accounts/logout/')
     }
 
+    componentDidMount() {
+        // Hacky way to scroll to right place with hash in URL
+        const hash = window.location.hash
+        if (hash) {
+            const el = document.querySelector(hash)
+            if (el) {
+                window.setTimeout(() => {
+                    window.scrollTo(0, el.offsetTop - TOPBAR_HEIGHT)
+                }, 0)
+            }
+        }
+    }
+
     handleMenu = menu_id => event => {
         let {anchors} = this.state
         anchors[menu_id] = event.currentTarget
