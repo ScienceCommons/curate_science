@@ -109,6 +109,15 @@ class App extends React.Component {
                                     <Switch>
                                         <Route
                                             exact path="/"
+                                            component={() =>  {
+                                                if (user_session.authenticated) {
+                                                    return <Recent user_session={user_session} />
+                                                }
+                                                return <Home user_session={user_session} />
+                                            }}
+                                        />
+                                        <Route
+                                            exact path="/home"
                                             component={() => <Home user_session={user_session} />}
                                         />
                                         <Route
