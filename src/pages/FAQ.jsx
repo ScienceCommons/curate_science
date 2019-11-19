@@ -1,22 +1,17 @@
 import React from 'react';
 
 import { withRouter } from 'react-router-dom';
-import { Link } from "react-router-dom";
 
 import { withStyles } from '@material-ui/core/styles';
 
 import {Typography, Paper} from '@material-ui/core';
 
+import { Link } from '../components/Link.jsx';
+
+
 const styles = {
 	section: {
 		margin: 15
-	},
-	sectionHeader: {
-		fontSize: 14,
-		fontWeight: 600,
-		color: 'CornflowerBlue',
-		textAlign: 'left',
-		textTransform: 'none'
 	},
 	q: {
 		marginTop: 3,
@@ -74,7 +69,7 @@ class FAQ extends React.Component {
 					},
 					{
 						q: "What is Curate Science's business model?",
-						a: <span>We operate as a not-for-profit entity and are currently developing cost-covering mechanisms so that we can achieve financial sustainability in serving the research community. Our platform's code is open-source and our curated content is openly licensed (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a>) and accessible via an open API (see our <a href="https://github.com/ScienceCommons/curate_science" target="_blank">github repo</a> for details).</span>
+						a: <span>We operate as a not-for-profit entity and are currently developing cost-covering mechanisms so that we can achieve financial sustainability in serving the research community. Our platform's code is open-source and our curated content is openly licensed (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a>) and accessible via an open API (see our <a href="https://github.com/ScienceCommons/curate_science" target="_blank">GitHub repo</a> for details).</span>
 					}
 				]
 			},
@@ -91,7 +86,7 @@ class FAQ extends React.Component {
 					},
 					{
 						q: <span>Curate Science seems to have good intentions, but isn't it going to "stigmatize" older research conducted according to different standards</span>,
-						a: <div>Kind of, but no. It is true that today's (much needed) higher transparency standards in some ways make older research seem less impressive. However, Curate Science is focused on rewarding positive scientific behaviors rather than punishing questionable behaviors. Indeed, we make it easy to get the most credit possible for conducting and reporting one's research only a little bit more transparently. That is, as transparent as you currently have time for and/or are comfortable with. For example, if you're uncomfortable publicly posting your data for an article, you could still earn credit by publicly posting your code and linking to it on Curate Science.</div>
+						a: "Kind of, but no. It is true that today's (much needed) higher transparency standards in some ways make older research seem less impressive. However, Curate Science is focused on rewarding positive scientific behaviors rather than punishing questionable behaviors. Indeed, we make it easy to get the most credit possible for conducting and reporting one's research only a little bit more transparently. That is, as transparent as you currently have time for and/or are comfortable with. For example, if you're uncomfortable publicly posting your data for an article, you could still earn credit by publicly posting your code and linking to it on Curate Science."
 					}
 				]
 			},
@@ -100,7 +95,7 @@ class FAQ extends React.Component {
 				qas: [
 					{
 						q: "I want to add my transparently reported articles. When will I be able to do so?",
-						a: <span>We are in an early beta testing phase, hence the platform is currently only open to a small group of researchers. Our public beta launch is planned for early 2020. Please <Link to="/newsletter">sign up to receive our newsletter</Link> to be notified of updates regarding our public launch.</span>
+						a: <span>We are in an early beta testing phase, hence the platform is currently only open to a small group of researchers. Our public beta launch is planned for early 2020. Please <Link to="/home#newsletter">sign up to receive our newsletter</Link> to be notified of updates regarding our public launch.</span>
 					},
 					{
 						q: "What's the story behind Curate Science's new snail logo?",
@@ -112,27 +107,42 @@ class FAQ extends React.Component {
     }
 
     render_section(sec) {
-    	let {classes} = this.props
+    	let {classes, homeStyles} = this.props
     	return (
 	    	<div className="section" key={sec.name}>
-	    		<Typography variant="h2" className={classes.sectionHeader}>{sec.name}</Typography>
+                <Typography
+                    variant="h2"
+                    align="center"
+                    className={homeStyles.subsectionTitle}
+                    style={{ padding: '2rem 0 1rem 0' }}
+                >
+                    {sec.name}
+                </Typography>
 
 	    		{ sec.qas.map((qa, i) => {
 	    			return (
 	    				<div key={i}>
-	    					<Typography variant="body1" className={classes.q}>{ qa.q }</Typography>
-	    					<Typography variant="body1" className={classes.a}>{ qa.a }</Typography>
+                            <Typography className={homeStyles.howItWorksDescription} style={{paddingBottom: 0}}>
+                                <strong>{ qa.q }</strong>
+                            </Typography>
+                            <Typography className={homeStyles.howItWorksDescription}>
+                                { qa.a }
+                            </Typography>
 	    				</div>
-	    				)
+                    )
 	    		})}
 	    	</div>
 	    )
     }
 
 	render() {
+        const homeStyles = this.props.homeStyles
+
 		return (
-			<div style={{margin: '10px auto', maxWidth: 800}} className="StaticPages">
-				<Typography variant="h3" align="center">FAQ</Typography>
+			<div id="faq" style={{ width: '100%' }}>
+                <Typography variant="h3" align="center" className={homeStyles.sectionHeading}>
+                    FAQ
+                </Typography>
 
 				{ this.SECTIONS.map(this.render_section) }
 

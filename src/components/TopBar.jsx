@@ -5,7 +5,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import qs from 'query-string';
 
 // Routing & routes
-import { Link } from "react-router-dom";
+import { Link } from './Link.jsx';
 import { withRouter } from 'react-router-dom';
 
 // UI components
@@ -23,7 +23,7 @@ import SearchBox from './shared/SearchBox.jsx';
 
 import {json_api_req, summarize_api_errors, unspecified} from '../util/util.jsx'
 
-const TOPBAR_HEIGHT = 56
+export const TOPBAR_HEIGHT = 56
 
 const styles = theme => ({
     root: {
@@ -170,34 +170,42 @@ class TopBar extends React.Component {
         let { anchors, menuOpen, search_term, drawerOpen } = this.state;
         let admin = user_session.admin
         let has_author_page = this.user_has_author_page()
+
+        let drawer_links = []
+        if (user_session.authenticated) {
+            drawer_links = [
+                { title: 'Recent articles', to: '/recent' },
+                { title: 'How it works', to: '/home#how-it-works' },
+                { title: 'About', to: '/home#about' },
+                { title: 'People', to: '/home#people' },
+                { title: 'FAQ', to: '/home#faq' },
+                { title: 'Newsletter', to: '/home#newsletter' },
+            ]
+        } else {
+            drawer_links = [
+                { title: 'Landing', to: '/home' },
+                { title: 'How it works', to: '/home#how-it-works' },
+                { title: 'Recent articles', to: '/recent' },
+                { title: 'About', to: '/home#about' },
+                { title: 'People', to: '/home#people' },
+                { title: 'FAQ', to: '/home#faq' },
+                { title: 'Newsletter', to: '/home#newsletter' },
+            ]
+        }
         let drawer_menu = (
             <div className={classes.drawer} key="drawer">
                 <List>
-                    <Link to="/replications" key="replications">
-                        <ListItem key="replications">
-                            <ListItemText primary={"Replications"} />
-                        </ListItem>
-                    </Link>
-                    <Link to="/about" key="about">
-                        <ListItem>
-                            <ListItemText primary="About" />
-                        </ListItem>
-                    </Link>
-                    <Link to="/faq" key="faq">
-                        <ListItem key="faq">
-                            <ListItemText primary={"FAQ"} />
-                        </ListItem>
-                    </Link>
-                    <Link to="/newsletter" key="newsletter">
-                        <ListItem key="newsletter">
-                            <ListItemText primary={"Newsletter"} />
-                        </ListItem>
-                    </Link>
-                    <Link to="/help" key="help">
-                        <ListItem key="help">
-                            <ListItemText primary={"Help"} />
-                        </ListItem>
-                    </Link>
+                    {
+                        drawer_links.map((link) => {
+                            return (
+                                <Link to={link.to} key={link.to}>
+                                    <ListItem>
+                                        <ListItemText primary={link.title} />
+                                    </ListItem>
+                                </Link>
+                            )
+                        })
+                    }
                 </List>
                 <Divider />
             </div>
@@ -246,9 +254,11 @@ class TopBar extends React.Component {
 
                             <div className={classes.rightSide} key="right">
 
-                                <Button href="/#how-it-works" variant="text" className={classes.topLink}>
-                                    How It Works
-                                </Button>
+                                <Link to="/home/#how-it-works">
+                                    <Button variant="text" className={classes.topLink}>
+                                        How It Works
+                                    </Button>
+                                </Link>
 
                                 {user_session.authenticated ? (
                                 <span>

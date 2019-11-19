@@ -10,6 +10,10 @@ import { makeStyles } from '@material-ui/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
 
+import FAQ from './FAQ.jsx';
+import Newsletter from './Newsletter.jsx';
+import People from './home/People.jsx';
+
 
 const textColor = '#666666'
 
@@ -61,6 +65,12 @@ const useStyles = makeStyles(theme => ({
         marginRight: 'auto',
         marginBottom: theme.spacing(3),
         maxWidth: 700,
+    },
+    subsectionTitle: {
+        color: '#455cc7',
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
     },
     subheading: {
         fontSize: '1.8rem',
@@ -167,7 +177,7 @@ function About({}) {
     const biggerThanMD = useMediaQuery(theme => theme.breakpoints.up('md'));
 
     return (
-        <div>
+        <div id="about">
             <Grid container item justify="center">
                 <Typography component="h3" className={classes.sectionHeading} align="center">
                     About
@@ -251,7 +261,7 @@ function About({}) {
 
                         <Grid container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
-                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Researchers
                                 </Typography>
                             </Grid>
@@ -277,7 +287,7 @@ function About({}) {
 
                         <Grid container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
-                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Journals
                                 </Typography>
                             </Grid>
@@ -302,7 +312,7 @@ function About({}) {
 
                         <Grid container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
-                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Universities / Research Institutes
                                 </Typography>
                             </Grid>
@@ -331,7 +341,7 @@ function About({}) {
 
                         <Grid container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
-                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Funders / Funding Agencies
                                 </Typography>
                             </Grid>
@@ -359,7 +369,7 @@ function About({}) {
 
                         <Grid container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
-                                <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                                <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     CURATE SCIENCE ACCOUNTABILITY
                                 </Typography>
                             </Grid>
@@ -500,7 +510,7 @@ export default function Home({}) {
                     <Grid container spacing={3}>
                         <Grid item md={6}></Grid>
                         <Grid item md={6} xs={12}>
-                            <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                            <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                 For authors
                             </Typography>
                         </Grid>
@@ -548,7 +558,7 @@ export default function Home({}) {
                 <CardContent>
                     <Grid container spacing={3}>
                         <Grid item md={6} xs={12}>
-                            <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                            <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                 For replicators
                             </Typography>
                         </Grid>
@@ -595,7 +605,7 @@ export default function Home({}) {
                     <Grid container spacing={3}>
                         <Grid item md={6}></Grid>
                         <Grid item md={6} xs={12}>
-                            <Typography align="center" component="h4" style={{ color: '#455cc7', fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
+                            <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                 For educators
                             </Typography>
                         </Grid>
@@ -650,6 +660,18 @@ export default function Home({}) {
             <hr className={classes.divider}/>
 
             <About/>
+
+            <hr className={classes.divider}/>
+
+            <People homeStyles={classes}/>
+
+            <hr className={classes.divider}/>
+
+            <FAQ homeStyles={classes}/>
+
+            <hr className={classes.divider}/>
+
+            <Newsletter homeStyles={classes}/>
         </Grid>
 
     )

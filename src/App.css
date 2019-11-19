@@ -187,14 +187,6 @@ textarea {
 
 }
 
-.StaticPages input {
-	padding: 3px;
-	font-size: 15px;
-	min-width: 200px;
-	border-radius: 2px;
-	border: 1px solid #DDD;
-}
-
 .StaticPages h4 {
 	font-weight: 500;
 	text-align: center;
