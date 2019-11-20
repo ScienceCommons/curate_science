@@ -254,11 +254,23 @@ class TopBar extends React.Component {
 
                             <div className={classes.rightSide} key="right">
 
-                                <Link to="/home/#how-it-works">
-                                    <Button variant="text" className={classes.topLink}>
-                                        How It Works
-                                    </Button>
-                                </Link>
+                                {
+                                    user_session.authenticated ?
+                                    (
+                                        <Link to="/help">
+                                            <Button variant="text" className={classes.topLink}>
+                                                Help
+                                            </Button>
+                                        </Link>
+                                    ) :
+                                    (
+                                        <Link to="/home/#how-it-works">
+                                            <Button variant="text" className={classes.topLink}>
+                                                How It Works
+                                            </Button>
+                                        </Link>
+                                    )
+                                }
 
                                 {user_session.authenticated ? (
                                 <span>
