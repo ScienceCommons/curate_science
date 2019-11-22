@@ -172,27 +172,17 @@ class TopBar extends React.Component {
         let admin = user_session.admin
         let has_author_page = this.user_has_author_page()
 
-        let drawer_links = []
-        if (user_session.authenticated) {
-            drawer_links = [
-                { title: 'Recent articles', to: '/recent' },
-                { title: 'How it works', to: '/home#how-it-works' },
-                { title: 'About', to: '/home#about' },
-                { title: 'People', to: '/home#people' },
-                { title: 'FAQ', to: '/home#faq' },
-                { title: 'Newsletter', to: '/home#newsletter' },
-            ]
-        } else {
-            drawer_links = [
-                { title: 'Landing', to: '/home' },
-                { title: 'How it works', to: '/home#how-it-works' },
-                { title: 'Recent articles', to: '/recent' },
-                { title: 'About', to: '/home#about' },
-                { title: 'People', to: '/home#people' },
-                { title: 'FAQ', to: '/home#faq' },
-                { title: 'Newsletter', to: '/home#newsletter' },
-            ]
-        }
+        const drawer_links = [
+            { title: 'How it works', to: '/home#how-it-works' },
+            { title: 'Browse', to: '/recent' },
+            { title: 'About', to: '/home#about' },
+            { title: 'People', to: '/home#people' },
+            { title: 'FAQ', to: '/home#faq' },
+            { title: 'Newsletter', to: '/home#newsletter' },
+            { title: 'Replications (legacy)', to: '/replications' },
+            { title: 'Help', to: '/help' },
+        ]
+
         let drawer_menu = (
             <div className={classes.drawer} key="drawer">
                 <List>
