@@ -33,8 +33,10 @@ const useStyles = makeStyles(theme => ({
         border: 'solid 1px',
     },
     card: {
-        paddingLeft: theme.spacing(5),
-        paddingRight: theme.spacing(5),
+        [theme.breakpoints.up('md')]: {
+            paddingLeft: theme.spacing(5),
+            paddingRight: theme.spacing(5),
+        }
     },
     buttontext: {
         fontSize: '0.875rem',

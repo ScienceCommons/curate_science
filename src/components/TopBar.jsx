@@ -232,11 +232,11 @@ class TopBar extends React.Component {
                             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                                 <MenuIcon />
                             </IconButton>
-                            <a href="/app" id="sitename" className={classes.sitename}>
+                            <Link to="/" id="sitename" className={classes.sitename}>
                                 <Typography variant="h6" color="inherit">
                                   <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME} <sup><span style={{fontSize: '9px', marginLeft: '-2px'}}>BETA</span></sup>
                                 </Typography>
-                            </a>
+                            </Link>
                           </div>
 
                           <Grid container style={{ width: '40%' }}>

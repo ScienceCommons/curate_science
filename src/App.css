@@ -1,7 +1,12 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
 }
 
 a:link, a:visited, a:hover, a:active {
@@ -31,12 +36,9 @@ textarea {
 
 @media (max-width: 1100px) {
   .AppContent {
-    margin: 0 1rem;
-  }
-
-  .AppContent {
     width: 100%;
-    margin: 0 1rem;
+    padding: 0 1rem;
+    margin: 0;
   }
 }
 
