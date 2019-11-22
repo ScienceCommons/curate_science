@@ -15,6 +15,7 @@ import {AppBar, Toolbar, Typography, IconButton, Button, Grid, Menu, MenuItem,
     Drawer, List, ListItem, ListItemText, Divider, ListSubheader} from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
 import C from '../constants/constants';
@@ -223,6 +224,15 @@ class TopBar extends React.Component {
                 <MenuItem onClick={this.logout}>Logout</MenuItem>
             </div>
         ]
+
+        const author_page_icon = (
+            <IconButton
+                style={{color: 'white', padding: 4}}
+            >
+                <AccountCircle />
+            </IconButton>
+        )
+
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.appBar}>
@@ -274,19 +284,31 @@ class TopBar extends React.Component {
 
                                 {user_session.authenticated ? (
                                 <span>
+                                    <span title="Author page">
+                                    {
+                                        has_author_page ? (
+                                            <Link to={`/author/${author_slug}`}>
+                                                {author_page_icon}
+                                            </Link>
+                                        ) :
+                                        {author_page_icon}
+                                    }
+                                    </span>
                                     <IconButton
                                         aria-owns={this.menuOpen('account') ? 'menu-account' : undefined}
                                         aria-haspopup="true"
                                         onClick={this.handleMenu('account')}
                                         color="inherit"
-                                      >
-                                        <AccountCircle />
-                                  </IconButton>
+                                        style={{padding: 0}}
+                                    >
+                                        <ArrowDropDown/>
+                                    </IconButton>
                                   <Menu
                                     id="menu-account"
                                     anchorEl={anchors.account}
+                                    getContentAnchorEl={null}
                                     anchorOrigin={{
-                                      vertical: 'top',
+                                      vertical: 'bottom',
                                       horizontal: 'right',
                                     }}
                                     transformOrigin={{
