@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
@@ -9,6 +8,8 @@ import { concat } from 'lodash'
 import { makeStyles } from '@material-ui/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
+
+import { Link } from '../components/Link.jsx';
 
 import FAQ from './FAQ.jsx';
 import Newsletter from './Newsletter.jsx';
