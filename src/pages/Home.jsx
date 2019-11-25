@@ -633,14 +633,6 @@ export default function Home({}) {
                             <Typography className={classes.howItWorksDescription}>
                                 Curate the transparency and credibility of seminal findings for your graduate seminar classes, organized in article lists re-usable by other instructors (coming soon).
                             </Typography>
-
-                            <Typography className={classes.howItWorksDescription}>
-                                Curate replication metadata on its own article page and easily share it.
-                            </Typography>
-
-                            <Typography className={classes.howItWorksDescription}>
-                                Create collections of replications across different methods of testing an effect, and meta-analyze and track replication evidence (coming soon).
-                            </Typography>
                         </Grid>
                     </Grid>
 
