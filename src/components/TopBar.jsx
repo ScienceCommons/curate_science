@@ -28,9 +28,10 @@ export const TOPBAR_HEIGHT = 56
 
 const styles = theme => ({
     root: {
-        width: '100%',
-        position: 'sticky',
+        position: 'fixed',
         top: 0,
+        left: 0,
+        right: 0,
         zIndex: 10,
     },
     sitename: {
@@ -225,7 +226,7 @@ class TopBar extends React.Component {
 
         return (
             <div className={classes.root}>
-                <AppBar position="static" className={classes.appBar}>
+                <AppBar position="static" className={classes.appBar + " mui-fixed"}>
                     <div className="AppContent">
                         <Toolbar className={classes.toolbar} disableGutters>
                           <div style={{display: 'flex', alignItems: 'center'}}>

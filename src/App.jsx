@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // Routing & routes
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
-import TopBar from './components/TopBar.jsx';
+import TopBar, { TOPBAR_HEIGHT } from './components/TopBar.jsx';
 import Footer from './components/Footer.jsx';
 
 import Splash from './pages/Splash.jsx';
@@ -102,7 +102,7 @@ class App extends React.Component {
                             // Rest of the app
                             <Route>
                                 <TopBar user_session={user_session} />
-                                <div className="AppContent">
+                                <div className="AppContent" style={{ top: TOPBAR_HEIGHT }}>
                                     <Switch>
                                         <Route
                                             exact path="/"
