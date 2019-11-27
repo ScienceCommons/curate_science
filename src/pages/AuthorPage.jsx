@@ -115,6 +115,20 @@ class AuthorPage extends React.Component {
         this.fetch_author_then_articles()
     }
 
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.match.params.slug !== prevState.current_slug){
+            const current_slug = nextProps.match.params.slug
+            return { current_slug }
+        }
+        return null;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.match.params.slug !== this.state.current_slug) {
+            this.fetch_author_then_articles()
+        }
+    }
+
     componentWillUnmount() {
     }
 

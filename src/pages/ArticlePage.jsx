@@ -61,6 +61,20 @@ class ArticlePage extends React.PureComponent {
     this.fetch_article()
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+      if (nextProps.match.params.id !== prevState.current_id){
+          const current_id = nextProps.match.params.id
+          return { current_id }
+      }
+      return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.match.params.id !== this.state.current_id) {
+      this.fetch_article()
+    }
+  }
+
   fetch_article() {
     const article_id = this.props.match.params.id
     this.setState({loading: true}, () => {
