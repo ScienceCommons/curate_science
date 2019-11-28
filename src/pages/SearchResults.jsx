@@ -69,7 +69,8 @@ class SearchResultsPage extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const url_fields = ['sort_by', 'transparency_filters', 'content_filters']
     const changed = url_fields.some(field => prevState[field] !== this.state[field])
-    if (changed) {
+    const queryChanged = (prevProps.location.search !== this.props.location.search)
+    if (changed || queryChanged) {
       this.search()
     }
   }
