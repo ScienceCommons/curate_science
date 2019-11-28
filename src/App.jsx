@@ -102,7 +102,7 @@ class App extends React.Component {
                             // Rest of the app
                             <Route>
                                 <TopBar user_session={user_session} />
-                                <div className="AppContent" style={{ top: TOPBAR_HEIGHT }}>
+                                <div className="AppContent" style={{ marginTop: TOPBAR_HEIGHT }}>
                                     <Switch>
                                         <Route
                                             exact path="/"
