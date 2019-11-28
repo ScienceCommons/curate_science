@@ -110,7 +110,7 @@ function AuthorPageIcon({ slug }) {
         </IconButton>
     )
 
-    if (!slug) {
+    if (slug) {
         return (
             <Link to={`/author/${slug}`}>
                 { icon }
