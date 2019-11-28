@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react'
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel as RRCarousel } from 'react-responsive-carousel';
+import Carousel, { Modal, ModalGateway } from 'react-images';
 
-import { concat } from 'lodash'
+import { forEach } from 'lodash'
 
 import { makeStyles } from '@material-ui/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -97,24 +98,132 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function ImageCarousel({ images }) {
+const images = {
+    landing: [
+        { 
+            thumbnail: '/sitestatic/infographics/101-T-standards-LANDING-THUMBNAIL.png',
+            full: '/sitestatic/infographics/1.0-T-standards-L-HIW-& A-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/102-article-card-ecosys-THUMBNAIL.png',
+            full: '/sitestatic/infographics/2.0-article-card-ecosys-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/103-author-page-LANDING-THUMBNAIL.png',
+            full: '/sitestatic/infographics/3.0-author-page-LANDING-HD.png',
+        },
+    ],
+    authors: [
+        {
+            thumbnail: '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.0-author-page-HIW-A-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/104.5-T-standards-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/1.0-T-standards-L-HIW-& A-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/5.0-external-author-page-HIW-A-HD.png',
+        },
+    ],
+    replicators: [
+        {
+            thumbnail: '/sitestatic/infographics/106-article-page-HIW-THUMBNAIL.png',
+            full: '/sitestatic/infographics/6.0-article-page-HIW-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/107-COLLECTION-page-HIW-THUMBNAIL.png',
+            full: '/sitestatic/infographics/7.0-COLLECTION-page-HIW-HD.png',
+        },
+    ],
+    educators: [
+        {
+            thumbnail: '/sitestatic/infographics/108-educator-DATA-THUMBNAIL.png',
+            full: '/sitestatic/infographics/8.0-educator-DATA.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/109-educator-MATERIALS-THUMBNAIL.png',
+            full: '/sitestatic/infographics/9.0-educator-MATERIALS.png'
+        },
+    ],
+    researchers: [
+        {
+            thumbnail: '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.0-author-page-HIW-A-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/104.5-T-standards-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/1.0-T-standards-L-HIW-& A-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/5.0-external-author-page-HIW-A-HD.png',
+        },
+    ],
+    journals: [
+        {
+            thumbnail: '/sitestatic/infographics/110-journal-article-list-ABOUT-THUMBNAIL.png',
+            full: '/sitestatic/infographics/10.0-journal-article-list-ABOUT-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/111-T-leaderboards-JOURNALS-THUMBNAIL.png',
+            full: '/sitestatic/infographics/11.0-T-leaderboards-JOURNALS-HD.png',
+        },
+    ],
+    universities: [
+        {
+            thumbnail: '/sitestatic/infographics/112-uni-researcher-list-ABOUT-THUMBNAIL.png',
+            full: '/sitestatic/infographics/12.0-uni-researcher-list-ABOUT-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/113-T-leaderboard-UNIS-THUMBNAIL.png',
+            full: '/sitestatic/infographics/13.0-T-leaderboard-UNIS-HD.png',
+        },
+    ],
+    funders: [
+        {
+            thumbnail: '/sitestatic/infographics/114-funders-grantee-list-ABOUT-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.0-funders-grantee-list-ABOUT-HD.png',
+        },
+    ],
+}
+
+// The lightbox cycles through all images on the page so we add
+// an index to each image to use so we know which to open when clicked
+let index = 0
+let full_size_images = []
+forEach(images, function(sectionImages) {
+    forEach(sectionImages, function(image) {
+        image.index = index++
+        full_size_images.push({ src: image.full })
+    })
+})
+
+
+function ImageCarousel({ images, openGallery }) {
+    function onClickItem(index, item) {
+        openGallery(Number(item.key) || 0)
+    }
+
     return (
-        <Carousel
+        <RRCarousel
             autoPlay={true}
             infiniteLoop={true}
             showStatus={false}
             showThumbs={false}
+            onClickItem={onClickItem}
         >
             {
                 images.map((image, index) => {
                     return (
-                        <div key={index}>
-                            <img src={image}/>
+                        <div key={image.index}>
+                            <img src={image.thumbnail}/>
                         </div>
                     )
                 })
             }
-        </Carousel>
+        </RRCarousel>
     )
 }
 
@@ -174,7 +283,7 @@ function AreYouCard({title, text, button_text, to, href}) {
     )
 }
 
-function About({}) {
+function About({openGallery}) {
     const classes = useStyles()
  
     const biggerThanMD = useMediaQuery(theme => theme.breakpoints.up('md'));
@@ -271,11 +380,7 @@ function About({}) {
                         </Grid>
                         <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                                <ImageCarousel images={[
-                                    '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
-                                    '/sitestatic/infographics/104.5-T-standards-HIW-A-THUMBNAIL.png',
-                                    '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
-                                ]}/>
+                                <ImageCarousel images={images.researchers} openGallery={openGallery}/>
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
@@ -306,10 +411,7 @@ function About({}) {
                                 </Typography>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                                <ImageCarousel images={[
-                                    '/sitestatic/infographics/110-journal-article-list-ABOUT-THUMBNAIL.png',
-                                    '/sitestatic/infographics/111-T-leaderboards-JOURNALS-THUMBNAIL.png',
-                                ]}/>
+                                <ImageCarousel images={images.journals} openGallery={openGallery}/>
                             </Grid>
                         </Grid>
 
@@ -322,10 +424,7 @@ function About({}) {
                         </Grid>
                         <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                                <ImageCarousel images={[
-                                    '/sitestatic/infographics/112-uni-researcher-list-ABOUT-THUMBNAIL.png',
-                                    '/sitestatic/infographics/113-T-leaderboard-UNIS-THUMBNAIL.png',
-                                ]}/>
+                                <ImageCarousel images={images.universities} openGallery={openGallery}/>
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
@@ -364,9 +463,7 @@ function About({}) {
                                 </Typography>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                                <ImageCarousel images={[
-                                    '/sitestatic/infographics/114-funders-grantee-list-ABOUT-THUMBNAIL.png',
-                                ]}/>
+                                <ImageCarousel images={images.funders} openGallery={openGallery}/>
                             </Grid>
                         </Grid>
 
@@ -422,34 +519,36 @@ function About({}) {
     )
 }
 
+function Gallery({ galleryOpen, closeGallery, currentIndex }) {
+    return (
+        <ModalGateway>
+            {galleryOpen ? (
+                <Modal onClose={closeGallery}>
+                    <Carousel
+                        views={full_size_images}
+                        currentIndex={currentIndex}
+                    />
+                </Modal>
+            ) : null}
+        </ModalGateway>
+    )
+}
+
 export default function Home({}) {
+    // Image gallery state
+    const [galleryOpen, setGalleryOpen] = useState(false)
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const closeGallery = () => setGalleryOpen(false)
+    const openGallery = function(index) {
+        setCurrentIndex(index || 0)
+        setGalleryOpen(true)
+    }
+
     const classes = useStyles()
 
     // Media query used to determine if screen size is bigger than `md`
     // (used to reorder "For replicators" text and images on smaller screens)
     const biggerThanMD = useMediaQuery(theme => theme.breakpoints.up('md'));
-
-    const images = [
-        '/sitestatic/infographics/101-T-standards-LANDING-THUMBNAIL.png',
-        '/sitestatic/infographics/102-article-card-ecosys-THUMBNAIL.png',
-        '/sitestatic/infographics/103-author-page-LANDING-THUMBNAIL.png',
-    ]
-
-    const for_authors_images = [
-        '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
-        '/sitestatic/infographics/104.5-T-standards-HIW-A-THUMBNAIL.png',
-        '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
-    ]
-
-    const for_replicators_images = [
-        '/sitestatic/infographics/106-article-page-HIW-THUMBNAIL.png',
-        '/sitestatic/infographics/107-COLLECTION-page-HIW-THUMBNAIL.png',
-    ]
-
-    const for_educators_images = [
-        '/sitestatic/infographics/108-educator-DATA-THUMBNAIL.png',
-        '/sitestatic/infographics/109-educator-MATERIALS-THUMBNAIL.png',
-    ]
 
     // Props for the 'Are you a ...?' cards
     const are_you = [
@@ -475,6 +574,7 @@ export default function Home({}) {
 
     return (
         <Grid container className={classes.homepage}>
+            <Gallery galleryOpen={galleryOpen} closeGallery={closeGallery} currentIndex={currentIndex}/>
             <Grid container item justify="center">
                 <Typography component="h2" className={classes.subheading} align="center">
                     Transparent and credible scientific evidence.
@@ -482,7 +582,7 @@ export default function Home({}) {
             </Grid>
 
             <Grid item>
-                <ImageCarousel images={images}/>
+                <ImageCarousel images={images.landing} openGallery={openGallery}/>
             </Grid>
 
             <Grid container spacing={2} style={{marginTop: '2rem'}}>
@@ -520,7 +620,7 @@ export default function Home({}) {
                     </Grid>
                     <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                            <ImageCarousel images={for_authors_images}/>
+                            <ImageCarousel images={images.authors} openGallery={openGallery}/>
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
@@ -583,7 +683,7 @@ export default function Home({}) {
 
                         </Grid>
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                            <ImageCarousel images={for_replicators_images}/>
+                            <ImageCarousel images={images.replicators} openGallery={openGallery}/>
                         </Grid>
                     </Grid>
 
@@ -615,7 +715,7 @@ export default function Home({}) {
                     </Grid>
                     <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                            <ImageCarousel images={for_educators_images}/>
+                            <ImageCarousel images={images.educators} openGallery={openGallery}/>
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
@@ -654,7 +754,7 @@ export default function Home({}) {
 
             <hr className={classes.divider}/>
 
-            <About/>
+            <About openGallery={openGallery}/>
 
             <hr className={classes.divider}/>
 
