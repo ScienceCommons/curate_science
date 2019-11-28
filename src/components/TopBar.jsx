@@ -11,8 +11,23 @@ import { withRouter } from 'react-router-dom';
 // UI components
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Typography, IconButton, Button, Grid, Menu, MenuItem,
-    Drawer, List, ListItem, ListItemText, Divider, ListSubheader} from '@material-ui/core';
+import {
+    AppBar,
+    Button,
+    Divider,
+    Drawer,
+    Grid,
+    Hidden,
+    IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    ListSubheader,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
@@ -227,7 +242,7 @@ class TopBar extends React.Component {
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.appBar + " mui-fixed"}>
-                    <div className="AppContent">
+                    <div className="TopBar">
                         <Toolbar className={classes.toolbar} disableGutters>
                           <div style={{display: 'flex', alignItems: 'center'}}>
                             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
@@ -240,18 +255,20 @@ class TopBar extends React.Component {
                             </Link>
                           </div>
 
-                          <Grid container style={{ width: '40%' }}>
-                              <Grid item style={{ maxWidth: 400, flex: 1 }}>
-                                  <SearchBox/>
+                          <Hidden smDown>
+                              <Grid container style={{ width: '40%' }}>
+                                  <Grid item style={{ maxWidth: 400, flex: 1 }}>
+                                      <SearchBox/>
+                                  </Grid>
+                                  <Grid item>
+                                      <Link to="/recent">
+                                          <Button variant="text" className={classes.topLink}>
+                                              Browse
+                                          </Button>
+                                      </Link>
+                                  </Grid>
                               </Grid>
-                              <Grid item>
-                                  <Link to="/recent">
-                                      <Button variant="text" className={classes.topLink}>
-                                          Browse
-                                      </Button>
-                                  </Link>
-                              </Grid>
-                          </Grid>
+                          </Hidden>
 
                             <div className={classes.rightSide} key="right">
 

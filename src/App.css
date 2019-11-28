@@ -32,17 +32,21 @@ textarea {
 	height: 18px;
 }
 
-.AppContent {
+.AppContent, .TopBar {
   width: 1100px;
   margin: 0 auto;
   position: relative;
 }
 
 @media (max-width: 1100px) {
-  .AppContent {
+  .AppContent, .TopBar {
     width: 100%;
     padding: 0 1rem;
     margin: 0;
+  }
+
+  .TopBar {
+    padding: 0;
   }
 }
 
