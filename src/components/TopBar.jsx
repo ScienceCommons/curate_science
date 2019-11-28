@@ -100,6 +100,27 @@ const styles = theme => ({
     },
 })
 
+function AuthorPageIcon({ slug }) {
+    const icon = (
+        <IconButton
+            style={{color: 'white', padding: 4}}
+            title="Author page"
+        >
+            <AccountCircle />
+        </IconButton>
+    )
+
+    if (!slug) {
+        return (
+            <Link to={`/author/${slug}`}>
+                { icon }
+            </Link>
+        )
+    }
+
+    return icon
+}
+
 class TopBar extends React.Component {
     constructor(props) {
         super(props);
@@ -231,14 +252,6 @@ class TopBar extends React.Component {
             </div>
         ]
 
-        const author_page_icon = (
-            <IconButton
-                style={{color: 'white', padding: 4}}
-            >
-                <AccountCircle />
-            </IconButton>
-        )
-
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.appBar + " mui-fixed"}>
@@ -292,16 +305,10 @@ class TopBar extends React.Component {
 
                                 {user_session.authenticated ? (
                                 <span>
-                                    <span title="Author page">
-                                    {
-                                        has_author_page ? (
-                                            <Link to={`/author/${author_slug}`}>
-                                                {author_page_icon}
-                                            </Link>
-                                        ) :
-                                        {author_page_icon}
-                                    }
-                                    </span>
+                                    <AuthorPageIcon
+                                        slug={author_slug}
+                                    />
+
                                     <IconButton
                                         aria-owns={this.menuOpen('account') ? 'menu-account' : undefined}
                                         aria-haspopup="true"
