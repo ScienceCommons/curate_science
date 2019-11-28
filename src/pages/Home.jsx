@@ -217,7 +217,7 @@ function ImageCarousel({ images, openGallery }) {
             {
                 images.map((image, index) => {
                     return (
-                        <div key={image.index}>
+                        <div key={image.index} style={{cursor: 'pointer'}}>
                             <img src={image.thumbnail}/>
                         </div>
                     )
