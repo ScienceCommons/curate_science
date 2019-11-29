@@ -209,7 +209,8 @@ function ImageCarousel({ images, openGallery, autoPlay }) {
     return (
         <RRCarousel
             autoPlay={autoPlay}
-            interval={3000}
+            interval={3700}
+            transitionTime={350}
             infiniteLoop={true}
             showStatus={false}
             showThumbs={false}
