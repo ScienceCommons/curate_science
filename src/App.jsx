@@ -127,7 +127,7 @@ class App extends React.Component {
                                         <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
                                         <Route path="/article/:id" component={() => <ArticlePage user_session={user_session} />} />
                                         <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
-                                        <Route path="/search" component={() => <SearchResults/>} />
+                                        <Route path="/search" component={() => <SearchResults user_session={user_session} />} />
                                         <Route path="/admin/manage" component={AdminManage} />
                                         <Route path="/admin/invite" component={AdminInvite} />
                                     </Switch>
