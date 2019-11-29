@@ -75,7 +75,8 @@ const styles = theme => ({
     },
     topButton: {
         color: 'white',
-        borderColor: 'white'
+        borderColor: 'white',
+        marginRight: theme.spacing(),
     },
     topLink: {
         color: 'white',
@@ -285,6 +286,7 @@ class TopBar extends React.Component {
 
                             <div className={classes.rightSide} key="right">
 
+                          <Hidden smDown>
                                 {
                                     user_session.authenticated ?
                                     (
@@ -302,6 +304,7 @@ class TopBar extends React.Component {
                                         </Link>
                                     )
                                 }
+                            </Hidden>
 
                                 {user_session.authenticated ? (
                                 <span>
