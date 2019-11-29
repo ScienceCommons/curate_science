@@ -201,14 +201,15 @@ forEach(images, function(sectionImages) {
 })
 
 
-function ImageCarousel({ images, openGallery }) {
+function ImageCarousel({ images, openGallery, autoPlay }) {
     function onClickItem(index, item) {
         openGallery(Number(item.key) || 0)
     }
 
     return (
         <RRCarousel
-            autoPlay={true}
+            autoPlay={autoPlay}
+            interval={3000}
             infiniteLoop={true}
             showStatus={false}
             showThumbs={false}
@@ -582,7 +583,7 @@ export default function Home({}) {
             </Grid>
 
             <Grid item>
-                <ImageCarousel images={images.landing} openGallery={openGallery}/>
+                <ImageCarousel images={images.landing} openGallery={openGallery} autoPlay={true}/>
             </Grid>
 
             <Grid container spacing={2} style={{marginTop: '2rem'}}>
