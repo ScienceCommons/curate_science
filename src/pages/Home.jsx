@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Carousel as RRCarousel } from 'react-responsive-carousel';
-import Carousel, { Modal, ModalGateway } from 'react-images';
+import '@fancyapps/fancybox/dist/jquery.fancybox.min.css';
+import { Carousel } from 'react-responsive-carousel';
 
 import { forEach } from 'lodash'
 
@@ -201,31 +201,43 @@ forEach(images, function(sectionImages) {
 })
 
 
-function ImageCarousel({ images, openGallery, autoPlay }) {
-    function onClickItem(index, item) {
-        openGallery(Number(item.key) || 0)
+function ImageCarousel({ images, autoPlay }) {
+    const fancyBoxOptions = {
+        loop: true,
+        buttons: [
+            'zoom',
+            'share',
+            'slideShow',
+            'thumbs',
+            'close',
+        ]
     }
 
     return (
-        <RRCarousel
+        <Carousel
             autoPlay={autoPlay}
             interval={3700}
             transitionTime={350}
             infiniteLoop={true}
             showStatus={false}
             showThumbs={false}
-            onClickItem={onClickItem}
         >
             {
                 images.map((image, index) => {
                     return (
-                        <div key={image.index} style={{cursor: 'pointer'}}>
+                        <a
+                            href={image.full}
+                            key={image.index}
+                            data-fancybox="gallery"
+                            data-options={JSON.stringify(fancyBoxOptions)}
+                            style={{ display: 'block' }}
+                        >
                             <img src={image.thumbnail}/>
-                        </div>
+                        </a>
                     )
                 })
             }
-        </RRCarousel>
+        </Carousel>
     )
 }
 
@@ -285,7 +297,7 @@ function AreYouCard({title, text, button_text, to, href}) {
     )
 }
 
-function About({openGallery}) {
+function About() {
     const classes = useStyles()
  
     const biggerThanMD = useMediaQuery(theme => theme.breakpoints.up('md'));
@@ -382,7 +394,7 @@ function About({openGallery}) {
                         </Grid>
                         <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                                <ImageCarousel images={images.researchers} openGallery={openGallery}/>
+                                <ImageCarousel images={images.researchers}/>
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
@@ -413,7 +425,7 @@ function About({openGallery}) {
                                 </Typography>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                                <ImageCarousel images={images.journals} openGallery={openGallery}/>
+                                <ImageCarousel images={images.journals}/>
                             </Grid>
                         </Grid>
 
@@ -426,7 +438,7 @@ function About({openGallery}) {
                         </Grid>
                         <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                                <ImageCarousel images={images.universities} openGallery={openGallery}/>
+                                <ImageCarousel images={images.universities}/>
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
@@ -465,7 +477,7 @@ function About({openGallery}) {
                                 </Typography>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                                <ImageCarousel images={images.funders} openGallery={openGallery}/>
+                                <ImageCarousel images={images.funders}/>
                             </Grid>
                         </Grid>
 
@@ -521,32 +533,21 @@ function About({openGallery}) {
     )
 }
 
-function Gallery({ galleryOpen, closeGallery, currentIndex }) {
-    return (
-        <ModalGateway>
-            {galleryOpen ? (
-                <Modal onClose={closeGallery}>
-                    <Carousel
-                        views={full_size_images}
-                        currentIndex={currentIndex}
-                    />
-                </Modal>
-            ) : null}
-        </ModalGateway>
-    )
+
+function initialiseFancyBoxGallery() {
+    // Check if it's already loaded
+    if (window.jQuery && window.jQuery.fancybox) return
+
+    window.jQuery = window.$ = require('jquery')
+    require('@fancyapps/fancybox')
 }
 
-export default function Home({}) {
-    // Image gallery state
-    const [galleryOpen, setGalleryOpen] = useState(false)
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const closeGallery = () => setGalleryOpen(false)
-    const openGallery = function(index) {
-        setCurrentIndex(index || 0)
-        setGalleryOpen(true)
-    }
 
+export default function Home({}) {
     const classes = useStyles()
+
+    // Run FancyBox initialisation once component has been rendered
+    useEffect(initialiseFancyBoxGallery, [])
 
     // Media query used to determine if screen size is bigger than `md`
     // (used to reorder "For replicators" text and images on smaller screens)
@@ -576,7 +577,6 @@ export default function Home({}) {
 
     return (
         <Grid container className={classes.homepage}>
-            <Gallery galleryOpen={galleryOpen} closeGallery={closeGallery} currentIndex={currentIndex}/>
             <Grid container item justify="center">
                 <Typography component="h2" className={classes.subheading} align="center">
                     Transparent and credible scientific evidence.
@@ -584,7 +584,7 @@ export default function Home({}) {
             </Grid>
 
             <Grid item>
-                <ImageCarousel images={images.landing} openGallery={openGallery} autoPlay={true}/>
+                <ImageCarousel images={images.landing} autoPlay={true}/>
             </Grid>
 
             <Grid container spacing={2} style={{marginTop: '2rem'}}>
@@ -622,7 +622,7 @@ export default function Home({}) {
                     </Grid>
                     <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                            <ImageCarousel images={images.authors} openGallery={openGallery}/>
+                            <ImageCarousel images={images.authors}/>
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
@@ -685,7 +685,7 @@ export default function Home({}) {
 
                         </Grid>
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                            <ImageCarousel images={images.replicators} openGallery={openGallery}/>
+                            <ImageCarousel images={images.replicators}/>
                         </Grid>
                     </Grid>
 
@@ -717,7 +717,7 @@ export default function Home({}) {
                     </Grid>
                     <Grid container style={{ marginTop: '2rem' }} spacing={3}>
                         <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                            <ImageCarousel images={images.educators} openGallery={openGallery}/>
+                            <ImageCarousel images={images.educators}/>
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
@@ -756,7 +756,7 @@ export default function Home({}) {
 
             <hr className={classes.divider}/>
 
-            <About openGallery={openGallery}/>
+            <About/>
 
             <hr className={classes.divider}/>
 
