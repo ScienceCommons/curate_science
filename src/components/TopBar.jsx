@@ -45,9 +45,9 @@ const styles = theme => ({
     root: {
         position: 'fixed',
         top: 0,
-        left: 0,
-        right: 0,
         zIndex: 1,
+        width: '100%',
+        maxWidth: '100vw',
     },
     sitename: {
         color: 'white',

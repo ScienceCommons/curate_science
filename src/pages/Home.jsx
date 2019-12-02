@@ -50,11 +50,14 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#ccc',
         border: 0,
         height: 1,
-        width: 10000000000000,
+        maxWidth: '100vw',
+        width: '100%',
         marginTop: theme.spacing(5),
         marginBottom: theme.spacing(5),
-        marginLeft: -200,
-        marginRight: -200,
+        [theme.breakpoints.up('md')]: {
+            marginLeft: '-4rem',
+            marginRight: '-4rem',
+        }
     },
     homepage: {
         color: textColor,
