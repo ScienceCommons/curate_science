@@ -50,13 +50,13 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#ccc',
         border: 0,
         height: 1,
-        maxWidth: '100vw',
         width: '100%',
         marginTop: theme.spacing(5),
         marginBottom: theme.spacing(5),
         [theme.breakpoints.up('md')]: {
-            marginLeft: '-4rem',
-            marginRight: '-4rem',
+            width: 'calc(100% + 16rem)',
+            marginLeft: '-8rem',
+            marginRight: '-8rem',
         }
     },
     homepage: {
