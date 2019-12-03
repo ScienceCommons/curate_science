@@ -219,7 +219,7 @@ function ImageCarousel({ images, autoPlay }) {
     return (
         <Carousel
             autoPlay={autoPlay}
-            interval={3700}
+            interval={9000}
             transitionTime={350}
             infiniteLoop={true}
             showStatus={false}
