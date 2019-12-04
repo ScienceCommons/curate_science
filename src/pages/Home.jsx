@@ -402,7 +402,7 @@ function About() {
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Researchers can ensure their publications meet minimum transparency standards via their own (externally embeddable) author page, in addition to a host of other benefits (see <a href="#how-it-works">HOW IT WORKS section</a>).
+                                    Researchers can ensure their publications meet minimum transparency standards via their own (externally embeddable) author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
