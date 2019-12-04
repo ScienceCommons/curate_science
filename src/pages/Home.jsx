@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     },
     howItWorksDescription: {
         color: textColor,
-        fontSize: '1.25rem',
+        fontSize: '1.125rem',
         paddingBottom: theme.spacing(2.5),
     },
     imageCarousel: {
@@ -80,7 +80,8 @@ const useStyles = makeStyles(theme => ({
         textTransform: 'uppercase',
     },
     subheading: {
-        fontSize: '1.8rem',
+        fontSize: '1.4rem',
+        lineHeight: 1.3,
         paddingTop: theme.spacing(3),
         paddingBottom: theme.spacing(4),
     },
