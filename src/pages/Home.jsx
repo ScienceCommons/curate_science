@@ -211,6 +211,7 @@ function ImageCarousel({ images, autoPlay }) {
         buttons: [
             'zoom',
             'share',
+            'fullScreen',
             'slideShow',
             'thumbs',
             'close',
