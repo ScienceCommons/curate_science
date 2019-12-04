@@ -582,7 +582,7 @@ export default function Home({}) {
         <Grid container className={classes.homepage}>
             <Grid container item justify="center">
                 <Typography component="h2" className={classes.subheading} align="center">
-                    Transparent and credible scientific evidence.
+                    Transparent and credible evidence.
                 </Typography>
             </Grid>
 
