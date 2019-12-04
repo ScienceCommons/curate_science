@@ -563,7 +563,7 @@ export default function Home({}) {
             title: 'Are you an author?',
             text: 'Be a transparent and credible researcher and accelerate your science with confidence.',
             button_text: 'Learn more',
-            to: '#for-authors',
+            to: '#how-it-works',
         },
         {
             title: 'Are you a replicator?',
