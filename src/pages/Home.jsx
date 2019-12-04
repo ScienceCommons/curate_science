@@ -291,7 +291,7 @@ function AreYouCard({title, text, button_text, to, href}) {
                     {text}
                 </Typography>
             </CardContent>
-            <CardActions>
+            <CardActions style={{ padding: '1rem', paddingTop: 0 }}>
                 <HomeButton href={href} to={to} style={{ marginTop: '1rem' }}>
                     {button_text}
                 </HomeButton>
