@@ -212,3 +212,11 @@ textarea {
 .StaticPages a:hover, .Footer a:hover {
 	color: #2A689C;
 }
+
+
+/* Override carousel arrow colours so they're visible on a white background */
+.carousel .control-prev.control-arrow::before,
+.carousel .control-next.control-arrow::before {
+  border-left-color: #666;
+  border-right-color: #666;
+}
