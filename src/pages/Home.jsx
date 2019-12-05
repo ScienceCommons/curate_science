@@ -221,6 +221,8 @@ function ImageCarousel({ images, autoPlay }) {
         ]
     }
 
+    const multiple_images = images.length > 1
+
     return (
         <Carousel
             autoPlay={autoPlay}
@@ -229,6 +231,8 @@ function ImageCarousel({ images, autoPlay }) {
             infiniteLoop={true}
             showStatus={false}
             showThumbs={false}
+            showArrows={multiple_images}
+            showIndicators={multiple_images}
         >
             {
                 images.map((image, index) => {
