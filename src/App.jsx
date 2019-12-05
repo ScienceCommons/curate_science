@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 // Routing & routes
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
+import ScrollToTop from './components/ScrollToTop.jsx';
 import TopBar, { TOPBAR_HEIGHT } from './components/TopBar.jsx';
 import Footer from './components/Footer.jsx';
 
@@ -90,6 +91,7 @@ class App extends React.Component {
         const open = Boolean(anchorEl);
         return (
         	<Router basename="/app">
+                <ScrollToTop/>
                 <div style={{backgroundColor: theme.palette.bg}}>
                     <MuiThemeProvider theme={theme}>
                         <Switch>
