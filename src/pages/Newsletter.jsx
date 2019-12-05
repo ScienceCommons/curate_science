@@ -31,9 +31,11 @@ class Help extends React.Component {
 
 	render() {
 		let {classes, homeStyles} = this.props
+        let className = "StaticPages " + classes.root
+        if (this.props.className) className += ` ${this.props.className}`
 		return (
-			<div id="newsletter" className={"StaticPages " + classes.root}>
-                <Typography variant="h3" justify="center" align="center" className={homeStyles.sectionHeading}>
+			<div id="newsletter" className={className}>
+                <Typography variant="h3" justify="center" align="center" className={homeStyles.sectionHeading} style={{marginBottom: '2rem'}}>
                     Newsletter
                 </Typography>
 

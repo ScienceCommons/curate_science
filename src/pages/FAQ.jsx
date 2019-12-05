@@ -139,7 +139,7 @@ class FAQ extends React.Component {
         const homeStyles = this.props.homeStyles
 
 		return (
-			<div id="faq" style={{ width: '100%' }}>
+			<div id="faq" style={{ width: '100%' }} className={this.props.className}>
                 <Typography variant="h3" align="center" className={homeStyles.sectionHeading}>
                     FAQ
                 </Typography>

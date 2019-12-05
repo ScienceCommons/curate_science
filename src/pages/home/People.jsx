@@ -48,7 +48,7 @@ function Person({person}) {
 }
 
 
-export default function People({homeStyles}) {
+export default function People({homeStyles, ...props}) {
 
     const classes = useStyles()
 
@@ -201,7 +201,7 @@ export default function People({homeStyles}) {
     ]
 
     return (
-        <div id="people">
+        <div id="people" {...props}>
             <Typography variant="h3" align="center" className={homeStyles.sectionHeading}>
                 People
             </Typography>

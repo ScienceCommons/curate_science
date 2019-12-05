@@ -73,6 +73,9 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(3),
         maxWidth: 700,
     },
+    section: {
+        marginTop: theme.spacing(10),
+    },
     subsectionTitle: {
         color: '#455cc7',
         fontSize: '1.5rem',
@@ -302,13 +305,13 @@ function AreYouCard({title, text, button_text, to, href}) {
     )
 }
 
-function About() {
+function About(props) {
     const classes = useStyles()
  
     const biggerThanMD = useMediaQuery(theme => theme.breakpoints.up('md'));
 
     return (
-        <div id="about">
+        <div id="about" {...props}>
             <Grid container item justify="center">
                 <Typography component="h3" className={classes.sectionHeading} align="center">
                     About
@@ -604,9 +607,7 @@ export default function Home({}) {
                 }
             </Grid>
 
-            <hr className={classes.divider}/>
-
-            <Grid container item justify="center" direction="column" id="how-it-works">
+            <Grid container item justify="center" direction="column" id="how-it-works" className={classes.section}>
                 <Typography component="h3" className={classes.sectionHeading} align="center">
                     How it works
                 </Typography>
@@ -759,21 +760,13 @@ export default function Home({}) {
                 </CardContent>
             </Card>
 
-            <hr className={classes.divider}/>
+            <About className={classes.section}/>
 
-            <About/>
+            <People homeStyles={classes} className={classes.section}/>
 
-            <hr className={classes.divider}/>
+            <FAQ homeStyles={classes} className={classes.section}/>
 
-            <People homeStyles={classes}/>
-
-            <hr className={classes.divider}/>
-
-            <FAQ homeStyles={classes}/>
-
-            <hr className={classes.divider}/>
-
-            <Newsletter homeStyles={classes}/>
+            <Newsletter homeStyles={classes} className={classes.section}/>
         </Grid>
 
     )
