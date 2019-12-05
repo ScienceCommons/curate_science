@@ -203,13 +203,19 @@ let full_size_images = []
 forEach(images, function(sectionImages) {
     forEach(sectionImages, function(image) {
         image.index = index++
-        full_size_images.push({ src: image.full })
+        full_size_images.push({
+            src: image.full,
+            thumb: image.thumbnail,
+        })
     })
 })
 
 
-function ImageCarousel({ images, autoPlay }) {
+const FANCYBOX_GALLERY = 'gallery'
+
+function openFancyBox(index){
     const fancyBoxOptions = {
+        hash: FANCYBOX_GALLERY,
         loop: true,
         buttons: [
             'zoom',
@@ -221,7 +227,18 @@ function ImageCarousel({ images, autoPlay }) {
         ]
     }
 
+    if (!window.$) return
+    window.$.fancybox.open(full_size_images, fancyBoxOptions, index)
+}
+
+function ImageCarousel({ images, autoPlay }) {
     const multiple_images = images.length > 1
+
+    const expand = function(event) {
+        event.preventDefault()
+        const index = event.target.dataset.index || 0
+        openFancyBox(index)
+    }
 
     return (
         <Carousel
@@ -240,9 +257,9 @@ function ImageCarousel({ images, autoPlay }) {
                         <a
                             href={image.full}
                             key={image.index}
-                            data-fancybox="gallery"
-                            data-options={JSON.stringify(fancyBoxOptions)}
                             style={{ display: 'block' }}
+                            onClick={expand}
+                            data-index={image.index}
                         >
                             <img src={image.thumbnail}/>
                         </a>
@@ -552,6 +569,15 @@ function initialiseFancyBoxGallery() {
 
     window.jQuery = window.$ = require('jquery')
     require('@fancyapps/fancybox')
+
+    if (window.location.hash) {
+        // Check if the page is loading a fancybox image
+        // e.g. /app/home/#gallery-2
+        const index = window.location.hash.split(`${FANCYBOX_GALLERY}-`)[1]
+        if (index) {
+            openFancyBox(Number(index) - 1)
+        }
+    }
 }
 
 
