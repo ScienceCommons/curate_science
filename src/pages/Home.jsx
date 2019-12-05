@@ -356,19 +356,19 @@ function About() {
                             To make progress on these and other problems, funded scientific research must be, at minimum, <strong>transparent and credible</strong> (credible research is transparent evidence that survives scrutiny from peers).
                             Transparent and credible evidence can then be built upon, which allows ever more precise theories/hypotheses to be tested (solid cumulative knowledge cannot be built on quicksand).
                             Sadly, there is a growing body of credible evidence that the majority of (current) academic research is not minimally transparent nor credible 
-                            (<a href="https://pdfs.semanticscholar.org/3813/c9cb1bbbf699998b622fe4c8dbb02c9db482.pdf">1</a>,&nbsp;
-                            <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0200303">2</a>,&nbsp;
-                            <a href="https://www.nature.com/articles/tp2017203">3</a>,&nbsp;
-                            <a href="https://osf.io/preprints/metaarxiv/6uhg5/">4</a>,&nbsp;
-                            <a href="http://bioinformatics.sph.harvard.edu/ngs-workshops/documents/introduction/Nat%20Genet%202009%20Ioannidis.pdf">5</a>,&nbsp;
-                            <a href="https://www.federalreserve.gov/econresdata/feds/2015/files/2015083pap.pdf">6</a>,&nbsp;
-                            <a href="https://tomhardwicke.netlify.com/files/Hardwicke_reproducibility_2018.pdf">7</a>,&nbsp;
-                            <a href="https://psyarxiv.com/fk8vh/">8</a>,&nbsp;
-                            <a href="https://etiennelebel.com/documents/osc(2015,&nbsp;science).pdf">9</a>,
-                            <a href="https://www.nature.com/articles/nrd3439-c1">10</a>,&nbsp;
-                            <a href="https://www.nature.com/articles/483531a">11</a>,&nbsp;
-                            <a href="https://osf.io/8srcd/">12</a>,&nbsp;
-                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165">13</a>).
+                            (<a href="https://pdfs.semanticscholar.org/3813/c9cb1bbbf699998b622fe4c8dbb02c9db482.pdf" target="_blank">1</a>,&nbsp;
+                            <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0200303" target="_blank">2</a>,&nbsp;
+                            <a href="https://www.nature.com/articles/tp2017203" target="_blank">3</a>,&nbsp;
+                            <a href="https://osf.io/preprints/metaarxiv/6uhg5/" target="_blank">4</a>,&nbsp;
+                            <a href="http://bioinformatics.sph.harvard.edu/ngs-workshops/documents/introduction/Nat%20Genet%202009%20Ioannidis.pdf" target="_blank">5</a>,&nbsp;
+                            <a href="https://www.federalreserve.gov/econresdata/feds/2015/files/2015083pap.pdf" target="_blank">6</a>,&nbsp;
+                            <a href="https://tomhardwicke.netlify.com/files/Hardwicke_reproducibility_2018.pdf" target="_blank">7</a>,&nbsp;
+                            <a href="https://psyarxiv.com/fk8vh/" target="_blank">8</a>,&nbsp;
+                            <a href="https://etiennelebel.com/documents/osc(2015,science).pdf" target="_blank">9</a>,
+                            <a href="https://www.nature.com/articles/nrd3439-c1" target="_blank">10</a>,&nbsp;
+                            <a href="https://www.nature.com/articles/483531a" target="_blank">11</a>,&nbsp;
+                            <a href="https://osf.io/8srcd/" target="_blank">12</a>,&nbsp;
+                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165" target="_blank">13</a>).
                         </Typography>
 
                         <Typography className={classes.howItWorksDescription}>
@@ -584,7 +584,7 @@ export default function Home({}) {
         <Grid container className={classes.homepage}>
             <Grid container item justify="center">
                 <Typography component="h2" className={classes.subheading} align="center">
-                    Transparent and credible scientific evidence.
+                    Transparent and credible evidence.
                 </Typography>
             </Grid>
 

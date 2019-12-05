@@ -77,7 +77,7 @@ export default function KeyFigureUploader({ article_id, dragging_files, figures,
                             <Typography>
                                 Drag and drop images here&nbsp;
                                 <Typography color="textSecondary" component="span">
-                                    (.png, .jpg, .gif or .pdf)
+                                    (.png, .jpg, or .gif)
                                 </Typography>
                             </Typography>
                             <Typography align="center" color="textSecondary">or</Typography>
