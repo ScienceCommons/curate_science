@@ -379,7 +379,7 @@ function About(props) {
                             Every year, millions of people suffer and/or die from serious conditions like cancer, Alzheimer’s, heart disease, anxiety/mood disorders, and suicide.
                             To make progress on these and other problems, funded scientific research must be, at minimum, <strong>transparent and credible</strong> (credible research is transparent evidence that survives scrutiny from peers).
                             Transparent and credible evidence can then be built upon, which allows ever more precise theories/hypotheses to be tested (solid cumulative knowledge cannot be built on quicksand).
-                            Sadly, there is a growing body of credible evidence that the majority of (current) academic research is not minimally transparent nor credible 
+                            Sadly, there is a growing body of compelling evidence that a great deal of current academic research is not minimally transparent nor credible 
                             (<a href="https://pdfs.semanticscholar.org/3813/c9cb1bbbf699998b622fe4c8dbb02c9db482.pdf" target="_blank">1</a>,&nbsp;
                             <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0200303" target="_blank">2</a>,&nbsp;
                             <a href="https://www.nature.com/articles/tp2017203" target="_blank">3</a>,&nbsp;
@@ -392,11 +392,11 @@ function About(props) {
                             <a href="https://www.nature.com/articles/nrd3439-c1" target="_blank">10</a>,&nbsp;
                             <a href="https://www.nature.com/articles/483531a" target="_blank">11</a>,&nbsp;
                             <a href="https://osf.io/8srcd/" target="_blank">12</a>,&nbsp;
-                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165" target="_blank">13</a>).
+                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165" target="_blank">13</a>). Worse, there’s no systematic way to differentiate credible evidence from untrustworthy evidence.
                         </Typography>
 
                         <Typography className={classes.howItWorksDescription}>
-                            Curate Science is a unified curation system and platform to verify that research is <strong>transparent and credible</strong>. It will allow researchers, journals, universities, and funders to ensure:
+                            Curate Science is a unified curation system and platform to verify that research is <strong>transparent and credible</strong>. It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
                         </Typography>
 
                         <Typography component="ol" className={classes.howItWorksDescription}>
@@ -411,7 +411,7 @@ function About(props) {
                         </Typography>
 
                         <Typography className={classes.howItWorksDescription}>
-                            By ensuring <strong>transparency and credibility</strong>, research stakeholders are held accountable to the people/groups they serve.
+                            This will ensure that researchers, journals, universities, and funders are <strong>accountable</strong> to the people they serve. A unified platform to differentiate <em>credible evidence</em> (from untrustworthy evidence) will substantially accelerate the development of cumulative scientific knowledge and applied innovations across the natural and social sciences. The implications for human welfare are large.
                         </Typography>
 
                         <Grid container spacing={3} style={{ marginTop: '4rem' }}>
@@ -471,11 +471,11 @@ function About(props) {
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Universities can ensure that professors&#700; published research meets a specific transparency standard for passing appropriate scrutiny, which can be used for promotion/hiring decisions.
+                                    Universities can ensure that professors&#700; published research meets a minimum transparency standard, which can also be used for promotion/hiring decisions.                                    
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
-                                    University departments can then be ranked by their transparency track record, which graduate students/job candidates can use to decide at what university to work.
+                                    University departments can then be ranked by their transparency track record, which graduate students and job candidates can use to inform their decisions at what university to work.
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
@@ -542,10 +542,10 @@ function About(props) {
                                     <li>Incentivize high quality information that is sensitive to the power/political dynamics in academia:
                                         <ul>
                                             <li>
-                                                Communication system to allow users to anonymously request clarification from an author regarding possible limitations/errors in a published work, including revocable confidentiality of information escrow to hold each party accountable.
+                                                Discrete error detection system that allows users to anonymously and confidentially request clarification from an author regarding possible errors in a published work, including revocable confidentiality of information escrow to hold each party accountable (<a href="https://events.stanford.edu/events/645/64543/" target="_blank">Broockman, 2015</a>).
                                             </li>
                                             <li>
-                                                Bug bounty initiative/program that provides financial rewards to those who identify errors/limitations of published research (financial bounties provided by original author and/or outside donors).
+                                                Bug bounty functionality that provides financial rewards to researchers who identify errors in published research, conduct reproducibility re-analyses, or replication checks (financial bounties provided by original authors, journals, or outside donors).
                                             </li>
                                         </ul>
                                     </li>
@@ -662,19 +662,15 @@ export default function Home({}) {
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
-                                Communicate the transparency and credibility of your research according to recognized transparency standards on your own (externally embeddable) author page.
+                                Signal the transparency of your research according to recognized transparency standards, guaranteeing it gets the credibility it deserves.
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
-                                Organize your publications (full-text URLs, key figures, etc.) and share and disseminate your research.
+                                Organize your publications (full-text URLs, key figures, etc.) on your own (externally embeddable) author page, and easily and efficiently share and disseminate your scholarship.
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
                                 Increase the discoverability, accessibility, and impact of your research, giving yourself a competitive edge in hiring/grant contexts.
-                            </Typography>
-
-                            <Typography className={classes.howItWorksDescription}>
-                                Feel confident inviting the world to both use and scrutinize your work.
                             </Typography>
 
                         </Grid>
