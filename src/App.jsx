@@ -4,14 +4,13 @@ import PropTypes from 'prop-types';
 // Routing & routes
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
-import TopBar from './components/TopBar.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
+import TopBar, { TOPBAR_HEIGHT } from './components/TopBar.jsx';
 import Footer from './components/Footer.jsx';
 
 import Splash from './pages/Splash.jsx';
-import About from './pages/About.jsx';
-import FAQ from './pages/FAQ.jsx';
-import Newsletter from './pages/Newsletter.jsx';
 import Help from './pages/Help.jsx';
+import Home from './pages/Home.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Recent from './pages/Recent.jsx';
 import Replications from './pages/Replications.jsx';
@@ -91,35 +90,53 @@ class App extends React.Component {
         const { anchorEl } = this.state;
         const open = Boolean(anchorEl);
         return (
-        	<Router forceRefresh={true} basename="/app">
+        	<Router basename="/app">
+                <ScrollToTop/>
                 <div style={{backgroundColor: theme.palette.bg}}>
                     <MuiThemeProvider theme={theme}>
-                        <TopBar user_session={user_session} />
-                        <div className="AppContent">
-                            <Switch>
-                                <Route
-                                    exact path="/"
-                                    component={() => <Recent user_session={user_session} />}
-                                />
-                                <Route
-                                    exact path="/recent"
-                                    component={() => <Recent user_session={user_session} />}
-                                />
-                                <Route exact path="/replications" component={Replications} />
-                                <Route path="/about" component={About} />
-                                <Route path="/faq" component={FAQ} />
-                                <Route path="/newsletter" component={Newsletter} />
-                                <Route path="/help" component={Help} />
-                                <Route path="/privacy" component={Privacy} />
-                                <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
-                                <Route path="/article/:id" component={() => <ArticlePage user_session={user_session} />} />
-                                <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
-                                <Route path="/search" component={() => <SearchResults/>} />
-                                <Route path="/admin/manage" component={AdminManage} />
-                                <Route path="/admin/invite" component={AdminInvite} />
-                            </Switch>
-                        </div>
-                        <Footer />
+                        <Switch>
+                            // Author embed page
+                            <Route
+                                path="/author-embed/:slug(.+)"
+                                component={() => <AuthorPage user_session={{}} embedded={true}/>}
+                            />
+
+                            // Rest of the app
+                            <Route>
+                                <TopBar user_session={user_session} />
+                                <div className="AppContent" style={{ marginTop: TOPBAR_HEIGHT }}>
+                                    <Switch>
+                                        <Route
+                                            exact path="/"
+                                            component={() =>  {
+                                                if (user_session.authenticated) {
+                                                    return <Recent user_session={user_session} />
+                                                }
+                                                return <Home user_session={user_session} />
+                                            }}
+                                        />
+                                        <Route
+                                            exact path="/home"
+                                            component={() => <Home user_session={user_session} />}
+                                        />
+                                        <Route
+                                            exact path="/recent"
+                                            component={() => <Recent user_session={user_session} />}
+                                        />
+                                        <Route exact path="/replications" component={Replications} />
+                                        <Route path="/help" component={Help} />
+                                        <Route path="/privacy" component={Privacy} />
+                                        <Route path="/author/:slug(.+)" component={() => <AuthorPage user_session={user_session} />} />
+                                        <Route path="/article/:id" component={() => <ArticlePage user_session={user_session} />} />
+                                        <Route path="/create_author" component={() => <AuthorPageCreator user_session={user_session} />} />
+                                        <Route path="/search" component={() => <SearchResults user_session={user_session} />} />
+                                        <Route path="/admin/manage" component={AdminManage} />
+                                        <Route path="/admin/invite" component={AdminInvite} />
+                                    </Switch>
+                                </div>
+                                <Footer />
+                            </Route>
+                        </Switch>
                     </MuiThemeProvider>
                 </div>
             </Router>

@@ -30,7 +30,7 @@ reproducibility, and effect replicability are curated/veriﬁed over time (findi
 Curate Science is a web application written in Python 3 using the [Django](https://www.djangoproject.com/) framework 2.1. with PostgreSQL 9.6, running on Google App Engine Standard Environment. The master branch is continuously deployed to production with Travis CI. The application features a REST API for interacting with the curated data programmatically.
 
 * Entity models are in `curate/models.py` ([current entity-relationship diagram (v0.3.0)](https://etiennelebel.com/logos/curatescience_datamodel_v0.3.0.png) (entities to-be-added in blue))
-* REST API view controllers use [Django REST Framework](http://django-rest-framework.org/) and are in `views_api.py`
+* REST API view controllers use [Django REST Framework](http://django-rest-framework.org/) and are in `views/api.py`
 * REST API model serializers are in `curate/serializers.py`
 * HTML view controllers are in `curate/views.py`
 * HTML templates use the Django template engine and are in `templates/`

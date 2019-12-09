@@ -1,7 +1,15 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 a:link, a:visited, a:hover, a:active {
@@ -24,8 +32,22 @@ textarea {
 	height: 18px;
 }
 
-.AppContent {
-	min-height: 600px;
+.AppContent, .TopBar {
+  width: 1100px;
+  margin: 0 auto;
+  position: relative;
+}
+
+@media (max-width: 1100px) {
+  .AppContent, .TopBar {
+    width: 100%;
+    padding: 0 1rem;
+    margin: 0;
+  }
+
+  .TopBar {
+    padding: 0;
+  }
 }
 
 .HomeArticleList {
@@ -175,14 +197,6 @@ textarea {
 
 }
 
-.StaticPages input {
-	padding: 3px;
-	font-size: 15px;
-	min-width: 200px;
-	border-radius: 2px;
-	border: 1px solid #DDD;
-}
-
 .StaticPages h4 {
 	font-weight: 500;
 	text-align: center;
@@ -197,4 +211,12 @@ textarea {
 
 .StaticPages a:hover, .Footer a:hover {
 	color: #2A689C;
+}
+
+
+/* Override carousel arrow colours so they're visible on a white background */
+.carousel .control-prev.control-arrow::before,
+.carousel .control-next.control-arrow::before {
+  border-left-color: #666;
+  border-right-color: #666;
 }

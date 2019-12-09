@@ -22,7 +22,7 @@ import AuthorList from '../AuthorList.jsx';
 
 const styles = theme => ({
   root: {
-    width: '50%'
+    width: '100%'
   },
   input: {
     display: 'flex',

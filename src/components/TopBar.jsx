@@ -5,16 +5,32 @@ import { withCookies, Cookies } from 'react-cookie';
 import qs from 'query-string';
 
 // Routing & routes
-import { Link } from "react-router-dom";
+import { Link } from './Link.jsx';
 import { withRouter } from 'react-router-dom';
 
 // UI components
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Typography, IconButton, Button, Grid, Menu, MenuItem,
-    Drawer, List, ListItem, ListItemText, Divider, ListSubheader} from '@material-ui/core';
+import {
+    AppBar,
+    Button,
+    Divider,
+    Drawer,
+    Grid,
+    Hidden,
+    IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    ListSubheader,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
 import C from '../constants/constants';
@@ -23,11 +39,15 @@ import SearchBox from './shared/SearchBox.jsx';
 
 import {json_api_req, summarize_api_errors, unspecified} from '../util/util.jsx'
 
-const TOPBAR_HEIGHT = 56
+export const TOPBAR_HEIGHT = 56
 
 const styles = theme => ({
     root: {
-        flexGrow: 1,
+        position: 'fixed',
+        top: 0,
+        zIndex: 1,
+        width: '100%',
+        maxWidth: '100vw',
     },
     sitename: {
         color: 'white',
@@ -35,22 +55,15 @@ const styles = theme => ({
     },
     appBar: {
         background: 'linear-gradient(0deg, #333 70%, #555 100%)',
+        flexDirection: 'row',
     },
     toolbar: {
+        width: '100%',
         boxShadow: 'none',
         height: TOPBAR_HEIGHT,
         minHeight: TOPBAR_HEIGHT,
-        width: C.COL_WIDTH + 'px',
         display: 'flex',
         justifyContent: 'space-between',
-    },
-    centeredCol: {
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        width: C.COL_WIDTH + 'px',
-        height: TOPBAR_HEIGHT,
-        margin: '0px auto'
     },
     sitelogo: {
         height: 20,
@@ -62,7 +75,8 @@ const styles = theme => ({
     },
     topButton: {
         color: 'white',
-        borderColor: 'white'
+        borderColor: 'white',
+        marginRight: theme.spacing(),
     },
     topLink: {
         color: 'white',
@@ -87,6 +101,27 @@ const styles = theme => ({
     },
 })
 
+function AuthorPageIcon({ slug }) {
+    const icon = (
+        <IconButton
+            style={{color: 'white', padding: 4}}
+            title="Author page"
+        >
+            <AccountCircle />
+        </IconButton>
+    )
+
+    if (slug) {
+        return (
+            <Link to={`/author/${slug}`}>
+                { icon }
+            </Link>
+        )
+    }
+
+    return icon
+}
+
 class TopBar extends React.Component {
     constructor(props) {
         super(props);
@@ -105,6 +140,19 @@ class TopBar extends React.Component {
 
     logout() {
         window.location.replace('/accounts/logout/')
+    }
+
+    componentDidMount() {
+        // Hacky way to scroll to right place with hash in URL
+        const hash = window.location.hash
+        if (hash) {
+            const el = document.querySelector(hash)
+            if (el) {
+                window.setTimeout(() => {
+                    window.scrollTo(0, el.offsetTop - TOPBAR_HEIGHT)
+                }, 0)
+            }
+        }
     }
 
     handleMenu = menu_id => event => {
@@ -161,34 +209,32 @@ class TopBar extends React.Component {
         let { anchors, menuOpen, search_term, drawerOpen } = this.state;
         let admin = user_session.admin
         let has_author_page = this.user_has_author_page()
+
+        const drawer_links = [
+            { title: 'How it works', to: '/home#how-it-works' },
+            { title: 'Browse', to: '/recent' },
+            { title: 'About', to: '/home#about' },
+            { title: 'People', to: '/home#people' },
+            { title: 'FAQ', to: '/home#faq' },
+            { title: 'Newsletter', to: '/home#newsletter' },
+            { title: 'Replications (legacy)', to: '/replications' },
+            { title: 'Help', to: '/help' },
+        ]
+
         let drawer_menu = (
             <div className={classes.drawer} key="drawer">
                 <List>
-                    <Link to="/replications" key="replications">
-                        <ListItem key="replications">
-                            <ListItemText primary={"Replications"} />
-                        </ListItem>
-                    </Link>
-                    <Link to="/about" key="about">
-                        <ListItem>
-                            <ListItemText primary="About" />
-                        </ListItem>
-                    </Link>
-                    <Link to="/faq" key="faq">
-                        <ListItem key="faq">
-                            <ListItemText primary={"FAQ"} />
-                        </ListItem>
-                    </Link>
-                    <Link to="/newsletter" key="newsletter">
-                        <ListItem key="newsletter">
-                            <ListItemText primary={"Newsletter"} />
-                        </ListItem>
-                    </Link>
-                    <Link to="/help" key="help">
-                        <ListItem key="help">
-                            <ListItemText primary={"Help"} />
-                        </ListItem>
-                    </Link>
+                    {
+                        drawer_links.map((link) => {
+                            return (
+                                <Link to={link.to} key={link.to}>
+                                    <ListItem>
+                                        <ListItemText primary={link.title} />
+                                    </ListItem>
+                                </Link>
+                            )
+                        })
+                    }
                 </List>
                 <Divider />
             </div>
@@ -206,43 +252,81 @@ class TopBar extends React.Component {
                 <MenuItem onClick={this.logout}>Logout</MenuItem>
             </div>
         ]
+
         return (
             <div className={classes.root}>
-                <AppBar position="static" className={classes.appBar}>
-                    <div className={classes.centeredCol}>
+                <AppBar position="static" className={classes.appBar + " mui-fixed"}>
+                    <div className="TopBar">
                         <Toolbar className={classes.toolbar} disableGutters>
                           <div style={{display: 'flex', alignItems: 'center'}}>
                             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                                 <MenuIcon />
                             </IconButton>
-                            <a href="/app" id="sitename" className={classes.sitename}>
+                            <Link to="/" id="sitename" className={classes.sitename}>
                                 <Typography variant="h6" color="inherit">
                                   <img src="/sitestatic/icons/snail_white.svg" className={classes.sitelogo} /> {C.SITENAME} <sup><span style={{fontSize: '9px', marginLeft: '-2px'}}>BETA</span></sup>
                                 </Typography>
-                            </a>
+                            </Link>
                           </div>
 
-                          <SearchBox/>
+                          <Hidden smDown>
+                              <Grid container style={{ width: '40%' }}>
+                                  <Grid item style={{ maxWidth: 400, flex: 1 }}>
+                                      <SearchBox/>
+                                  </Grid>
+                                  <Grid item>
+                                      <Link to="/recent">
+                                          <Button variant="text" className={classes.topLink}>
+                                              Browse
+                                          </Button>
+                                      </Link>
+                                  </Grid>
+                              </Grid>
+                          </Hidden>
 
                             <div className={classes.rightSide} key="right">
 
-                                <Link to="/help"><Button variant="text" className={classes.topLink}>Help</Button></Link>
+                          <Hidden smDown>
+                                {
+                                    user_session.authenticated ?
+                                    (
+                                        <Link to="/help">
+                                            <Button variant="text" className={classes.topLink}>
+                                                Help
+                                            </Button>
+                                        </Link>
+                                    ) :
+                                    (
+                                        <Link to="/home/#how-it-works">
+                                            <Button variant="text" className={classes.topLink}>
+                                                How It Works
+                                            </Button>
+                                        </Link>
+                                    )
+                                }
+                            </Hidden>
 
                                 {user_session.authenticated ? (
                                 <span>
+                                    <AuthorPageIcon
+                                        slug={author_slug}
+                                    />
+
                                     <IconButton
                                         aria-owns={this.menuOpen('account') ? 'menu-account' : undefined}
                                         aria-haspopup="true"
                                         onClick={this.handleMenu('account')}
                                         color="inherit"
-                                      >
-                                        <AccountCircle />
-                                  </IconButton>
+                                        style={{padding: 0}}
+                                    >
+                                        <ArrowDropDown/>
+                                    </IconButton>
                                   <Menu
                                     id="menu-account"
                                     anchorEl={anchors.account}
+                                    getContentAnchorEl={null}
                                     anchorOrigin={{
-                                      vertical: 'top',
+                                      vertical: 'bottom',
                                       horizontal: 'right',
                                     }}
                                     transformOrigin={{
@@ -255,7 +339,7 @@ class TopBar extends React.Component {
                                     { user_dropdown_menu }
                                   </Menu>
                                 </span>
-                              ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login to Curate</Button></a>}
+                              ) : <a href="/accounts/login/"><Button variant="outlined" className={classes.topButton}>Login</Button></a>}
                             </div>
                         </Toolbar>
                     </div>

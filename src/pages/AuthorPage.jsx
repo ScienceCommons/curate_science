@@ -3,8 +3,17 @@ import { Link, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 
 import Typography from '@material-ui/core/Typography';
-import {Grid, Button, Icon, IconButton,
-        Popover, Snackbar, Tooltip} from '@material-ui/core';
+import {
+    Grid,
+    Button,
+    Icon,
+    IconButton,
+    InputAdornment,
+    Popover,
+    Snackbar,
+    TextField,
+    Tooltip
+} from '@material-ui/core';
 
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
@@ -17,7 +26,7 @@ import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
 import { includes, merge } from 'lodash'
 
-import {json_api_req, randomId} from '../util/util.jsx'
+import { json_api_req, randomId, send_height_to_parent } from '../util/util.jsx'
 
 import C from '../constants/constants';
 
@@ -37,7 +46,8 @@ const styles = theme => ({
         right: 0
     },
     box: {
-        padding: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+        paddingTop: theme.spacing(2),
     },
     leftIcon: {
         marginRight: theme.spacing(1)
@@ -56,7 +66,11 @@ const styles = theme => ({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 4
-    }
+    },
+    searchFilter: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
 })
 
 class AuthorPage extends React.Component {
@@ -72,7 +86,8 @@ class AuthorPage extends React.Component {
             editing_article_id: null,
             popperAnchorEl: null,
             author_creator_showing: false,
-            snack_message: null
+            snack_message: null,
+            search_filter: '',
         }
 
         this.open_author_editor = this.toggle_author_editor.bind(this, true)
@@ -89,10 +104,29 @@ class AuthorPage extends React.Component {
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
         this.update_articles = this.update_articles.bind(this)
+        this.update_search_filter = this.update_search_filter.bind(this)
     }
 
     componentDidMount() {
+        if (this.props.embedded) {
+            document.body.style.overflow = 'hidden'
+        }
+
         this.fetch_author_then_articles()
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.match.params.slug !== prevState.current_slug){
+            const current_slug = nextProps.match.params.slug
+            return { current_slug }
+        }
+        return null;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.match.params.slug !== this.state.current_slug) {
+            this.fetch_author_then_articles()
+        }
     }
 
     componentWillUnmount() {
@@ -210,6 +244,7 @@ class AuthorPage extends React.Component {
                             window.location.hash = ''  // Need to change to ensure scroll
                             window.location.hash = location.hash
                         }
+                        send_height_to_parent()
                     })
                 })
             })
@@ -257,6 +292,10 @@ class AuthorPage extends React.Component {
         });
     };
 
+    update_search_filter(event) {
+        this.setState({ search_filter: event.target.value })
+    }
+
     sorted_visible_articles() {
         let {articles} = this.state
         let sorted_visible = articles.filter(a => a.is_live)
@@ -285,7 +324,7 @@ class AuthorPage extends React.Component {
     }
 
 	render() {
-        let {classes, user_session} = this.props
+        let {classes, embedded, user_session} = this.props
         let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
             articles_loading,
@@ -295,66 +334,100 @@ class AuthorPage extends React.Component {
         let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
         let editable = this.editable()
+
+        const search_filter = (
+            <TextField
+                placeholder="Filter articles"
+                value={this.state.search_filter}
+                onChange={this.update_search_filter}
+                margin="normal"
+                variant="outlined"
+                style={{margin: 0}}
+                InputProps={{
+                    startAdornment: <InputAdornment position="start"><Icon color="disabled">search</Icon></InputAdornment>,
+                    inputProps: {
+                        className: classes.searchFilter,
+                    }
+                }}
+            />
+        )
+
 		return (
             <div className={classes.root}>
     			<Grid container justify="center" className="AuthorPage">
                     <Grid item>
-                        <div className={classes.cardColumn}>
-                            <div style={{position: 'relative'}}>
-                                <span hidden={!editable}>
-                                    <Button variant="outlined" color="secondary"
+                        {
+                            !embedded ?
+                            <div className={classes.cardColumn}>
+                                <div style={{position: 'relative'}}>
+                                    <span hidden={!editable}>
+                                        <Button variant="outlined" color="secondary"
                                             className={classes.authorEditButton}
                                             onClick={this.open_author_editor}>
-                                        <Icon className={classes.leftIcon}>edit</Icon>
-                                        Edit
-                                    </Button>
-                                </span>
-                                <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
-                                <Typography variant="h4" className={classes.subtitle}>
-                                    <span className={classes.title}>{ this.render_position() }</span>
-                                    <span className={classes.affiliation}>{ author.affiliations }</span>
-                                </Typography>
-                                <AuthorLinks links={author.profile_urls} />
-                            </div>
+                                            <Icon className={classes.leftIcon}>edit</Icon>
+                                            Edit
+                                        </Button>
+                                    </span>
+                                    <Typography variant="h2" className={classes.name}>{ author.name }</Typography>
+                                    <Typography variant="h4" className={classes.subtitle}>
+                                        <span className={classes.title}>{ this.render_position() }</span>
+                                        <span className={classes.affiliation}>{ author.affiliations }</span>
+                                    </Typography>
+                                    <AuthorLinks links={author.profile_urls} />
+                                </div>
 
-                            <div id="actions" className={classes.box} hidden={!editable}>
-                                <Button variant="contained" color="secondary" onClick={this.create_new_article} disabled={loading}>
-                                    <Icon className={classes.leftIcon}>add</Icon>
-                                    Add Article
-                                </Button>
-                                <Button variant="outlined"
+                                <div id="actions" className={classes.box} hidden={!editable}>
+                                    <Button variant="contained" color="secondary" onClick={this.create_new_article} disabled={loading}>
+                                        <Icon className={classes.leftIcon}>add</Icon>
+                                        Add Article
+                                    </Button>
+                                    <Button variant="outlined"
                                         color="secondary"
                                         aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
                                         onClick={this.open_preexisting_popper}
                                         style={{marginLeft: 10}}>
-                                    <Icon className={classes.leftIcon}>link</Icon>
-                                    Link Existing Article
-                                </Button>
-                                <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
-                                    <IconButton aria-label="Info" style={{cursor: 'default'}} disableRipple>
-                                        <Icon>info</Icon>
-                                    </IconButton>
-                                </Tooltip>
-                                <Popover
-                                  id="add_preexisting_popper"
-                                  open={add_preexisting_open}
-                                  anchorEl={popperAnchorEl}
-                                  onClose={this.close_preexisting_popper}
-                                  anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                  }}
-                                  transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                  }}
-                                >
-                                    <div style={{width: "400px", height: "250px", padding: 14 }}>
-                                      <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
+                                        <Icon className={classes.leftIcon}>link</Icon>
+                                        Link Existing Article
+                                    </Button>
+                                    <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
+                                        <IconButton aria-label="Info" style={{cursor: 'default'}} disableRipple>
+                                            <Icon>info</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Popover
+                                        id="add_preexisting_popper"
+                                        open={add_preexisting_open}
+                                        anchorEl={popperAnchorEl}
+                                        onClose={this.close_preexisting_popper}
+                                        anchorOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        }}
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'left',
+                                            }}
+                                        >
+                                            <div style={{width: "400px", height: "250px", padding: 14 }}>
+                                                <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
+                                            </div>
+                                        </Popover>
                                     </div>
-                                </Popover>
-                            </div>
-                        </div>
+                                    {search_filter}
+                                </div>
+                                : 
+                                <Grid container alignItems="center" justify="space-between">
+                                    {search_filter}
+                                    <a href="https://curatescience.org/" target="_blank">
+                                        <img
+                                            style={{ width: 65 }}
+                                            src="/sitestatic/icons/powered_by_curate.png"
+                                            alt="Powered by Curate Science"
+                                            title="Powered by Curate Science"
+                                        />
+                                    </a>
+                                </Grid>
+                        }
 
                         {
                           articles_loading ?
@@ -363,36 +436,47 @@ class AuthorPage extends React.Component {
                             articles={this.sorted_visible_articles()}
                             onArticlesUpdated={this.update_articles}
                             user_session={this.props.user_session}
+                            search_filter={this.state.search_filter}
                           />
                         }
                     </Grid>
     			</Grid>
 
+                {
+                    !embedded ?
+                    <div>
+                        <AuthorEditor author={author}
+                                      open={edit_author_modal_open}
+                                      onClose={this.close_author_editor}
+                                      onAuthorUpdate={this.author_updated}
+                                      onShowSnack={this.show_snack} />
 
-                <AuthorEditor author={author}
-                              open={edit_author_modal_open}
-                              onClose={this.close_author_editor}
-                              onAuthorUpdate={this.author_updated}
-                              onShowSnack={this.show_snack} />
+                        <ArticleEditor article_id={editing_article_id}
+                                open={edit_article_modal_open}
+                                onUpdate={this.article_updated}
+                                onClose={this.close_article_editor} />
 
-                <ArticleEditor article_id={editing_article_id}
-                        open={edit_article_modal_open}
-                        onUpdate={this.article_updated}
-                        onClose={this.close_article_editor} />
-
-                <Snackbar
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  open={snack_message != null}
-                  autoHideDuration={3000}
-                  onClose={this.close_snack}
-                  message={snack_message}
-                />
+                        <Snackbar
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                          }}
+                          open={snack_message != null}
+                          autoHideDuration={3000}
+                          onClose={this.close_snack}
+                          message={snack_message}
+                        />
+                    </div>
+                    : null
+                }
             </div>
 		)
 	}
+}
+
+AuthorPage.defaultProps = {
+    embedded: false,
+    user_session: {},
 }
 
 export default withRouter(withCookies(withStyles(styles)(AuthorPage)));

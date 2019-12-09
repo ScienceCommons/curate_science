@@ -1,4 +1,5 @@
 import moment from 'moment-timezone'
+import { debounce } from 'lodash'
 
 export const iso_from_date = (d) => {
     let year = d.getFullYear();
@@ -131,3 +132,8 @@ export const summarize_api_errors = (res) => {
 export const unspecified = (s) => {
     return s == null || s.length == 0
 }
+
+function send_height() {
+    window.parent.postMessage({height: document.body.offsetHeight}, '*')
+}
+export const send_height_to_parent = debounce(send_height, 250, { leading: true })
