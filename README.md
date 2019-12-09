@@ -2,26 +2,30 @@ Curate Science
 ==============
 [![Build Status](https://travis-ci.org/ScienceCommons/curate_science.svg?branch=master)](https://travis-ci.org/ScienceCommons/curate_science)
 
-*Transparency Compliance for Science*
+*Transparent and Credible Evidence.*
 
-Code base of **[Curate Science](https://CurateScience.org)**, a next-generation *transparency compliance and accountability system* for scientific articles. A central problem in research is determining whether reported evidence can be trusted. In science, evidence can only be trusted if it is transparently reported and has survived scrutiny from peers via follow-up replications/re-analyses. No platform, however, currently exists to verify (and track) the transparency and replication of research. 
+Code base of **[Curate Science](https://CurateScience.org)**, a unified curation system and platform to verify that research is **transparent and credible**. A central problem in academic research is determining whether a paper's reported evidence can be trusted. In science, evidence is only considered trustworthy/credible if it is transparently reported and has survived scrutiny from peers via follow-up replications/re-analyses. No platform, however, currently exists to verify (and track) the transparency and credibility of research. 
 
-To solve this problem, we are developing curation tools that will allow researchers, journals, universities, and funders ensure that scientific articles (1) comply with the appropriate transparency standards and (2) are accountable to follow-up replication studies and re-analyses. This will create immense value for all research stakeholders (see [list](https://etiennelebel.com/logos/value-created-for-stakeholders.png)), which has large potential to accelerate scientific progress and applied innovations. 
+Curate Science aims to solve this holy grail problem of academic research, by allowing researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
+1.  *Transparency*: Ensure that research meets minimum transparency standards appropriate to the article type and methodologies used.
+2.  *Credibility*: Ensure that follow-up scrutiny is linked to its parent paper, including critical commentaries, reproducibility/robustness re-analyses, and new sample replications.
 
-For more details about the platform, see:
+Having a unified/systematic way to distinguish *credible evidence* (from untrustworthy evidence) will substantially accelerate the development of cumulative scientific knowledge and applied innovations across the natural and social sciences. The implications for human welfare are large. (See a [list](https://etiennelebel.com/logos/value-created-for-stakeholders.png) of value/benefits our system will create for different research stakeholders.)
+
+For more details about our platform, see:
 1.	[Falsifiability-informed framework](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf) that guides the design and implementation of our platform/tools.
-2.	[Current functionalities/features](https://etiennelebel.com/documents/generalized-grant-proposal.pdf) being designed and developed.
-3.	[Upcoming features and platform roadmap](https://github.com/ScienceCommons/curate_science/issues/52).
+2.	[Upcoming features and platform roadmap](https://github.com/ScienceCommons/curate_science/issues/52).
+3.  [Browse our curated content](https://curatescience.org/app/), which features one of the world’s largest collection of transparently-reported replications and original research articles (including > 3,000 social science replications and > 400 original research articles).
 
-![alt text](https://etiennelebel.com/logos/carousel-png1_updated.png)
+
+![alt text](https://user-images.githubusercontent.com/4512335/70174268-8c257700-16a2-11ea-90a2-13ce1dbc9439.png)
 
 *Figure 1*: Basic layout of Curate Science’s article card displaying information about an article’s 
-transparency and follow-up commentaries, replications, and re-analyses. 
+transparency and credibility (i.e., follow-up commentaries, re-analyses, and replications).
 
-![alt text](https://etiennelebel.com/logos/accountability-system-multistakeholder.png)
+![alt text](https://user-images.githubusercontent.com/4512335/70171251-554c6280-169c-11ea-843f-d98b2a9f3ae4.png)
 
-*Figure 2*: Curate Science transparency compliance and accountability system: An article’s transparency, result 
-reproducibility, and effect replicability are curated/veriﬁed over time (findings that survive scrutiny are treated as credible proportional to the extent of scrutiny achieved over that time period). 
+*Figure 2*: Curate Science credibility curation system: An article’s transparency and credibility is verified over time across different contexts within the scholarly ecosystem. 
 
 ## Contributing
 
