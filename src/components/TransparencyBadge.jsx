@@ -46,7 +46,7 @@ class TransparencyBadge extends React.Component {
         in_article: 'sample_size_all_details_reported',
       },
       {
-        title: 'Unreported analyses/Anayltic plans',
+        title: 'Unreported analyses/Analytic plans',
         text_field: 'analyses',
         in_article: 'analyses_all_details_reported',
       },
