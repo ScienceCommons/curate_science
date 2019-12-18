@@ -61,9 +61,10 @@ function url_is_valid(url, mediaType) {
         case 'preprint':
             return preprint_url_is_valid(url)
 
-    }
+        default:
+            return false
 
-    return true
+    }
 }
 
 
