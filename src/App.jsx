@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 // Routing & routes
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
+import EmbeddedViewer from './components/EmbeddedViewer.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import TopBar, { TOPBAR_HEIGHT } from './components/TopBar.jsx';
 import Footer from './components/Footer.jsx';
+import { ViewURL } from './components/EmbeddedViewer.jsx';
 
 import Splash from './pages/Splash.jsx';
 import Help from './pages/Help.jsx';
@@ -104,6 +106,8 @@ class App extends React.Component {
                             // Rest of the app
                             <Route>
                                 <TopBar user_session={user_session} />
+                                <div style={{display: 'flex'}}>
+                                <ViewURL.Provider>
                                 <div className="AppContent" style={{ marginTop: TOPBAR_HEIGHT }}>
                                     <Switch>
                                         <Route
@@ -133,6 +137,9 @@ class App extends React.Component {
                                         <Route path="/admin/manage" component={AdminManage} />
                                         <Route path="/admin/invite" component={AdminInvite} />
                                     </Switch>
+                                    </div>
+                                    <EmbeddedViewer/>
+                                    </ViewURL.Provider>
                                 </div>
                                 <Footer />
                             </Route>
