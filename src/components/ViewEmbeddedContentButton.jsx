@@ -42,6 +42,14 @@ function html_url_is_valid(url) {
 }
 
 
+function preprint_url_is_valid(url) {
+    const denied_urls = ['github.com', 'psycnet.apa.org/fulltext', 'academia.edu.documents']
+    if (url_contains(url, denied_urls)) return false
+
+    return endsWith(url, '.pdf')
+}
+
+
 function url_is_valid(url, mediaType) {
     switch(mediaType) {
         case 'pdf':
@@ -49,6 +57,10 @@ function url_is_valid(url, mediaType) {
 
         case 'html':
             return html_url_is_valid(url)
+
+        case 'preprint':
+            return preprint_url_is_valid(url)
+
     }
 
     return true
