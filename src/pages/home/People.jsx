@@ -68,6 +68,12 @@ export default function People({homeStyles, ...props}) {
             title: "Conceptual Advisor"
         },
         {
+            url: "https://github.com/alexkyllo",
+            image: "/sitestatic/people/kyllo-hires.png",
+            name: "Alex Kyllo",
+            title: "Software Developer"
+        },
+        {
             url: "https://psychology.msu.edu/people/graduate-student/morri640",
             image: "/sitestatic/people/morrison-hires.png",
             name: "Mike Morrison",
@@ -75,18 +81,18 @@ export default function People({homeStyles, ...props}) {
             title: "Technical Advisor"
         },
         {
+            url: "https://github.com/dokterbob",
+            image: "/sitestatic/people/debruin-hires.png",
+            name: "Mathijs de Bruin",
+            affiliation: "Visualspace",
+            title: "Technical Advisor"
+        },
+        {
             image: "/sitestatic/people/kuusi-hires.png",
             name: "Touko Kuusi",
             affiliation: "University of Helsinki",
             title: "Volunteer Curator"
-        },
-        {
-            url: "https://github.com/alexkyllo",
-            image: "/sitestatic/people/kyllo-hires.png",
-            name: "Alex Kyllo",
-            title: "Software Developer"
         }
-
     ]
 
     const ADVISORS = [
