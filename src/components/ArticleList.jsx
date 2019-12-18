@@ -9,9 +9,9 @@ import { get, includes, lowerCase, some } from 'lodash'
 import ArticleActions from '../components/ArticleActions.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleLI from '../components/ArticleLI.jsx';
+import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 import Loader from '../components/shared/Loader.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
-import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -26,7 +26,6 @@ const styles = theme => ({
   },
   articleList: {
     marginTop: '10px',
-    minWidth: 650,
   },
   leftIcon: {
     marginRight: theme.spacing(1)

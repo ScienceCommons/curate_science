@@ -2,7 +2,11 @@ import React from 'react';
 
 import {Button, Icon, Typography} from '@material-ui/core';
 
+import ViewEmbeddedContentButton from './ViewEmbeddedContentButton.jsx';
+
 import {get_link_source_icon} from '../util/util.jsx'
+
+
 var numbro = require("numbro");
 
 const LINK_TYPES = ['pdf', 'html', 'preprint']
@@ -82,7 +86,8 @@ class ArticleFullTextLinks extends React.Component {
 			marginLeft: 5,
 			color: color,
 			display: 'inline',
-			fontSize: 16
+            fontSize: 16,
+            paddingRight: 0,
 		}
 		const LINK_ICON = {
 			marginBottom: '-2px'
@@ -103,13 +108,23 @@ class ArticleFullTextLinks extends React.Component {
 		let cite_title = `${link_label} has been cited ${this.number(cites)} times (as of ${update_date}; Google Scholar)`
 		return (
 			<div key={lt}>
-				<Typography variant="body2" className="ContentLink" style={{marginBottom: 4}}>
+                <Typography
+                    variant="body2"
+                    className="ContentLink"
+                    style={{
+                        marginBottom: 4,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'end',
+                    }}
+                >
 					<span className="ContentLinkCounts">
 						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={CITE_COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
 						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
 						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
 					</span>
 					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}<span className="LinkLabel">{label}</span><Icon fontSize="inherit" style={LINK_ICON}>open_in_new</Icon></a>
+                    <ViewEmbeddedContentButton mediaType={lt} iconStyle={st} url={url}/>
 				</Typography>
 			</div>
 		)
