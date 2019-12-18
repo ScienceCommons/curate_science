@@ -40,7 +40,7 @@ export default function EmbeddedViewer({ props }) {
 
     return (
         <div className={classes.viewer} style={style}>
-            <iframe style={{height: '100%', width: '100%'}} src={view_url.url}></iframe>
+            <iframe style={{height: '100%', width: '100%', border: 'solid 1px'}} src={view_url.url}></iframe>
         </div>
     )
 }
