@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 
-import { concat } from 'lodash'
+import { endsWith, includes, some } from 'lodash'
 import { makeStyles } from '@material-ui/styles';
 import { Button, Icon, IconButton } from '@material-ui/core';
 
@@ -17,9 +17,49 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+
+
+function url_contains(url, strings) {
+    return some(strings, (string) => includes(url, string))
+}
+
+
+function pdf_url_is_valid(url) {
+    const valid_urls = ['open.lnu.se/index.php', 'readcube.com/articles']
+    const denied_urls = ['github.com', 'psycnet.apa.org/fulltext', 'academia.edu.documents']
+
+    if (url_contains(url, denied_urls)) return false
+    if (url_contains(url, valid_urls)) return true
+
+    return endsWith(url, '.pdf')
+}
+
+
+function html_url_is_valid(url) {
+    if (includes(url, 'frontiersin.org/articles') && endsWith(url, 'full')) return true
+    if (includes(url, 'github.io')) return true
+    return endsWith(url, '.html')
+}
+
+
+function url_is_valid(url, mediaType) {
+    switch(mediaType) {
+        case 'pdf':
+            return pdf_url_is_valid(url)
+
+        case 'html':
+            return html_url_is_valid(url)
+    }
+
+    return true
+}
+
+
 export default function ViewEmbeddedContentButton({ iconStyle, mediaType, url }) {
     const classes = useStyles()
     const view_url = ViewURL.useContainer()
+
+    if (!url_is_valid(url, mediaType)) return null
 
     if (mediaType === 'pdf') {
         url += '#view=FitH'
@@ -34,7 +74,7 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, url })
     }
 
     return (
-        <Button onClick={() => toggle_viewer(url)} className={classes.button}>
+        <Button onClick={() => toggle_viewer(url)} className={classes.button} title="View in embedded viewer">
             <Icon style={iconStyle}>zoom_out_map</Icon>
         </Button>
     )
