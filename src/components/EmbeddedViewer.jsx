@@ -3,7 +3,7 @@ import { createContainer } from 'unstated-next'
 
 import { concat } from 'lodash'
 import { makeStyles } from '@material-ui/styles';
-import { Button, Icon, Typography } from '@material-ui/core'
+import { Button, Icon, IconButton } from '@material-ui/core'
 
 import { TOPBAR_HEIGHT } from './TopBar.jsx';
 
@@ -12,7 +12,12 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('lg')]: {
             display: 'none',
         }
-    }
+    },
+    viewerTopBar: {
+        background: '#333',
+        width: '100%',
+        textAlign: 'right',
+    },
 }))
 
 
@@ -38,8 +43,15 @@ export default function EmbeddedViewer({ props }) {
         transition: 'width 0.2s ease-in-out',
     }
 
+    const closeViewer = () => view_url.clear_url()
+
     return (
         <div className={classes.viewer} style={style}>
+            <div className={classes.viewerTopBar}> 
+                <IconButton onClick={closeViewer} title="Close embedded viewer" style={{ color: '#999' }}>
+                    <Icon>close</Icon>
+                </IconButton>
+            </div>
             <iframe style={{height: '100%', width: '100%', border: 'solid 1px'}} src={view_url.url}></iframe>
         </div>
     )
