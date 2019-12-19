@@ -115,7 +115,7 @@ class ArticleFullTextLinks extends React.Component {
                         marginBottom: 4,
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'end',
+                        justifyContent: 'flex-end',
                     }}
                 >
 					<span className="ContentLinkCounts">
