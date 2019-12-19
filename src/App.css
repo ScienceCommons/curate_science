@@ -51,6 +51,7 @@ textarea {
 }
 
 .HomeArticleList {
+	width: 650px;
 }
 
 .CenteredContent {
@@ -65,6 +66,7 @@ textarea {
 
 .ArticleWithActions .Article {
 	display: 'block';
+	width: 650px;
 }
 
 .ArticleWithActions .ArticleActions {
