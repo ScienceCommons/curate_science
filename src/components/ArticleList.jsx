@@ -13,9 +13,6 @@ import Loader from '../components/shared/Loader.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
-
 import { json_api_req, simple_api_req } from '../util/util.jsx'
 
 import { withStyles } from '@material-ui/core/styles';
@@ -43,10 +40,6 @@ class ArticleList extends React.Component {
       editing_article_id: null,
       view_figure_thumb: null,
       view_figure_full: null,
-      // Lightbox / gallery state
-      gallery_images: [],
-      gallery_showing: false,
-      gallery_index: 0,
     }
 
     this.open_article_editor = this.toggle_article_editor.bind(this, true)
@@ -55,7 +48,6 @@ class ArticleList extends React.Component {
     this.handle_delete = this.handle_delete.bind(this)
     this.article_updated = this.article_updated.bind(this)
     this.show_article = this.show_article.bind(this)
-    this.show_figure = this.show_figure.bind(this)
     this.got_article_details = this.got_article_details.bind(this)
   }
 
@@ -100,11 +92,6 @@ class ArticleList extends React.Component {
     this.setState(st)
   }
 
-  show_figure(figures, index) {
-    // Currently shows only one at a time
-    this.setState({gallery_images: figures.map((fig) => fig.image), gallery_index: index, gallery_showing: true})
-  }
-
   show_article(article) {
       const { search_filter } = this.props
       if (!(search_filter && search_filter.length)) return true
@@ -130,31 +117,9 @@ class ArticleList extends React.Component {
       view_figure_thumb,
       view_figure_full,
       articles_loading,
-      gallery_showing,
-      gallery_images,
-      gallery_index,
       loading
     } = this.state
 
-    let gallery
-    if (gallery_showing && gallery_images.length > 0) gallery = (
-      <Lightbox
-        mainSrc={gallery_images[gallery_index]}
-        nextSrc={gallery_images[(gallery_index + 1) % gallery_images.length]}
-        prevSrc={gallery_images[(gallery_index + gallery_images.length - 1) % gallery_images.length]}
-        onCloseRequest={() => this.setState({ gallery_showing: false })}
-        onMovePrevRequest={() =>
-            this.setState({
-              gallery_index: (gallery_index + gallery_images.length - 1) % gallery_images.length,
-            })
-        }
-        onMoveNextRequest={() =>
-            this.setState({
-              gallery_index: (gallery_index + 1) % gallery_images.length,
-            })
-        }
-      />
-    )
     return (
       <div className={classes.root}>
         <div className={classes.articleList}>
@@ -171,12 +136,9 @@ class ArticleList extends React.Component {
                   onEdit={this.handle_edit}
                   onDelete={this.handle_delete}
                   onUpdate={this.article_updated}
-                  onFigureClick={this.show_figure}
                   onFetchedArticleDetails={this.got_article_details}
                 />) }
           </div>
-
-          { gallery }
 
         <ArticleEditor article_id={editing_article_id}
           open={edit_article_modal_open}
@@ -194,7 +156,6 @@ class ArticleWithActions extends React.Component {
 
     this.edit = this.edit.bind(this)
     this.delete = this.delete.bind(this)
-    this.show_figure = this.show_figure.bind(this)
     this.got_article_details = this.got_article_details.bind(this)
   }
 
@@ -206,10 +167,6 @@ class ArticleWithActions extends React.Component {
   delete() {
     let {article} = this.props
     this.props.onDelete(article)
-  }
-
-  show_figure(figures, index) {
-    this.props.onFigureClick(figures, index)
   }
 
   got_article_details(article) {
@@ -228,7 +185,6 @@ class ArticleWithActions extends React.Component {
             admin={false}
             is_article_page={is_article_page}
             onFetchedArticleDetails={this.got_article_details}
-            onFigureClick={this.show_figure}
             show_date={show_date}
           />
         </div>

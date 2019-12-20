@@ -11,6 +11,7 @@ import {TextField, Button, Icon, Typography, Menu, Grid, InputLabel,
 import { withStyles } from '@material-ui/core/styles';
 
 import { simple_api_req } from '../../util/util.jsx'
+import { FancyBoxViewer } from 'util/fancybox'
 
 const styles = {
     container: {
@@ -38,6 +39,7 @@ const styles = {
     }
 }
 
+
 class FigureList extends React.Component {
 	constructor(props) {
         super(props);
@@ -45,6 +47,21 @@ class FigureList extends React.Component {
         this.delete_figure = this.delete_figure.bind(this)
         this.render_thumbnail = this.render_thumbnail.bind(this)
         this.handle_add = this.handle_add.bind(this)
+    }
+
+    componentDidMount() {
+        // Initialise fancybox gallery
+        this.viewer = FancyBoxViewer({
+            initial_images: this.get_fancybox_images(),
+            hash: `article-${this.props.article_id}-image`,
+        })
+    }
+
+    get_fancybox_images() {
+        // Convert figures to format expected by FancyBox
+        return this.props.figures.map(figure => {
+            return { thumb: figure.image, src: figure.image }
+        })
     }
 
     delete_figure(idx) {
@@ -64,10 +81,14 @@ class FigureList extends React.Component {
     }
 
     figure_click = (idx, event) => {
+        event.preventDefault()
         let {figures, show_delete} = this.props
-        console.log(`figure_click ${idx}`)
-        if (show_delete) this.delete_figure(idx)
-        else this.props.onFigureClick(figures, idx)
+        if (show_delete) {
+            this.delete_figure(idx)
+        } else {
+            const images = this.get_fancybox_images()
+            this.viewer.show_image(images, idx)
+        }
     }
 
     handle_add() {
@@ -121,7 +142,8 @@ FigureList.propTypes = {
 }
 
 FigureList.defaultProps = {
-	figures: [],
+    article_id: null,
+    figures: [],
     show_delete: false,
     showAdd: false,
     loading: false,

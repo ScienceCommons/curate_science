@@ -9,9 +9,6 @@ import Loader from '../components/shared/Loader.jsx';
 
 import C from '../constants/constants';
 
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
-
 import { json_api_req, simple_api_req } from '../util/util.jsx'
 
 import Card from '@material-ui/core/Card';
@@ -41,12 +38,6 @@ class ArticlePage extends React.PureComponent {
       article: null,
       loading: true,
       edit_article_modal_open: false,
-      view_figure_thumb: null,
-      view_figure_full: null,
-      // Lightbox / gallery state
-      gallery_images: [],
-      gallery_showing: false,
-      gallery_index: 0,
     }
 
     this.open_article_editor = this.toggle_article_editor.bind(this, true)
@@ -54,7 +45,6 @@ class ArticlePage extends React.PureComponent {
     this.handle_edit = this.handle_edit.bind(this)
     this.handle_delete = this.handle_delete.bind(this)
     this.article_updated = this.article_updated.bind(this)
-    this.show_figure = this.show_figure.bind(this)
   }
 
   componentDidMount() {
@@ -106,11 +96,6 @@ class ArticlePage extends React.PureComponent {
     }
   }
 
-  show_figure(figures, index) {
-    // Currently shows only one at a time
-    this.setState({gallery_images: figures.map((fig) => fig.image), gallery_index: index, gallery_showing: true})
-  }
-
   render() {
     const { classes, show_date, user_session} = this.props
     const {
@@ -118,32 +103,7 @@ class ArticlePage extends React.PureComponent {
       edit_article_modal_open,
       editing_article_id,
       loading,
-      view_figure_thumb,
-      view_figure_full,
-      gallery_showing,
-      gallery_images,
-      gallery_index,
     } = this.state
-
-    let gallery
-    if (gallery_showing && gallery_images.length > 0) gallery = (
-      <Lightbox
-        mainSrc={gallery_images[gallery_index]}
-        nextSrc={gallery_images[(gallery_index + 1) % gallery_images.length]}
-        prevSrc={gallery_images[(gallery_index + gallery_images.length - 1) % gallery_images.length]}
-        onCloseRequest={() => this.setState({ gallery_showing: false })}
-        onMovePrevRequest={() =>
-            this.setState({
-              gallery_index: (gallery_index + gallery_images.length - 1) % gallery_images.length,
-            })
-        }
-        onMoveNextRequest={() =>
-            this.setState({
-              gallery_index: (gallery_index + 1) % gallery_images.length,
-            })
-        }
-      />
-    )
 
     return (
       <div className={classes.root}>
@@ -157,7 +117,6 @@ class ArticlePage extends React.PureComponent {
                   <CardContent className={classes.cardContent}>
                     <ArticleContent
                       article={article}
-                      onFigureClick={this.show_figure}
                       is_article_page={true}
                     />
                   </CardContent>
@@ -171,8 +130,6 @@ class ArticlePage extends React.PureComponent {
                 onEdit={this.handle_edit}
                 onUpdate={this.article_updated}
               />
-
-              { gallery }
 
               <ArticleEditor
                 article_id={editing_article_id}
