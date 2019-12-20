@@ -15,9 +15,6 @@ import SortArticlesButton from '../components/SortArticlesButton.jsx';
 
 import C from '../constants/constants';
 
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
-
 import { json_api_req, simple_api_req } from '../util/util.jsx'
 import queryString from 'query-string'
 

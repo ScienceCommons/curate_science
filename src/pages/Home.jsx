@@ -16,6 +16,8 @@ import FAQ from './FAQ.jsx';
 import Newsletter from './Newsletter.jsx';
 import People from './home/People.jsx';
 
+import { FancyBoxViewer } from 'util/fancybox'
+
 
 const textColor = '#666666'
 
@@ -211,25 +213,10 @@ forEach(images, function(sectionImages) {
 })
 
 
-const FANCYBOX_GALLERY = 'gallery'
-
-function openFancyBox(index){
-    const fancyBoxOptions = {
-        hash: FANCYBOX_GALLERY,
-        loop: true,
-        buttons: [
-            'zoom',
-            'share',
-            'fullScreen',
-            'slideShow',
-            'thumbs',
-            'close',
-        ]
-    }
-
-    if (!window.$) return
-    window.$.fancybox.open(full_size_images, fancyBoxOptions, index)
-}
+const viewer = FancyBoxViewer({
+    initial_images: full_size_images,
+    hash: 'gallery'
+})
 
 function ImageCarousel({ images, autoPlay }) {
     const multiple_images = images.length > 1
@@ -237,7 +224,7 @@ function ImageCarousel({ images, autoPlay }) {
     const expand = function(event) {
         event.preventDefault()
         const index = event.target.dataset.index || 0
-        openFancyBox(index)
+        viewer.show_image(full_size_images, index)
     }
 
     return (
@@ -563,29 +550,8 @@ function About(props) {
 }
 
 
-function initialiseFancyBoxGallery() {
-    // Check if it's already loaded
-    if (window.jQuery && window.jQuery.fancybox) return
-
-    window.jQuery = window.$ = require('jquery')
-    require('@fancyapps/fancybox')
-
-    if (window.location.hash) {
-        // Check if the page is loading a fancybox image
-        // e.g. /app/home/#gallery-2
-        const index = window.location.hash.split(`${FANCYBOX_GALLERY}-`)[1]
-        if (index) {
-            openFancyBox(Number(index) - 1)
-        }
-    }
-}
-
-
 export default function Home({}) {
     const classes = useStyles()
-
-    // Run FancyBox initialisation once component has been rendered
-    useEffect(initialiseFancyBoxGallery, [])
 
     // Media query used to determine if screen size is bigger than `md`
     // (used to reorder "For replicators" text and images on smaller screens)

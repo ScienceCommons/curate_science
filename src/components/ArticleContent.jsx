@@ -101,7 +101,6 @@ class ArticleContent extends React.PureComponent {
     };
 
     this.toggle_show_more = this.toggle_show_more.bind(this)
-    this.handle_figure_click = this.handle_figure_click.bind(this)
   }
 
   toggle_show_more() {
@@ -127,10 +126,6 @@ class ArticleContent extends React.PureComponent {
         this.setState({loading: false})
       })
     })
-  }
-
-  handle_figure_click(figures, idx) {
-    this.props.onFigureClick(figures, idx)
   }
 
   empty(text) {
@@ -265,7 +260,11 @@ class ArticleContent extends React.PureComponent {
           </Typography>
           <ArticleKeywords keywords={article.keywords} />
           <div className={classes.figureList}>
-              <FigureList figures={show_figures} loading={loading} onFigureClick={this.handle_figure_click} />
+              <FigureList
+                  figures={show_figures}
+                  loading={loading}
+                  article_id={article.id}
+              />
           </div>
           <div hidden={this.empty(article.author_contributions)}>
             <Typography component="span" variant="body2">
