@@ -74,6 +74,13 @@ export default function People({homeStyles, ...props}) {
             title: "Software Developer"
         },
         {
+            url: "https://www.researchgate.net/profile/Dominik_Lenda",
+            image: "/sitestatic/people/lenda-hires.png",
+            name: "Dominik Lenda",
+            affiliation: "SWPS University (Poland)",
+            title: "Software Developer"
+        },
+        {
             url: "https://psychology.msu.edu/people/graduate-student/morri640",
             image: "/sitestatic/people/morrison-hires.png",
             name: "Mike Morrison",
@@ -203,6 +210,12 @@ export default function People({homeStyles, ...props}) {
             image: "/sitestatic/people/shiffrin-hires.png",
             name: "Richard Shiffrin",
             affiliation: "Indiana University"
+        },
+        {
+            url: "https://www.kingston.ac.uk/research/research-degrees/research-degree-students/profile/emma-henderson-61/",
+            image: "/sitestatic/people/henderson-hires.png",
+            name: "Emma Henderson",
+            affiliation: "Kingston University (UK)"
         }
     ]
 
