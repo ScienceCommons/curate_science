@@ -40,8 +40,10 @@ const COUNT_ST = {
 	display: 'inline',
 	marginRight: 7
 }
+
+const icon_size = 20
 const COUNT_ICON_ST = {
-	fontSize: '13px',
+	fontSize: icon_size,
 	verticalAlign: -2
 }
 
@@ -85,13 +87,17 @@ class ArticleFullTextLinks extends React.Component {
 		const st = {
 			marginLeft: 5,
 			color: color,
-			display: 'inline',
+			display: 'flex',
+			alignItems: 'center',
             fontSize: 16,
             paddingRight: 0,
 		}
+
 		const LINK_ICON = {
-			marginBottom: '-2px'
+			fontSize: icon_size,
 		}
+
+
 		let url = this.props[`${lt}_url`]
 		let views = this.props[`${lt}_views`]
 		let cites = this.props[`${lt}_citations`]
@@ -119,12 +125,12 @@ class ArticleFullTextLinks extends React.Component {
                     }}
                 >
 					<span className="ContentLinkCounts">
-						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={CITE_COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
-						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
-						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
+						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon style={CITE_COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
+						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
+						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
 					</span>
-					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}<span className="LinkLabel">{label}</span><Icon fontSize="inherit" style={LINK_ICON}>open_in_new</Icon></a>
-                    <ViewEmbeddedContentButton mediaType={lt} iconStyle={st} url={url}/>
+					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}<span className="LinkLabel">{label}</span><Icon style={LINK_ICON}>open_in_new</Icon></a>
+                    <ViewEmbeddedContentButton mediaType={lt} iconStyle={{ fontSize: icon_size }} url={url}/>
 				</Typography>
 			</div>
 		)
