@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 
-import { endsWith, includes, some } from 'lodash'
+import { endsWith, includes, some, startsWith } from 'lodash'
 import { makeStyles } from '@material-ui/styles';
 import { Button, Icon, IconButton } from '@material-ui/core';
 
@@ -51,6 +51,9 @@ function preprint_url_is_valid(url) {
 
 
 function url_is_valid(url, mediaType) {
+    // We can only embed content from https URLs
+    if (!startsWith(url, 'https')) return false
+
     switch(mediaType) {
         case 'pdf':
             return pdf_url_is_valid(url)
