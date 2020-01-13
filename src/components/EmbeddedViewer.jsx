@@ -32,18 +32,43 @@ const ViewURL = createContainer(useViewURL)
 
 export { ViewURL }
 
+
+
 export default function EmbeddedViewer({ props }) {
     const classes = useStyles()
     const view_url = ViewURL.useContainer()
-    const width = (view_url.url === null) ? 0 : '66%'
+    const width = (view_url.url === null) ? 0 : '50%'
+    const visibility = (view_url.url === null) ? 'hidden' : 'visible'
 
     const style = {
         width,
-        marginTop: TOPBAR_HEIGHT,
+        visibility,
+        position: 'fixed',
+        top: TOPBAR_HEIGHT,
+        bottom: 0,
+        right: 0,
         transition: 'width 0.2s ease-in-out',
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 10,
     }
 
     const closeViewer = () => view_url.clear_url()
+    
+    // Hacky way to update the styles on .AppContent so it's independently scrollable when the viewer is visible
+    // Doing it this way because relying on the ViewURL state to change the style causes the whole
+    // .AppContent to be rerendered when the viewer is shown (clearing any filters etc.)
+    // There's probably a better way to do this...
+    const app_content_el = document.querySelector('.AppContent')
+    if (app_content_el) {
+        if (view_url.url === null) {
+            // add class
+            app_content_el.classList.remove('EmbeddedViewerVisible')
+        } else {
+            // remove class
+            app_content_el.classList.add('EmbeddedViewerVisible')
+        }
+    }
 
     return (
         <div className={classes.viewer} style={style}>
@@ -52,7 +77,7 @@ export default function EmbeddedViewer({ props }) {
                     <Icon>close</Icon>
                 </IconButton>
             </div>
-            <iframe style={{height: '100%', width: '100%', border: 'solid 1px'}} src={view_url.url}></iframe>
+            <iframe style={{height: '100%', width: '100%', border: 'solid 1px', flex: 1}} src={view_url.url}></iframe>
         </div>
     )
 }
