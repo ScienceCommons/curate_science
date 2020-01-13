@@ -71,7 +71,7 @@ function url_is_valid(url, mediaType) {
 }
 
 
-export default function ViewEmbeddedContentButton({ iconStyle, mediaType, url }) {
+export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style, url }) {
     const classes = useStyles()
     const view_url = ViewURL.useContainer()
 
@@ -90,7 +90,7 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, url })
     }
 
     return (
-        <Button onClick={() => toggle_viewer(url)} className={classes.button} title="View in embedded viewer">
+        <Button style={style} onClick={() => toggle_viewer(url)} className={classes.button} title="View in embedded viewer">
             <Icon style={iconStyle}>zoom_out_map</Icon>
         </Button>
     )

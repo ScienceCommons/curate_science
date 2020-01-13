@@ -43,7 +43,7 @@ const COUNT_ST = {
 
 const icon_size = 20
 const COUNT_ICON_ST = {
-	fontSize: icon_size,
+	fontSize: '13px',
 	verticalAlign: -2
 }
 
@@ -85,8 +85,8 @@ class ArticleFullTextLinks extends React.Component {
 		let color = COLORS[lt] || '#444444'
 		let label = lt.toLowerCase()
 		const st = {
-			marginLeft: 5,
 			color: color,
+			marginLeft: 5,
 			display: 'flex',
 			alignItems: 'center',
             fontSize: 16,
@@ -94,6 +94,7 @@ class ArticleFullTextLinks extends React.Component {
 		}
 
 		const LINK_ICON = {
+			color: color,
 			fontSize: icon_size,
 		}
 
@@ -125,12 +126,12 @@ class ArticleFullTextLinks extends React.Component {
                     }}
                 >
 					<span className="ContentLinkCounts">
-						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon style={CITE_COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
-						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
-						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
+						{ cites > 0 ? <span key="cites" style={COUNT_ST} title={cite_title}><Icon fontSize="inherit" style={CITE_COUNT_ICON_ST}>format_quote</Icon> {this.short_number(cites)}</span> : null }
+						{ dls > 0 ? <span key="dls" style={COUNT_ST} title={dl_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>cloud_download</Icon> {this.short_number(dls)}</span> : null }
+						{ views > 0 ? <span key="views" style={COUNT_ST} title={view_title}><Icon fontSize="inherit" style={COUNT_ICON_ST}>remove_red_eye</Icon> {this.short_number(views)}</span> : null }
 					</span>
 					<a href={url} className="ArticleContentLink" key={url} style={st} target="_blank" title={title}>{icon}<span className="LinkLabel">{label}</span><Icon style={LINK_ICON}>open_in_new</Icon></a>
-                    <ViewEmbeddedContentButton mediaType={lt} iconStyle={{ fontSize: icon_size }} url={url}/>
+                    <ViewEmbeddedContentButton style={st} mediaType={lt} iconStyle={LINK_ICON} url={url}/>
 				</Typography>
 			</div>
 		)
