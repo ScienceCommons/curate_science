@@ -206,12 +206,6 @@ export default function People({homeStyles, ...props}) {
             affiliation: "Tilburg University",
         },
         {
-            url: "http://shiffrin.cogs.indiana.edu/",
-            image: "/sitestatic/people/shiffrin-hires.png",
-            name: "Richard Shiffrin",
-            affiliation: "Indiana University"
-        },
-        {
             url: "https://www.kingston.ac.uk/research/research-degrees/research-degree-students/profile/emma-henderson-61/",
             image: "/sitestatic/people/henderson-hires.png",
             name: "Emma Henderson",
