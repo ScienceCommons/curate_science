@@ -89,8 +89,6 @@ class App extends React.Component {
 
     render() {
         const { classes, user_session } = this.props;
-        const { anchorEl } = this.state;
-        const open = Boolean(anchorEl);
         return (
         	<Router basename="/app">
                 <ScrollToTop/>
