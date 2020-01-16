@@ -38,8 +38,10 @@ export { ViewURL }
 export default withRouter(function EmbeddedViewer({ history }) {
     const classes = useStyles()
     const view_url = ViewURL.useContainer()
-    const width = (view_url.url === null) ? 0 : '50%'
-    const visibility = (view_url.url === null) ? 'hidden' : 'visible'
+    const viewer_visible = !(view_url.url === null)
+
+    const width = viewer_visible ? '50%' : 0
+    const visibility = viewer_visible ? 'visible' : 'hidden'
 
     const style = {
         width,
@@ -62,12 +64,12 @@ export default withRouter(function EmbeddedViewer({ history }) {
     // There's probably a better way to do this...
     const app_content_el = document.querySelector('.AppContent')
     if (app_content_el) {
-        if (view_url.url === null) {
+        if (viewer_visible) {
             // add class
-            app_content_el.classList.remove('EmbeddedViewerVisible')
+            app_content_el.classList.add('EmbeddedViewerVisible')
         } else {
             // remove class
-            app_content_el.classList.add('EmbeddedViewerVisible')
+            app_content_el.classList.remove('EmbeddedViewerVisible')
         }
     }
 
@@ -75,6 +77,21 @@ export default withRouter(function EmbeddedViewer({ history }) {
     useEffect(() => {
         closeViewer()
     }, [history.location.pathname])
+
+    // Close viewer on ESC
+    useEffect(() => {
+        if (viewer_visible) {
+            function close_on_escape(event) {
+                console.log('close_on_escape!!!')
+                if (event.key === 'Escape') {
+                    closeViewer()
+                }
+            }
+
+            window.addEventListener('keyup', close_on_escape);
+            return () => window.removeEventListener('keyup', close_on_escape);
+        }
+    }, [viewer_visible]);
 
     return (
         <div className={classes.viewer} style={style}>
