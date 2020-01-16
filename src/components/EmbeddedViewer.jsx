@@ -82,7 +82,6 @@ export default withRouter(function EmbeddedViewer({ history }) {
     useEffect(() => {
         if (viewer_visible) {
             function close_on_escape(event) {
-                console.log('close_on_escape!!!')
                 if (event.key === 'Escape') {
                     closeViewer()
                 }
