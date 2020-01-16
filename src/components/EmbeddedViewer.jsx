@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { withRouter } from "react-router-dom";
 import { createContainer } from 'unstated-next'
 
 import { concat } from 'lodash'
@@ -34,7 +35,7 @@ export { ViewURL }
 
 
 
-export default function EmbeddedViewer({ props }) {
+export default withRouter(function EmbeddedViewer({ history }) {
     const classes = useStyles()
     const view_url = ViewURL.useContainer()
     const width = (view_url.url === null) ? 0 : '50%'
@@ -70,6 +71,11 @@ export default function EmbeddedViewer({ props }) {
         }
     }
 
+    // Close viewer on navigation
+    useEffect(() => {
+        closeViewer()
+    }, [history.location.pathname])
+
     return (
         <div className={classes.viewer} style={style}>
             <div className={classes.viewerTopBar}> 
@@ -80,4 +86,4 @@ export default function EmbeddedViewer({ props }) {
             <iframe style={{height: '100%', width: '100%', border: 'solid 1px', flex: 1}} src={view_url.url}></iframe>
         </div>
     )
-}
+})
