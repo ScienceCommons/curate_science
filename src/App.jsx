@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // Routing & routes
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 
 import EmbeddedViewer from './components/EmbeddedViewer.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
@@ -112,9 +112,9 @@ class App extends React.Component {
                                             exact path="/"
                                             component={() =>  {
                                                 if (user_session.authenticated) {
-                                                    return <Recent user_session={user_session} />
+                                                    return <Redirect to="/recent"/>
                                                 }
-                                                return <Home user_session={user_session} />
+                                                return <Redirect to="/home"/>
                                             }}
                                         />
                                         <Route
@@ -139,7 +139,10 @@ class App extends React.Component {
                                     <EmbeddedViewer/>
                                     </ViewURL.Provider>
                                 </div>
-                                <Footer />
+                                <Route
+                                    exact path="/home"
+                                    component={() => <Footer />}
+                                />
                             </Route>
                         </Switch>
                     </MuiThemeProvider>
