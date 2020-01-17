@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 
 import { endsWith, includes, some, startsWith } from 'lodash'
 import { makeStyles } from '@material-ui/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Button, Icon, IconButton } from '@material-ui/core';
 
 import { ViewURL } from './EmbeddedViewer.jsx';
@@ -11,9 +12,6 @@ const useStyles = makeStyles(theme => ({
     button: {
         minWidth: 0,
         padding: 0,
-        [theme.breakpoints.down('lg')]: {
-            display: 'none',
-        }
     }
 }))
 
@@ -75,6 +73,9 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style,
     const classes = useStyles()
     const view_url = ViewURL.useContainer()
 
+    const lessThanLg = useMediaQuery(theme => theme.breakpoints.down('lg'))
+    
+    if (lessThanLg) return null
     if (!url_is_valid(url, mediaType)) return null
 
     if (mediaType === 'pdf') {
