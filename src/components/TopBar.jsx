@@ -45,7 +45,7 @@ const styles = theme => ({
     root: {
         position: 'fixed',
         top: 0,
-        zIndex: 1,
+        zIndex: 20,
         width: '100%',
         maxWidth: '100vw',
     },
