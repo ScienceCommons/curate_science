@@ -65,11 +65,17 @@ export default withRouter(function EmbeddedViewer({ history }) {
     const app_content_el = document.querySelector('.AppContent')
     if (app_content_el) {
         if (viewer_visible) {
+            // Store window scroll position to be applied to AppContent div
+            const scroll_position = window.scrollY
             // add class
             app_content_el.classList.add('EmbeddedViewerVisible')
+            app_content_el.scrollTop = scroll_position
         } else {
+            // Store AppContent scroll position to be applied to window
+            const scroll_position = app_content_el.scrollTop
             // remove class
             app_content_el.classList.remove('EmbeddedViewerVisible')
+            window.scrollTo(0, scroll_position)
         }
     }
 
