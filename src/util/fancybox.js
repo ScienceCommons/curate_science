@@ -28,9 +28,7 @@ export function FancyBoxViewer({ initial_images, hash }) {
   }
 
   function show_image(images, index) {
-    console.log('shjpow image', index, !window.$)
     if (!window.$) return
-    console.log('fancybox open', images, index)
     window.$.fancybox.open(images, options, index)
   }
 
