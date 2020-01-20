@@ -63,18 +63,21 @@ export default withRouter(function EmbeddedViewer({ history }) {
     // .AppContent to be rerendered when the viewer is shown (clearing any filters etc.)
     // There's probably a better way to do this...
     const app_content_el = document.querySelector('.AppContent')
+    const viewer_visible_class = 'EmbeddedViewerVisible'
+
     if (app_content_el) {
-        if (viewer_visible) {
+        const class_already_added = app_content_el.classList.contains(viewer_visible_class)
+        if (viewer_visible && !class_already_added) {
             // Store window scroll position to be applied to AppContent div
             const scroll_position = window.scrollY
             // add class
-            app_content_el.classList.add('EmbeddedViewerVisible')
+            app_content_el.classList.add(viewer_visible_class)
             app_content_el.scrollTop = scroll_position
-        } else {
+        } else if (!viewer_visible) {
             // Store AppContent scroll position to be applied to window
             const scroll_position = app_content_el.scrollTop
             // remove class
-            app_content_el.classList.remove('EmbeddedViewerVisible')
+            app_content_el.classList.remove(viewer_visible_class)
             window.scrollTo(0, scroll_position)
         }
     }
