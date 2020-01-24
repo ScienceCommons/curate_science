@@ -79,6 +79,7 @@ const styles = theme => ({
     left: '50%',
     marginLeft: '-24px', // Icon width 36/2 + 6px padding = 24
     padding: 6,
+    marginTop: -6,
     pointerEvents: 'auto'
   },
   moreIcon: {
