@@ -13,7 +13,8 @@ const styles = {
     marginBottom: '9px'
   },
   cardContent: {
-    padding: 12
+    padding: 12,
+    paddingTop: 0,
   },
 };
 

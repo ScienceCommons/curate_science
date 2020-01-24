@@ -21,6 +21,16 @@ import TruncatedText from './shared/TruncatedText.jsx';
 import { json_api_req, send_height_to_parent } from '../util/util.jsx'
 
 const styles = theme => ({
+  root: {
+    '&:hover': {
+      '& $articleType': {
+        opacity: 1,
+      }
+    }
+  },
+  articleType: {
+    opacity: 0.4,
+  },
   createdDate: {
     fontStyle: 'italic',
     textAlign: 'right',
@@ -167,8 +177,8 @@ class ArticleContent extends React.PureComponent {
     send_height_to_parent()
   }
 
-	render() {
-		const { loading, show_more } = this.state
+  render() {
+    const { loading, show_more } = this.state
     const { article, classes, is_article_page, show_date } = this.props;
     const is_expanded = show_more || is_article_page
 
@@ -204,9 +214,9 @@ class ArticleContent extends React.PureComponent {
 
     const created_at = this.created_at()
     const title = (
-          <Typography className={classes.title} variant="h2" color="textPrimary">
-              {article.title}
-          </Typography>
+      <Typography className={classes.title} variant="h2" color="textPrimary">
+        {article.title}
+      </Typography>
     )
 
     let journal
@@ -216,17 +226,35 @@ class ArticleContent extends React.PureComponent {
       journal = article.journal
     }
 
-		return (
-			<div>
+    return (
+      <div className={classes.root}>
+        <div className={classes.articleType}>
+          <ArticleType
+            type={article.article_type}
+            replication_data={rd}
+            registered_report={article.prereg_protocol_type == 'REGISTERED_REPORT'}
+            article={article}
+          />
+        </div>
+
+        <div
+          style={{
+            borderBottom: 'solid 1px #d3d3d3',
+            marginBottom: '0.5rem',
+            marginLeft: -12,
+            marginRight: -12
+          }}
+        ></div>
+
         <ArticleFullTextLinks {...content_links} />
 
         {
           is_article_page ?
-          <span>{title}</span>
-          :
-          <Link to={`/article/${article.id}`} className={classes.titleLink}>
-            {title}
-          </Link>
+            <span>{title}</span>
+            :
+              <Link to={`/article/${article.id}`} className={classes.titleLink}>
+                {title}
+              </Link>
         }
 
         <Typography className={classes.authors} color="textSecondary" gutterBottom variant="body2">
@@ -236,13 +264,6 @@ class ArticleContent extends React.PureComponent {
         <Typography className={classes.journal} color="textSecondary" gutterBottom variant="body2">
           <JournalDOIBadge journal={journal} doi={article.doi} />
         </Typography>
-
-        <ArticleType
-          type={article.article_type}
-          replication_data={rd}
-          registered_report={article.prereg_protocol_type == 'REGISTERED_REPORT'}
-          article={article}
-        />
 
         <TransparencyBadge {...transparency_data} article={article}/>
 
@@ -255,18 +276,18 @@ class ArticleContent extends React.PureComponent {
         <div id="details" hidden={!is_expanded}>
           <Typography className={classes.abstract} variant="body2">
             { is_article_page ?
-              <span>{article.abstract}</span>
-              :
-              <TruncatedText text={article.abstract} maxLength={540} fontSize={12} />
+            <span>{article.abstract}</span>
+                :
+                  <TruncatedText text={article.abstract} maxLength={540} fontSize={12} />
             }
           </Typography>
           <ArticleKeywords keywords={article.keywords} />
           <div className={classes.figureList}>
-              <FigureList
-                  figures={show_figures}
-                  loading={loading}
-                  article_id={article.id}
-              />
+            <FigureList
+              figures={show_figures}
+              loading={loading}
+              article_id={article.id}
+            />
           </div>
           <div hidden={this.empty(article.author_contributions)}>
             <Typography component="span" variant="body2">
@@ -302,50 +323,50 @@ class ArticleContent extends React.PureComponent {
 
           {
             (article.videos || []).length + (article.presentations || []).length + (article.supplemental_materials || []).length > 0 ?
-            (
-              <Typography variant="body2" style={{display: 'flex', alignItems: 'center'}} className={classes.secondaryLink}>
-                { article.videos.map(video =>
-                  <a href={video.url} target="_blank" key={`video-${video.id}`} className={classes.additionalLink} style={{color: '#000'}}>
-                    <Icon title={`Video: ${video.url}`}>videocam</Icon>
-                  </a>
-                )}
-                { article.presentations.map(presentation =>
-                  <a href={presentation.url} target="_blank" key={`presentation-${presentation.id}`} className={classes.additionalLink}>
-                    <Icon title={`Presentation: ${presentation.url}`}>
-                      <img src="/sitestatic/icons/slide_icon.png" style={{ width: '1em' }}/>
-                    </Icon>
-                  </a>
-                )}
-                { article.supplemental_materials.map((material, idx) =>
-                  <a href={material.url} target="_blank" key={`material-${material.id}`} className={classes.additionalLink}>
-                    {`Suppl. materials #${idx + 1}`}
-                  </a>
-                )}
-              </Typography>
-            )
-            : null
+              (
+                <Typography variant="body2" style={{display: 'flex', alignItems: 'center'}} className={classes.secondaryLink}>
+                  { article.videos.map(video =>
+                    <a href={video.url} target="_blank" key={`video-${video.id}`} className={classes.additionalLink} style={{color: '#000'}}>
+                      <Icon title={`Video: ${video.url}`}>videocam</Icon>
+                    </a>
+                  )}
+                  { article.presentations.map(presentation =>
+                    <a href={presentation.url} target="_blank" key={`presentation-${presentation.id}`} className={classes.additionalLink}>
+                      <Icon title={`Presentation: ${presentation.url}`}>
+                        <img src="/sitestatic/icons/slide_icon.png" style={{ width: '1em' }}/>
+                      </Icon>
+                    </a>
+                  )}
+                  { article.supplemental_materials.map((material, idx) =>
+                    <a href={material.url} target="_blank" key={`material-${material.id}`} className={classes.additionalLink}>
+                      {`Suppl. materials #${idx + 1}`}
+                    </a>
+                  )}
+                </Typography>
+              )
+              : null
           }
 
           {
             article.media_coverage && article.media_coverage.length ?
-            (
-              <Typography variant="body2" className={classes.secondaryLink}>
-                <span className={classes.grayedTitle}>News coverage:</span>
-                {
-                  article.media_coverage.map((coverage, idx, arr) =>
-                    <span key={`coverage-${coverage.id}`}>
-                      <a href={coverage.url} target="_blank">
-                        {coverage.media_source_name}
-                      </a>
-                      <span hidden={idx === arr.length - 1} style={{marginLeft: 2, marginRight: 2}}>
-                        &#8226;
+              (
+                <Typography variant="body2" className={classes.secondaryLink}>
+                  <span className={classes.grayedTitle}>News coverage:</span>
+                  {
+                    article.media_coverage.map((coverage, idx, arr) =>
+                      <span key={`coverage-${coverage.id}`}>
+                        <a href={coverage.url} target="_blank">
+                          {coverage.media_source_name}
+                        </a>
+                        <span hidden={idx === arr.length - 1} style={{marginLeft: 2, marginRight: 2}}>
+                          &#8226;
+                        </span>
                       </span>
-                    </span>
-                  )
-                }
-              </Typography>
-            )
-            : null
+                    )
+                  }
+                </Typography>
+              )
+              : null
           }
         </div>
 
@@ -355,9 +376,9 @@ class ArticleContent extends React.PureComponent {
           </Typography>
         </div>
 
-			</div>
-		)
-	}
+      </div>
+    )
+  }
 }
 
 ArticleContent.defaultProps = {

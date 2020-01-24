@@ -18,7 +18,7 @@ class ArticleType extends React.Component {
     let color = at != null ? at.color || '#000000' : "#000000"
     const st = {
       color: color,
-      border: `1px solid ${color}`
+      opacity: 1,
     }
     if (type == 'REPLICATION' && !isEmpty(replication_data)) {
       count = <span className="Count">{replication_data.number_of_reps}</span>
@@ -76,7 +76,7 @@ class ArticleType extends React.Component {
 		const rr_color = C.REGISTERED_REPORT_COLOR
 		const st = {
 			color: rr_color,
-			border: `1px solid`,
+			opacity: 1,
 		}
 		if (registered_report) rr = (
 			<span className="ArticleBadgeWithCount ArticleType" style={st}>
@@ -84,7 +84,7 @@ class ArticleType extends React.Component {
 			</span>
 		)
 		return (
-			<div>
+			<div style={{ display: 'flex', alignItems: 'center' }}>
 				{ type_label }
 				{ rr }
 			</div>
