@@ -351,7 +351,7 @@ class TransparencyBadge extends React.Component {
 		})
 		if (badges.length == 0) return null
 		else return (
-			<div>
+			<div style={{ opacity: 0.55 }}>
 				<span style={{marginRight: 10}}>{ badges }</span>
 				{ commentary_popover }
 			</div>
