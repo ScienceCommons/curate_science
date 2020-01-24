@@ -39,7 +39,7 @@ const styles = theme => ({
     }
   },
   authors: {
-    color: "#009933",
+    color: "#006621",
     marginTop: 3,
     marginBottom: 3,
     lineHeight: 1.24
