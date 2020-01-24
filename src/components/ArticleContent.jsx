@@ -75,6 +75,7 @@ const styles = theme => ({
   },
   moreIconButton: {
     display: 'block',
+    color: '#d3d3d3',
     position: 'absolute',
     left: '50%',
     marginLeft: '-24px', // Icon width 36/2 + 6px padding = 24
