@@ -105,6 +105,7 @@ class AuthorPage extends React.Component {
         this.close_snack = this.close_snack.bind(this)
         this.update_articles = this.update_articles.bind(this)
         this.update_search_filter = this.update_search_filter.bind(this)
+        this.focus_on_filter_box = this.focus_on_filter_box.bind(this)
     }
 
     componentDidMount() {
@@ -112,6 +113,7 @@ class AuthorPage extends React.Component {
             document.body.style.overflow = 'hidden'
         }
 
+        document.addEventListener('keydown', this.focus_on_filter_box);
         this.fetch_author_then_articles()
     }
 
@@ -123,6 +125,14 @@ class AuthorPage extends React.Component {
         return null;
     }
 
+    focus_on_filter_box(event) {
+        // Focus of filter box when `Shift + /` is pressed
+        if (event.shiftKey && event.keyCode === 191) {
+            event.preventDefault()
+            this.filter_box.focus()
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.match.params.slug !== this.state.current_slug) {
             this.fetch_author_then_articles()
@@ -130,6 +140,7 @@ class AuthorPage extends React.Component {
     }
 
     componentWillUnmount() {
+      document.removeEventListener('keydown', this.focus_on_filter_box);
     }
 
     show_snack(message) {
@@ -323,7 +334,7 @@ class AuthorPage extends React.Component {
         this.setState({ articles: articles })
     }
 
-	render() {
+    render() {
         let {classes, embedded, user_session} = this.props
         let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
@@ -343,6 +354,7 @@ class AuthorPage extends React.Component {
                 margin="normal"
                 variant="outlined"
                 style={{margin: 0}}
+                inputRef={ref => { this.filter_box = ref }}
                 InputProps={{
                     startAdornment: <InputAdornment position="start"><Icon color="disabled">search</Icon></InputAdornment>,
                     inputProps: {
