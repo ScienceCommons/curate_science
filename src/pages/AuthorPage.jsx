@@ -128,6 +128,11 @@ class AuthorPage extends React.Component {
     focus_on_filter_box(event) {
         // Focus of filter box when `Shift + /` is pressed
         if (event.shiftKey && event.keyCode === 191) {
+            // Ignore the combo if the user is inputting text
+            const target_tag_name = (event.target.nodeType == 1) ? event.target.nodeName.toUpperCase() : ''
+            const in_text_field = /INPUT|SELECT|TEXTAREA/.test(target_tag_name)
+            if (in_text_field) return
+
             event.preventDefault()
             this.filter_box.focus()
         }

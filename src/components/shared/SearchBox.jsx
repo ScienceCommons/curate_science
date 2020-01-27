@@ -303,6 +303,11 @@ class SearchBox extends React.PureComponent {
 
   focusOnSearchBox(event) {
     if (event.key === '/') {
+      // Ignore the keypress if the user is inputting text
+      const targetTagName = (event.target.nodeType == 1) ? event.target.nodeName.toUpperCase() : ''
+      const inTextField = /INPUT|SELECT|TEXTAREA/.test(targetTagName)
+      if (inTextField) return
+
       event.preventDefault()
       this.searchBox.focus()
     }
