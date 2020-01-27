@@ -73,7 +73,7 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style,
     const classes = useStyles()
     const view_url = ViewURL.useContainer()
 
-    const lessThanLg = useMediaQuery(theme => theme.breakpoints.down('lg'))
+    const lessThanLg = useMediaQuery(theme => theme.breakpoints.down('md'))
     
     if (lessThanLg) return null
     if (!url_is_valid(url, mediaType)) return null
