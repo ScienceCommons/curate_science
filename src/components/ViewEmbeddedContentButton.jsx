@@ -24,7 +24,13 @@ function url_contains(url, strings) {
 
 function pdf_url_is_valid(url) {
     const valid_urls = ['open.lnu.se/index.php', 'readcube.com/articles']
-    const denied_urls = ['github.com', 'psycnet.apa.org/fulltext', 'academia.edu.documents']
+    const denied_urls = [
+        'academia.edu.documents',
+        'core.ac.uk',
+        'github.com',
+        'psycnet.apa.org/fulltext',
+        'researchgate.net',
+    ]
 
     if (url_contains(url, denied_urls)) return false
     if (url_contains(url, valid_urls)) return true
