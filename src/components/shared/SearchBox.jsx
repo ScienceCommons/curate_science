@@ -237,6 +237,7 @@ class SearchBox extends React.PureComponent {
     this.handleChange = this.handleChange.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.loadOptions = debounce(this.loadOptions.bind(this), 400)
+    this.focusOnSearchBox = this.focusOnSearchBox.bind(this)
   }
 
   handleChange(value, action) {
@@ -300,6 +301,21 @@ class SearchBox extends React.PureComponent {
       })
   }
 
+  focusOnSearchBox(event) {
+    if (event.key === '/') {
+      event.preventDefault()
+      this.searchBox.focus()
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.focusOnSearchBox);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.focusOnSearchBox);
+  }
+
   render() {
     const {
       autoFocus,
@@ -337,6 +353,7 @@ class SearchBox extends React.PureComponent {
     return (
       <div className={classes.root}>
         <Async
+          ref={ref => { this.searchBox = ref }}
           onChange={this.handleChange}
           onInputChange={this.handleInputChange}
           isLoading={loading}
