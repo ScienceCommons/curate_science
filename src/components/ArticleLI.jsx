@@ -13,8 +13,7 @@ const styles = {
     marginBottom: '9px'
   },
   cardContent: {
-    padding: 12,
-    paddingTop: 0,
+    padding: '0 12px',
   },
 };
 
@@ -23,26 +22,26 @@ class ArticleLI extends React.Component {
     super(props);
   }
 
-	render() {
+  render() {
     let { article, classes, show_date } = this.props;
 
-    const CC_ST = {paddingBottom: 12} // Fix for .MuiCardContent-root-325:last-child adding 24px padding-bottom
+    const CC_ST = {paddingBottom: 0} // Fix for .MuiCardContent-root-325:last-child adding 24px padding-bottom
 
-		return (
-			<div className="ArticleCard">
-				<Card className={classes.card} raised>
-					<CardContent className={classes.cardContent} style={CC_ST}>
+    return (
+      <div className="ArticleCard">
+        <Card className={classes.card} raised>
+          <CardContent className={classes.cardContent} style={CC_ST}>
             <ArticleContent
               article={article}
               onFetchedArticleDetails={this.props.onFetchedArticleDetails}
               onFigureClick={this.props.onFigureClick}
               show_date={show_date}
             />
-	  			</CardContent>
-				</Card>
-			</div>
-		)
-	}
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 }
 
 ArticleLI.defaultProps = {

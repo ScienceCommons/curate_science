@@ -81,7 +81,6 @@ const styles = theme => ({
     position: 'relative',
     height: 36,
     marginTop: '-15px',
-    marginBottom: '5px',
     pointerEvents: 'none' // Prevent interference with transparency popups
   },
   moreIconButton: {
@@ -284,7 +283,7 @@ class ArticleContent extends React.PureComponent {
           </IconButton>
         </div>
 
-        <div id="details" hidden={!is_expanded}>
+        <div id="details" hidden={!is_expanded} style={{ paddingBottom: '0.75rem' }}>
           <Typography className={classes.abstract} variant="body2">
             { is_article_page ?
             <span>{article.abstract}</span>
