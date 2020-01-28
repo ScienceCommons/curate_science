@@ -375,7 +375,7 @@ TransparencyBadge.defaultProps = {
   article: {},
   reporting_standards_type: null,
   article_type: "ORIGINAL",
-  icon_size: 30,
+  icon_size: 25,
   original_article_url: null,
   prereg_protocol_type: null,
   commentaries: [],
