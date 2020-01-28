@@ -24,7 +24,7 @@ const styles = theme => ({
   root: {
     '&:hover': {
       '& $articleType': {
-        opacity: 1,
+        opacity: 0.7,
       }
     }
   },
