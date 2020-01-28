@@ -84,7 +84,7 @@ class ArticleType extends React.Component {
 			</span>
 		)
 		return (
-			<div style={{ display: 'flex', alignItems: 'center' }}>
+			<div style={{ display: 'flex', alignItems: 'center', padding: '5px 0' }}>
 				{ type_label }
 				{ rr }
 			</div>
