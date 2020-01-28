@@ -127,6 +127,12 @@ textarea {
 	opacity: 1.0;
 }
 
+@media (max-width: 375px) {
+  .ArticleCard .ContentLinkCounts {
+    display: none;
+  }
+}
+
 .ArticleBadgeWithCount {
 	box-sizing: border-box;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
