@@ -79,9 +79,10 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style,
     const classes = useStyles()
     const view_url = ViewURL.useContainer()
 
-    const lessThanLg = useMediaQuery(theme => theme.breakpoints.down('md'))
-    
-    if (lessThanLg) return null
+    // If the screen size is less than the XL breakpoint, don't show the embedded content button
+    const lessThanXl = useMediaQuery(theme => theme.breakpoints.down('lg'))
+    if (lessThanXl) return null
+
     if (!url_is_valid(url, mediaType)) return null
 
     if (mediaType === 'pdf') {
