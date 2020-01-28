@@ -32,6 +32,7 @@ const styles = theme => ({
     opacity: 0.4,
   },
   createdDate: {
+    color: "#DCDCDC",
     fontStyle: 'italic',
     textAlign: 'right',
   },
@@ -228,13 +229,23 @@ class ArticleContent extends React.PureComponent {
 
     return (
       <div className={classes.root}>
-        <div className={classes.articleType}>
-          <ArticleType
-            type={article.article_type}
-            replication_data={rd}
-            registered_report={article.prereg_protocol_type == 'REGISTERED_REPORT'}
-            article={article}
-          />
+        <div
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}
+        >
+          <div className={classes.articleType}>
+            <ArticleType
+              type={article.article_type}
+              replication_data={rd}
+              registered_report={article.prereg_protocol_type == 'REGISTERED_REPORT'}
+              article={article}
+            />
+          </div>
+
+          <div hidden={!show_date}>
+            <Typography className={classes.createdDate} component='div' color="textSecondary" variant="body2">
+              {created_at}
+            </Typography>
+          </div>
         </div>
 
         <div
@@ -368,12 +379,6 @@ class ArticleContent extends React.PureComponent {
               )
               : null
           }
-        </div>
-
-        <div hidden={!show_date}>
-          <Typography className={classes.createdDate} component='div' color="textSecondary" variant="body2">
-            {created_at}
-          </Typography>
         </div>
 
       </div>
