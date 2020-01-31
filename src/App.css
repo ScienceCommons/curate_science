@@ -127,8 +127,17 @@ textarea {
 	opacity: 1.0;
 }
 
+.ArticleCreatedDate {
+  color: #DCDCDC;
+  font-style: italic;
+  text-align: right;
+}
+
 @media (max-width: 375px) {
   .ArticleCard .ContentLinkCounts {
+    display: none;
+  }
+  .ArticleCreatedDate {
     display: none;
   }
 }

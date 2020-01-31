@@ -31,11 +31,6 @@ const styles = theme => ({
   articleType: {
     opacity: 0.4,
   },
-  createdDate: {
-    color: "#DCDCDC",
-    fontStyle: 'italic',
-    textAlign: 'right',
-  },
   title: {
     fontSize: 18,
     lineHeight: '20px',
@@ -241,7 +236,7 @@ class ArticleContent extends React.PureComponent {
           </div>
 
           <div hidden={!show_date}>
-            <Typography className={classes.createdDate} component='div' color="textSecondary" variant="body2">
+            <Typography className="ArticleCreatedDate" component='div' color="textSecondary" variant="body2">
               {created_at}
             </Typography>
           </div>
