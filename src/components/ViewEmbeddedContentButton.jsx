@@ -77,7 +77,14 @@ function url_is_valid(url, mediaType) {
 
 export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style, url }) {
     const classes = useStyles()
-    const view_url = ViewURL.useContainer()
+    let view_url
+    try {
+        view_url = ViewURL.useContainer()
+    } catch(error) {
+        // Quick hack to avoid errors rendering the embedded author page
+        // If trying to render outside of ViewURL.Provider we ignore the component and render nothing
+        return null
+    }
 
     // If the screen size is less than the XL breakpoint, don't show the embedded content button
     const lessThanXl = useMediaQuery(theme => theme.breakpoints.down('lg'))
