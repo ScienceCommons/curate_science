@@ -115,8 +115,9 @@ Then don’t forget to reset the env var: `export GOOGLE_CLOUD_PROJECT=`
 
 (DB_NAME is set conditionally, based on the value of GOOGLE_CLOUD_PROJECT, [here]( https://github.com/ScienceCommons/curate_science/blob/177da9bba83b0eea75086749d883acd2c9c39b48/curate_science/settings.py#L31))
 
+(for a more detailed set of instructions on how to setup a local instance of the app, see [here](https://github.com/ScienceCommons/curate_science/issues/76))
 
-### Core UI Regression Tests
+## Core UI Regression Tests
 
 1. Create a new article
 2. Save a new article
