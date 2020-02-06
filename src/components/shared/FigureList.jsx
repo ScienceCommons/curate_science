@@ -15,9 +15,9 @@ import { FancyBoxViewer } from 'util/fancybox'
 
 const styles = {
     container: {
-       display: 'flex',
-       flexDirection: 'row',
-       overflow: 'scroll-x'
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap'
     },
     thumbnail: {
         display: 'inline-block',
