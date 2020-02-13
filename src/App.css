@@ -72,8 +72,7 @@ textarea {
 	position: relative;
 }
 
-.ArticleWithActions .Article {
-	display: 'block';
+.Article {
 	max-width: 650px;
 }
 
