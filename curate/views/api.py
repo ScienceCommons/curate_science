@@ -3,7 +3,7 @@ from itertools import chain
 from django.shortcuts import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import F, Q
+from django.db.models import F, Prefetch, Q
 from django.contrib.postgres.search import SearchVector, SearchRank
 import logging
 from django.contrib.auth.forms import UserCreationForm
@@ -299,8 +299,17 @@ def view_article(request, pk):
     '''
     View one specific article.
     '''
-    queryset=get_object_or_404(Article.objects \
-            .prefetch_related('authors', 'commentaries', 'key_figures'), id=pk)
+    queryset = get_object_or_404(
+        Article
+        .objects
+        .prefetch_related(
+            'authors',
+            'commentaries',
+            # Specify the ordering for key_figures so they're always shown in the order they were added
+            Prefetch('key_figures', queryset=KeyFigure.objects.order_by('id'))
+        ),
+        id=pk
+    )
     serializer=ArticleSerializerNested(instance=queryset)
     return Response(serializer.data)
 
