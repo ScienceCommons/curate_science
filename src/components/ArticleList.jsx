@@ -2,13 +2,12 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 
-import { Button, Grid, Icon, IconButton, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, Icon, IconButton, Typography } from '@material-ui/core';
 
 import { get, includes, lowerCase, some } from 'lodash'
 
-import ArticleActions from '../components/ArticleActions.jsx';
+import ArticleContent from '../components/ArticleContent.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
-import ArticleLI from '../components/ArticleLI.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
 import Loader from '../components/shared/Loader.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
@@ -20,6 +19,13 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
   root: {
     flexGrow: 1
+  },
+  card: {
+    minWidth: 275,
+    marginBottom: '9px'
+  },
+  cardContent: {
+    padding: '0 12px',
   },
   articleList: {
     marginTop: '10px',
@@ -178,31 +184,22 @@ class ArticleWithActions extends React.Component {
     let article_ui_id = article.doi || article.id
 
     return (
-      <div key={article.id} className="ArticleWithActions" id={article_ui_id}>
-        <div className="Article">
-          <ArticleLI article={article}
-            admin={false}
-            is_article_page={is_article_page}
-            onFetchedArticleDetails={this.got_article_details}
-            show_date={show_date}
-          />
+      <div className="Article" id={article_ui_id}>
+        <div className="ArticleCard">
+          <Card className={classes.card} raised>
+            <CardContent className={classes.cardContent} style={{ paddingBottom: 0 }}>
+              <ArticleContent
+                article={article}
+                onFetchedArticleDetails={this.got_article_details}
+                show_date={show_date}
+                user_session={user_session}
+                onDelete={this.delete}
+                onEdit={this.edit}
+                onUpdate={this.props.onUpdate}
+              />
+            </CardContent>
+          </Card>
         </div>
-        <div className="ArticleLeftActions">
-          <span className="ActionButton">
-            <IconButton href={`#${article_ui_id}`} size="small" style={{color: 'gray'}}>
-              <Icon>link</Icon>
-            </IconButton>
-          </span>
-        </div>
-
-        <ArticleActions
-          article={article}
-          user_session={user_session}
-          onDelete={this.delete}
-          onEdit={this.edit}
-          onUpdate={this.props.onUpdate}
-        />
-
       </div>
     )
   }

@@ -35,9 +35,6 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import C from './constants/constants';
 
-// CS components
-import ArticleLI from './components/ArticleLI.jsx';
-
 import css from './App.css';
 
 const theme = createMuiTheme({

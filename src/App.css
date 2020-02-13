@@ -77,35 +77,6 @@ textarea {
 	max-width: 650px;
 }
 
-.ArticleWithActions .ArticleActions {
-	display: none;
-	text-align: left;
-	position: absolute;
-	width: 100px;
-	top: 10px;
-	padding: 5px 20px;
-	left: 100%;
-}
-
-.ArticleWithActions:hover .ArticleActions {
-	display: block;
-}
-
-.ArticleWithActions .ArticleLeftActions {
-	display: none;
-	text-align: right;
-	position: absolute;
-	width: 100px;
-	height: 200px;
-	top: 0px;
-	padding: -25px;
-	left: -100px;
-}
-
-.ArticleWithActions:hover .ArticleLeftActions {
-	display: block;
-}
-
 .ArticleWithActions .ActionButton {
 	display: inline-block;
 	margin-bottom: 8px;

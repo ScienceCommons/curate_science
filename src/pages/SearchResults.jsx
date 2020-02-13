@@ -4,7 +4,6 @@ import { withCookies } from 'react-cookie';
 
 import { concat } from 'lodash'
 
-import ArticleLI from '../components/ArticleLI.jsx';
 import ArticleList from '../components/ArticleList.jsx';
 import AuthorCard from '../components/AuthorCard.jsx';
 import FilterChips from '../components/FilterChips.jsx';

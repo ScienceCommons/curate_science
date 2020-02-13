@@ -118,18 +118,14 @@ class ArticlePage extends React.PureComponent {
                     <ArticleContent
                       article={article}
                       is_article_page={true}
+                      user_session={user_session}
+                      onDelete={this.handle_delete}
+                      onEdit={this.handle_edit}
+                      onUpdate={this.article_updated}
                     />
                   </CardContent>
                 </Card>
               </div>
-
-              <ArticleActions
-                article={article}
-                user_session={user_session}
-                onDelete={this.handle_delete}
-                onEdit={this.handle_edit}
-                onUpdate={this.article_updated}
-              />
 
               <ArticleEditor
                 article_id={editing_article_id}

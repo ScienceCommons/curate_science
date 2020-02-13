@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react'
+import { withCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 
-import { pick } from 'lodash'
+import { get, includes, pick } from 'lodash'
 
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
 import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import Typography from '@material-ui/core/Typography';
 
+import ArticleActions from './ArticleActions.jsx';
 import ArticleFullTextLinks from './ArticleFullTextLinks.jsx';
 import ArticleKeywords from './ArticleKeywords.jsx';
 import ArticleType from './ArticleType.jsx';
@@ -18,7 +25,7 @@ import JournalDOIBadge from './JournalDOIBadge.jsx';
 import TransparencyBadge from './TransparencyBadge.jsx';
 import TruncatedText from './shared/TruncatedText.jsx';
 
-import { json_api_req, send_height_to_parent } from '../util/util.jsx'
+import { json_api_req, send_height_to_parent, simple_api_req } from '../util/util.jsx'
 
 const styles = theme => ({
   root: {
@@ -99,6 +106,7 @@ const styles = theme => ({
   }
 });
 
+
 class ArticleContent extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -174,7 +182,7 @@ class ArticleContent extends React.PureComponent {
 
   render() {
     const { loading, show_more } = this.state
-    const { article, classes, is_article_page, show_date } = this.props;
+    const { article, classes, cookies, is_article_page, show_date, user_session } = this.props;
     const is_expanded = show_more || is_article_page
 
     const content_links = pick(article, [
@@ -235,10 +243,20 @@ class ArticleContent extends React.PureComponent {
             />
           </div>
 
-          <div hidden={!show_date}>
-            <Typography className="ArticleCreatedDate" component="div" variant="body2">
-              {created_at}
-            </Typography>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div hidden={!show_date}>
+                <Typography className="ArticleCreatedDate" component="div" variant="body2">
+                  {created_at}
+                </Typography>
+              </div>
+              <ArticleActions
+                  article={article}
+                  cookies={cookies}
+                  user_session={user_session}
+                  onDelete={this.props.onDelete}
+                  onEdit={this.props.onEdit}
+                  onUpdate={this.props.onUpdate}
+              />
           </div>
         </div>
 
@@ -374,7 +392,6 @@ class ArticleContent extends React.PureComponent {
               : null
           }
         </div>
-
       </div>
     )
   }
@@ -388,4 +405,4 @@ ArticleContent.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ArticleContent);
+export default withCookies(withStyles(styles)(ArticleContent));
