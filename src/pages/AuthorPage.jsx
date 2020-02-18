@@ -370,7 +370,12 @@ class AuthorPage extends React.Component {
 
 		return (
             <div className={classes.root}>
-    			<Grid container justify="center" className="AuthorPage">
+                <Grid
+                    container
+                    justify="center"
+                    className="AuthorPage"
+                    style={embedded ? { padding: '0.5rem 1rem' } : null }
+                >
                     <Grid item>
                         {
                             !embedded ?
