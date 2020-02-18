@@ -75,6 +75,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
     transparency_urls = TransparencyURLSerializer(many=True)
     is_basic_4_retroactive = serializers.BooleanField(read_only=True)
     is_basic_7_retroactive = serializers.BooleanField(read_only=True)
+    key_figures = KeyFigureSerializer(many=True, required=False, allow_null=True)
 
     class Meta:
         model=Article

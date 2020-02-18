@@ -239,7 +239,13 @@ def list_articles(request):
     '''
     queryset = filter_and_sort_articles(request)
     queryset = queryset.filter(is_live=True)
-    queryset = queryset.prefetch_related('commentaries', 'authors')
+    queryset = queryset.prefetch_related(
+        'authors',
+        'commentaries',
+        # Specify the ordering for key_figures so they're always shown
+        # in the order they were added
+        Prefetch('key_figures', queryset=KeyFigure.objects.order_by('id')),
+    )
 
     serializer = ArticleListSerializer(instance=queryset, many=True)
 
