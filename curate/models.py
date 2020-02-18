@@ -386,6 +386,9 @@ class KeyFigure(models.Model):
         width_field='thumb_width',
     )
 
+    class Meta:
+        ordering = ('id',)
+
     def save(self, *args, **kwargs):
         """
         Make and save the thumbnail for the photo here.
