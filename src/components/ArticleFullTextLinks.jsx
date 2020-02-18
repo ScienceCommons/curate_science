@@ -9,8 +9,6 @@ import {get_link_source_icon} from '../util/util.jsx'
 
 var numbro = require("numbro");
 
-const LINK_TYPES = ['pdf', 'html', 'preprint']
-
 const LINK_TITLES = {
 	'pdf': "View PDF of this article (postprint).",
 	'html': "View interactive HTML version of this article (postprint).",
@@ -81,7 +79,7 @@ class ArticleFullTextLinks extends React.Component {
 	}
 
 	render_link(lt) {
-		let {updated} = this.props
+		let { updated } = this.props
 		let color = COLORS[lt] || '#444444'
 		let label = lt.toLowerCase()
 		const st = {
@@ -137,18 +135,27 @@ class ArticleFullTextLinks extends React.Component {
 		)
 	}
 
-	render() {
-		let links = []
-		LINK_TYPES.forEach((lt) => {
-			let link = this.render_link(lt)
-			if (link != null) links.push(link)
-		})
-		return <div className="ArticleFullTextLinks">{ links }</div>
-	}
+    render() {
+        let links = []
+
+        const LINK_TYPES = ['pdf', 'html', 'preprint']
+        LINK_TYPES.forEach((lt) => {
+            let link = this.render_link(lt)
+            if (link != null) links.push(link)
+        })
+
+        // Remove the last link if the article has figures to allow room for the figure viewer
+        if (this.props.hide_last_link && links.length === 3) {
+            links.pop()
+        }
+
+        return <div className="ArticleFullTextLinks">{ links }</div>
+    }
 }
 
 ArticleFullTextLinks.defaultProps = {
-	updated: ''
+	hide_last_link: false,
+	updated: '',
 };
 
 export default ArticleFullTextLinks;

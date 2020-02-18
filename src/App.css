@@ -97,6 +97,14 @@ textarea {
 	opacity: 1.0;
 }
 
+.ArticleCard .MiniFigureViewer {
+	opacity: 0.6;
+}
+
+.ArticleCard:hover .MiniFigureViewer {
+	opacity: 1.0;
+}
+
 .ArticleCreatedDate {
   color: #DCDCDC;
   font-style: italic;
@@ -148,7 +156,7 @@ textarea {
 	margin-top: 0px;
 	margin-right: -4px;
 	text-align: right;
-	float: right;
+	white-space: nowrap;
 }
 
 .ArticleContentLink {

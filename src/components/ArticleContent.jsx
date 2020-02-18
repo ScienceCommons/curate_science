@@ -22,6 +22,7 @@ import ArticleType from './ArticleType.jsx';
 import AuthorList from './AuthorList.jsx';
 import FigureList from './shared/FigureList.jsx';
 import JournalDOIBadge from './JournalDOIBadge.jsx';
+import MiniFigureViewer from './MiniFigureViewer.jsx';
 import TransparencyBadge from './TransparencyBadge.jsx';
 import TruncatedText from './shared/TruncatedText.jsx';
 
@@ -269,26 +270,38 @@ class ArticleContent extends React.PureComponent {
           }}
         ></div>
 
-        <ArticleFullTextLinks {...content_links} />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            {
+              is_article_page ?
+                <span>{title}</span>
+                :
+                  <Link to={`/article/${article.id}`} className={classes.titleLink}>
+                    {title}
+                  </Link>
+            }
 
-        {
-          is_article_page ?
-            <span>{title}</span>
-            :
-              <Link to={`/article/${article.id}`} className={classes.titleLink}>
-                {title}
-              </Link>
-        }
+            <Typography className={classes.authors} color="textSecondary" gutterBottom variant="body2">
+              <AuthorList author_list={article.author_list} year={article.year} in_press={article.in_press} />
+            </Typography>
 
-        <Typography className={classes.authors} color="textSecondary" gutterBottom variant="body2">
-          <AuthorList author_list={article.author_list} year={article.year} in_press={article.in_press} />
-        </Typography>
+            <Typography className={classes.journal} color="textSecondary" gutterBottom variant="body2">
+              <JournalDOIBadge journal={journal} doi={article.doi} />
+            </Typography>
 
-        <Typography className={classes.journal} color="textSecondary" gutterBottom variant="body2">
-          <JournalDOIBadge journal={journal} doi={article.doi} />
-        </Typography>
+            <TransparencyBadge {...transparency_data} article={article}/>
+          </div>
 
-        <TransparencyBadge {...transparency_data} article={article}/>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <ArticleFullTextLinks
+              {...content_links}
+              hide_last_link={!is_article_page && article.key_figures && article.key_figures.length}
+            />
+            <div hidden={is_expanded} style={{ marginTop: '0.5rem', maxWidth: '5rem', alignSelf: 'flex-end' }}>
+              <MiniFigureViewer figures={article.key_figures}/>
+            </div>
+          </div>
+        </div>
 
         <div className={classes.moreIconHolder} hidden={is_article_page}>
           <IconButton onClick={this.toggle_show_more} className={classes.moreIconButton}>
