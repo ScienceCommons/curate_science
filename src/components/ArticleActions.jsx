@@ -51,8 +51,8 @@ export default function ArticleActions({ article, cookies, user_session, onDelet
 
   const deleteArticle = () => {
     simple_api_req('DELETE', `/api/articles/${article.id}/delete/`, {}, cookies.get('csrftoken'), () => {
-      onDelete()
       handleClose()
+      onDelete()
     }, (err) => {
       console.error(err)
     })
