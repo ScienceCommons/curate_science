@@ -39,7 +39,7 @@ export default function MiniFigureViewer({ figures }) {
               onClick={expand}
               data-index={index}
             >
-              <img src={figure.image} style={{ height: '100%', objectFit: 'cover' }}/>
+              <img src={figure.image} style={{ height: 80, width: 80, objectFit: 'cover' }}/>
             </a>
           )
         })
