@@ -300,7 +300,7 @@ class ArticleContent extends React.PureComponent {
             <div
               hidden={is_expanded}
               style={{
-                marginTop: '0.5rem',
+                marginTop: '0.125rem',
                 maxWidth: '5rem',
                 alignSelf: 'flex-end',
                 height: 80,
