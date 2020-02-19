@@ -297,7 +297,16 @@ class ArticleContent extends React.PureComponent {
               {...content_links}
               hide_last_link={!is_article_page && article.key_figures && article.key_figures.length}
             />
-            <div hidden={is_expanded} style={{ marginTop: '0.5rem', maxWidth: '5rem', alignSelf: 'flex-end' }}>
+            <div
+              hidden={is_expanded}
+              style={{
+                marginTop: '0.5rem',
+                maxWidth: '5rem',
+                alignSelf: 'flex-end',
+                height: 80,
+                width: 80,
+              }}
+            >
               <MiniFigureViewer figures={article.key_figures}/>
             </div>
           </div>
