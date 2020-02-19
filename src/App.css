@@ -111,6 +111,15 @@ textarea {
 	opacity: 1.0;
 }
 
+.MiniFigureViewer .carousel .control-arrow::before {
+	margin: 0 3px;
+}
+
+.MiniFigureViewer .carousel .control-arrow {
+	margin: 0 3px;
+	padding: 0;
+}
+
 .ArticleCreatedDate {
   color: #DCDCDC;
   font-style: italic;
