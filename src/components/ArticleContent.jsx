@@ -306,10 +306,7 @@ class ArticleContent extends React.PureComponent {
               hidden={is_expanded}
               style={{
                 marginTop: '0.125rem',
-                maxWidth: '5rem',
                 alignSelf: 'flex-end',
-                height: 80,
-                width: 80,
               }}
             >
               <MiniFigureViewer figures={article.key_figures}/>

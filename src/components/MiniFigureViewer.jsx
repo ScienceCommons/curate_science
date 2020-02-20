@@ -20,30 +20,32 @@ export default function MiniFigureViewer({ figures }) {
   const multipleFigures = figures.length > 0
 
   return (
-    <Carousel
-      autoPlay={false}
-      infiniteLoop={true}
-      showStatus={false}
-      showThumbs={false}
-      showArrows={multipleFigures}
-      showIndicators={false}
-      className="MiniFigureViewer"
-    >
-      {
-        figures.map((figure, index) => {
-          return (
-            <a
-              href={figure.image}
-              key={figure.id}
-              style={{ display: 'block', height: '100%' }}
-              onClick={expand}
-              data-index={index}
-            >
-              <img src={figure.image} style={{ height: 80, width: 80, objectFit: 'cover' }}/>
-            </a>
-          )
-        })
-      }
-    </Carousel>
+    <div style={{ height: 80, width: 80 }}>
+      <Carousel
+        autoPlay={false}
+        infiniteLoop={true}
+        showStatus={false}
+        showThumbs={false}
+        showArrows={multipleFigures}
+        showIndicators={false}
+        className="MiniFigureViewer"
+      >
+        {
+          figures.map((figure, index) => {
+            return (
+              <a
+                href={figure.image}
+                key={figure.id}
+                style={{ display: 'block', height: '100%' }}
+                onClick={expand}
+                data-index={index}
+              >
+                <img src={figure.image} style={{ height: 80, width: 80, objectFit: 'cover' }}/>
+              </a>
+            )
+          })
+        }
+      </Carousel>
+    </div>
   )
 }
