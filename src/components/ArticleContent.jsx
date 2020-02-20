@@ -292,7 +292,7 @@ class ArticleContent extends React.PureComponent {
             <TransparencyBadge {...transparency_data} article={article}/>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '0.5rem' }}>
             <ArticleFullTextLinks
               {...content_links}
               hide_last_link={!is_article_page && article.key_figures && article.key_figures.length}
