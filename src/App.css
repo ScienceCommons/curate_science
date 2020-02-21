@@ -125,7 +125,7 @@ textarea {
   text-align: right;
 }
 
-@media (max-width: 375px) {
+@media (max-width: 540px) {
   .ArticleCard .ContentLinkCounts {
     display: none;
   }
