@@ -2,9 +2,9 @@ Curate Science
 ==============
 [![Build Status](https://travis-ci.org/ScienceCommons/curate_science.svg?branch=master)](https://travis-ci.org/ScienceCommons/curate_science)
 
-*Transparent and Credible Evidence.*
+*Science Deliciously User-Friendly and Accessible.*
 
-Code base of **[Curate Science](https://CurateScience.org)**, a unified curation system and platform to verify that research is **transparent and credible**. A central problem in academic research is determining whether a paper's reported evidence can be trusted. In science, evidence is only considered trustworthy/credible if it is transparently reported and has survived scrutiny from peers via follow-up replications/re-analyses. No platform, however, currently exists to verify (and track) the transparency and credibility of research. 
+Code base of **[Curate Science](https://CurateScience.org)**, a unified curation system and platform to ensure that research is **transparent and credible**. A central problem in academic research is determining whether a paper's reported evidence can be trusted. In science, evidence is only considered trustworthy/credible if it is transparently reported and has survived scrutiny from peers via follow-up replications/re-analyses. No platform, however, currently exists to verify (and track) the transparency and credibility of research. 
 
 Curate Science aims to solve this holy grail problem of academic research, by allowing researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
 1.  *Transparency*: Ensure that research meets minimum transparency standards appropriate to the article type and methodologies used.
@@ -23,9 +23,7 @@ For more details about our platform, see:
 *Figure 1*: Basic layout of Curate Science’s article card displaying information about an article’s 
 transparency and credibility (i.e., follow-up commentaries, re-analyses, and replications).
 
-![alt text](https://user-images.githubusercontent.com/4512335/70171251-554c6280-169c-11ea-843f-d98b2a9f3ae4.png)
-
-*Figure 2*: Curate Science credibility curation system: An article’s transparency and credibility is verified over time across different contexts within the scholarly ecosystem. 
+ 
 
 ## Contributing
 
@@ -107,6 +105,8 @@ Django admin should be available at `localhost:8000/admin`.
 ### DB migration instructions:
 For staging:  `export GOOGLE_CLOUD_PROJECT=curate-science-staging-2`
 
+(For more realistic testing of performance, user-friendliness, and general feel/esthetic, please contact us at admin@curatescience.org to be granted access to our production DB backup bucket, which you can import into your local environment.)
+
 For production: `export GOOGLE_CLOUD_PROJECT=curate`
 
 Then run `python manage.py migrate`
@@ -117,16 +117,29 @@ Then don’t forget to reset the env var: `export GOOGLE_CLOUD_PROJECT=`
 
 (for a more detailed set of instructions on how to setup a local instance of the app, see [here](https://github.com/ScienceCommons/curate_science/issues/76))
 
-## Core UI Regression Tests
+## License
+Curate Science source code is licensed under an open-source MIT license for all personal, educational, research, and other open source applications. A commercial license is required for all commercial applications. Please contact admin@curatescience.org for more information about our commercial license.
 
-1. Create a new article
-2. Save a new article
-  - All fields can successfully save information
-  - Canceling unsaved information prompts warning dialog
-3. Edit an article
-  - All fields can successfully be edited
-4. Link an existing article to an author page
-  - Link that same article to a (different) co-author's page (admin only)
-5. Create a new author page (admin only)
-6. Invite/create a new user (admin only)
-7. Delete an article (admin only)
+## Core Regression Tests
+
+1. Core functionality
+    1. Create a new article, add information to all fields, including uploading multiple figures simultaneously via drag-and-drop
+    2. Save a new article
+        * All fields can successfully save information
+        * Canceling unsaved information prompts warning dialog
+    3. Edit an article
+        * All fields can successfully be edited, including deleting a key figure (admin only)
+    4. Delete an article (admin only)
+    5. Link an existing article to an author page (e.g., https://curate-science-staging-2.appspot.com/app/author/etienne-p-lebel)
+    6. Link that same article to a (different) co-author's page (admin only)
+    7. Ensure article page works (e.g., https://curate-science-staging-2.appspot.com/app/article/57)
+    8. Ensure search/search results page works (e.g., https://curate-science-staging-2.appspot.com/app/search/?q=disgust)
+    9. Ensure Browse/recent page works: https://curate-science-staging-2.appspot.com/app/recent
+        * Ensure filtering and sorting works (e.g., show only "Replication" articles)
+    10. Create a new author page (admin only)
+    11. Invite/create a new user (admin only)
+2. Full-screen mode functionality (e.g., author page with lots of embedabble full-screen PDF/HTML articles: https://curate-science-staging-2.appspot.com/app/author/etienne-p-lebel)
+    1. PDF: Ensure a supported embeddable full-text PDF article activates full-screen icon *AND* is displayed in right-panel embed viewer (e.g., https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf)
+    2. HTML: Ensure a supported embeddable full-text HTML article activates full-screen icon *AND* is displayed in right-panel embed viewer (e.g., https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01004/full)
+3. Author page publication list external embedding
+      * Ensure embedding `<script src="https://curate-science-staging-2.appspot.com/author-embed/etienne-p-lebel.js" async></script>` loads and displays relevant author page publication list, i.e., https://etiennelebel.com/author/etienne-p-lebel-EMBED-AUTHOR-PAGE-from-staging.html)
