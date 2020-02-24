@@ -45,13 +45,11 @@ export default function MiniFigureViewer({ figures }) {
     setVisibleFigures(new Set(visibleFigures))
   }
 
-  useEffect(() => {
-    // Load the figures before and after the first image initially
-    markFiguresVisible(0)
-  }, [])
-
   return (
-    <div style={{ height: 80, width: 80 }}>
+    <div
+      style={{ height: 80, width: 80 }}
+      onMouseEnter={() => markFiguresVisible(0)}
+    >
       <Carousel
         autoPlay={false}
         infiniteLoop={true}
