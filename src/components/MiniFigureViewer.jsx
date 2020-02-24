@@ -44,12 +44,13 @@ export default function MiniFigureViewer({ figures }) {
     // We have to create a new Set here to force React to rerender
     setVisibleFigures(new Set(visibleFigures))
   }
+  useEffect(() => {
+    // Load the figures before and after the first image after the initial render
+    markFiguresVisible(0)
+  }, [])
 
   return (
-    <div
-      style={{ height: 80, width: 80 }}
-      onMouseEnter={() => markFiguresVisible(0)}
-    >
+    <div style={{ height: 80, width: 80 }}>
       <Carousel
         autoPlay={false}
         infiniteLoop={true}
