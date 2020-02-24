@@ -20,6 +20,7 @@ export default function MiniFigureViewer({ figures }) {
   const multipleFigures = figures.length > 0
 
   const onChange = function(visibleIndex) {
+    setCurrentFigure(visibleIndex)
     markFiguresVisible(visibleIndex)
   }
 
@@ -27,6 +28,7 @@ export default function MiniFigureViewer({ figures }) {
   // If a figure's index isn't in the visibleFigures set, the image isn't loaded
   // We add the first image to the set by default
   const [visibleFigures, setVisibleFigures] = useState(new Set([0]))
+  const [currentFigure, setCurrentFigure] = useState(0)
 
   const markFiguresVisible = function(index) {
     // Add the figures before and after the current index to the set of visible figures
@@ -59,6 +61,7 @@ export default function MiniFigureViewer({ figures }) {
         showIndicators={false}
         className="MiniFigureViewer"
         onChange={onChange}
+        selectedItem={currentFigure}
       >
         {
           figures.map((figure, index) => {
