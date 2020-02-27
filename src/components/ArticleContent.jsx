@@ -114,15 +114,16 @@ class ArticleContent extends React.PureComponent {
     this.state = {
       show_more: false,
       loading: false,
+      details_fetched: false,
     };
 
     this.toggle_show_more = this.toggle_show_more.bind(this)
   }
 
   toggle_show_more() {
-    let {show_more} = this.state
+    const { details_fetched, show_more } = this.state
     let {article} = this.props
-    let details_fetched = article.key_figures != null
+
     this.setState({show_more: !show_more}, () => {
       if (!details_fetched) {
         this.fetch_article_details()
@@ -138,6 +139,7 @@ class ArticleContent extends React.PureComponent {
       json_api_req('GET', `/api/articles/${article.id}/`, {}, null, (res) => {
         this.props.onFetchedArticleDetails(res)
         this.setState({loading: false})
+        this.setState({ details_fetched: true })
       }, (err) => {
         this.setState({loading: false})
       })
