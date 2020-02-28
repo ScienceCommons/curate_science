@@ -68,7 +68,7 @@ export default function MiniFigureViewer({ figures }) {
               <a
                 href={figure.image}
                 key={figure.id}
-                style={{ display: 'block', height: '100%' }}
+                style={{ display: 'block', height: '100%', backgroundColor: 'white' }}
                 onClick={expand}
                 data-index={index}
               >
