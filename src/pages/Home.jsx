@@ -128,8 +128,8 @@ const images = {
             full: '/sitestatic/infographics/4.0-author-page-HIW-A-HD.png',
         },
         {
-            thumbnail: '/sitestatic/infographics/104.5-T-standards-HIW-A-THUMBNAIL.png',
-            full: '/sitestatic/infographics/1.0-T-standards-L-HIW-& A-HD.png',
+            thumbnail: '/sitestatic/infographics/104.25-author-page-beautiful-on-all-devices-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.5-author-page-beautiful-on-all-devices-HD.png',
         },
         {
             thumbnail: '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
@@ -561,7 +561,7 @@ export default function Home({}) {
     const are_you = [
         {
             title: 'Are you an author?',
-            text: 'Be a transparent and credible researcher and accelerate your science with confidence.',
+            text: 'Make your science deliciously user-friendly to consume, ultimately accessible, and beautiful on all devices.',
             button_text: 'Learn more',
             to: '#how-it-works',
         },
@@ -628,15 +628,19 @@ export default function Home({}) {
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
-                                Signal the transparency of your research according to recognized transparency standards, guaranteeing it gets the credibility it deserves.
+                                Organize your publications on your own author page to make your science deliciously user-friendly to consume, ultimately accessible, and beautiful on all devices.
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
-                                Organize your publications (full-text URLs, key figures, etc.) on your own (externally embeddable) author page, and easily and efficiently share and disseminate your scholarship.
+                                View full-text PDF and HTML versions of your articles directly within your author page.
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
-                                Increase the discoverability, accessibility, and impact of your research, giving yourself a competitive edge in hiring/grant contexts.
+                                Expose key figures in your publication list so your readers can jump directly into your research via a delightful touch-enabled media viewer.
+                            </Typography>
+                            
+                            <Typography className={classes.howItWorksDescription}>
+                                Curate links to associated content to save your reader and yourself time (e.g., URLs to open data, talks/videos).
                             </Typography>
 
                         </Grid>
