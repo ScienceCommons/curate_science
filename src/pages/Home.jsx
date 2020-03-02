@@ -244,7 +244,7 @@ function ImageCarousel({ images, autoPlay }) {
                         <a
                             href={image.full}
                             key={image.index}
-                            style={{ display: 'block' }}
+                            style={{ display: 'block', backgroundColor: 'white' }}
                             onClick={expand}
                             data-index={image.index}
                         >
