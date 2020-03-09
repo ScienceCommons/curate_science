@@ -2,30 +2,24 @@ Curate Science
 ==============
 [![Build Status](https://travis-ci.org/ScienceCommons/curate_science.svg?branch=master)](https://travis-ci.org/ScienceCommons/curate_science)
 
-*Science Deliciously User-Friendly and Accessible.*
+*Science Deliciously User-Friendly.*
 
-Code base of **[Curate Science](https://CurateScience.org)**, a unified curation system and platform to ensure that research is **transparent and credible**. A central problem in academic research is determining whether a paper's reported evidence can be trusted. In science, evidence is only considered trustworthy/credible if it is transparently reported and has survived scrutiny from peers via follow-up replications/re-analyses. No platform, however, currently exists to verify (and track) the transparency and credibility of research. 
-
-Curate Science aims to solve this holy grail problem of academic research, by allowing researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
-1.  *Transparency*: Ensure that research meets minimum transparency standards appropriate to the article type and methodologies used.
-2.  *Credibility*: Ensure that follow-up scrutiny is linked to its parent paper, including critical commentaries, reproducibility/robustness re-analyses, and new sample replications.
-
-Having a unified/systematic way to distinguish *credible evidence* (from untrustworthy evidence) will substantially accelerate the development of cumulative scientific knowledge and applied innovations across the natural and social sciences. The implications for human welfare are large. (See a [list](https://etiennelebel.com/logos/value-created-for-stakeholders.png) of value/benefits our system will create for different research stakeholders.)
-
-For more details about our platform, see:
-1.	[Falsifiability-informed framework](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf) that guides the design and implementation of our platform/tools.
-2.	[Upcoming features and platform roadmap](https://github.com/ScienceCommons/curate_science/issues/52).
-3.  [Browse our curated content](https://curatescience.org/app/), which features one of the world’s largest collection of transparently-reported replications and original research articles (including > 3,000 social science replications and > 400 original research articles).
+Code base of **[Curate Science](https://CurateScience.org)**, a web app to create deliciously user-friendly author pages for scientists (think Google Scholar exponentially enhanced in several unique ways; see our [release 0.4.0 video](https://www.youtube.com/watch?v=abJStJvwFxc) for a demo of new features). The app is part of a broader integrated curation system to ensure that research is transparent and credible. For more details, see our [meta-scientific theoretical framework](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf) that guides the implementation of our integrated system.  See also our [current funding requesting document](https://docs.google.com/document/d/1zWPWeW8gh01BAc9ckTs4lebKDmcrLdHZ4ZCuzpPii1I/edit), which outlines our 5-year roadmap.
 
 
-![alt text](https://user-images.githubusercontent.com/4512335/70174268-8c257700-16a2-11ea-90a2-13ce1dbc9439.png)
+![alt text](https://user-images.githubusercontent.com/4512335/76235166-1c72db00-6201-11ea-9709-d2582b381ce3.png)
 
-*Figure 1*: Basic layout of Curate Science’s article card displaying information about an article’s 
-transparency and credibility (i.e., follow-up commentaries, re-analyses, and replications).
 
  
 
 ## Contributing
+
+### Bug Bounty Program (_Fix an issue, earn cash!_)
+
+Current value: **USD$500** (March 2020).  Total current escrow $1,000. (more coming soon.)
+
+To identify talent to expand our team, we’re running a monthly bug bounty program. Current top-priority issues are worth a specific # of points to fix (see [issues under "Improved demoability" milestone](https://github.com/ScienceCommons/curate_science/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Improved+demoability%22)). Earn cash proportional to the points earned, shared among contributing programmers (at the end of the month). To incentivize both individual and communal productivity, a larger proportion of monthly escrow is unlocked for larger total points collectively earned by the team. For example, if dev#1 earns 270 points, and dev#2 earns 750 points, the total >1,000 points collectively earned unlocks a larger chunk of the total monthly escrow amount available (the maximum amount is unlocked if all issues are fixed).
+
 
 ### Application Structure
 
