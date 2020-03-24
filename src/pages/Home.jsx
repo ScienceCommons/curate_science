@@ -109,13 +109,13 @@ const useStyles = makeStyles(theme => ({
 
 const images = {
     landing: [
-        { 
-            thumbnail: '/sitestatic/infographics/104.1-author-page-LANDING-THUMBNAIL.png',
-            full: '/sitestatic/infographics/4.1-author-page-L-HIW-HD.png',
-        },
         {
             thumbnail: '/sitestatic/infographics/104.5-AP-beautiful-on-all-devices-LANDING-THUMBNAIL.png',
             full: '/sitestatic/infographics/4.5-AP-beautiful-on-all-devices-L-HIW-A-HD.png',
+        },
+        { 
+            thumbnail: '/sitestatic/infographics/104.1-author-page-LANDING-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.1-author-page-L-HIW-HD.png',
         },
         {
             thumbnail: '/sitestatic/infographics/105.0-external-author-page-LANDING-THUMBNAIL.png',
@@ -124,12 +124,12 @@ const images = {
     ],
     authors: [
         {
-            thumbnail: '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
-            full: '/sitestatic/infographics/4.1-author-page-L-HIW-HD.png',
-        },
-        {
             thumbnail: '/sitestatic/infographics/104.25-author-page-beautiful-on-all-devices-HIW-A-THUMBNAIL.png',
             full: '/sitestatic/infographics/4.5-AP-beautiful-on-all-devices-L-HIW-A-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.1-author-page-L-HIW-HD.png',
         },
         {
             thumbnail: '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
