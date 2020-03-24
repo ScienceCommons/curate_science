@@ -2,9 +2,9 @@ Curate Science
 ==============
 [![Build Status](https://travis-ci.org/ScienceCommons/curate_science.svg?branch=master)](https://travis-ci.org/ScienceCommons/curate_science)
 
-*Science Deliciously User-Friendly.*
+*Science deliciously user-friendly.*
 
-Code base of **[Curate Science](https://CurateScience.org)**, an author page web app to make scientific papers deliciously user-friendly to consume and universally accessible (think Google Scholar substantially enhanced in several unique ways; see our [release 0.4.0 video](https://www.youtube.com/watch?v=abJStJvwFxc) for a demo of new features). The app is part of a broader integrated curation system to ensure that research is transparent and credible. For more details, see our [meta-scientific theoretical framework](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf) that guides the implementation of our integrated system.  See also our [current funding requesting document](https://docs.google.com/document/d/1zWPWeW8gh01BAc9ckTs4lebKDmcrLdHZ4ZCuzpPii1I/edit), which outlines our 5-year roadmap.
+Code base of **[Curate Science](https://CurateScience.org)**, an author page web app to make scientific papers deliciously user-friendly to consume and universally accessible (think Google Scholar substantially enhanced in several unique ways; see our [release 0.4.0 video](https://www.youtube.com/watch?v=abJStJvwFxc) for a demo of new features).  The app is part of a broader integrated curation system to ensure that research is transparent and credible.  For more details, see our [meta-scientific theoretical framework](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf) that guides the implementation of our integrated system.  See [below](https://github.com/ScienceCommons/curate_science#roadmap) for current features in development (1-year road map) and upcoming features (3-year road map).  See our current [funding requesting document](https://docs.google.com/document/d/1zWPWeW8gh01BAc9ckTs4lebKDmcrLdHZ4ZCuzpPii1I/edit) for exciting funding opportunities.
 
 
 ![alt text](https://user-images.githubusercontent.com/4512335/76235166-1c72db00-6201-11ea-9709-d2582b381ce3.png)
@@ -25,7 +25,7 @@ To identify talent to expand our team, we’re running a monthly bug bounty prog
 
 Curate Science is a web application written in Python 3 using the [Django](https://www.djangoproject.com/) framework 2.1. with PostgreSQL 9.6, running on Google App Engine Standard Environment. The master branch is continuously deployed to production with Travis CI. The application features a REST API for interacting with the curated data programmatically.
 
-* Entity models are in `curate/models.py` ([current entity-relationship diagram (v0.3.0)](https://etiennelebel.com/logos/curatescience_datamodel_v0.3.0.png) (entities to-be-added in blue))
+* Entity models are in `curate/models.py` ([entity-relationship diagram (v0.3.0)](https://etiennelebel.com/logos/curatescience_datamodel_v0.3.0.png))
 * REST API view controllers use [Django REST Framework](http://django-rest-framework.org/) and are in `views/api.py`
 * REST API model serializers are in `curate/serializers.py`
 * HTML view controllers are in `curate/views.py`
@@ -99,7 +99,7 @@ Django admin should be available at `localhost:8000/admin`.
 ### DB migration instructions:
 For staging:  `export GOOGLE_CLOUD_PROJECT=curate-science-staging-2`
 
-(For more realistic testing of performance, user-friendliness, and general feel/esthetic, please contact us at admin@curatescience.org to be granted access to our production DB backup bucket, which you can import into your local environment.)
+(For more realistic testing of performance, user-friendliness, and general feel/esthetic, please contact us at admin@curatescience.org to be granted access to a de-identified version of our production DB, which you can import into your local environment.)
 
 For production: `export GOOGLE_CLOUD_PROJECT=curate`
 
@@ -137,3 +137,10 @@ Curate Science source code is licensed under an open-source MIT license for all 
     2. HTML: Ensure a supported embeddable full-text HTML article activates full-screen icon *AND* is displayed in right-panel embed viewer (e.g., https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01004/full)
 3. Author page publication list external embedding
       * Ensure embedding `<script src="https://curate-science-staging-2.appspot.com/author-embed/etienne-p-lebel.js" async></script>` loads and displays relevant author page publication list, i.e., https://etiennelebel.com/author/etienne-p-lebel-EMBED-AUTHOR-PAGE-from-staging.html)
+
+## Roadmap
+
+1. Current focus (1-year road map)
+   - Features and improvements in active development: See [issues under "Improved Demoability" milestone](https://github.com/ScienceCommons/curate_science/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Improved+demoability%22)
+   - Next batch of features to be implemented: See [issues under "Public launch (author page)" milestone](https://github.com/ScienceCommons/curate_science/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Public+launch+%28author+page%29%22)
+2. Upcoming features (3-year road map): See issue [#52](https://github.com/ScienceCommons/curate_science/issues/52)
