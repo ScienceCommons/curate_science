@@ -248,7 +248,7 @@ class ArticleContent extends React.PureComponent {
 
           <div style={{ display: 'flex', alignItems: 'center' }}>
               <div hidden={!show_date}>
-                <Typography className="ArticleCreatedDate" component="div" variant="body2">
+                <Typography style={{color: '#E8E8E8'}} className="ArticleCreatedDate" component="div" variant="body2">
                   {created_at}
                 </Typography>
               </div>
