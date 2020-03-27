@@ -69,6 +69,7 @@ const styles = theme => ({
     searchFilter: {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
+        color: '#DCDCDC',
     },
 })
 
@@ -436,7 +437,7 @@ class AuthorPage extends React.Component {
                                     </div>
                                     {search_filter}
                                 </div>
-                                : 
+                                :
                                 <Grid container alignItems="center" justify="space-between">
                                     {search_filter}
                                     <a href="https://curatescience.org/" target="_blank">

@@ -47,6 +47,7 @@ const styles = theme => ({
     position: 'absolute',
     left: 10,
     fontSize: 14,
+    color: '#DCDCDC',
   },
   paper: {
     position: 'absolute',

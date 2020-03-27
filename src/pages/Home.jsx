@@ -109,31 +109,31 @@ const useStyles = makeStyles(theme => ({
 
 const images = {
     landing: [
+        {
+            thumbnail: '/sitestatic/infographics/104.5-AP-beautiful-on-all-devices-LANDING-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.5-AP-beautiful-on-all-devices-L-HIW-A-HD.png',
+        },
         { 
-            thumbnail: '/sitestatic/infographics/101-T-standards-LANDING-THUMBNAIL.png',
-            full: '/sitestatic/infographics/1.0-T-standards-L-HIW-& A-HD.png',
+            thumbnail: '/sitestatic/infographics/104.1-author-page-LANDING-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.1-author-page-L-HIW-HD.png',
         },
         {
-            thumbnail: '/sitestatic/infographics/102-article-card-ecosys-THUMBNAIL.png',
-            full: '/sitestatic/infographics/2.0-article-card-ecosys-HD.png',
-        },
-        {
-            thumbnail: '/sitestatic/infographics/103-author-page-LANDING-THUMBNAIL.png',
-            full: '/sitestatic/infographics/3.0-author-page-LANDING-HD.png',
+            thumbnail: '/sitestatic/infographics/105.0-external-author-page-LANDING-THUMBNAIL.png',
+            full: '/sitestatic/infographics/5.0-external-author-page-L-HIW-A-HD.png',
         },
     ],
     authors: [
         {
-            thumbnail: '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
-            full: '/sitestatic/infographics/4.0-author-page-HIW-A-HD.png',
+            thumbnail: '/sitestatic/infographics/104.25-author-page-beautiful-on-all-devices-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.5-AP-beautiful-on-all-devices-L-HIW-A-HD.png',
         },
         {
-            thumbnail: '/sitestatic/infographics/104.25-author-page-beautiful-on-all-devices-THUMBNAIL.png',
-            full: '/sitestatic/infographics/4.5-author-page-beautiful-on-all-devices-HD.png',
+            thumbnail: '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/4.1-author-page-L-HIW-HD.png',
         },
         {
             thumbnail: '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
-            full: '/sitestatic/infographics/5.0-external-author-page-HIW-A-HD.png',
+            full: '/sitestatic/infographics/5.0-external-author-page-L-HIW-A-HD.png',
         },
     ],
     replicators: [
@@ -159,15 +159,15 @@ const images = {
     researchers: [
         {
             thumbnail: '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
-            full: '/sitestatic/infographics/4.0-author-page-HIW-A-HD.png',
+            full: '/sitestatic/infographics/4.1-author-page-A-HD.png',
         },
         {
-            thumbnail: '/sitestatic/infographics/104.5-T-standards-HIW-A-THUMBNAIL.png',
-            full: '/sitestatic/infographics/1.0-T-standards-L-HIW-& A-HD.png',
+            thumbnail: '/sitestatic/infographics/104.5-T-standards-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/1.0-T-standards-A-HD.png',
         },
         {
             thumbnail: '/sitestatic/infographics/105-external-author-page-HIW-A-THUMBNAIL.png',
-            full: '/sitestatic/infographics/5.0-external-author-page-HIW-A-HD.png',
+            full: '/sitestatic/infographics/5.0-external-author-page-L-HIW-A-HD.png',
         },
     ],
     journals: [

@@ -1,3 +1,19 @@
+#backup
+backup.bak
+
+# more ignores
+bin/
+share/
+package-lock.json
+curate_science/settings.py
+package.json
+curate/migrations/0057_auto_20200305_1956.py
+curate_science/google_cloud_credentials.json.enc
+pyvenv.cfg
+lib64
+media/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -158,4 +174,6 @@ secrets.tar
 node_modules/
 
 # images
-/media/key_figures/*.*
+media/key_figures/*.*
+
+
