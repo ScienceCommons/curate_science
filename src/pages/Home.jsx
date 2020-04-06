@@ -172,8 +172,16 @@ const images = {
     ],
     journals: [
         {
-            thumbnail: '/sitestatic/infographics/110-journal-article-list-ABOUT-THUMBNAIL.png',
+            thumbnail: '/sitestatic/infographics/110.0-journal-article-list-ABOUT-THUMBNAIL.png',
             full: '/sitestatic/infographics/10.0-journal-article-list-ABOUT-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/110.5-journal-article-list-ABOUT-BMJ-open-THUMBNAIL.png',
+            full: '/sitestatic/infographics/10.5-journal-article-list-ABOUT-HD-BMJ-Open.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/110.75-journal-article-editor-widget-MP-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/10.75-journal-article-editor-widget-MP-A-HD.png',
         },
         {
             thumbnail: '/sitestatic/infographics/111-T-leaderboards-JOURNALS-THUMBNAIL.png',
@@ -182,8 +190,12 @@ const images = {
     ],
     universities: [
         {
-            thumbnail: '/sitestatic/infographics/112-uni-researcher-list-ABOUT-THUMBNAIL.png',
+            thumbnail: '/sitestatic/infographics/112.0-uni-researcher-list-ABOUT-THUMBNAIL.png',
             full: '/sitestatic/infographics/12.0-uni-researcher-list-ABOUT-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/112.5-uni-T-compliance-dashboard-A-THUMBNAIL.png',
+            full: '/sitestatic/infographics/12.5-uni-T-compliance-dashboard-A-HD.png',
         },
         {
             thumbnail: '/sitestatic/infographics/113-T-leaderboard-UNIS-THUMBNAIL.png',
@@ -414,7 +426,7 @@ function About(props) {
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Researchers can ensure their publications meet minimum transparency standards via their own (externally embeddable) author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>).
+                                    Researchers can ensure their publications meet minimum transparency standards (across <a href="/sitestatic/infographics/1.0-4-T-standards-across-article-types-A.png" target="_blank">13 article types</a>) via their own (externally embeddable) author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
