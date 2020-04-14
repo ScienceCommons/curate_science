@@ -204,6 +204,10 @@ const images = {
     ],
     funders: [
         {
+            thumbnail: '/sitestatic/infographics/114-funders-grantee-list-CIHR-ABOUT-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.0-funders-grantee-list-CIHR-ABOUT-HD.png',
+        },
+        {
             thumbnail: '/sitestatic/infographics/114-funders-grantee-list-ABOUT-THUMBNAIL.png',
             full: '/sitestatic/infographics/14.0-funders-grantee-list-ABOUT-HD.png',
         },

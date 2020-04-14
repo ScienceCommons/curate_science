@@ -53,6 +53,7 @@ class MouseOverPopover extends React.Component {
         <Tooltip
           interactive
           placement="top"
+          enterDelay={250}
           leaveDelay={100}
           classes={cls}
           PopperProps={popperProps}
