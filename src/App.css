@@ -57,9 +57,12 @@ textarea {
 }
 
 .TopBar.EmbeddedViewerVisible {
-  width: 1775px;
-  position: relative;
-  left: 63px
+  width: 100%;
+  /*position: absolute;*/
+  padding-left: 100px;
+  padding-right: 100px;
+  /*position: relative;*/
+  /*left: 153px*/
 }
 
 .AppContent.EmbeddedViewerVisible {
