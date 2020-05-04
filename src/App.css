@@ -56,6 +56,11 @@ textarea {
   }
 }
 
+.TopBar.EmbeddedViewerVisible {
+  width: 100%;
+  position: relative;
+}
+
 .AppContent.EmbeddedViewerVisible {
   width: 50%;
   margin: 0;
