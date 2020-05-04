@@ -40,7 +40,7 @@ export default withRouter(function EmbeddedViewer({ history }) {
     const view_url = ViewURL.useContainer()
     const viewer_visible = !(view_url.url === null)
 
-    const width = viewer_visible ? '67%' : 0
+    const width = viewer_visible ? '60%' : 0
     const visibility = viewer_visible ? 'visible' : 'hidden'
 
     const style = {
