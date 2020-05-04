@@ -62,7 +62,7 @@ textarea {
 }
 
 .AppContent.EmbeddedViewerVisible {
-  width: 50%;
+  width: 33%;
   margin: 0;
   max-height: calc(100vh - 56px);
   overflow-y: scroll;
