@@ -73,15 +73,6 @@ const theme = createMuiTheme({
             fontSize: 13
         }
     }
-  },
-  breakpoints: {
-    values: {
-        xs: 0,
-        sm: 450,
-        md: 600,
-        lg: 1200,
-        xl: 1500
-    }
   }
 });
 

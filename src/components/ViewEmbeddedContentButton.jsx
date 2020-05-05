@@ -87,7 +87,7 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style,
     }
 
     // If the screen size is less than the XL breakpoint, don't show the embedded content button
-    const lessThanXl = useMediaQuery(theme => theme.breakpoints.down('lg'))
+    const lessThanXl = useMediaQuery('(max-width:1499px)')
     if (lessThanXl) return null
 
     if (!url_is_valid(url, mediaType)) return null
