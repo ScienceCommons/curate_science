@@ -40,8 +40,9 @@ function pdf_url_is_valid(url) {
 
 
 function html_url_is_valid(url) {
+    const valid_urls = ['github.io', 'distill.pub']
     if (includes(url, 'frontiersin.org/articles') && endsWith(url, 'full')) return true
-    if (includes(url, 'github.io')) return true
+    if (url_contains(url, valid_urls)) return true
     return endsWith(url, '.html')
 }
 
