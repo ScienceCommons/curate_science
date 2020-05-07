@@ -324,11 +324,13 @@ class ArticleContent extends React.PureComponent {
 
         <div id="details" hidden={!is_expanded} style={{ paddingBottom: '0.75rem' }}>
           <Typography className={classes.abstract} variant="body2">
-            { (is_article_page) 
-              ? <span>{article.abstract}</span>
-              : (article.abstract == null || article.abstract.length == 0)
-              ? null
-              : <TruncatedText text={article.abstract} maxLength={540} fontSize={12} />
+            { (is_article_page) ? 
+            <span>{article.abstract}</span>
+              : 
+                (article.abstract == null || article.abstract.length == 0) ?
+                null
+                  : 
+                    <TruncatedText text={article.abstract} maxLength={540} fontSize={12} />
             }
           </Typography>
           <ArticleKeywords keywords={article.keywords} />
