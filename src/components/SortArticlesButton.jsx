@@ -85,7 +85,7 @@ class SortBy extends React.PureComponent {
               style={{color: "#999"}}
             >
               <Icon className={classes.leftIcon}>sort</Icon>
-              Sort by { sorted_by ? <span>: { sorted_by }</span> : null }
+              Sort by
             </Button>
               { menu_open ? (
                 <Paper className={classes.menu}>
