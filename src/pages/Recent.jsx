@@ -25,7 +25,7 @@ class Home extends React.PureComponent {
       articles_loading: true,
       content_filters: [],
       transparency_filters: ['open_code', 'open_data', 'open_materials'],
-      sort_by: 'created',
+      sort_by: null,
       more_articles: true,
       current_page: 1,
     };

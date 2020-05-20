@@ -40,7 +40,7 @@ export default withRouter(function EmbeddedViewer({ history }) {
     const view_url = ViewURL.useContainer()
     const viewer_visible = !(view_url.url === null)
 
-    const width = viewer_visible ? '50%' : 0
+    const width = viewer_visible ? '60%' : 0
     const visibility = viewer_visible ? 'visible' : 'hidden'
 
     const style = {
@@ -63,6 +63,7 @@ export default withRouter(function EmbeddedViewer({ history }) {
     // .AppContent to be rerendered when the viewer is shown (clearing any filters etc.)
     // There's probably a better way to do this...
     const app_content_el = document.querySelector('.AppContent')
+    const top_bar_ev = document.querySelector('.TopBar')
     const viewer_visible_class = 'EmbeddedViewerVisible'
 
     if (app_content_el) {
@@ -72,12 +73,14 @@ export default withRouter(function EmbeddedViewer({ history }) {
             const scroll_position = window.scrollY
             // add class
             app_content_el.classList.add(viewer_visible_class)
+            top_bar_ev.classList.add(viewer_visible_class)
             app_content_el.scrollTop = scroll_position
         } else if (!viewer_visible) {
             // Store AppContent scroll position to be applied to window
             const scroll_position = app_content_el.scrollTop
             // remove class
             app_content_el.classList.remove(viewer_visible_class)
+            top_bar_ev.classList.remove(viewer_visible_class)   
             window.scrollTo(0, scroll_position)
         }
     }

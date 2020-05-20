@@ -40,8 +40,9 @@ function pdf_url_is_valid(url) {
 
 
 function html_url_is_valid(url) {
+    const valid_urls = ['github.io', 'distill.pub']
     if (includes(url, 'frontiersin.org/articles') && endsWith(url, 'full')) return true
-    if (includes(url, 'github.io')) return true
+    if (url_contains(url, valid_urls)) return true
     return endsWith(url, '.html')
 }
 
@@ -87,7 +88,7 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style,
     }
 
     // If the screen size is less than the XL breakpoint, don't show the embedded content button
-    const lessThanXl = useMediaQuery(theme => theme.breakpoints.down('lg'))
+    const lessThanXl = useMediaQuery('(max-width:1499px)')
     if (lessThanXl) return null
 
     if (!url_is_valid(url, mediaType)) return null
