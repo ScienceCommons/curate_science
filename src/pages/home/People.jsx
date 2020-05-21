@@ -134,22 +134,10 @@ export default function People({homeStyles, ...props}) {
             affiliation: "University of Oxford",
         },
         {
-            url: "http://www.psychology.illinois.edu/people/bwrobrts",
-            image: "/sitestatic/people/roberts-hires.png",
-            name: "Brent Roberts",
-            affiliation: "University of Illinois - Urbana-Champaign",
-        },
-        {
             url: "http://www.psychology.ucsd.edu/people/profiles/hpashler.html",
             image: "/sitestatic/people/pashler-hires.png",
             name: "Hal Pashler",
             affiliation: "University of California - San Diego",
-        },
-        {
-            url: "http://www.dansimons.com/",
-            image: "/sitestatic/people/simons-hires.png",
-            name: "Daniel Simons",
-            affiliation: "University of Illinois - Urbana-Champaign",
         },
         {
             url: "http://www.psych.usyd.edu.au/staff/alexh/lab/",
@@ -170,18 +158,6 @@ export default function People({homeStyles, ...props}) {
             affiliation: "Grand Valley State University",
         },
         {
-            url: "http://www.simine.com/",
-            image: "/sitestatic/people/vazire-hires.png",
-            name: "Simine Vazire",
-            affiliation: "University of California – Davis",
-        },
-        {
-            url: "https://www.msu.edu/~lucasri/",
-            image: "/sitestatic/people/lucas-hires.png",
-            name: "Richard Lucas",
-            affiliation: "Michigan State University",
-        },
-        {
             url: "https://www.unimib.it/marco-perugini",
             image: "/sitestatic/people/perugini-hires.png",
             name: "Marco Perugini",
@@ -192,18 +168,6 @@ export default function People({homeStyles, ...props}) {
             image: "/sitestatic/people/campbell-hires.png",
             name: "Lorne Campbell",
             affiliation: "University of Western Ontario",
-        },
-        {
-            url: "http://psych.ubc.ca/persons/eric-eich/",
-            image: "/sitestatic/people/eich-hires.png",
-            name: "Eric Eich",
-            affiliation: "University of British Columbia",
-        },
-        {
-            url: "https://tbslaboratory.com/",
-            image: "/sitestatic/people/brandt-hires.png",
-            name: "Mark Brandt",
-            affiliation: "Tilburg University",
         },
         {
             url: "https://www.kingston.ac.uk/research/research-degrees/research-degree-students/profile/emma-henderson-61/",
