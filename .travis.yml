@@ -1,8 +1,6 @@
 language: python
 python:
 - '3.6'
-version:
-- prod
 addons:
   postgresql: '9.6'
 services:
@@ -20,6 +18,7 @@ deploy:
     master: curate-science-216207
     staging: curate-science-staging-2
   skip_cleanup: true
+  version: prod
 env:
   global:
   - secure: RP8VgCc6mft9F+GznJQMMGrU4VinQQHvxCDdhlUSdGjtEyjEdbNfRakO7AAHjToDernqxk2H1b24E3HwNWQKJZ6Go94rmp6CjmVPcmtmJwQTDelmCypL7W3bj9STrL83f5zNqPIQc+R0PtE467MLnOIcFigeyzU2/d3Nn/CU/4XLGUl0daHYAOYWtHfeuW1wKXYLCjZz3NzyHdbg188j2nAaEEzMfbp7duDa2tnPiq1MkNrfAMLLbAAPez//klMgtmgfojmIcRtZdvoDhuFbJWulAMikPIWvKAnKPnB3dwZbMzZUXQgEq1r5tEEnJIUdvvDD1oLPmRkvDdKlvfYHQqOLJQpt5WNMWsGqlrbBlSpR03yFpSqBgZ3+8GGicEBjPWh9x3u6VUUu13LfMWIHhPlDywGhjqc3fig3qxHmJROqQMyIbFLF7mNbjklhEC8lJmCyXc9zEsvIX++6NIpu+KFVWeuPoB8bSkgKMKZT9YV9eTss6iaVRkJPzQOo8IwcDY5eXNgCAsefH3zv1OD1xWL9OtwQPszZzYqopMCcJfGgWyDzyrQ7KdAM+QqXU0hTcP8T3KBmxWjwPdT3H9RIr5siLVXmegq5t+NxhmYL0HMI0cOtKzs+Bvxgj6mBKMcKdcY/BOmUMwa0DZ4MNqqjL0BjtHidYshKpmTyVvTzTwA=
