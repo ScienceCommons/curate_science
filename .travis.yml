@@ -1,7 +1,8 @@
 language: python
 python:
 - '3.6'
-version: prod
+version:
+- prod
 addons:
   postgresql: '9.6'
 services:
