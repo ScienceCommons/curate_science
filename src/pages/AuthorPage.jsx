@@ -40,6 +40,7 @@ const styles = theme => ({
         maxWidth: C.CARD_COL_WIDTH + 'px'
     },
     authorEditButton: {
+        visibility: 'hidden',
         position: 'absolute',
         top: 0,
         right: 0
@@ -71,6 +72,12 @@ const styles = theme => ({
         paddingBottom: theme.spacing(1),
         color: '#DCDCDC',
     },
+    authorInformation: {
+        position: 'relative',
+        '&:hover $authorEditButton': {
+            visibility: 'visible'
+        }
+    }
 })
 
 class AuthorPage extends React.Component {
@@ -381,7 +388,7 @@ class AuthorPage extends React.Component {
                         {
                             !embedded ?
                             <div className={classes.cardColumn}>
-                                <div style={{position: 'relative'}}>
+                                <div className={classes.authorInformation}>
                                     <span hidden={!editable}>
                                         <Button variant="outlined" color="secondary"
                                             className={classes.authorEditButton}
