@@ -136,6 +136,30 @@ const images = {
             full: '/sitestatic/infographics/5.0-external-author-page-L-HIW-A-HD.png',
         },
     ],
+    unisHIW: [
+        {
+            thumbnail: '/sitestatic/infographics/112.0-uni-researcher-list-ABOUT-THUMBNAIL.png',
+            full: '/sitestatic/infographics/12.0-uni-researcher-list-ABOUT-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/105.5-uni-OS-dashboard-01-home-UofB-THUMBNAIL.png',
+            full: '/sitestatic/infographics/5.5-uni-OS-dashboard-01-home-UofB.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/113-T-leaderboard-UNIS-THUMBNAIL.png',
+            full: '/sitestatic/infographics/13.0-T-leaderboard-UNIS-HD.png',
+        },
+    ],
+    fundersHIW: [
+        {
+            thumbnail: '/sitestatic/infographics/114-funders-grantee-list-CIHR-ABOUT-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.0-funders-grantee-list-CIHR-ABOUT-HD.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/114-funders-grantee-list-ABOUT-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.0-funders-grantee-list-ABOUT-HD.png',
+        },
+    ],    
     replicators: [
         {
             thumbnail: '/sitestatic/infographics/106-article-page-HIW-THUMBNAIL.png',
@@ -190,26 +214,34 @@ const images = {
     ],
     universities: [
         {
-            thumbnail: '/sitestatic/infographics/112.0-uni-researcher-list-ABOUT-THUMBNAIL.png',
-            full: '/sitestatic/infographics/12.0-uni-researcher-list-ABOUT-HD.png',
+            thumbnail: '/sitestatic/infographics/105.5-uni-OS-dashboard-01-home-UofB-THUMBNAIL.png',
+            full: '/sitestatic/infographics/5.5-uni-OS-dashboard-01-home-UofB.png',
         },
         {
             thumbnail: '/sitestatic/infographics/112.5-uni-T-compliance-dashboard-A-THUMBNAIL.png',
             full: '/sitestatic/infographics/12.5-uni-T-compliance-dashboard-A-HD.png',
-        },
-        {
-            thumbnail: '/sitestatic/infographics/113-T-leaderboard-UNIS-THUMBNAIL.png',
-            full: '/sitestatic/infographics/13.0-T-leaderboard-UNIS-HD.png',
-        },
+        },        
     ],
     funders: [
         {
-            thumbnail: '/sitestatic/infographics/114-funders-grantee-list-CIHR-ABOUT-THUMBNAIL.png',
-            full: '/sitestatic/infographics/14.0-funders-grantee-list-CIHR-ABOUT-HD.png',
+            thumbnail: '/sitestatic/infographics/114.5-funder-OS-dashboard-01-home-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.5-funder-OS-dashboard-01-home.png',
         },
         {
-            thumbnail: '/sitestatic/infographics/114-funders-grantee-list-ABOUT-THUMBNAIL.png',
-            full: '/sitestatic/infographics/14.0-funders-grantee-list-ABOUT-HD.png',
+            thumbnail: '/sitestatic/infographics/114.5-funder-OS-dashboard-02-grants-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.5-funder-OS-dashboard-02-grants.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/114.5-funder-OS-dashboard-03-unis-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.5-funder-OS-dashboard-03-unis.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/114.5-funder-OS-dashboard-04-researchers-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.5-funder-OS-dashboard-04-researchers.png',
+        },
+        {
+            thumbnail: '/sitestatic/infographics/114.5-funder-OS-dashboard-05-outputs-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.5-funder-OS-dashboard-05-outputs.png',
         },
     ],
 }
@@ -382,7 +414,9 @@ function About(props) {
                             Every year, millions of people suffer and/or die from serious conditions like cancer, Alzheimer’s, heart disease, anxiety/mood disorders, and suicide.
                             To make progress on these and other problems, funded scientific research must be, at minimum, <strong>transparent and credible</strong> (credible research is transparent evidence that survives scrutiny from peers).
                             Transparent and credible evidence can then be built upon, which allows ever more precise theories/hypotheses to be tested (solid cumulative knowledge cannot be built on quicksand).
-                            Sadly, there is a growing body of compelling evidence that a great deal of current academic research is not minimally transparent nor credible 
+                            Sadly, there is a growing body of compelling evidence that a great deal of current academic research (if not the majority: 
+                            <a href="https://journals.plos.org/plosmedicine/article%3Fid%3D10.1371/journal.pmed.0020124" target="_blank">1</a>,&nbsp;
+                            <a href="https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1001747" target="_blank">2</a>) is neither minimally transparent nor credible 
                             (<a href="https://pdfs.semanticscholar.org/3813/c9cb1bbbf699998b622fe4c8dbb02c9db482.pdf" target="_blank">1</a>,&nbsp;
                             <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0200303" target="_blank">2</a>,&nbsp;
                             <a href="https://www.nature.com/articles/tp2017203" target="_blank">3</a>,&nbsp;
@@ -395,11 +429,14 @@ function About(props) {
                             <a href="https://www.nature.com/articles/nrd3439-c1" target="_blank">10</a>,&nbsp;
                             <a href="https://www.nature.com/articles/483531a" target="_blank">11</a>,&nbsp;
                             <a href="https://osf.io/8srcd/" target="_blank">12</a>,&nbsp;
-                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165" target="_blank">13</a>). Worse, there’s no systematic way to differentiate credible evidence from untrustworthy evidence.
+                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165" target="_blank">13</a>,&nbsp;
+                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002333" target="_blank">14</a>,&nbsp;
+                            <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2006930" target="_blank">15</a>,&nbsp;
+                            <a href="https://academic.oup.com/clinchem/article/63/5/963/5612947" target="_blank">16</a>). Worse, there’s no systematic way to differentiate credible evidence from untrustworthy evidence.
                         </Typography>
 
                         <Typography className={classes.howItWorksDescription}>
-                            Curate Science is a unified curation system and platform to verify that research is <strong>transparent and credible</strong>. It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
+                            Curate Science is an integrated system and curation platform to verify that research is <strong>transparent and credible</strong> (see <a href="https://etiennelebel.com/cs/cs-state-of-and-roadmap.html" target="_blank">interactive diagram</a>). It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
                         </Typography>
 
                         <Typography component="ol" className={classes.howItWorksDescription}>
@@ -430,7 +467,7 @@ function About(props) {
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Researchers can ensure their publications meet minimum transparency standards (across <a href="/sitestatic/infographics/1.0-4-T-standards-across-article-types-A.png" target="_blank">13 article types</a>) via their own (externally embeddable) author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>).
+                                    Researchers can ensure their publications meet minimum transparency standards (across <a href="/sitestatic/infographics/1.0-4-T-standards-across-article-types-A.png" target="_blank">13 article types</a>) via their own (externally embeddable) Curate Scholar author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
@@ -453,7 +490,7 @@ function About(props) {
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
-                                    This holds journals accountable to what they publish, making them accountable to (1) the research community they serve, (2) the parent professional society that owns the journal (if applicable), and (3) organizations and public officials who rely on peer-reviewed journal articles for evidence-based decision-making.
+                                    Our Curate Journal product holds journals accountable to what they publish, making them accountable to (1) the research community they serve, (2) the parent professional society that owns the journal (if applicable), and (3) organizations who rely on peer-reviewed journal articles for evidence-based decision-making.
                                 </Typography>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
@@ -474,15 +511,15 @@ function About(props) {
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Universities can ensure that professors&#700; published research meets a minimum transparency standard, which can also be used for promotion/hiring decisions.                                    
+                                    Ensure your professors&#700; published research meets accepted minimum transparency standards and survives follow-up scrutiny (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).                                    
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
-                                    University departments can then be ranked by their transparency track record, which graduate students and job candidates can use to inform their decisions at what university to work.
+                                    Base hiring and promotion decisions on researchers&#700; transparency track record.
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
-                                    This makes universities accountable to their stakeholders: (1) tuition-fee paying students, (2) the government/taxpayer (for public universities), and/or (3) private/corporate donors.
+                                    Our Curate University product makes universities accountable to their stakeholders: (1) tuition-fee paying students, (2) the government/taxpayer (for public universities), and/or (3) private/corporate donors.
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -497,7 +534,7 @@ function About(props) {
                         <Grid container style={{ marginTop: '2rem' }} spacing={3} direction={biggerThanMD ? "row" : "column-reverse"}>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Ensure that grantees&#700; publications meet a minimum transparency standard and survive follow-up scrutiny.
+                                    Ensure that grantees&#700; publications meet a minimum transparency standard and survive follow-up scrutiny (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
@@ -505,7 +542,7 @@ function About(props) {
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
-                                    This makes funders accountable to their stakeholders: (1) the taxpayer (for government funding agencies) and/or (2) the philanthropist donors (for private/non-profit foundations).
+                                    Our Curate Funder product makes funding agencies accountable to their stakeholders: (1) the taxpayer (for public funding agencies) and/or (2) the philanthropist donors (for private/non-profit foundations).
                                 </Typography>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.imageCarousel}>
@@ -531,7 +568,7 @@ function About(props) {
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription} component="ul">
-                                    <li>Open-source code base, open ontologies, and open standards.</li>
+                                    <li><a href="https://github.com/ScienceCommons/curate_science" target="_blank">Open-source code base</a>, open ontologies, and open standards.</li>
                                     <li>Openly-licensed curated content, accessible via an open database/open API, which can be easily re-used/re-posted via embeddable widgets. This enables the scholarly community/users to be in full control of their curated publications/content, unlike other platforms where content is either not flexible or accessible (Google Scholar) or only accessible to logged-in users (like Academia.edu and ResearchGate, who use a lock-in model).</li>
                                     <li>Transparent logging of all user curation contributions including editors and volunteer/paid curators. All users must use their real name (and be affiliated with a research institute) and will have their own user page displaying all of their contributions/edits.</li>
                                 </Typography>
@@ -545,7 +582,7 @@ function About(props) {
                                     <li>Incentivize high quality information that is sensitive to the power/political dynamics in academia:
                                         <ul>
                                             <li>
-                                                Discrete error detection system that allows users to anonymously and confidentially request clarification from an author regarding possible errors in a published work, including revocable confidentiality of information escrow to hold each party accountable (<a href="https://events.stanford.edu/events/645/64543/" target="_blank">Broockman, 2015</a>).
+                                                Discrete error detection system that allows users to anonymously and confidentially request clarification from an author regarding possible errors in a published work, including revocable confidentiality of information escrow to hold each party accountable (<a href="https://www.youtube.com/watch?v=0pgCaXMI-ps&feature=youtu.be&t=2093" target="_blank">Broockman, 2015</a>).
                                             </li>
                                             <li>
                                                 Bug bounty functionality that provides financial rewards to researchers who identify errors in published research, conduct reproducibility re-analyses, or replication checks (financial bounties provided by original authors, journals, or outside donors).
@@ -582,16 +619,16 @@ export default function Home({}) {
             to: '#how-it-works',
         },
         {
-            title: 'Are you a replicator?',
-            text: 'Add your replication to our database to increase its visibility, discoverability, and impact.',
-            button_text: 'Sign up',
-            href: '/accounts/signup/',
+            title: 'Are you a university official?',
+            text: "Track the transparency of your researchers' outputs using our next-generation open science dashboard for institutions.",
+            button_text: 'Learn more',
+            to: '#for-unis',
         },
         {
-            title: 'Are you an educator?',
-            text: 'Find open data sets and study materials for your courses in statistics, research methodology, or meta-science.',
-            button_text: 'Browse',
-            to: '/recent',
+            title: 'Are you a funder?',
+            text: 'Ensure the research you fund is transparent and accessible to maximize its impact and increase your return on investment.',
+            button_text: 'Learn more',
+            to: '#for-funders',
         },
     ]
 
@@ -599,7 +636,7 @@ export default function Home({}) {
         <Grid container className={classes.homepage}>
             <Grid container item justify="center">
                 <Typography component="h2" className={classes.subheading} align="center">
-                    Science deliciously user-friendly.
+                    Curation products for all research stakeholders.
                 </Typography>
             </Grid>
 
@@ -644,7 +681,7 @@ export default function Home({}) {
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
-                                Organize your publications on your own author page to make your science deliciously user-friendly to consume, ultimately accessible, and beautiful on all devices.
+                                Organize your publications on your own Curate Scholar author page to make your science deliciously user-friendly, ultimately accessible, and beautiful on all devices.
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
@@ -677,6 +714,94 @@ export default function Home({}) {
                 </CardContent>
             </Card>
 
+            <Card id="for-unis" style={{ marginTop: '5rem' }} className={classes.card}>
+                <CardContent>
+                    <Grid container spacing={3}>
+                        <Grid item md={6}></Grid>
+                        <Grid item md={6} xs={12}>
+                            <Typography align="center" component="h4" className={classes.subsectionTitle}>
+                                For universities
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid container style={{ marginTop: '2rem' }} direction={biggerThanMD ? "row" : "column-reverse"} spacing={3}>
+                        <Grid item container md={6} xs={12} alignItems="center">
+                            <Typography className={classes.howItWorksDescription}>
+                                Make your researchers&#700; publications easy to access, interactive, and deliciously user-friendly to consume on your university&#700;s departmental pages.
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                Track the open science practices of your researchers, and monitor your progress in achieving transparency targets prioritized by your institution (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                University departments can then be ranked by their transparency track record, which graduate students and job candidates can use to inform their decisions at what university to work.
+                            </Typography>
+
+                        </Grid>
+                        <Grid item md={6} xs={12} className={classes.imageCarousel}>
+                            <ImageCarousel images={images.unisHIW}/>
+                        </Grid>
+                    </Grid>
+
+                    <Grid container>
+                        <Grid item md={6}/>
+                        <Grid item container md={6} xs={12} alignItems="center">
+                            <HomeButton
+                                style={{ marginTop: '1rem' }}
+                                fontSize="1rem"
+                                href="/accounts/signup/"
+                            >
+                                Sign up
+                            </HomeButton>
+                        </Grid>
+                    </Grid>
+
+                </CardContent>
+            </Card>
+
+            <Card id="for-funders" style={{ marginTop: '5rem' }} className={classes.card}>
+                <CardContent>
+                    <Grid container spacing={3}>
+                        <Grid item md={6}></Grid>
+                        <Grid item md={6} xs={12}>
+                            <Typography align="center" component="h4" className={classes.subsectionTitle}>
+                                For funders
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid container style={{ marginTop: '2rem' }} spacing={3}>
+                        <Grid item md={6} xs={12} className={classes.imageCarousel}>
+                            <ImageCarousel images={images.fundersHIW}/>
+                        </Grid>
+                        <Grid item container md={6} xs={12} alignItems="center">
+                            <Typography className={classes.howItWorksDescription}>
+                                Make your grantees&#700; research outputs easy to access, interactive, and deliciously user-friendly to consume for all research stakeholders (e.g., policy analysts, innovators, citizens, etc.).
+                            </Typography>
+
+                            <Typography className={classes.howItWorksDescription}>
+                                 Track the open science practices of the research you fund, and monitor your progress in requiring increased transparency and funding independent replications and reproducibility re-analyses (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).                                
+                            </Typography>
+
+                        </Grid>
+                    </Grid>
+
+                    <Grid container>
+                        <Grid item md={6}/>
+                        <Grid item container md={6} xs={12} alignItems="center">
+                            <HomeButton
+                                style={{ marginTop: '1rem' }}
+                                fontSize="1rem"
+                                href="/accounts/signup/"
+                            >
+                                Sign up
+                            </HomeButton>
+                        </Grid>
+                    </Grid>
+
+                </CardContent>
+            </Card>            
+            
             <Card style={{ marginTop: '5rem' }} className={classes.card}>
                 <CardContent>
                     <Grid container spacing={3}>
@@ -718,55 +843,6 @@ export default function Home({}) {
                             </HomeButton>
                         </Grid>
                         <Grid item md={6}/>
-                    </Grid>
-
-                </CardContent>
-            </Card>
-
-            <Card style={{ marginTop: '5rem' }} className={classes.card}>
-                <CardContent>
-                    <Grid container spacing={3}>
-                        <Grid item md={6}></Grid>
-                        <Grid item md={6} xs={12}>
-                            <Typography align="center" component="h4" className={classes.subsectionTitle}>
-                                For educators
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid container style={{ marginTop: '2rem' }} spacing={3}>
-                        <Grid item md={6} xs={12} className={classes.imageCarousel}>
-                            <ImageCarousel images={images.educators}/>
-                        </Grid>
-                        <Grid item container md={6} xs={12} alignItems="center">
-                            <Typography className={classes.howItWorksDescription}>
-                                Find open data sets and analysis code on specific topics for your courses in statistics, research methodology, or meta-science.
-                            </Typography>
-
-                            <Typography className={classes.howItWorksDescription}>
-                                Discover open study materials for course-related replication projects on topics relevant to your students&#700; interests.
-                            </Typography>
-
-                            <Typography className={classes.howItWorksDescription}>
-                                Identify transparent and credible research findings to include in your courses.
-                            </Typography>
-
-                            <Typography className={classes.howItWorksDescription}>
-                                Curate the transparency and credibility of seminal findings for your graduate seminar classes, organized in article lists re-usable by other instructors (coming soon).
-                            </Typography>
-                        </Grid>
-                    </Grid>
-
-                    <Grid container>
-                        <Grid item md={6}/>
-                        <Grid item container md={6} xs={12} alignItems="center">
-                            <HomeButton
-                                style={{ marginTop: '1rem' }}
-                                fontSize="1rem"
-                                to="/recent"
-                            >
-                                Browse
-                            </HomeButton>
-                        </Grid>
                     </Grid>
 
                 </CardContent>
