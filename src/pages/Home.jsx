@@ -170,16 +170,6 @@ const images = {
             full: '/sitestatic/infographics/7.0-COLLECTION-page-HIW-HD.png',
         },
     ],
-    educators: [
-        {
-            thumbnail: '/sitestatic/infographics/108-educator-DATA-THUMBNAIL.png',
-            full: '/sitestatic/infographics/8.0-educator-DATA.png',
-        },
-        {
-            thumbnail: '/sitestatic/infographics/109-educator-MATERIALS-THUMBNAIL.png',
-            full: '/sitestatic/infographics/9.0-educator-MATERIALS.png'
-        },
-    ],
     researchers: [
         {
             thumbnail: '/sitestatic/infographics/104.0-author-page-HIW-A-THUMBNAIL.png',
@@ -626,7 +616,7 @@ export default function Home({}) {
         },
         {
             title: 'Are you a funder?',
-            text: 'Ensure the research you fund is transparent and accessible to maximize its impact and increase your return on investment.',
+            text: 'Ensure the research you fund is transparent and accessible to maximize your impact and return on investment.',
             button_text: 'Learn more',
             to: '#for-funders',
         },
@@ -780,7 +770,11 @@ export default function Home({}) {
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
-                                 Track the open science practices of the research you fund, and monitor your progress in requiring increased transparency and funding independent replications and reproducibility re-analyses (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).                                
+                                 Track the transparency of the research you fund, and monitor your progress in requiring higher levels of research transparency (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).                                
+                            </Typography>
+                            
+                            <Typography className={classes.howItWorksDescription}>
+                                 Monitor your progress in funding a larger proportion of studies that report independent replications and reproducibility re-analyses.                                
                             </Typography>
 
                         </Grid>
