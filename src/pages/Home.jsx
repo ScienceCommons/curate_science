@@ -524,7 +524,7 @@ function About(props) {
                         <Grid container style={{ marginTop: '2rem' }} spacing={3} direction={biggerThanMD ? "row" : "column-reverse"}>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Ensure that grantees&#700; publications meet a minimum transparency standard and survive follow-up scrutiny (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).
+                                    Ensure that grantees&#700; publications meet a minimum transparency standard and survive follow-up scrutiny (see <a href="https://etiennelebel.com/dashboards/funder-os-dashboard.html#home" target="_blank">interactive prototype</a>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
@@ -770,7 +770,7 @@ export default function Home({}) {
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
-                                 Track the transparency of the research you fund, and monitor your progress in requiring higher levels of research transparency (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).                                
+                                 Track the transparency of the research you fund, and monitor your progress in requiring higher levels of research transparency (see <a href="https://etiennelebel.com/dashboards/funder-os-dashboard.html#home" target="_blank">interactive prototype</a>).                                
                             </Typography>
                             
                             <Typography className={classes.howItWorksDescription}>
