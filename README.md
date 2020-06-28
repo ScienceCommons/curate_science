@@ -111,7 +111,7 @@ Then don’t forget to reset the env var: `export GOOGLE_CLOUD_PROJECT=`
 
 (DB_NAME is set conditionally, based on the value of GOOGLE_CLOUD_PROJECT, [here]( https://github.com/ScienceCommons/curate_science/blob/177da9bba83b0eea75086749d883acd2c9c39b48/curate_science/settings.py#L31))
 
-(for a more detailed set of instructions on how to setup a local instance of the app, see [here](https://github.com/ScienceCommons/curate_science/issues/76))
+
 
 ## License
 Curate Science source code is licensed under an open-source MIT license for all personal, educational, research, and other open source applications. A commercial license is required for all commercial applications. Please contact admin@curatescience.org for more information about our commercial license.
