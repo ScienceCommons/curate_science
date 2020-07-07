@@ -459,44 +459,6 @@ class AuthorPage extends React.Component {
                                     </Typography>
                                     <AuthorLinks links={author.profile_urls} />
                                 </div>
-
-                                <div id="actions" className={classes.box} hidden={!editable}>
-                                    <Button variant="contained" color="secondary" onClick={this.create_new_article} disabled={loading}>
-                                        <Icon className={classes.leftIcon}>add</Icon>
-                                        Add Article
-                                    </Button>
-                                    <Button variant="outlined"
-                                        color="secondary"
-                                        aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
-                                        onClick={this.open_preexisting_popper}
-                                        style={{marginLeft: 10}}>
-                                        <Icon className={classes.leftIcon}>link</Icon>
-                                        Link Existing Article
-                                    </Button>
-                                    <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
-                                        <IconButton aria-label="Info" style={{cursor: 'default'}} disableRipple>
-                                            <Icon>info</Icon>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Popover
-                                        id="add_preexisting_popper"
-                                        open={add_preexisting_open}
-                                        anchorEl={popperAnchorEl}
-                                        onClose={this.close_preexisting_popper}
-                                        anchorOrigin={{
-                                            vertical: 'bottom',
-                                            horizontal: 'left',
-                                        }}
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'left',
-                                            }}
-                                        >
-                                            <div style={{width: "400px", height: "250px", padding: 14 }}>
-                                                <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
-                                            </div>
-                                        </Popover>
-                                    </div>
                                     {search_filter}
                                     {long_menu}
                                 </div>
