@@ -12,9 +12,11 @@ import {
     Popover,
     Snackbar,
     TextField,
-    Tooltip
+    Tooltip,
+    Menu,
+    MenuItem
 } from '@material-ui/core';
-
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AuthorEditor from '../components/AuthorEditor.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleList from '../components/ArticleList.jsx';
@@ -77,7 +79,14 @@ const styles = theme => ({
         '&:hover $authorEditButton': {
             visibility: 'visible'
         }
-    }
+    },
+  actionMenu: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      margin: 0,
+      position: 'absolute',
+      right: (C.COL_WIDTH - C.CARD_COL_WIDTH)/2,
+  }
 })
 
 class AuthorPage extends React.Component {
@@ -92,6 +101,7 @@ class AuthorPage extends React.Component {
             edit_article_modal_open: false,
             editing_article_id: null,
             popperAnchorEl: null,
+            actionAnchorEl: null,
             author_creator_showing: false,
             snack_message: null,
             search_filter: '',
@@ -107,6 +117,8 @@ class AuthorPage extends React.Component {
         this.link_existing_article = this.link_existing_article.bind(this)
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
+        this.open_action_list = this.open_action_list.bind(this)
+        this.close_action_list = this.close_action_list.bind(this)
         this.article_updated = this.article_updated.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
@@ -315,6 +327,18 @@ class AuthorPage extends React.Component {
         });
     };
 
+    open_action_list = event => {
+        this.setState({
+          actionAnchorEl: event.currentTarget,
+        });
+    };
+
+    close_action_list = () => {
+        this.setState({
+          actionAnchorEl: null,
+        });
+    };
+
     update_search_filter(event) {
         this.setState({ search_filter: event.target.value })
     }
@@ -350,12 +374,13 @@ class AuthorPage extends React.Component {
         let {classes, embedded, user_session} = this.props
         let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
-            articles_loading,
+            articles_loading, actionAnchorEl,
             snack_message, loading} = this.state
         if (author == null) return <Loader />
         else if (!author.is_activated) return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
         let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
+        const add_action_open = Boolean(actionAnchorEl)
         let editable = this.editable()
 
         const search_filter = (
@@ -376,6 +401,36 @@ class AuthorPage extends React.Component {
             />
         )
 
+        const ITEM_HEIGHT = 48;
+        const long_menu = (
+            <span hidden={!editable}>
+                <IconButton 
+                    className={classes.actionMenu}
+                    aria-label="more"
+                    aria-controls="long-menu"
+                     aria-haspopup="true"
+                    onClick={this.open_action_list}
+                >
+                <MoreVertIcon />
+                </IconButton>
+                <Menu
+                    id="long-menu"
+                    open={add_action_open}
+                    anchorEl={actionAnchorEl}
+                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                    onClose={this.close_action_list}
+                    PaperProps={{
+                        style: {
+                        maxHeight: ITEM_HEIGHT * 4.5,
+                        width: '20ch',
+                    },
+                    }}
+                >
+                    <MenuItem key={'Add article'} onClick={this.create_new_article}>Add article</MenuItem>
+                    <MenuItem key={'Link existing article'} onClick={this.open_preexisting_popper}>Link existing article</MenuItem>
+                </Menu>
+            </span>
+        )
 		return (
             <div className={classes.root}>
                 <Grid
@@ -404,45 +459,8 @@ class AuthorPage extends React.Component {
                                     </Typography>
                                     <AuthorLinks links={author.profile_urls} />
                                 </div>
-
-                                <div id="actions" className={classes.box} hidden={!editable}>
-                                    <Button variant="contained" color="secondary" onClick={this.create_new_article} disabled={loading}>
-                                        <Icon className={classes.leftIcon}>add</Icon>
-                                        Add Article
-                                    </Button>
-                                    <Button variant="outlined"
-                                        color="secondary"
-                                        aria-owns={add_preexisting_open ? 'add_preexisting_popper' : undefined}
-                                        onClick={this.open_preexisting_popper}
-                                        style={{marginLeft: 10}}>
-                                        <Icon className={classes.leftIcon}>link</Icon>
-                                        Link Existing Article
-                                    </Button>
-                                    <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors).">
-                                        <IconButton aria-label="Info" style={{cursor: 'default'}} disableRipple>
-                                            <Icon>info</Icon>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Popover
-                                        id="add_preexisting_popper"
-                                        open={add_preexisting_open}
-                                        anchorEl={popperAnchorEl}
-                                        onClose={this.close_preexisting_popper}
-                                        anchorOrigin={{
-                                            vertical: 'bottom',
-                                            horizontal: 'left',
-                                        }}
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'left',
-                                            }}
-                                        >
-                                            <div style={{width: "400px", height: "250px", padding: 14 }}>
-                                                <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
-                                            </div>
-                                        </Popover>
-                                    </div>
                                     {search_filter}
+                                    {long_menu}
                                 </div>
                                 :
                                 <Grid container alignItems="center" justify="space-between">
