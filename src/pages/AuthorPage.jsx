@@ -24,6 +24,7 @@ import Loader from '../components/shared/Loader.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
+import LongMenu from '../components/AuthorPageActions.jsx';
 
 import { includes, merge } from 'lodash'
 
@@ -80,13 +81,14 @@ const styles = theme => ({
             visibility: 'visible'
         }
     },
-  actionMenu: {
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
-      margin: 0,
-      position: 'absolute',
-      right: (C.COL_WIDTH - C.CARD_COL_WIDTH)/2,
-  }
+    actionIcon: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        float: 'right'
+    },
+    actionMenu: {
+        marginLeft: '10px'    
+    }
 })
 
 class AuthorPage extends React.Component {
@@ -405,10 +407,10 @@ class AuthorPage extends React.Component {
         const long_menu = (
             <span hidden={!editable}>
                 <IconButton 
-                    className={classes.actionMenu}
+                    className={classes.actionIcon}
                     aria-label="more"
                     aria-controls="long-menu"
-                     aria-haspopup="true"
+                    aria-haspopup="true"
                     onClick={this.open_action_list}
                 >
                 <MoreVertIcon />
@@ -419,15 +421,9 @@ class AuthorPage extends React.Component {
                     anchorEl={actionAnchorEl}
                     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                     onClose={this.close_action_list}
-                    PaperProps={{
-                        style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                        width: '20ch',
-                    },
-                    }}
+                    className={classes.actionMenu}
+                    getContentAnchorEl={null}
                 >
-                    <MenuItem key={'Add article'} onClick={this.create_new_article}>Add article</MenuItem>
-                    <MenuItem key={'Link existing article'} onClick={this.open_preexisting_popper}>Link existing article</MenuItem>
                 </Menu>
             </span>
         )
@@ -460,7 +456,7 @@ class AuthorPage extends React.Component {
                                     <AuthorLinks links={author.profile_urls} />
                                 </div>
                                     {search_filter}
-                                    {long_menu}
+                                    <LongMenu/>
                                 </div>
                                 :
                                 <Grid container alignItems="center" justify="space-between">
