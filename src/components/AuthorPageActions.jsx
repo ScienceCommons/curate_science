@@ -1,13 +1,19 @@
-import React from 'react';
+//import React from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Button, 
     Icon,
     Tooltip,
+    Popover,
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
+import { json_api_req, randomId, send_height_to_parent } from '../util/util.jsx'
+import C from '../constants/constants';
+//import { get, includes, isEmpty } from 'lodash'
+import ArticleSelector from './curateform/ArticleSelector.jsx';
 
 const useStyles = makeStyles(theme => ({
     menuIcon: {
@@ -28,19 +34,29 @@ const useStyles = makeStyles(theme => ({
     }          
 }));
 
-export default function LongMenu() {
+export default function LongMenu({articlesIds, addArticle, linkArticle}) {
     const classes = useStyles()
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
+    const [anchorElMenu, setAnchorElMenu] = React.useState(null);
+    const [anchorElPopper, setAnchorElPopper] = React.useState(null);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const openMenu = Boolean(anchorElMenu);
+    const openPopper = Boolean(anchorElPopper);
+
+    const handleClickMenu = (event) => {
+        setAnchorElMenu(event.currentTarget);
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    const handleCloseMenu = () => {
+        setAnchorElMenu(null);
     };
 
+    const handleClickPopper = (event) => {
+        setAnchorElPopper(event.currentTarget);
+    };
+
+    const handleClosePopper = () => {
+        setAnchorElPopper(null);
+    };
     const ActionButton = ({ iconLeft, iconRight, label, color }) => {
         color = color || 'primary'
         return (
@@ -77,30 +93,48 @@ export default function LongMenu() {
                 aria-label="more"
                 aria-controls="long-menu"
                 aria-haspopup="true"
-                onClick={handleClick}
+                onClick={handleClickMenu}
                 style={{minWidth: 0, color: '#CCC' }}
             >
             <MoreVertIcon />
             </IconButton>
             <Menu
                 id="long-menu"
-                anchorEl={anchorEl}
+                anchorEl={anchorElMenu}
                 anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                 getContentAnchorEl = {null}
                 keepMounted
-                open={open}
-                onClose={handleClose}
+                open={openMenu}
+                onClose={handleCloseMenu}
                 className={classes.menu}
                 MenuListProps={{ style: {padding: 0}}}
             >
-                <MenuItem key='Add article' onClick={handleClose} className={classes.menuItem}>
+                <MenuItem key='Add article' onClick={() => {handleCloseMenu(); addArticle()}} className={classes.menuItem}>
                     <ActionButton iconLeft='add' iconRight={null} label='Add article' color='default'/>
                 </MenuItem>
 
-                <MenuItem key='Link existing article' onClick={handleClose} className={classes.menuItem}>
+                <MenuItem key='Link existing article' onClick={handleClickPopper} className={classes.menuItem}>
                     <ActionButton iconLeft='link' iconRight='info' label='Link existing article' color='default'/>
                 </MenuItem>
             </Menu>
+            <Popover
+        id="add_preexisting_popper"
+        open={openPopper}
+        anchorEl={anchorElPopper}
+        onClose={handleClosePopper}
+        anchorOrigin={{
+            vertical: 'bottom',
+                horizontal: 'left',
+        }}
+        transformOrigin={{
+            vertical: 'top',
+                horizontal: 'left',
+        }}
+        >
+            <div style={{width: "400px", height: "250px", padding: 14 }}>
+                <ArticleSelector onChange={linkArticle} author_articles={articlesIds} />
+            </div>
+        </Popover>
         </span>
     );
 }

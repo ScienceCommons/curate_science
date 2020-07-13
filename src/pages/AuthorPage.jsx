@@ -190,7 +190,6 @@ class AuthorPage extends React.Component {
         let {match} = this.props
         return match.params.slug || null
     }
-
     create_new_article() {
         // Create new placeholder article, then open editor
         let {cookies} = this.props
@@ -373,6 +372,8 @@ class AuthorPage extends React.Component {
     }
 
     render() {
+console.log(this.props)
+console.log(this.state)
         let {classes, embedded, user_session} = this.props
         let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
@@ -456,7 +457,9 @@ class AuthorPage extends React.Component {
                                     <AuthorLinks links={author.profile_urls} />
                                 </div>
                                     {search_filter}
-                                    <LongMenu/>
+                                    <span hidden={!editable}>
+                                         <LongMenu articlesIds={article_ids} addArticle={this.create_new_article} linkArticle={this.link_existing_article} />
+                                    </span>
                                 </div>
                                 :
                                 <Grid container alignItems="center" justify="space-between">
