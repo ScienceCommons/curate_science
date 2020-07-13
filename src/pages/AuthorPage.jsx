@@ -24,7 +24,8 @@ import Loader from '../components/shared/Loader.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
-import LongMenu from '../components/AuthorPageActions.jsx';
+// leave LongMenu functional component for further development
+//import { LongMenu} from '../components/AuthorPageActions.jsx';
 
 import { includes, merge } from 'lodash'
 
@@ -81,15 +82,52 @@ const styles = theme => ({
             visibility: 'visible'
         }
     },
-    actionIcon: {
+    menuIcon: {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
         float: 'right'
     },
-    actionMenu: {
-        marginLeft: '10px'    
-    }
+    menu: {
+        marginLeft: '10px',  
+        marginTop: '5px'
+    },
+    menuItem: {
+        margin: 0,
+        padding: 0,
+        border: 'solid',
+        borderColor: '#999',
+        borderWidth: '1.5px',
+    }          
 })
+
+const ActionButton = ({ iconLeft, iconRight, label, color }) => {
+    color = color || 'primary'
+    return (
+        <Button
+        variant="outlined"
+        size="medium"
+        color={color}
+        style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'flex-start',
+            padding: '0.5rem 0.5rem',
+            border: 'none',
+            color: '#999',
+        }}
+        >
+            <Icon>{iconLeft}</Icon>
+            <span style={{ marginLeft: '0.5rem' }}>
+                {label}
+            </span>
+                { iconRight === null ? null :
+                    <Tooltip title="Link an article to your author page that is already in our database (for example, an article that has already been added by one of your co-authors)."> 
+                        <Icon style={{marginLeft:'0.6rem'}}>{iconRight}</Icon>
+                    </Tooltip>
+                }
+        </Button>
+    )
+}
 
 class AuthorPage extends React.Component {
 	constructor(props) {
@@ -103,7 +141,7 @@ class AuthorPage extends React.Component {
             edit_article_modal_open: false,
             editing_article_id: null,
             popperAnchorEl: null,
-            actionAnchorEl: null,
+            menuAnchorEl: null,
             author_creator_showing: false,
             snack_message: null,
             search_filter: '',
@@ -119,8 +157,8 @@ class AuthorPage extends React.Component {
         this.link_existing_article = this.link_existing_article.bind(this)
         this.open_preexisting_popper = this.open_preexisting_popper.bind(this)
         this.close_preexisting_popper = this.close_preexisting_popper.bind(this)
-        this.open_action_list = this.open_action_list.bind(this)
-        this.close_action_list = this.close_action_list.bind(this)
+        this.open_menu = this.open_menu.bind(this)
+        this.close_menu = this.close_menu.bind(this)
         this.article_updated = this.article_updated.bind(this)
         this.show_snack = this.show_snack.bind(this)
         this.close_snack = this.close_snack.bind(this)
@@ -328,15 +366,15 @@ class AuthorPage extends React.Component {
         });
     };
 
-    open_action_list = event => {
+    open_menu = event => {
         this.setState({
-          actionAnchorEl: event.currentTarget,
+          menuAnchorEl: event.currentTarget,
         });
     };
 
-    close_action_list = () => {
+    close_menu = () => {
         this.setState({
-          actionAnchorEl: null,
+          menuAnchorEl: null,
         });
     };
 
@@ -372,18 +410,16 @@ class AuthorPage extends React.Component {
     }
 
     render() {
-console.log(this.props)
-console.log(this.state)
         let {classes, embedded, user_session} = this.props
         let {articles, author, edit_author_modal_open, edit_article_modal_open,
             editing_article_id, popperAnchorEl, author_creator_showing,
-            articles_loading, actionAnchorEl,
+            articles_loading, menuAnchorEl,
             snack_message, loading} = this.state
         if (author == null) return <Loader />
         else if (!author.is_activated) return <Typography variant="h3" align="center" style={{marginTop: 30}}>This user has not created an author profile yet</Typography>
         let article_ids = articles.map((a) => a.id)
         const add_preexisting_open = Boolean(popperAnchorEl)
-        const add_action_open = Boolean(actionAnchorEl)
+        const add_menu_open = Boolean(menuAnchorEl)
         let editable = this.editable()
 
         const search_filter = (
@@ -404,28 +440,76 @@ console.log(this.state)
             />
         )
 
-        const ITEM_HEIGHT = 48;
         const long_menu = (
             <span hidden={!editable}>
-                <IconButton 
-                    className={classes.actionIcon}
+                <IconButton
+                    className={classes.menuIcon}
                     aria-label="more"
                     aria-controls="long-menu"
                     aria-haspopup="true"
-                    onClick={this.open_action_list}
+                    onClick={this.open_menu}
+                    style={{minWidth: 0, color: '#CCC' }}
                 >
                 <MoreVertIcon />
                 </IconButton>
                 <Menu
                     id="long-menu"
-                    open={add_action_open}
-                    anchorEl={actionAnchorEl}
+                    anchorEl={menuAnchorEl}
                     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                    onClose={this.close_action_list}
-                    className={classes.actionMenu}
-                    getContentAnchorEl={null}
+                    getContentAnchorEl = {null}
+                    keepMounted
+                    open={add_menu_open}
+                    onClose={this.close_menu}
+                    className={classes.menu}
+                    MenuListProps={{ style: {padding: 0}}}
                 >
+                    <MenuItem 
+                        key='Add article' 
+                        onClick={() => {
+                            this.close_menu(); 
+                            this.create_new_article()}
+                        } 
+                        className={classes.menuItem}>
+                        <ActionButton 
+                            iconLeft='add' 
+                            iconRight={null} 
+                            label='Add article' 
+                            color='default'
+                        />
+                    </MenuItem>
+                    <MenuItem 
+                        key='Link existing article' 
+                        onClick={(event) => {
+                            this.open_preexisting_popper(event), 
+                            this.close_menu()}
+                        } 
+                        className={classes.menuItem}>
+                        <ActionButton 
+                            iconLeft='link' 
+                            iconRight='info' 
+                            label='Link existing article' 
+                            color='default'
+                        />
+                    </MenuItem>
                 </Menu>
+                <Popover
+                    id="add_preexisting_popper"
+                    open={add_preexisting_open}
+                    anchorEl={popperAnchorEl}
+                    onClose={this.close_preexisting_popper}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
+                >
+                    <div style={{width: "400px", height: "250px", padding: 14 }}>
+                        <ArticleSelector onChange={this.link_existing_article} author_articles={article_ids} />
+                    </div>
+                </Popover>
             </span>
         )
 		return (
@@ -457,9 +541,7 @@ console.log(this.state)
                                     <AuthorLinks links={author.profile_urls} />
                                 </div>
                                     {search_filter}
-                                    <span hidden={!editable}>
-                                         <LongMenu articlesIds={article_ids} addArticle={this.create_new_article} linkArticle={this.link_existing_article} />
-                                    </span>
+                                    {long_menu}
                                 </div>
                                 :
                                 <Grid container alignItems="center" justify="space-between">
