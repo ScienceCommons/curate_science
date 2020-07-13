@@ -97,7 +97,10 @@ const styles = theme => ({
         border: 'solid',
         borderColor: '#999',
         borderWidth: '1.5px',
-    }          
+    },          
+    actions: {
+        paddingTop: theme.spacing(5),
+    }
 })
 
 const ActionButton = ({ iconLeft, iconRight, label, color }) => {
@@ -540,8 +543,10 @@ class AuthorPage extends React.Component {
                                     </Typography>
                                     <AuthorLinks links={author.profile_urls} />
                                 </div>
-                                    {search_filter}
-                                    {long_menu}
+                                    <div className={classes.actions}>
+                                        {search_filter}
+                                        {long_menu}
+                                    </div>
                                 </div>
                                 :
                                 <Grid container alignItems="center" justify="space-between">
