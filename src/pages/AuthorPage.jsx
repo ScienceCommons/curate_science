@@ -24,8 +24,6 @@ import Loader from '../components/shared/Loader.jsx';
 import AuthorLinks from '../components/AuthorLinks.jsx';
 import LabeledBox from '../components/shared/LabeledBox.jsx';
 import ArticleSelector from '../components/curateform/ArticleSelector.jsx';
-// leave LongMenu functional component for further development
-//import { LongMenu} from '../components/AuthorPageActions.jsx';
 
 import { includes, merge } from 'lodash'
 
@@ -86,10 +84,6 @@ const styles = theme => ({
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
         float: 'right'
-    },
-    menu: {
-        marginLeft: '10px',  
-        marginTop: '5px'
     },
     menuItem: {
         margin: 0,
@@ -458,12 +452,18 @@ class AuthorPage extends React.Component {
                 <Menu
                     id="long-menu"
                     anchorEl={menuAnchorEl}
-                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                    anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                    }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                    }}
                     getContentAnchorEl = {null}
                     keepMounted
                     open={add_menu_open}
                     onClose={this.close_menu}
-                    className={classes.menu}
                     MenuListProps={{ style: {padding: 0}}}
                 >
                     <MenuItem 
