@@ -93,12 +93,12 @@ const styles = theme => ({
         borderWidth: '1.5px',
     },          
     actions: {
-        paddingTop: theme.spacing(5),
+        paddingTop: theme.spacing(3),
     }
 })
 
 const ActionButton = ({ iconLeft, iconRight, label, color }) => {
-    color = color || 'primary'
+    color = color || 'secondary' 
     return (
         <Button
         variant="outlined"
@@ -113,8 +113,8 @@ const ActionButton = ({ iconLeft, iconRight, label, color }) => {
             color: '#999',
         }}
         >
-            <Icon>{iconLeft}</Icon>
-            <span style={{ marginLeft: '0.5rem' }}>
+            <Icon color='secondary'>{iconLeft}</Icon>
+            <span style={{ marginLeft: '0.5rem', color: '#8F0DCC' }}>
                 {label}
             </span>
                 { iconRight === null ? null :
@@ -477,7 +477,6 @@ class AuthorPage extends React.Component {
                             iconLeft='add' 
                             iconRight={null} 
                             label='Add article' 
-                            color='default'
                         />
                     </MenuItem>
                     <MenuItem 
@@ -491,7 +490,6 @@ class AuthorPage extends React.Component {
                             iconLeft='link' 
                             iconRight='info' 
                             label='Link existing article' 
-                            color='default'
                         />
                     </MenuItem>
                 </Menu>
