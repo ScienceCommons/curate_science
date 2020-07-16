@@ -457,7 +457,7 @@ function About(props) {
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Researchers can ensure their publications meet minimum transparency standards (across <a href="/sitestatic/infographics/1.0-4-T-standards-across-article-types-A.png" target="_blank">13 article types</a>) via their own (externally embeddable) Curate Scholar author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>).
+                                    Researchers can ensure their publications meet minimum transparency standards (across <a href="/sitestatic/infographics/1.0-4-T-standards-across-article-types-A.png" target="_blank">13 article types</a>) via their own (externally embeddable) Curate Scholar author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>; example author pages: <Link to="/author/etienne-p-lebel">1</Link>, <Link to="/author/anna-vant-veer">2</Link>, <Link to="/author/lorne-campbell">3</Link>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
@@ -671,7 +671,7 @@ export default function Home({}) {
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
-                                Organize your publications on your own Curate Scholar author page to make your science deliciously user-friendly, ultimately accessible, and beautiful on all devices.
+                                Organize your publications on your own Curate Scholar author page to make your science deliciously user-friendly, ultimately accessible, and beautiful on all devices (example author pages: <Link to="/author/etienne-p-lebel">1</Link>, <Link to="/author/anna-vant-veer">2</Link>, <Link to="/author/lorne-campbell">3</Link>).
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
