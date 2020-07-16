@@ -444,7 +444,7 @@ function About(props) {
                             This will ensure that researchers, journals, universities, and funders are <strong>accountable</strong> to the people they serve. A unified platform to differentiate <em>credible evidence</em> (from untrustworthy evidence) will substantially accelerate the development of cumulative scientific knowledge and applied innovations across the natural and social sciences. The implications for human welfare are large.
                         </Typography>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-researchers" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Researchers
@@ -466,7 +466,7 @@ function About(props) {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-journals" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Journals
@@ -488,7 +488,7 @@ function About(props) {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-unis" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Universities / Research Institutes
@@ -514,7 +514,7 @@ function About(props) {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-funders" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Funders / Funding Agencies
@@ -540,7 +540,7 @@ function About(props) {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-cs-accountability" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     CURATE SCIENCE ACCOUNTABILITY
@@ -796,7 +796,7 @@ export default function Home({}) {
                 </CardContent>
             </Card>            
             
-            <Card style={{ marginTop: '5rem' }} className={classes.card}>
+            <Card id="for-replicators" style={{ marginTop: '5rem' }} className={classes.card}>
                 <CardContent>
                     <Grid container spacing={3}>
                         <Grid item md={6} xs={12}>
