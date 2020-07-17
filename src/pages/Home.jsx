@@ -426,7 +426,7 @@ function About(props) {
                         </Typography>
 
                         <Typography className={classes.howItWorksDescription}>
-                            Curate Science is an integrated system and curation platform to verify that research is <strong>transparent and credible</strong> (see <a href="https://etiennelebel.com/cs/cs-state-of-and-roadmap.html" target="_blank">interactive diagram</a>). It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
+                            Curate Science is an integrated system and curation platform to verify that research is <strong>transparent and credible</strong> (for a visual overview, <a href="https://etiennelebel.com/cs/cs-state-of-and-roadmap.html" target="_blank">see interactive diagram</a>). It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
                         </Typography>
 
                         <Typography component="ol" className={classes.howItWorksDescription}>
