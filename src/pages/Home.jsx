@@ -426,7 +426,7 @@ function About(props) {
                         </Typography>
 
                         <Typography className={classes.howItWorksDescription}>
-                            Curate Science is an integrated system and curation platform to verify that research is <strong>transparent and credible</strong> (for a visual overview, <a href="https://etiennelebel.com/cs/cs-state-of-and-roadmap.html" target="_blank">see interactive diagram</a>). It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
+                            Curate Science is an integrated system and curation platform to verify that research is <strong>transparent and credible</strong> (for a visual overview, <a href="https://etiennelebel.com/cs/cs-state-of-and-roadmap.html" target="_blank">see hyperlinked diagram</a>). It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
                         </Typography>
 
                         <Typography component="ol" className={classes.howItWorksDescription}>
@@ -505,7 +505,7 @@ function About(props) {
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
-                                    Base hiring and promotion decisions on researchers&#700; transparency track record.
+                                    Base hiring and promotion decisions on researchers&#700; transparency track record and impact (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard-Charite.html#promotion" target="_blank">interactive prototype</a>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
@@ -721,7 +721,7 @@ export default function Home({}) {
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
-                                Track the open science practices of your researchers, and monitor your progress in achieving transparency targets prioritized by your institution (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).
+                                Track the open science practices of your researchers, and monitor your progress in achieving transparency targets prioritized by your institution (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard-Charite.html#home" target="_blank">interactive prototype</a>).
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
