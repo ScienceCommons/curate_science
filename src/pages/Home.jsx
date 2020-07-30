@@ -151,13 +151,13 @@ const images = {
         },
     ],
     fundersHIW: [
+         {
+            thumbnail: '/sitestatic/infographics/114-funders-output-list-Gates-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.0-funders-output-list-Gates.png',
+        },
         {
             thumbnail: '/sitestatic/infographics/114-funders-grantee-list-CIHR-ABOUT-THUMBNAIL.png',
             full: '/sitestatic/infographics/14.0-funders-grantee-list-CIHR-ABOUT-HD.png',
-        },
-        {
-            thumbnail: '/sitestatic/infographics/114-funders-grantee-list-ABOUT-THUMBNAIL.png',
-            full: '/sitestatic/infographics/14.0-funders-grantee-list-ABOUT-HD.png',
         },
     ],    
     replicators: [
