@@ -23,8 +23,8 @@ class Home extends React.PureComponent {
     this.state = {
       articles: [],
       articles_loading: true,
-      content_filters: [],
-      transparency_filters: ['open_code', 'open_data', 'open_materials'],
+      content_filters: ['REPLICATION'],
+      transparency_filters: ['open_data'],
       sort_by: 'created',
       more_articles: true,
       current_page: 1,
