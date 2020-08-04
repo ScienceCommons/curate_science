@@ -151,13 +151,13 @@ const images = {
         },
     ],
     fundersHIW: [
+         {
+            thumbnail: '/sitestatic/infographics/114-funders-output-list-Gates-THUMBNAIL.png',
+            full: '/sitestatic/infographics/14.0-funders-output-list-Gates.png',
+        },
         {
             thumbnail: '/sitestatic/infographics/114-funders-grantee-list-CIHR-ABOUT-THUMBNAIL.png',
             full: '/sitestatic/infographics/14.0-funders-grantee-list-CIHR-ABOUT-HD.png',
-        },
-        {
-            thumbnail: '/sitestatic/infographics/114-funders-grantee-list-ABOUT-THUMBNAIL.png',
-            full: '/sitestatic/infographics/14.0-funders-grantee-list-ABOUT-HD.png',
         },
     ],    
     replicators: [
@@ -426,7 +426,7 @@ function About(props) {
                         </Typography>
 
                         <Typography className={classes.howItWorksDescription}>
-                            Curate Science is an integrated system and curation platform to verify that research is <strong>transparent and credible</strong> (see <a href="https://etiennelebel.com/cs/cs-state-of-and-roadmap.html" target="_blank">interactive diagram</a>). It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
+                            Curate Science is an integrated system and curation platform to verify that research is <strong>transparent and credible</strong> (for a visual overview, <a href="https://etiennelebel.com/cs/cs-state-of-and-roadmap.html" target="_blank">see hyperlinked diagram</a>). It will allow researchers, journals, universities, funders, teachers, journalists, and the general public to ensure:
                         </Typography>
 
                         <Typography component="ol" className={classes.howItWorksDescription}>
@@ -444,7 +444,7 @@ function About(props) {
                             This will ensure that researchers, journals, universities, and funders are <strong>accountable</strong> to the people they serve. A unified platform to differentiate <em>credible evidence</em> (from untrustworthy evidence) will substantially accelerate the development of cumulative scientific knowledge and applied innovations across the natural and social sciences. The implications for human welfare are large.
                         </Typography>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-researchers" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Researchers
@@ -457,7 +457,7 @@ function About(props) {
                             </Grid>
                             <Grid item container md={6} xs={12} alignItems="center">
                                 <Typography className={classes.howItWorksDescription}>
-                                    Researchers can ensure their publications meet minimum transparency standards (across <a href="/sitestatic/infographics/1.0-4-T-standards-across-article-types-A.png" target="_blank">13 article types</a>) via their own (externally embeddable) Curate Scholar author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>).
+                                    Researchers can ensure their publications meet minimum transparency standards (across <a href="/sitestatic/infographics/1.0-4-T-standards-across-article-types-A.png" target="_blank">13 article types</a>) via their own (externally embeddable) Curate Scholar author page, in addition to a host of other benefits (see <Link to="#how-it-works">HOW IT WORKS section</Link>; example author pages: <Link to="/author/etienne-p-lebel">1</Link>, <Link to="/author/anna-vant-veer">2</Link>, <Link to="/author/lorne-campbell">3</Link>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
@@ -466,7 +466,7 @@ function About(props) {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-journals" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Journals
@@ -488,7 +488,7 @@ function About(props) {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-unis" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Universities / Research Institutes
@@ -505,7 +505,7 @@ function About(props) {
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
-                                    Base hiring and promotion decisions on researchers&#700; transparency track record.
+                                    Base hiring and promotion decisions on researchers&#700; transparency track record and impact (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard-Charite.html#promotion" target="_blank">interactive prototype</a>).
                                 </Typography>
 
                                 <Typography className={classes.howItWorksDescription}>
@@ -514,7 +514,7 @@ function About(props) {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-funders" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     Funders / Funding Agencies
@@ -540,7 +540,7 @@ function About(props) {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={3} style={{ marginTop: '4rem' }}>
+                        <Grid id="about-cs-accountability" container spacing={3} style={{ marginTop: '4rem' }}>
                             <Grid item xs={12}>
                                 <Typography align="center" component="h4" className={classes.subsectionTitle}>
                                     CURATE SCIENCE ACCOUNTABILITY
@@ -671,7 +671,7 @@ export default function Home({}) {
                         </Grid>
                         <Grid item container md={6} xs={12} alignItems="center">
                             <Typography className={classes.howItWorksDescription}>
-                                Organize your publications on your own Curate Scholar author page to make your science deliciously user-friendly, ultimately accessible, and beautiful on all devices.
+                                Organize your publications on your own Curate Scholar author page to make your science deliciously user-friendly, ultimately accessible, and beautiful on all devices (example author pages: <Link to="/author/etienne-p-lebel">1</Link>, <Link to="/author/anna-vant-veer">2</Link>, <Link to="/author/lorne-campbell">3</Link>).
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
@@ -721,7 +721,7 @@ export default function Home({}) {
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
-                                Track the open science practices of your researchers, and monitor your progress in achieving transparency targets prioritized by your institution (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard.html#home" target="_blank">interactive prototype</a>).
+                                Track the open science practices of your researchers, and monitor your progress in achieving transparency targets prioritized by your institution (see <a href="https://etiennelebel.com/dashboards/uni-os-dashboard-Charite.html#home" target="_blank">interactive prototype</a>).
                             </Typography>
 
                             <Typography className={classes.howItWorksDescription}>
@@ -796,7 +796,7 @@ export default function Home({}) {
                 </CardContent>
             </Card>            
             
-            <Card style={{ marginTop: '5rem' }} className={classes.card}>
+            <Card id="for-replicators" style={{ marginTop: '5rem' }} className={classes.card}>
                 <CardContent>
                     <Grid container spacing={3}>
                         <Grid item md={6} xs={12}>

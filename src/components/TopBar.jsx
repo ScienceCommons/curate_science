@@ -66,9 +66,9 @@ const styles = theme => ({
         justifyContent: 'space-between',
     },
     sitelogo: {
-        height: 20,
-        verticalAlign: 'middle',
-        marginRight: 10
+        height: 14,
+        marginRight: -2,
+        marginLeft: 5
     },
     drawer: {
         width: 300
