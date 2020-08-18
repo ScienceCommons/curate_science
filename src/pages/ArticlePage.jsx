@@ -6,6 +6,8 @@ import ArticleActions from '../components/ArticleActions.jsx';
 import ArticleEditor from '../components/ArticleEditor.jsx';
 import ArticleContent from '../components/ArticleContent.jsx';
 import Loader from '../components/shared/Loader.jsx';
+import { is_url_valid } from '../components/ViewEmbeddedContentButton.jsx'
+import { ViewURL } from '../components/EmbeddedViewer.jsx';
 
 import C from '../constants/constants';
 
@@ -14,8 +16,7 @@ import { json_api_req, simple_api_req } from '../util/util.jsx'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
-
-
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 const styles = theme => ({
   root: {
     paddingTop: 20,
@@ -30,6 +31,19 @@ const styles = theme => ({
   },
 })
 
+// prepare HOC to apply ViewURL hook in the class component
+const withViewURL = (Component) => {
+  function WrappedComponent(props) {
+    let view_url = ViewURL.useContainer()
+    return <Component view_url={view_url} {...props} />
+  }
+  return WrappedComponent
+}
+
+const withMediaQuery = (...args) => Component => props => {
+  const mediaQuery = useMediaQuery(...args);
+  return <Component media_query={mediaQuery} {...props} />;
+}
 
 class ArticlePage extends React.PureComponent {
   constructor(props) {
@@ -38,6 +52,7 @@ class ArticlePage extends React.PureComponent {
       article: null,
       loading: true,
       edit_article_modal_open: false,
+      flscreen_on_load: true,
     }
 
     this.open_article_editor = this.toggle_article_editor.bind(this, true)
@@ -62,6 +77,9 @@ class ArticlePage extends React.PureComponent {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.match.params.id !== this.state.current_id) {
       this.fetch_article()
+    }
+    if (this.state.flscreen_on_load) {
+      this.load_flscreen()
     }
   }
 
@@ -96,6 +114,35 @@ class ArticlePage extends React.PureComponent {
     }
   }
 
+  load_flscreen() {
+    const view_url = this.props.view_url
+    const pdf_url = this.state.article.pdf_url
+    const html_url = this.state.article.html_url
+    const preprint_url = this.state.article.preprint_url
+    if (!this.props.media_query) {
+      if (is_url_valid(html_url, 'html')) {
+        view_url.update_url(html_url)
+      }
+
+      else if (is_url_valid(pdf_url, 'pdf') && !is_url_valid(html_url)) {
+        view_url.update_url(pdf_url) 
+      }
+
+      else if (is_url_valid(preprint_url, 'preprint') && !is_url_valid(html_url, 'html') && !is_url_valid(pdf_url, 'pdf')) {
+        view_url.update_url(preprint_url) 
+      }
+
+      else {
+        return null
+      } 
+    }
+
+    else {
+      null
+    }
+  this.setState({flscreen_on_load: false})    
+}
+
   render() {
     const { classes, show_date, user_session} = this.props
     const {
@@ -112,7 +159,6 @@ class ArticlePage extends React.PureComponent {
           :
             <div className="ArticleWithActions">
               <div className="Article">
-
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <ArticleContent
@@ -141,4 +187,4 @@ class ArticlePage extends React.PureComponent {
   }
 }
 
-export default withRouter(withCookies(withStyles(styles)(ArticlePage)))
+export default withMediaQuery('(max-width:1499px)')(withViewURL(withRouter(withCookies(withStyles(styles)(ArticlePage)))))
