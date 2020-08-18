@@ -99,6 +99,7 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style,
     }
 
     function toggle_viewer(url) {
+        mediaType === 'pdf' ? url = url.replace('#view=FitH', '') : null
         if (view_url.url === url) {
             view_url.clear_url()
         } else {
