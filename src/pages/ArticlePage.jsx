@@ -16,6 +16,7 @@ import { json_api_req, simple_api_req } from '../util/util.jsx'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 const styles = theme => ({
   root: {
     paddingTop: 20,
@@ -37,6 +38,11 @@ const withViewURL = (Component) => {
     return <Component view_url={view_url} {...props} />
   }
   return WrappedComponent
+}
+
+const withMediaQuery = (...args) => Component => props => {
+  const mediaQuery = useMediaQuery(...args);
+  return <Component media_query={mediaQuery} {...props} />;
 }
 
 class ArticlePage extends React.PureComponent {
@@ -113,23 +119,29 @@ class ArticlePage extends React.PureComponent {
     const pdf_url = this.state.article.pdf_url
     const html_url = this.state.article.html_url
     const preprint_url = this.state.article.preprint_url
-    if (is_url_valid(html_url, 'html')) {
-      view_url.update_url(html_url)
+    if (!this.props.media_query) {
+      if (is_url_valid(html_url, 'html')) {
+        view_url.update_url(html_url)
+      }
+
+      else if (is_url_valid(pdf_url, 'pdf') && !is_url_valid(html_url)) {
+        view_url.update_url(pdf_url) 
+      }
+
+      else if (is_url_valid(preprint_url, 'preprint') && !is_url_valid(html_url, 'html') && !is_url_valid(pdf_url, 'pdf')) {
+        view_url.update_url(preprint_url) 
+      }
+
+      else {
+        return null
+      } 
     }
 
-    else if (is_url_valid(pdf_url, 'pdf') && !is_url_valid(html_url)) {
-      view_url.update_url(pdf_url) 
-      }
-
-    else if (is_url_valid(preprint_url, 'preprint') && !is_url_valid(html_url, 'html') && !is_url_valid(pdf_url, 'pdf')) {
-      view_url.update_url(preprint_url) 
-      }
-
     else {
-      return null
-    } 
-    this.setState({flscreen_on_load: false})    
-  }
+      null
+    }
+  this.setState({flscreen_on_load: false})    
+}
 
   render() {
     const { classes, show_date, user_session} = this.props
@@ -175,4 +187,4 @@ class ArticlePage extends React.PureComponent {
   }
 }
 
-export default withViewURL(withRouter(withCookies(withStyles(styles)(ArticlePage))))
+export default withMediaQuery('(max-width:1499px)')(withViewURL(withRouter(withCookies(withStyles(styles)(ArticlePage)))))
