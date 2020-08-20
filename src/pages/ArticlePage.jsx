@@ -45,6 +45,8 @@ const withMediaQuery = (...args) => Component => props => {
   return <Component media_query={mediaQuery} {...props} />;
 }
 
+export const Context = React.createContext({is_article_page: false})
+
 class ArticlePage extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -52,7 +54,8 @@ class ArticlePage extends React.PureComponent {
       article: null,
       loading: true,
       edit_article_modal_open: false,
-      flscreen_on_load: true,
+      viewer_on_load: true,
+      article_change : false,
     }
 
     this.open_article_editor = this.toggle_article_editor.bind(this, true)
@@ -77,10 +80,14 @@ class ArticlePage extends React.PureComponent {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.match.params.id !== this.state.current_id) {
       this.fetch_article()
+      this.setState({article_change: true})
     }
-    if (this.state.flscreen_on_load) {
+    if (this.state.viewer_on_load) {
       this.load_flscreen()
     }
+    else if (this.state.article_change) {
+      this.load_flscreen()
+    } 
   }
 
   fetch_article() {
@@ -115,11 +122,12 @@ class ArticlePage extends React.PureComponent {
   }
 
   load_flscreen() {
-    const view_url = this.props.view_url
-    const pdf_url = this.state.article.pdf_url
-    const html_url = this.state.article.html_url
-    const preprint_url = this.state.article.preprint_url
     if (!this.props.media_query) {
+      const view_url = this.props.view_url
+      const pdf_url = this.state.article.pdf_url
+      const html_url = this.state.article.html_url
+      const preprint_url = this.state.article.preprint_url
+
       if (is_url_valid(html_url, 'html')) {
         view_url.update_url(html_url)
       }
@@ -138,9 +146,9 @@ class ArticlePage extends React.PureComponent {
     }
 
     else {
-      null
+      return null
     }
-  this.setState({flscreen_on_load: false})    
+  this.setState({viewer_on_load: false})    
 }
 
   render() {
@@ -157,6 +165,7 @@ class ArticlePage extends React.PureComponent {
         { loading ?
         <Loader />
           :
+          <Context.Provider value={{ is_article_page: true }}>
             <div className="ArticleWithActions">
               <div className="Article">
                 <Card className={classes.card}>
@@ -180,6 +189,7 @@ class ArticlePage extends React.PureComponent {
                 onClose={this.close_article_editor}
               />
             </div>
+          </Context.Provider>
 
         }
       </div>
