@@ -6,7 +6,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Button, Icon, IconButton } from '@material-ui/core';
 
 import { ViewURL } from './EmbeddedViewer.jsx';
-
+import { Context } from '../pages/ArticlePage.jsx'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -106,7 +106,8 @@ export default function ViewEmbeddedContentButton({ iconStyle, mediaType, style,
             view_url.update_url(url)
         }
     }
-
+    const context = React.useContext(Context);
+    if (context.is_article_page) return null
     return (
         <Button style={style} onClick={() => toggle_viewer(url)} className={classes.button} title="View in embedded viewer">
             <Icon style={iconStyle}>zoom_out_map</Icon>
