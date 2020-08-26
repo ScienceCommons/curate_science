@@ -52,7 +52,6 @@ class ArticlePage extends React.PureComponent {
       article: null,
       loading: true,
       edit_article_modal_open: false,
-      flscreen_on_load: true,
     }
 
     this.open_article_editor = this.toggle_article_editor.bind(this, true)
@@ -78,9 +77,6 @@ class ArticlePage extends React.PureComponent {
     if (prevProps.match.params.id !== this.state.current_id) {
       this.fetch_article()
     }
-    if (this.state.flscreen_on_load) {
-      this.load_flscreen()
-    }
   }
 
   fetch_article() {
@@ -88,6 +84,7 @@ class ArticlePage extends React.PureComponent {
     this.setState({loading: true}, () => {
       json_api_req('GET', `/api/articles/${article_id}/`, {}, null, (res) => {
         this.setState({ article: res, loading: false })
+        this.load_viewer()
       }, (err) => {
         this.setState({loading: false})
       })
@@ -114,7 +111,7 @@ class ArticlePage extends React.PureComponent {
     }
   }
 
-  load_flscreen() {
+  load_viewer() {
     const view_url = this.props.view_url
     const pdf_url = this.state.article.pdf_url
     const html_url = this.state.article.html_url
@@ -138,9 +135,8 @@ class ArticlePage extends React.PureComponent {
     }
 
     else {
-      null
+      return null
     }
-  this.setState({flscreen_on_load: false})    
 }
 
   render() {
