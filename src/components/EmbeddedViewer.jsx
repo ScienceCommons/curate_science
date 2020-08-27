@@ -85,20 +85,6 @@ export default withRouter(function EmbeddedViewer({ history }) {
         closeViewer()
     }, [history.location.pathname])
 
-    // Close viewer on ESC
-    useEffect(() => {
-        if (viewer_visible) {
-            function close_on_escape(event) {
-                if (event.key === 'Escape') {
-                    closeViewer()
-                }
-            }
-
-            window.addEventListener('keyup', close_on_escape);
-            return () => window.removeEventListener('keyup', close_on_escape);
-        }
-    }, [viewer_visible]);
-
     return (
         <div className={classes.viewer} style={style}>
             <iframe style={{height: '100%', width: '100%', border: 'solid 1px', flex: 1}} src={view_url.url}></iframe>
