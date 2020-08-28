@@ -4,7 +4,7 @@ import { createContainer } from 'unstated-next'
 
 import { concat } from 'lodash'
 import { makeStyles } from '@material-ui/styles';
-import { Button, Icon, IconButton } from '@material-ui/core'
+import { Button, Icon } from '@material-ui/core'
 
 import { TOPBAR_HEIGHT } from './TopBar.jsx';
 
@@ -13,11 +13,6 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('lg')]: {
             display: 'none',
         }
-    },
-    viewerTopBar: {
-        background: '#333',
-        width: '100%',
-        textAlign: 'right',
     },
 }))
 
@@ -90,27 +85,8 @@ export default withRouter(function EmbeddedViewer({ history }) {
         closeViewer()
     }, [history.location.pathname])
 
-    // Close viewer on ESC
-    useEffect(() => {
-        if (viewer_visible) {
-            function close_on_escape(event) {
-                if (event.key === 'Escape') {
-                    closeViewer()
-                }
-            }
-
-            window.addEventListener('keyup', close_on_escape);
-            return () => window.removeEventListener('keyup', close_on_escape);
-        }
-    }, [viewer_visible]);
-
     return (
         <div className={classes.viewer} style={style}>
-            <div className={classes.viewerTopBar}> 
-                <IconButton onClick={closeViewer} title="Close embedded viewer" style={{ color: '#999' }}>
-                    <Icon>close</Icon>
-                </IconButton>
-            </div>
             <iframe style={{height: '100%', width: '100%', border: 'solid 1px', flex: 1}} src={view_url.url}></iframe>
         </div>
     )
