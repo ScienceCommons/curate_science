@@ -59,7 +59,9 @@ class Footer extends React.Component {
                     </Grid>
 
                     <div className={classes.bottomText}>
-                        Use of this website implies consent to its use of HTML cookies.
+                            This project has received funding from the European Union’s Horizon 2020 research and innovation programme under the <a href="https://cordis.europa.eu/project/rcn/215183_en.html" target="_blank">Marie Sklodowska-Curie grant agreement No 793669</a>.
+			<br/>
+			    Use of this website implies consent to its use of HTML cookies.
                         <br/>
                         <div style={{marginTop: 10, marginBottom: 10}}>
                             <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
