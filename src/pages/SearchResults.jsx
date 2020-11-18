@@ -24,7 +24,6 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
   root: {
     paddingTop: 20,
-    width: C.COL_WIDTH,
     margin: '0 auto',
   },
   header: {
@@ -212,7 +211,7 @@ class SearchResultsPage extends React.Component {
           }
         </Grid>
 
-        <div style={{width: C.CARD_COL_WIDTH}}>
+        <div style={{width: C.CARD_COL_WIDTH, margin: '0 auto'}}>
           { 
             searching ?
             <Loader/> :
