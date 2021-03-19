@@ -67,13 +67,6 @@ export default function People({homeStyles, ...props}) {
             title: "Software Developer"
         },
         {
-            url: "https://www.researchgate.net/profile/Dominik_Lenda",
-            image: "/sitestatic/people/lenda-hires.png",
-            name: "Dominik Lenda",
-            affiliation: "SWPS University (Poland)",
-            title: "Software Developer"
-        },
-        {
             url: "https://psychology.msu.edu/people/graduate-student/morri640",
             image: "/sitestatic/people/morrison-hires.png",
             name: "Mike Morrison",
