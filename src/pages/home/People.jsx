@@ -103,6 +103,12 @@ export default function People({homeStyles, ...props}) {
             affiliation: "University of California - San Diego",
         },
         {
+            url: "https://www.psy.ox.ac.uk/team/dorothy-bishop",
+            image: "/sitestatic/people/bishop-hires.png",
+            name: "Dorothy Bishop",
+            affiliation: "University of Oxford",
+        },
+        {
             url: "https://www.coll.mpg.de/team/page/susann_fiedler",
             image: "/sitestatic/people/fiedler-hires.png",
             name: "Susann Fiedler",
