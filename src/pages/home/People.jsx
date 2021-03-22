@@ -61,23 +61,9 @@ export default function People({homeStyles, ...props}) {
             title: "Founder & Lead"
         },
         {
-            url: "https://ppw.kuleuven.be/okp/people/wolf_vanpaemel/",
-            image: "/sitestatic/people/vanpaemel-hires.png",
-            name: "Wolf Vanpaemel",
-            affiliation: "KU Leuven",
-            title: "Conceptual Advisor"
-        },
-        {
             url: "https://github.com/alexkyllo",
             image: "/sitestatic/people/kyllo-hires.png",
             name: "Alex Kyllo",
-            title: "Software Developer"
-        },
-        {
-            url: "https://www.researchgate.net/profile/Dominik_Lenda",
-            image: "/sitestatic/people/lenda-hires.png",
-            name: "Dominik Lenda",
-            affiliation: "SWPS University (Poland)",
             title: "Software Developer"
         },
         {
@@ -104,6 +90,18 @@ export default function People({homeStyles, ...props}) {
 
     const ADVISORS = [
         {
+            url: "http://www.psychology.ucsd.edu/people/profiles/hpashler.html",
+            image: "/sitestatic/people/pashler-hires.png",
+            name: "Hal Pashler",
+            affiliation: "University of California - San Diego",
+        },
+        {
+            url: "https://www.psy.ox.ac.uk/team/dorothy-bishop",
+            image: "/sitestatic/people/bishop-hires.png",
+            name: "Dorothy Bishop",
+            affiliation: "University of Oxford",
+        },
+        {
             url: "https://www.coll.mpg.de/team/page/susann_fiedler",
             image: "/sitestatic/people/fiedler-hires.png",
             name: "Susann Fiedler",
@@ -116,34 +114,10 @@ export default function People({homeStyles, ...props}) {
             affiliation: "Leiden University",
         },
         {
-            url: "https://www.imprs-life.mpg.de/en/people/julia-m-rohrer",
-            image: "/sitestatic/people/rohrer-hires.png",
-            name: "Julia Rohrer",
-            affiliation: "Max Planck Institute - Berlin",
-        },
-        {
             url: "https://mbnuijten.com/",
             image: "/sitestatic/people/nuijten-hires.png",
             name: "Michèle Nuijten",
             affiliation: "Tilburg University",
-        },
-        {
-            url: "https://www.psy.ox.ac.uk/team/dorothy-bishop",
-            image: "/sitestatic/people/bishop-hires.png",
-            name: "Dorothy Bishop",
-            affiliation: "University of Oxford",
-        },
-        {
-            url: "http://www.psychology.ucsd.edu/people/profiles/hpashler.html",
-            image: "/sitestatic/people/pashler-hires.png",
-            name: "Hal Pashler",
-            affiliation: "University of California - San Diego",
-        },
-        {
-            url: "http://www.psych.usyd.edu.au/staff/alexh/lab/",
-            image: "/sitestatic/people/holcombe-hires.png",
-            name: "Alex Holcombe",
-            affiliation: "University of Sydney",
         },
         {
             url: "http://www.ejwagenmakers.com/",
@@ -168,12 +142,6 @@ export default function People({homeStyles, ...props}) {
             image: "/sitestatic/people/campbell-hires.png",
             name: "Lorne Campbell",
             affiliation: "University of Western Ontario",
-        },
-        {
-            url: "https://www.kingston.ac.uk/research/research-degrees/research-degree-students/profile/emma-henderson-61/",
-            image: "/sitestatic/people/henderson-hires.png",
-            name: "Emma Henderson",
-            affiliation: "Kingston University (UK)"
         }
     ]
 
@@ -192,7 +160,7 @@ export default function People({homeStyles, ...props}) {
             </Grid>
 
             <Typography variant="h2" className={homeStyles.subsectionTitle} align="center" style={{ marginTop: '2rem' }}>
-                Advisory Board
+                Advisory Board (2018 - 2020)
             </Typography>
 
             <Grid container>
