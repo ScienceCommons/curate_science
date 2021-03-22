@@ -67,13 +67,6 @@ export default function People({homeStyles, ...props}) {
             title: "Software Developer"
         },
         {
-            url: "https://psychology.msu.edu/people/graduate-student/morri640",
-            image: "/sitestatic/people/morrison-hires.png",
-            name: "Mike Morrison",
-            affiliation: "Michigan State University",
-            title: "Technical Advisor"
-        },
-        {
             url: "https://github.com/dokterbob",
             image: "/sitestatic/people/debruin-hires.png",
             name: "Mathijs de Bruin",
@@ -108,34 +101,10 @@ export default function People({homeStyles, ...props}) {
             affiliation: "Max Planck Institute - Bonn",
         },
         {
-            url: "https://www.universiteitleiden.nl/en/staffmembers/anna-van-t-veer#tab-1",
-            image: "/sitestatic/people/vantveer-hires.png",
-            name: "Anna van't Veer",
-            affiliation: "Leiden University",
-        },
-        {
             url: "https://mbnuijten.com/",
             image: "/sitestatic/people/nuijten-hires.png",
             name: "Michèle Nuijten",
             affiliation: "Tilburg University",
-        },
-        {
-            url: "http://www.ejwagenmakers.com/",
-            image: "/sitestatic/people/wagenmakers-hires.png",
-            name: "E-J Wagenmakers",
-            affiliation: "University of Amsterdam",
-        },
-        {
-            url: "https://scienceofpsych.wordpress.com/katie/",
-            image: "/sitestatic/people/corker-hires.png",
-            name: "Katie Corker",
-            affiliation: "Grand Valley State University",
-        },
-        {
-            url: "https://www.unimib.it/marco-perugini",
-            image: "/sitestatic/people/perugini-hires.png",
-            name: "Marco Perugini",
-            affiliation: "University of Milan-Bicocca",
         },
         {
             url: "http://publish.uwo.ca/~lcampb23/index.html",
