@@ -105,12 +105,6 @@ export default function People({homeStyles, ...props}) {
             image: "/sitestatic/people/nuijten-hires.png",
             name: "Michèle Nuijten",
             affiliation: "Tilburg University",
-        },
-        {
-            url: "http://publish.uwo.ca/~lcampb23/index.html",
-            image: "/sitestatic/people/campbell-hires.png",
-            name: "Lorne Campbell",
-            affiliation: "University of Western Ontario",
         }
     ]
 
@@ -120,19 +114,19 @@ export default function People({homeStyles, ...props}) {
                 People
             </Typography>
 
-            <Typography variant="h2" className={homeStyles.subsectionTitle} align="center" style={{ marginTop: '2rem' }}>
+            <Typography variant="h2" className={homeStyles.subsectionTitle} align="center" style={{ marginTop: '2rem', display: 'none' }}>
                 Main Team
             </Typography>
 
-            <Grid container>
+            <Grid container style={{ display: 'none' }}>
                 { MAIN_TEAM.map((person) => { return <Person person={person} key={person.image}/> }) }
             </Grid>
 
-            <Typography variant="h2" className={homeStyles.subsectionTitle} align="center" style={{ marginTop: '2rem' }}>
+            <Typography variant="h2" className={homeStyles.subsectionTitle} align="center" style={{ marginTop: '2rem', display: 'none' }}>
                 Advisory Board (2018 - 2020)
             </Typography>
 
-            <Grid container>
+            <Grid container style={{ display: 'none' }}>
                 { ADVISORS.map((person) => { return <Person person={person} key={person.image}/> }) }
             </Grid>
         </div>
