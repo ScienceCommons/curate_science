@@ -56,15 +56,21 @@ export default function People({homeStyles, ...props}) {
         {
             url: "http://etiennelebel.com",
             image: "/sitestatic/people/lebel-hires.png",
-            name: "Etienne P. LeBel",
-            affiliation: "KU Leuven",
+            name: "Etienne P. LeBel, PhD",
+            affiliation: "Curate Science",
             title: "Founder & Lead"
         },
         {
-            url: "https://github.com/alexkyllo",
-            image: "/sitestatic/people/kyllo-hires.png",
-            name: "Alex Kyllo",
-            title: "Software Developer"
+            url: "https://opensciencetv.pubpub.org/",
+            image: "/sitestatic/people/ivashchenko-hires.png",
+            name: "Stefaniia Ivashchenko, PhD",
+            title: "Conceptual Advisor"
+        },
+        {
+            url: "https://wikiletters.org/",
+            image: "/sitestatic/people/andutta-hires.png",
+            name: "Fernando Andutta, PhD",
+            title: "Technical Advisor"
         },
         {
             url: "https://github.com/dokterbob",
@@ -114,11 +120,11 @@ export default function People({homeStyles, ...props}) {
                 People
             </Typography>
 
-            <Typography variant="h2" className={homeStyles.subsectionTitle} align="center" style={{ marginTop: '2rem', display: 'none' }}>
+            <Typography variant="h2" className={homeStyles.subsectionTitle} align="center" style={{ marginTop: '2rem' }}>
                 Main Team
             </Typography>
 
-            <Grid container style={{ display: 'none' }}>
+            <Grid container>
                 { MAIN_TEAM.map((person) => { return <Person person={person} key={person.image}/> }) }
             </Grid>
 
