@@ -2,7 +2,9 @@ Curate Science
 ==============
 [![Build Status](https://travis-ci.org/ScienceCommons/curate_science.svg?branch=master)](https://travis-ci.org/ScienceCommons/curate_science)
 
-*Curation products for all research stakeholders.*
+*Transparency author apps to boost quality in science*
+
+Curate Science is a nonprofit tech startup whose mission is to boost QUALITY in science by developing transparency audit technologies & transparency author apps for scientists.
 
 Code base of **[Curate Science](https://CurateScience.org)**, an integrated system and product suite to curate the transparency and credibility of research (for broad overview, see [this interactive diagram](https://etiennelebel.com/cs/cs-state-of-and-roadmap.html)).  Recently, we released Curate Scholar ([release notes](https://github.com/ScienceCommons/curate_science/releases/tag/v0.4.0)), an author page web app to make scientific papers deliciously user-friendly to consume and universally accessible (think Google Scholar substantially enhanced in several unique ways; see our [release 0.4.0 video](https://www.youtube.com/watch?v=abJStJvwFxc) for a demo of new features).  For more details, see our [meta-scientific theoretical framework](https://etiennelebel.com/documents/lebeletal(2018,ampss)a-unified-framework-to-quantify-the-credibility-of-scientific-findings.pdf) that guides the implementation of our integrated system.  See [below](https://github.com/ScienceCommons/curate_science#roadmap) for current features in development (1-year road map) and upcoming features (3-year road map).  See our current [funding requesting document](https://docs.google.com/document/d/1zWPWeW8gh01BAc9ckTs4lebKDmcrLdHZ4ZCuzpPii1I/edit) for exciting funding opportunities.
 
